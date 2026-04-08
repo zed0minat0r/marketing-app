@@ -28,36 +28,21 @@ nav.scrolled{border-color:var(--border)}
 .nav__cta{background:var(--accent);color:#141210;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
 .nav__cta:hover{opacity:0.9}
 .hero{padding:120px 0 80px;position:relative;overflow:hidden}
-.hero__split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.hero__split{display:grid;grid-template-columns:1fr;gap:0;align-items:center;max-width:640px}
 .hero__left{display:flex;flex-direction:column}
 .hero__title{font-size:clamp(2.4rem,5.5vw,4.4rem);font-weight:700;line-height:1.04;letter-spacing:-0.04em;margin-bottom:28px}
 .hero__title em{font-style:normal;color:var(--accent)}
 .hero__stat{font-family:var(--mono);font-size:0.8rem;letter-spacing:0.03em;color:var(--text-muted);background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.18);border-radius:4px;padding:8px 14px;display:inline-block;margin-bottom:24px;line-height:1.5}
 .hero__stat strong{color:var(--accent);font-weight:700}
 .hero__cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.hero__desc{font-size:1.05rem;color:var(--text);line-height:1.55;margin-bottom:24px;max-width:420px;opacity:0.85}
+.hero__desc{font-size:1.05rem;color:var(--text);line-height:1.55;margin-bottom:24px;max-width:560px;opacity:0.85}
 .hero__trust{font-size:0.78rem;color:var(--text-muted);margin-top:0;letter-spacing:0.01em}
-.hero__right{display:flex;align-items:center;justify-content:center}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
 .btn--primary{background:var(--accent);color:#141210;font-weight:700}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
 .btn--ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
 .btn--ghost:hover{border-color:var(--text-muted)}
-.hero__live{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,0.5)}
-.hero__live-header{background:var(--surface2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
-.hero__live-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
-.hero__live-name{font-size:0.78rem;font-weight:600;flex:1;text-align:center;letter-spacing:-0.01em}
-.hero__live-badge{font-family:var(--mono);font-size:0.75rem;color:var(--green);letter-spacing:0.04em}
-.hero__live-msgs{padding:16px;min-height:148px;display:flex;flex-direction:column;gap:8px;justify-content:flex-end}
-.hero__live-msg{font-size:0.8rem;line-height:1.45;padding:9px 13px;border-radius:14px;max-width:86%;opacity:0;transition:opacity 0.25s}
-.hero__live-msg.visible{opacity:1}
-.hero__live-msg--in{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:3px;color:var(--text)}
-.hero__live-msg--out{background:var(--accent);color:#141210;font-weight:600;align-self:flex-end;border-bottom-right-radius:3px}
-.hero__live-typing{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);padding:10px 14px;border-radius:14px;border-bottom-left-radius:3px;display:none}
-.hero__live-typing.visible{display:flex;gap:4px}
-.hero__live-typing span{width:5px;height:5px;border-radius:50%;background:var(--text-muted);animation:dotPulse 1.4s infinite}
-.hero__live-typing span:nth-child(2){animation-delay:0.2s}
-.hero__live-typing span:nth-child(3){animation-delay:0.4s}
+
 .demo{padding:80px 0;position:relative}
 .demo__label{text-align:center;margin-bottom:40px}
 .demo__label h2{font-size:1.8rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
@@ -188,9 +173,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 .footer__links a:hover{color:var(--text)}
 @media(max-width:768px){
   .hero{padding:100px 0 60px}
-  .hero__split{grid-template-columns:1fr;gap:40px}
-  .hero__right{display:flex;justify-content:center;width:100%}
-  .hero__live{max-width:320px;width:100%}
+  .hero__split{grid-template-columns:1fr;gap:0}
   .hero__title{font-size:2.2rem;text-align:center}
   .hero__stat{display:table;margin:0 auto 24px;text-align:center}
   .hero__cta-row{justify-content:center}
@@ -247,7 +230,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .compare__mobile-label{font-size:0.78rem;padding:10px 8px}
   .compare__mobile-val{font-size:0.82rem;padding:10px 4px}
   .compare__mobile-heading{font-size:0.75rem;padding:8px 6px}
-  .hero__live-msg{font-size:0.82rem}
 }
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
 .modal-overlay.open{display:flex}
@@ -480,7 +462,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 <section class="proof">
   <div class="container">
     <div class="section-label">217 businesses on the waitlist</div>
-    <h2 class="section-title">Real business owners.<br>Real texts.</h2>
+    <h2 class="section-title">What our customers are saying</h2>
     <div class="proof__quotes">
       <div class="proof__quote">
         <p class="proof__quote-text">"we let our social media person go in february. honest answer — the monday summary text tells me more than she ever did. 'your wednesday posts do 2x the engagement' ok i never knew that"</p>
@@ -659,89 +641,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 <script>
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20)},{passive:true});
-
-// Hero live preview animation
-(function(){
-  const sequences=[
-    {
-      a:"Good morning! Here are 3 posts for Bloom & Co. Ready to review?",
-      b:"YES",
-      c:"Posted to Instagram and Facebook. Est. reach: 1,200 locals. I'll check back Thursday."
-    },
-    {
-      a:"New Google review just came in — 5 stars from Jennifer M. Want me to draft a reply?",
-      b:"Yes please",
-      c:"Reply sent: \"Thank you, Jennifer! We love making your week a little brighter. See you soon! — Maria\""
-    },
-    {
-      a:"This week: 5 posts, 1,247 impressions (+18%), 43 new followers. Your Wednesday posts get 2x engagement.",
-      b:"Can you do more mid-week?",
-      c:"Done. I've shifted the schedule to Wed/Thu heavy starting next week. Your next posts land Sunday night."
-    }
-  ];
-  let seq=0;
-  let paused=false;
-  const msg1=document.getElementById('heroMsg1');
-  const msg2=document.getElementById('heroMsg2');
-  const msg3=document.getElementById('heroMsg3');
-  const typing=document.getElementById('heroTyping');
-  const heroLive=document.querySelector('.hero__live');
-
-  function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
-  function sleepOrPause(ms){
-    return new Promise(r=>{
-      const start=Date.now();
-      function check(){
-        if(!paused&&Date.now()-start>=ms){r();return;}
-        requestAnimationFrame(check);
-      }
-      check();
-    });
-  }
-
-  async function runSequence(){
-    if(paused){await sleepOrPause(500);runSequence();return;}
-    const s=sequences[seq%sequences.length];
-    seq++;
-    // Reset
-    [msg1,msg2,msg3].forEach(m=>{m.classList.remove('visible');m.textContent='';});
-    typing.classList.remove('visible');
-    await sleep(400);
-    // Show typing then msg1
-    typing.classList.add('visible');
-    await sleepOrPause(1400);
-    typing.classList.remove('visible');
-    msg1.textContent=s.a;
-    msg1.classList.add('visible');
-    await sleepOrPause(1800);
-    // Show user reply
-    msg2.textContent=s.b;
-    msg2.classList.add('visible');
-    await sleepOrPause(900);
-    // Show typing then response
-    typing.classList.add('visible');
-    await sleepOrPause(1300);
-    typing.classList.remove('visible');
-    msg3.textContent=s.c;
-    msg3.classList.add('visible');
-    // Hold, then loop
-    await sleepOrPause(4200);
-    runSequence();
-  }
-
-  if('IntersectionObserver' in window){
-    const obs=new IntersectionObserver(entries=>{
-      paused=!entries[0].isIntersecting;
-    },{threshold:0.1});
-    obs.observe(heroLive);
-  }
-
-  // Pause on hover so users can read the conversation
-  heroLive.addEventListener('mouseenter',()=>{paused=true;});
-  heroLive.addEventListener('mouseleave',()=>{paused=false;});
-
-  runSequence();
-})();
 
 const modalContent={
   privacy:{
