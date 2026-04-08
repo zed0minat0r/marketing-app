@@ -184,11 +184,11 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 .footer__links a:hover{color:var(--text)}
 @media(max-width:768px){
   .hero{padding:100px 0 60px}
-  .hero__split{grid-template-columns:1fr;gap:40px}
+  .hero__split{grid-template-columns:1fr;gap:40px;margin:0 auto}
   .hero__right{justify-content:center}
   .hero__phone-wrap{max-width:100%}
   .hero__title{font-size:2.2rem;text-align:center}
-  .hero__stat{display:table;margin:0 auto 24px;text-align:center}
+  .hero__stat{display:table;margin:0 auto 24px;text-align:center;max-width:100%}
   .hero__cta-row{justify-content:center}
   .hero__desc{max-width:100%;text-align:center}
   .hero__trust{text-align:center}
@@ -199,24 +199,27 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .feature:last-child{border-bottom:none}
   .pricing__grid{grid-template-columns:1fr;gap:16px}
   .plan--featured{order:-1}
+  .plan__price{justify-content:flex-start}
   .phone{max-width:100%;border-radius:16px}
   .proof__threads{grid-template-columns:1fr;gap:16px}
+  .proof__note{text-align:center}
   .compare__title{font-size:1.4rem;text-align:center}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
-  .compare__cta-row{flex-direction:column;align-items:center}
-  .compare__cta-row .btn{width:100%;text-align:center;font-size:0.9rem;padding:14px 20px}
+  .compare__cta-row{flex-direction:column;align-items:stretch}
+  .compare__cta-row .btn{width:100%;text-align:center;font-size:0.88rem;padding:14px 16px;white-space:normal;line-height:1.35}
   .compare__cta-note{text-align:center}
   .section-label{text-align:center}
-  .section-title{text-align:center}
+  .section-title{text-align:center;margin-bottom:32px}
   .step__desc,.feature__desc,.plan__desc{text-align:left}
-  .feature__title,.plan__name,.step__num{text-align:left}
+  .feature__title,.plan__name,.step__num,.step__title{text-align:left}
   .plan--featured::before{font-size:0.75rem}
   .demo__label h2,.demo__label p{text-align:center}
   .pricing__toggle{justify-content:center}
   .final-cta__title{text-align:center}
   .final-cta__sub{text-align:center}
   .final-cta__trust{text-align:center}
+  .faq__list{max-width:100%}
 }
 @media(max-width:480px){
   .hero__title{font-size:1.8rem}
@@ -226,22 +229,30 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .phone__prompts{gap:6px}
   .prompt-btn{font-size:0.82rem;padding:10px 14px;min-height:44px}
   .final-cta__title{font-size:1.8rem;text-align:center}
-  .section-title{font-size:1.6rem;text-align:center}
+  .section-title{font-size:1.5rem;text-align:center;margin-bottom:28px}
   .section-label{text-align:center}
   .signup-form{flex-direction:column;align-items:stretch}
-  .signup-form input{min-width:0;width:100%}
-  .signup-form button{width:100%}
+  .signup-form input{min-width:0;width:100%;font-size:1rem}
+  .signup-form button{width:100%;font-size:1rem}
   .footer__links{justify-content:center}
   .footer__links a{padding:8px 4px;display:inline-flex;align-items:center;min-height:44px}
   .step__num,.step__title{text-align:left}
-  .faq__a{text-align:left}
+  .faq__q{font-size:0.9rem}
+  .faq__a{text-align:left;font-size:0.88rem}
   .pricing__toggle{flex-wrap:wrap;justify-content:center;gap:8px}
   .proof__quote-meta{text-align:left;align-items:flex-start}
   .hero__trust{font-size:0.78rem;padding:0 8px;text-align:center}
+  .hero__stat{font-size:0.78rem;word-break:break-word}
   .plan__name{text-align:left}
+  .plan__price-num{font-size:2rem}
+  .plan{padding:24px 20px}
+  .feature{padding:20px}
   .compare__mobile-label{font-size:0.78rem;padding:10px 8px}
   .compare__mobile-val{font-size:0.82rem;padding:10px 4px}
   .compare__mobile-heading{font-size:0.78rem;padding:8px 6px}
+  .compare__cta-row .btn{font-size:0.85rem}
+  .proof__bubble{font-size:0.82rem}
+  .proof__thread-biz{font-size:0.72rem}
 }
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
 .modal-overlay.open{display:flex}
