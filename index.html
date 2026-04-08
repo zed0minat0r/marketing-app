@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden}
 :root{
   --bg:#09090b;--surface:#18181b;--surface2:#27272a;--border:#3f3f46;
   --text:#fafafa;--text-muted:#a1a1aa;--accent:#3b82f6;--accent-glow:rgba(59,130,246,0.15);
@@ -32,6 +33,7 @@ nav.scrolled{border-color:var(--border)}
 .hero__title em{font-style:normal;color:var(--accent)}
 .hero__sub{font-size:1.15rem;color:var(--text-muted);max-width:520px;margin:0 auto 40px;line-height:1.7}
 .hero__cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero__trust{font-size:0.78rem;color:var(--text-muted);margin-top:16px;letter-spacing:0.01em}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
 .btn--primary{background:var(--accent);color:#fff}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
@@ -173,6 +175,17 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   /* Footer link tap targets */
   .footer__links a{padding:6px 0;display:inline-block;min-height:44px;line-height:32px}
 }
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:8px;max-width:560px;width:100%;max-height:80vh;display:flex;flex-direction:column}
+.modal__header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal__title{font-size:1rem;font-weight:600}
+.modal__close{background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;line-height:1;padding:4px 8px;font-family:var(--mono);min-height:44px;display:flex;align-items:center}
+.modal__close:hover{color:var(--text)}
+.modal__body{padding:24px;overflow-y:auto;font-size:0.85rem;color:var(--text-muted);line-height:1.8}
+.modal__body h3{font-size:0.9rem;color:var(--text);font-weight:600;margin:20px 0 6px}
+.modal__body h3:first-child{margin-top:0}
+.modal__body p{margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -193,6 +206,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Start for Free &rarr;</button>
       <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See Demo</button>
     </div>
+    <p class="hero__trust">14-day free trial &middot; No credit card &middot; Cancel anytime by text</p>
   </div>
 </section>
 
@@ -436,7 +450,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <input type="tel" id="phoneInput" placeholder="(555) 000-0000" autocomplete="tel" required>
       <button type="submit">Text me to start &rarr;</button>
     </form>
-    <p class="signup-note">By signing up you agree to our <a href="#privacy">Privacy Policy</a> and <a href="#terms">Terms of Service</a>. We will only text you about your account.</p>
+    <p class="signup-note">By signing up you agree to our <a href="#" onclick="openModal('privacy');return false;">Privacy Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms of Service</a>. We will only text you about your account.</p>
     <p class="signup-msg" id="signupMsg">Done — expect a text within 60 seconds. Check your phone.</p>
   </div>
 </section>
@@ -444,34 +458,92 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 <footer>
   <div class="container">
     <div class="footer__links">
-      <a href="#privacy">Privacy Policy</a>
-      <a href="#terms">Terms of Service</a>
+      <a href="#" onclick="openModal('privacy');return false;">Privacy Policy</a>
+      <a href="#" onclick="openModal('terms');return false;">Terms of Service</a>
       <a href="mailto:hello@textmarketer.io">hello@textmarketer.io</a>
     </div>
     <p>&copy; 2026 TextMarketer. Your marketing, in your texts.</p>
   </div>
 </footer>
 
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal__header">
+      <span class="modal__title" id="modalTitle"></span>
+      <button class="modal__close" onclick="closeModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal__body" id="modalBody"></div>
+  </div>
+</div>
+
 <script>
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20)},{passive:true});
 
+const modalContent={
+  privacy:{
+    title:'Privacy Policy',
+    body:`<h3>What we collect</h3><p>We collect your phone number when you sign up. We also collect basic usage data — which features you use, how often you text us, and whether your content is performing well. We do not collect payment card data (handled by Stripe).</p><h3>How we use it</h3><p>Your phone number is used to send you marketing content, performance reports, and product updates related to your TextMarketer account. We do not sell your data to third parties. We do not use your data to train AI models without explicit consent.</p><h3>Data retention</h3><p>If you cancel your account, we delete your business data within 30 days. Your phone number is removed from all marketing lists immediately upon cancellation.</p><h3>Contact</h3><p>Questions? Text PRIVACY to your TextMarketer number or email <a href="mailto:privacy@textmarketer.io" style="color:var(--accent)">privacy@textmarketer.io</a>.</p>`
+  },
+  terms:{
+    title:'Terms of Service',
+    body:`<h3>The service</h3><p>TextMarketer provides an AI-powered marketing assistant delivered via SMS. You approve all content before it is published. We are not responsible for the performance of published content or advertising results.</p><h3>Billing</h3><p>Plans are billed monthly. You can cancel anytime by texting CANCEL — your plan continues until the end of the billing period with no prorated refund. Free trial periods do not require a credit card.</p><h3>Acceptable use</h3><p>You may not use TextMarketer to send spam, promote illegal products, or distribute content that violates platform guidelines (Facebook, Instagram, TikTok, etc.). Violations result in immediate account termination.</p><h3>Limitation of liability</h3><p>TextMarketer is provided as-is. We are not liable for indirect or consequential damages arising from use of the service. Our maximum liability is limited to fees paid in the prior 3 months.</p><h3>Contact</h3><p>Questions? Email <a href="mailto:hello@textmarketer.io" style="color:var(--accent)">hello@textmarketer.io</a>.</p>`
+  }
+};
+
+function openModal(type){
+  const overlay=document.getElementById('modalOverlay');
+  document.getElementById('modalTitle').textContent=modalContent[type].title;
+  document.getElementById('modalBody').innerHTML=modalContent[type].body;
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal()});
+
 const phoneInput=document.getElementById('phoneInput');
 phoneInput.addEventListener('input',function(){
   let v=this.value.replace(/\D/g,'');
-  if(v.length>=7)v=v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6,10);
-  else if(v.length>=4)v=v.slice(0,3)+'-'+v.slice(3);
+  if(v.length>10)v=v.slice(0,10);
+  if(v.length>6)v='('+v.slice(0,3)+') '+v.slice(3,6)+'-'+v.slice(6);
+  else if(v.length>3)v='('+v.slice(0,3)+') '+v.slice(3);
+  else if(v.length>0)v='('+v;
   this.value=v;
+});
+phoneInput.addEventListener('blur',function(){
+  if(this.value&&this.value.replace(/\D/g,'').length!==10){
+    this.style.borderColor='var(--red)';
+  }else{
+    this.style.borderColor='';
+  }
+});
+phoneInput.addEventListener('focus',function(){
+  this.style.borderColor='var(--accent)';
 });
 
 function handleSignup(e){
   e.preventDefault();
+  const digits=phoneInput.value.replace(/\D/g,'');
+  if(digits.length!==10){
+    phoneInput.style.borderColor='var(--red)';
+    phoneInput.focus();
+    return;
+  }
+  phoneInput.style.borderColor='';
   const btn=e.target.querySelector('button');
+  const formatted=phoneInput.value;
   btn.textContent='Sending...';
   btn.disabled=true;
   setTimeout(()=>{
     document.getElementById('signupForm').style.display='none';
-    document.getElementById('signupMsg').style.display='block';
+    const msg=document.getElementById('signupMsg');
+    msg.textContent='Done — we just texted '+formatted+'. Check your phone.';
+    msg.style.display='block';
   },800);
 }
 
