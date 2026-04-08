@@ -40,7 +40,7 @@ nav.scrolled{border-color:var(--border)}
 .hero__live-header{background:var(--surface2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
 .hero__live-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
 .hero__live-name{font-size:0.78rem;font-weight:600;flex:1;text-align:center;letter-spacing:-0.01em}
-.hero__live-badge{font-family:var(--mono);font-size:0.72rem;color:var(--green);letter-spacing:0.04em}
+.hero__live-badge{font-family:var(--mono);font-size:0.75rem;color:var(--green);letter-spacing:0.04em}
 .hero__live-msgs{padding:16px;min-height:148px;display:flex;flex-direction:column;gap:8px;justify-content:flex-end}
 .hero__live-msg{font-size:0.8rem;line-height:1.45;padding:9px 13px;border-radius:14px;max-width:86%;opacity:0;transition:opacity 0.25s}
 .hero__live-msg.visible{opacity:1}
@@ -91,6 +91,7 @@ nav.scrolled{border-color:var(--border)}
 .feature__title{font-size:0.95rem;font-weight:700;margin-bottom:6px;letter-spacing:-0.01em}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
 .compare{padding:80px 0;border-top:1px solid var(--border)}
+.compare__scroll{width:100%}
 .compare__title{font-size:1.8rem;font-weight:700;letter-spacing:-0.025em;margin-bottom:36px;max-width:640px;line-height:1.25}
 .compare__table{width:100%;border:1px solid var(--border);border-collapse:collapse;display:table}
 .compare__row{display:table-row}
@@ -172,7 +173,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .phone{max-width:100%;border-radius:16px}
   .proof__quotes{grid-template-columns:1fr;gap:16px}
   .compare__title{font-size:1.4rem;text-align:center}
-  .compare{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .compare{overflow-x:hidden}
+  .compare .container{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
   .compare__table{display:block;min-width:460px}
   .compare__row,.compare__row--head{display:flex}
   .compare__cell{flex:1;padding:12px 8px;font-size:0.78rem;min-width:80px}
@@ -180,6 +182,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .section-label{text-align:center}
   .section-title{text-align:center}
   .step__desc,.feature__desc,.proof__quote-text,.plan__desc{text-align:left}
+  .feature__title,.plan__name,.step__num{text-align:left}
+  .proof__quote-meta{text-align:left}
   .plan--featured::before{font-size:0.75rem}
   .demo__label h2,.demo__label p{text-align:center}
 }
@@ -199,6 +203,11 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .footer__links a{padding:6px 0;display:inline-flex;align-items:center;min-height:44px}
   .step__num,.step__title{text-align:left}
   .faq__a{text-align:left}
+  .pricing__toggle{flex-wrap:wrap;justify-content:center;gap:8px}
+  .proof__quote-meta{text-align:center}
+  .hero__trust{font-size:0.78rem;padding:0 8px}
+  .plan__name{text-align:left}
+  .feature__title,.step__title{text-align:left}
 }
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
 .modal-overlay.open{display:flex}
@@ -280,8 +289,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <div class="steps">
       <div class="step">
         <div class="step__num">01</div>
-        <h3 class="step__title">Text your number</h3>
-        <p class="step__desc">Sign up with just your phone number. Answer 5 quick texts about your business. That's your entire onboarding.</p>
+        <h3 class="step__title">Join the waitlist</h3>
+        <p class="step__desc">Enter your email to hold your spot. We'll follow up with one text asking for your number — that's the moment your marketing assistant wakes up.</p>
       </div>
       <div class="step">
         <div class="step__num">02</div>
@@ -328,9 +337,9 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <p class="feature__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
       </div>
       <div class="feature">
-        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-        <h3 class="feature__title">It spots problems before you do</h3>
-        <p class="feature__desc">"Engagement dropped 15% this week — here are 3 posts to fix it." Sent before you even noticed.</p>
+        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
+        <h3 class="feature__title">Autopilot mode</h3>
+        <p class="feature__desc">Don't want to approve every post? Switch to autopilot. We publish on your schedule, then text you a weekly summary of everything that went out.</p>
       </div>
     </div>
   </div>
@@ -340,13 +349,21 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   <div class="container">
     <div class="section-label">vs. the alternatives</div>
     <h2 class="compare__title">Every competitor still needs a dashboard. We don&#39;t.</h2>
+    <div class="compare__scroll">
     <div class="compare__table" role="table" aria-label="Competitor comparison">
       <div class="compare__row compare__row--head" role="row">
         <div class="compare__cell compare__cell--feature" role="columnheader"></div>
-        <div class="compare__cell" role="columnheader">SimpleTexting</div>
-        <div class="compare__cell" role="columnheader">Klaviyo</div>
-        <div class="compare__cell" role="columnheader">Attentive</div>
+        <div class="compare__cell" role="columnheader">Social Media Manager</div>
+        <div class="compare__cell" role="columnheader">Hootsuite Team</div>
+        <div class="compare__cell" role="columnheader">Podium</div>
         <div class="compare__cell compare__cell--us" role="columnheader">TextMarketer</div>
+      </div>
+      <div class="compare__row" role="row">
+        <div class="compare__cell compare__cell--feature" role="cell">Monthly cost</div>
+        <div class="compare__cell compare__cell--muted" role="cell">$2,500–$4k</div>
+        <div class="compare__cell compare__cell--muted" role="cell">$249/user</div>
+        <div class="compare__cell compare__cell--muted" role="cell">$399+</div>
+        <div class="compare__cell compare__cell--us" role="cell">$49–99</div>
       </div>
       <div class="compare__row" role="row">
         <div class="compare__cell compare__cell--feature" role="cell">No dashboard required</div>
@@ -359,7 +376,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="compare__cell compare__cell--feature" role="cell">AI-native (not bolted on)</div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
+        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Add-on extra" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
       </div>
       <div class="compare__row" role="row">
@@ -370,28 +387,22 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
       </div>
       <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Flat monthly price</div>
+        <div class="compare__cell compare__cell--feature" role="cell">Runs via text message</div>
+        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
+        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
+        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
+        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
+      </div>
+      <div class="compare__row" role="row">
+        <div class="compare__cell compare__cell--feature" role="cell">Transparent flat price</div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Yes" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
       </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Advanced email analytics</div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Yes" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Yes" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
-        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__x" style="color:var(--text-muted)" aria-label="No — not our focus">&#10005;</span></div>
-      </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Entry price</div>
-        <div class="compare__cell compare__cell--muted" role="cell">$29/mo</div>
-        <div class="compare__cell compare__cell--muted" role="cell">$20+/mo</div>
-        <div class="compare__cell compare__cell--muted" role="cell">$2,000+/qtr</div>
-        <div class="compare__cell compare__cell--us" role="cell">$49/mo</div>
-      </div>
     </div>
-    <p class="compare__note">Sources: Capterra, G2, Emitrr, EmailToolTester &mdash; April 2026. We give credit where it's due.</p>
+    </div>
+    <p class="compare__note">Sources: Hootsuite pricing page, Podium.com, Indeed salary data &mdash; April 2026. We give credit where it's due.</p>
   </div>
 </section>
 
@@ -401,21 +412,21 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <h2 class="section-title">What we heard in beta</h2>
     <div class="proof__quotes">
       <div class="proof__quote">
-        <p class="proof__quote-text">"I kept putting off Instagram because I never knew what to post. Now it sends me three options on Sunday night. I pick one, say YES, and my week is done."</p>
+        <p class="proof__quote-text">"ok so i was skeptical but it texted me sunday evening with 3 post options and i just said yes to the first one and it posted. thats it. thats the whole thing"</p>
         <div class="proof__quote-meta">
           <strong>Maria T. &mdash; Bloom &amp; Co. Florals</strong>
           <span>Phoenix, AZ</span>
         </div>
       </div>
       <div class="proof__quote">
-        <p class="proof__quote-text">"I didn't even read the instructions. Just replied to the first text it sent. The Google review reminders were the part I didn't know I needed."</p>
+        <p class="proof__quote-text">"i don't do social media. my wife set this up, i answered like 4 questions over text and now it just... runs. got a 5-star review last week and it already replied before i even saw it"</p>
         <div class="proof__quote-meta">
           <strong>Dave K. &mdash; Kowalski Plumbing</strong>
           <span>Chicago, IL</span>
         </div>
       </div>
       <div class="proof__quote">
-        <p class="proof__quote-text">"We had a social media manager until February. The weekly summary text is the part I actually look forward to — it's the first time I've ever known what my marketing was doing."</p>
+        <p class="proof__quote-text">"we let our social media person go in february. honest answer — the monday summary text tells me more than she ever did. 'your wednesday posts do 2x the engagement' ok i never knew that"</p>
         <div class="proof__quote-meta">
           <strong>Renee B. &mdash; Studio 44 Salon</strong>
           <span>Atlanta, GA</span>
@@ -524,13 +535,22 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   <div class="container">
     <p class="final-cta__trust">Early access &nbsp;&bull;&nbsp; Cancel by text &nbsp;&bull;&nbsp; No login ever</p>
     <h2 class="final-cta__title">Join the waitlist. Be first in line.</h2>
-    <p class="final-cta__sub">We're opening access in waves. We'll email you when your spot is ready. We'll text you to get started. No spam, ever.</p>
-    <form class="signup-form" id="signupForm" onsubmit="handleSignup(event)">
+    <p class="final-cta__sub" id="formSub">We're opening access in waves. Enter your email to hold your spot.</p>
+
+    <!-- Step 1: email -->
+    <form class="signup-form" id="step1Form" onsubmit="handleStep1(event)">
       <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
-      <button type="submit">Join the waitlist &rarr;</button>
+      <button type="submit">Hold my spot &rarr;</button>
     </form>
+
+    <!-- Step 2: phone -->
+    <form class="signup-form" id="step2Form" onsubmit="handleStep2(event)" style="display:none">
+      <input type="tel" id="phoneInput" placeholder="(555) 867-5309" autocomplete="tel" required>
+      <button type="submit">Start free trial &rarr;</button>
+    </form>
+
     <p class="signup-note">By joining you agree to our <a href="#" onclick="openModal('privacy');return false;">Privacy Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms of Service</a>. We'll only contact you about your waitlist spot &mdash; never sold, never spammed.</p>
-    <p class="signup-msg" id="signupMsg">You're on the list. We'll email you when your spot opens up.</p>
+    <p class="signup-msg" id="signupMsg"></p>
   </div>
 </section>
 
