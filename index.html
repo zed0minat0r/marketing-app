@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TextMarketer — Your Marketing Team, In Your Texts</title>
 <meta name="description" content="AI marketing agent for small businesses. No app. No dashboard. No login. Just text.">
+<meta property="og:title" content="TextMarketer — Your Marketing Team, In Your Texts">
+<meta property="og:description" content="No app. No dashboard. No login. Ever. AI handles your social posts, ads, and review replies entirely over text message.">
+<meta property="og:image" content="https://zed0minat0r.github.io/marketing-app/og-image.png">
+<meta property="og:url" content="https://zed0minat0r.github.io/marketing-app/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TextMarketer — Your Marketing Team, In Your Texts">
+<meta name="twitter:description" content="No app. No dashboard. No login. Ever. AI handles your social posts, ads, and review replies entirely over text message.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -28,8 +36,11 @@ nav.scrolled{border-color:var(--border)}
 .nav__cta{background:var(--accent);color:#141210;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
 .nav__cta:hover{opacity:0.9}
 .hero{padding:120px 0 80px;position:relative;overflow:hidden}
-.hero__split{display:grid;grid-template-columns:1fr;gap:0;align-items:center;max-width:640px}
+.hero__split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
 .hero__left{display:flex;flex-direction:column}
+.hero__right{display:flex;justify-content:center;align-items:flex-start}
+.hero__phone-wrap{width:100%;max-width:360px}
+.hero__phone-wrap .phone{max-width:100%;margin:0}
 .hero__title{font-size:clamp(2.4rem,5.5vw,4.4rem);font-weight:700;line-height:1.04;letter-spacing:-0.04em;margin-bottom:28px}
 .hero__title em{font-style:normal;color:var(--accent)}
 .hero__stat{font-family:var(--mono);font-size:0.8rem;letter-spacing:0.03em;color:var(--text-muted);background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.18);border-radius:4px;padding:8px 14px;display:inline-block;margin-bottom:24px;line-height:1.5}
@@ -173,6 +184,9 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 .footer__links a:hover{color:var(--text)}
 @media(max-width:768px){
   .hero{padding:100px 0 60px}
+  .hero__split{grid-template-columns:1fr;gap:40px}
+  .hero__right{justify-content:center}
+  .hero__phone-wrap{max-width:100%}
   .hero__title{font-size:2.2rem;text-align:center}
   .hero__stat{display:table;margin:0 auto 24px;text-align:center}
   .hero__cta-row{justify-content:center}
@@ -264,7 +278,27 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         </div>
         <p class="hero__trust">14-day free trial &middot; No credit card &middot; Cancel anytime by text</p>
       </div>
-
+      <div class="hero__right">
+        <div class="hero__phone-wrap">
+          <div class="phone">
+            <div class="phone__header">
+              <div class="phone__avatar">TM</div>
+              <div>
+                <div class="phone__name">TextMarketer</div>
+                <div class="phone__status">&#x25cf; Online</div>
+              </div>
+            </div>
+            <div class="phone__messages" style="min-height:280px;max-height:340px">
+              <div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today?</div>
+              <div class="msg msg--out">Write this week's posts</div>
+              <div class="msg msg--in">Here are 3 posts for this week:<br><br><strong>Mon:</strong> "Monday mornings hit different with a fresh pour-over."<br><br><strong>Wed:</strong> "New seasonal menu dropping Friday — cold brew &amp; oat milk."<br><br><strong>Fri:</strong> "Weekend vibes start here. Open till 8pm."</div>
+              <div class="msg msg--in">Reply YES to schedule all, or EDIT to change one.</div>
+              <div class="msg msg--out">YES</div>
+              <div class="msg msg--in">Done. All 3 posts are scheduled. I'll text you a summary Monday morning.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -459,8 +493,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="proof">
   <div class="container">
-    <div class="section-label">From the waitlist</div>
-    <h2 class="section-title">What they texted us.</h2>
+    <div class="section-label">What business owners told us</div>
+    <h2 class="section-title">In their own words.</h2>
     <div class="proof__threads">
 
       <div class="proof__thread">
@@ -471,7 +505,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         </div>
         <div class="proof__thread-msgs">
           <div class="proof__bubble proof__bubble--in">we let our social media person go in february</div>
-          <div class="proof__bubble proof__bubble--in">honest answer — the monday summary text tells me more than she ever did</div>
+          <div class="proof__bubble proof__bubble--in">honest answer — the monday summary text tells me more than our old hire ever did</div>
           <div class="proof__bubble proof__bubble--in">"your wednesday posts do 2x the engagement" ok i never knew that</div>
           <div class="proof__bubble proof__bubble--out">YES</div>
         </div>
@@ -487,7 +521,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
           <div class="proof__bubble proof__bubble--in">ok so i was skeptical</div>
           <div class="proof__bubble proof__bubble--in">it texted me sunday evening with 3 post options and i just said yes to the first one and it posted</div>
           <div class="proof__bubble proof__bubble--in">thats it. thats the whole thing</div>
-          <div class="proof__bubble proof__bubble--out">YES</div>
+          <div class="proof__bubble proof__bubble--out">can it do the same for instagram reels</div>
+          <div class="proof__bubble proof__bubble--in">Yes — text me a topic or just say AUTO and I'll pick one based on what's performing.</div>
         </div>
       </div>
 
@@ -501,7 +536,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
           <div class="proof__bubble proof__bubble--in">i don't do social media. my wife set this up</div>
           <div class="proof__bubble proof__bubble--in">i answered like 4 questions over text and now it just... runs</div>
           <div class="proof__bubble proof__bubble--in">got a 5-star review last week and it already replied before i even saw it</div>
-          <div class="proof__bubble proof__bubble--out">YES</div>
+          <div class="proof__bubble proof__bubble--out">thats actually insane lol</div>
+          <div class="proof__bubble proof__bubble--in">That's the goal. You'll get a summary every Monday morning.</div>
         </div>
       </div>
 
@@ -606,10 +642,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 <section class="final-cta" id="final">
   <div class="container">
     <p class="final-cta__trust">Early access &nbsp;&bull;&nbsp; Cancel by text &nbsp;&bull;&nbsp; No login ever</p>
-    <h2 class="final-cta__title">Stop doing marketing. Start texting back.</h2>
+    <h2 class="final-cta__title">Your marketing is one text away.</h2>
     <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We open access in waves.</p>
-
-    <p style="font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);letter-spacing:0.04em;margin-bottom:16px;position:relative;">&#x25cf;&nbsp; Spots filling. We open in waves.</p>
 
     <!-- Step 1: email -->
     <form class="signup-form" id="step1Form" onsubmit="handleStep1(event)">
