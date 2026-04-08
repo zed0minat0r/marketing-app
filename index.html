@@ -27,10 +27,8 @@ nav.scrolled{border-color:var(--border)}
 .nav__cta{background:var(--accent);color:#141210;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
 .nav__cta:hover{opacity:0.9}
 .hero{padding:140px 0 100px;text-align:center;position:relative;overflow:hidden}
-.hero::before{display:none}
 .hero__title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;line-height:1.04;letter-spacing:-0.04em;margin-bottom:0;max-width:920px;margin-left:auto;margin-right:auto}
 .hero__title em{font-style:normal;color:var(--accent)}
-/* hero__stat removed — no longer used in hero */
 .hero__cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
 .hero__trust{font-size:0.78rem;color:var(--text-muted);margin-top:0;letter-spacing:0.01em}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
@@ -121,7 +119,6 @@ nav.scrolled{border-color:var(--border)}
 .pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .plan{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:32px}
 .plan--featured{border-color:var(--accent);position:relative}
-/* plan--featured badge bumped to 0.75rem (12px) — 0.72rem was 11.52px below minimum */
 .plan--featured::before{content:'// most popular';position:absolute;top:-12px;left:24px;background:var(--bg);border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.75rem;font-weight:500;padding:3px 10px;border-radius:4px;letter-spacing:0.04em}
 .plan__name{font-family:var(--mono);font-size:0.85rem;font-weight:500;color:var(--accent);margin-bottom:8px}
 .plan__price{margin-bottom:4px;display:flex;align-items:baseline;gap:4px}
@@ -144,7 +141,6 @@ nav.scrolled{border-color:var(--border)}
 .faq__a{font-size:0.9rem;color:var(--text-muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease}
 .faq__item.open .faq__a{max-height:300px;padding-top:12px}
 .final-cta{padding:100px 0;text-align:center;border-top:1px solid var(--border);position:relative}
-.final-cta::before{display:none}
 .final-cta__trust{font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:24px;position:relative}
 .final-cta__title{font-size:2.2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px;position:relative}
 .final-cta__sub{color:var(--text-muted);margin-bottom:32px;position:relative}
@@ -176,21 +172,15 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .phone{max-width:100%;border-radius:16px}
   .proof__quotes{grid-template-columns:1fr;gap:16px}
   .compare__title{font-size:1.4rem;text-align:center}
-  /* compare table: overflow-x scroll container must be on the parent, not inside flex rows */
   .compare{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .compare__table{display:block;min-width:460px}
   .compare__row,.compare__row--head{display:flex}
   .compare__cell{flex:1;padding:12px 8px;font-size:0.78rem;min-width:80px}
   .compare__cell--feature{min-width:120px;flex:1.5}
-  /* Center section labels and headings on mobile */
   .section-label{text-align:center}
   .section-title{text-align:center}
-  .how .section-title,.features .section-title,.proof .section-title,.pricing .section-title,.faq .section-title{text-align:center}
-  /* Body text stays left-aligned on mobile (only headings/labels center) */
   .step__desc,.feature__desc,.proof__quote-text,.plan__desc{text-align:left}
-  /* plan--featured badge: 0.72rem was 11.52px, below 12px minimum */
   .plan--featured::before{font-size:0.75rem}
-  /* Demo section heading consistent center alignment */
   .demo__label h2,.demo__label p{text-align:center}
 }
 @media(max-width:480px){
@@ -198,23 +188,16 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .hero__cta-row{flex-direction:column;align-items:center}
   .btn{width:100%;text-align:center}
   .nav__cta{padding:10px 16px;font-size:0.82rem}
-  .antisaas__quote{font-size:1.3rem}
   .phone__prompts{gap:6px}
-  /* Fix prompt-btn tap target: restore min-height */
   .prompt-btn{font-size:0.8rem;padding:10px 14px;min-height:44px}
-  /* Fix phone status font-size: was 0.7rem (11.2px), below 12px minimum */
   .phone__status{font-size:0.75rem}
   .final-cta__title{font-size:1.8rem}
   .section-title{font-size:1.6rem}
   .signup-form{flex-direction:column}
   .signup-form input,.signup-form button{width:100%}
-  /* Ensure signup button is a proper tap target */
   .signup-form button{min-height:48px}
-  /* Footer link tap targets */
   .footer__links a{padding:6px 0;display:inline-flex;align-items:center;min-height:44px}
-  /* step number and title remain left-aligned (not a section heading) */
   .step__num,.step__title{text-align:left}
-  /* faq answer text stays left-aligned */
   .faq__a{text-align:left}
 }
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
@@ -660,14 +643,6 @@ function closeModal(){
 }
 
 document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal()});
-
-const emailInput=document.getElementById('emailInput');
-emailInput.addEventListener('focus',function(){
-  this.style.borderColor='var(--accent)';
-});
-emailInput.addEventListener('blur',function(){
-  this.style.borderColor='';
-});
 
 function handleSignup(e){
   e.preventDefault();
