@@ -780,7 +780,7 @@ function handleStep2(e){
     const msg=document.getElementById('signupMsg');
     const plan=document.getElementById('selectedPlan').value;
     const planNote=plan?' Your <strong>'+plan+' plan</strong> price is locked in.':'';
-    msg.innerHTML='Spot reserved.'+planNote+' We open to the first 500 businesses in <strong>May 2026</strong> — we'll text you the moment you're up.';
+    msg.innerHTML=`Spot reserved.${planNote} We open to the first 500 businesses in <strong>May 2026</strong> &mdash; we&rsquo;ll text you the moment you&rsquo;re up.`;
     msg.style.display='block';
     // Queue position — seeded number, feels real, not arbitrary
     const basePosition=187;
