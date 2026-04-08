@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sidekick Admin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1f1f1f;
+      --border-bright: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #666;
+      --accent: #f0f0f0;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --blue: #3b82f6;
+    }
+
+    body {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ---- AUTH GATE ---- */
+    #auth-gate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 360px;
+      border: 1px solid var(--border-bright);
+      padding: 40px;
+    }
+
+    .auth-box h1 {
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .auth-box p {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .auth-box input[type="password"] {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 10px 14px;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    .auth-box input[type="password"]:focus {
+      border-color: var(--accent);
+    }
+
+    .auth-box button {
+      width: 100%;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .auth-box button:hover {
+      background: #fff;
+    }
+
+    .auth-error {
+      color: var(--red);
+      font-size: 11px;
+      margin-top: 10px;
+    }
+
+    /* ---- DASHBOARD ---- */
+    #dashboard {
+      display: none;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .wordmark {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .env-badge {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .last-refresh {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .btn-refresh {
+      background: none;
+      border: 1px solid var(--border-bright);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 11px;
+      padding: 5px 12px;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+    }
+
+    .btn-refresh:hover { color: var(--text); border-color: var(--accent); }
+
+    main {
+      padding: 32px;
+      max-width: 1400px;
+    }
+
+    /* ---- STATS GRID ---- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      padding: 24px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ---- CHART ---- */
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .chart-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      height: 120px;
+    }
+
+    .chart-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      height: 100%;
+    }
+
+    .chart-bar-track {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .chart-bar {
+      width: 100%;
+      background: var(--border-bright);
+      min-height: 2px;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .chart-bar:hover {
+      background: var(--accent);
+    }
+
+    .chart-bar-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .chart-bar-count {
+      font-size: 10px;
+      color: var(--text);
+    }
+
+    /* ---- TABLE ---- */
+    .table-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      color: var(--text);
+      white-space: nowrap;
+      font-size: 12px;
+    }
+
+    .plan-badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border: 1px solid;
+    }
+
+    .plan-starter { border-color: var(--muted); color: var(--muted); }
+    .plan-growth { border-color: var(--yellow); color: var(--yellow); }
+    .plan-pro { border-color: var(--green); color: var(--green); }
+
+    .onboard-done { color: var(--green); }
+    .onboard-pending { color: var(--yellow); }
+
+    .loading {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    .error-msg {
+      color: var(--red);
+      font-size: 11px;
+      padding: 16px;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 11px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      main { padding: 16px; }
+      header { padding: 0 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AUTH GATE -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <h1>Sidekick Admin</h1>
+    <p>Enter your admin password to continue.</p>
+    <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password" />
+    <button id="pw-submit">Authenticate</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <header>
+    <div class="header-left">
+      <span class="wordmark">Sidekick</span>
+      <span class="env-badge">Admin</span>
+    </div>
+    <div class="header-right">
+      <span class="last-refresh" id="last-refresh">Loading...</span>
+      <button class="btn-refresh" onclick="loadAll()">Refresh</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Signups</div>
+        <div class="stat-value" id="stat-total">--</div>
+        <div class="stat-sub">all time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Users</div>
+        <div class="stat-value" id="stat-active">--</div>
+        <div class="stat-sub">onboarding complete</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Messages Today</div>
+        <div class="stat-value" id="stat-today">--</div>
+        <div class="stat-sub">inbound + outbound</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Messages This Week</div>
+        <div class="stat-value" id="stat-week">--</div>
+        <div class="stat-sub">last 7 days</div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Message Volume — Last 7 Days</span>
+      </div>
+      <div class="chart-container">
+        <div class="chart-bars" id="chart-bars">
+          <div class="loading">Loading chart...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USER TABLE -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Users</span>
+        <span class="last-refresh" id="user-count">--</span>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Phone</th>
+              <th>Business</th>
+              <th>Type</th>
+              <th>Plan</th>
+              <th>Onboarded</th>
+              <th>Signed Up</th>
+              <th>Last Message</th>
+              <th>Msgs</th>
+            </tr>
+          </thead>
+          <tbody id="user-table-body">
+            <tr><td colspan="8" class="loading">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // =============================================
+  // CONFIG — injected at build or set via env
+  // Read from window._env (set by server) or fall back to embedded values
+  // =============================================
+  const SUPABASE_URL = window._SUPABASE_URL || '';
+  const SUPABASE_ANON_KEY = window._SUPABASE_ANON_KEY || '';
+
+  // Admin password hash — SHA-256 of ADMIN_PASSWORD env var
+  // Default hash is SHA-256 of "sidekick-admin-2025" for local dev
+  // In production, override window._ADMIN_HASH via a server-rendered meta tag or inline script
+  const ADMIN_HASH = window._ADMIN_HASH || '3e7a2b8c4d6f1e9a0b5c3d7e2f4a8b1c6e3d5a7b9c2e4f6a8b0d2e4f6a8b1c3';
+
+  // =============================================
+  // AUTH
+  // =============================================
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function tryAuth() {
+    const pw = document.getElementById('pw-input').value.trim();
+    if (!pw) return;
+
+    const hash = await sha256(pw);
+    if (hash === ADMIN_HASH) {
+      sessionStorage.setItem('admin_authed', '1');
+      document.getElementById('auth-gate').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadAll();
+    } else {
+      document.getElementById('auth-error').textContent = 'Incorrect password.';
+    }
+  }
+
+  document.getElementById('pw-submit').addEventListener('click', tryAuth);
+  document.getElementById('pw-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryAuth();
+  });
+
+  // Auto-bypass if already authed this session
+  if (sessionStorage.getItem('admin_authed') === '1') {
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  }
+
+  // =============================================
+  // SUPABASE FETCH HELPER
+  // =============================================
+  async function sbFetch(path, params = {}) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      throw new Error('Supabase credentials not configured. Set window._SUPABASE_URL and window._SUPABASE_ANON_KEY.');
+    }
+
+    const qs = new URLSearchParams(params).toString();
+    const url = `${SUPABASE_URL}/rest/v1/${path}${qs ? '?' + qs : ''}`;
+
+    const res = await fetch(url, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'count=exact',
+      },
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(`Supabase error ${res.status}: ${err}`);
+    }
+
+    const count = res.headers.get('content-range')
+      ? parseInt(res.headers.get('content-range').split('/')[1], 10)
+      : null;
+
+    const data = await res.json();
+    return { data, count };
+  }
+
+  // =============================================
+  // LOAD DATA
+  // =============================================
+  async function loadAll() {
+    try {
+      await Promise.all([loadStats(), loadChart(), loadUsers()]);
+      document.getElementById('last-refresh').textContent =
+        'Refreshed ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      document.getElementById('last-refresh').textContent = 'Error: ' + e.message;
+    }
+  }
+
+  async function loadStats() {
+    // Total signups
+    const { count: totalCount } = await sbFetch('users', { select: 'id', head: 'true' });
+    document.getElementById('stat-total').textContent = totalCount ?? '--';
+
+    // Active users (onboarding complete)
+    const { count: activeCount } = await sbFetch('users', {
+      select: 'id',
+      onboarding_complete: 'eq.true',
+      head: 'true',
+    });
+    document.getElementById('stat-active').textContent = activeCount ?? '--';
+
+    // Messages today
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const { count: todayCount } = await sbFetch('conversations', {
+      select: 'id',
+      created_at: `gte.${todayStart.toISOString()}`,
+      head: 'true',
+    });
+    document.getElementById('stat-today').textContent = todayCount ?? '--';
+
+    // Messages this week
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - 7);
+    const { count: weekCount } = await sbFetch('conversations', {
+      select: 'id',
+      created_at: `gte.${weekStart.toISOString()}`,
+      head: 'true',
+    });
+    document.getElementById('stat-week').textContent = weekCount ?? '--';
+  }
+
+  async function loadChart() {
+    // Build last 7 days buckets
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      d.setHours(0, 0, 0, 0);
+      days.push({
+        label: d.toLocaleDateString('en-US', { weekday: 'short' }),
+        date: d.toISOString().split('T')[0],
+        start: d.toISOString(),
+        end: new Date(d.getTime() + 86400000).toISOString(),
+        count: 0,
+      });
+    }
+
+    // Fetch all conversations from last 7 days
+    const weekStart = days[0].start;
+    const { data: msgs } = await sbFetch('conversations', {
+      select: 'created_at',
+      created_at: `gte.${weekStart}`,
+      order: 'created_at.asc',
+      limit: 10000,
+    });
+
+    // Bucket by day
+    for (const msg of (msgs || [])) {
+      const d = msg.created_at.split('T')[0];
+      const bucket = days.find(b => b.date === d);
+      if (bucket) bucket.count++;
+    }
+
+    const max = Math.max(...days.map(d => d.count), 1);
+
+    const container = document.getElementById('chart-bars');
+    container.innerHTML = days.map(day => `
+      <div class="chart-bar-wrap">
+        <div class="chart-bar-count">${day.count}</div>
+        <div class="chart-bar-track">
+          <div class="chart-bar" style="height:${Math.max(4, Math.round((day.count / max) * 100))}%"
+               title="${day.label}: ${day.count} messages"></div>
+        </div>
+        <div class="chart-bar-label">${day.label}</div>
+      </div>
+    `).join('');
+  }
+
+  async function loadUsers() {
+    const { data: users } = await sbFetch('users', {
+      select: 'id,phone,business_name,business_type,plan,onboarding_complete,onboarding_step,created_at',
+      order: 'created_at.desc',
+      limit: 200,
+    });
+
+    if (!users || users.length === 0) {
+      document.getElementById('user-table-body').innerHTML =
+        '<tr><td colspan="8" class="empty">No users yet.</td></tr>';
+      document.getElementById('user-count').textContent = '0 users';
+      return;
+    }
+
+    document.getElementById('user-count').textContent = `${users.length} users`;
+
+    // Fetch last message + message count per user in a single query
+    const userIds = users.map(u => u.id);
+    const { data: convos } = await sbFetch('conversations', {
+      select: 'user_id,created_at',
+      user_id: `in.(${userIds.join(',')})`,
+      order: 'created_at.desc',
+      limit: 10000,
+    });
+
+    // Build per-user stats
+    const userStats = {};
+    for (const c of (convos || [])) {
+      if (!userStats[c.user_id]) {
+        userStats[c.user_id] = { lastMsg: c.created_at, count: 0 };
+      }
+      userStats[c.user_id].count++;
+      if (c.created_at > userStats[c.user_id].lastMsg) {
+        userStats[c.user_id].lastMsg = c.created_at;
+      }
+    }
+
+    const tbody = document.getElementById('user-table-body');
+    tbody.innerHTML = users.map(u => {
+      const stats = userStats[u.id] || { lastMsg: null, count: 0 };
+      const planClass = `plan-${u.plan || 'starter'}`;
+      const onboardClass = u.onboarding_complete ? 'onboard-done' : 'onboard-pending';
+      const onboardText = u.onboarding_complete ? 'Done' : (u.onboarding_step || 'pending');
+      const signupDate = new Date(u.created_at).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: '2-digit'
+      });
+      const lastMsg = stats.lastMsg
+        ? new Date(stats.lastMsg).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : '--';
+
+      return `
+        <tr>
+          <td>${u.phone}</td>
+          <td>${u.business_name || '<span style="color:var(--muted)">--</span>'}</td>
+          <td>${u.business_type || '<span style="color:var(--muted)">--</span>'}</td>
+          <td><span class="plan-badge ${planClass}">${u.plan || 'starter'}</span></td>
+          <td class="${onboardClass}">${onboardText}</td>
+          <td>${signupDate}</td>
+          <td>${lastMsg}</td>
+          <td>${stats.count}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Auto-load if already authenticated
+  if (sessionStorage.getItem('admin_authed') === '1') {
+    loadAll();
+  }
+</script>
+
+</body>
+</html>

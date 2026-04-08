@@ -104,6 +104,10 @@
       "dest": "/connected.html"
     },
     {
+      "src": "/admin",
+      "dest": "/admin.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }

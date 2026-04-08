@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sidekick-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sidekick
+      POSTGRES_PASSWORD: sidekick_dev
+      POSTGRES_DB: sidekick
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U sidekick -d sidekick']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: sidekick-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
