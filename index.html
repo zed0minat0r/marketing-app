@@ -109,20 +109,26 @@ nav.scrolled{border-color:var(--border)}
 .compare__x{color:var(--dim);font-size:1rem;font-weight:700}
 .compare__cell--muted{color:var(--text-muted)}
 .compare__note{font-size:0.78rem;color:var(--text-muted);margin-top:16px;opacity:0.6}
+.compare__cta-row{margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.compare__cta-note{font-size:0.82rem;color:var(--text-muted);font-family:var(--mono)}
 .compare__mobile{display:none;margin-bottom:8px}
-.compare__mobile-header{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:6px 6px 0 0;overflow:hidden}
-.compare__mobile-heading{font-family:var(--mono);font-size:0.72rem;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.compare__mobile-header{display:grid;grid-template-columns:1.4fr 1fr 1.1fr;gap:0;border:1px solid var(--border);border-radius:6px 6px 0 0;overflow:hidden}
+.compare__mobile-heading{font-family:var(--mono);font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);padding:9px 10px;background:var(--surface2);border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+.compare__mobile-heading:last-child{border-right:none}
 .compare__mobile-heading--us{color:var(--accent);background:rgba(212,245,60,0.06)}
-.compare__mobile-row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-left:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.compare__mobile-row{display:grid;grid-template-columns:1.4fr 1fr 1.1fr;gap:0;border-left:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
 .compare__mobile-row:last-child{border-radius:0 0 6px 6px;overflow:hidden}
-.compare__mobile-label{font-size:0.82rem;color:var(--text-muted);font-weight:500;padding:12px;border-right:1px solid var(--border);display:flex;align-items:center}
-.compare__mobile-val{font-size:0.88rem;font-weight:700;padding:12px;display:flex;align-items:center;justify-content:center;background:rgba(212,245,60,0.04)}
+.compare__mobile-label{font-size:0.8rem;color:var(--text-muted);font-weight:500;padding:11px 10px;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.3}
+.compare__mobile-val{font-size:0.88rem;font-weight:700;padding:11px 6px;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border)}
+.compare__mobile-val:last-child{border-right:none;background:rgba(212,245,60,0.05)}
+.compare__mobile-val--them{color:var(--text-muted);font-weight:500}
+.compare__mobile-val--us{color:var(--accent)}
 .proof{padding:80px 0;border-top:1px solid var(--border)}
 .proof__quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:24px}
 .proof__quote{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;display:flex;flex-direction:column}
 .proof__quote-text{font-size:0.88rem;line-height:1.65;margin-bottom:16px;color:var(--text);flex:1}
 .proof__quote-meta{display:flex;align-items:center;gap:12px}
-.proof__avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.72rem;font-weight:700;flex-shrink:0;letter-spacing:0.02em}
+.proof__avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.75rem;font-weight:700;flex-shrink:0;letter-spacing:0.02em}
 .proof__avatar--renee{background:#2e1f0e;color:#c4893a;border:1px solid #5c3d1a}
 .proof__avatar--maria{background:#0e2218;color:#3dc48a;border:1px solid #1a5c3d}
 .proof__avatar--dave{background:#0e1a2e;color:#3a7ac4;border:1px solid #1a3d5c}
@@ -171,7 +177,7 @@ nav.scrolled{border-color:var(--border)}
 .signup-form button{padding:14px 24px;min-height:48px;border-radius:6px;background:var(--accent);color:#141210;border:none;font-family:var(--font);font-size:0.95rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;white-space:nowrap}
 .signup-form button:hover{opacity:0.9}
 .signup-note{font-size:0.78rem;color:var(--text-muted);margin-top:12px;position:relative}
-.signup-note a{padding:8px 2px;display:inline-block;color:var(--text-muted);text-decoration:underline;text-underline-offset:2px}
+.signup-note a{padding:8px 2px;display:inline-flex;align-items:center;min-height:44px;color:var(--text-muted);text-decoration:underline;text-underline-offset:2px}
 .signup-note a:hover{color:var(--text)}
 .signup-msg{text-align:center;font-size:0.9rem;color:var(--green);margin-top:16px;display:none;position:relative;font-weight:500}
 footer{padding:40px 0;border-top:1px solid var(--border);text-align:center}
@@ -200,6 +206,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .compare__title{font-size:1.4rem;text-align:center}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
+  .compare__cta-row{flex-direction:column;align-items:flex-start}
+  .compare__cta-row .btn{width:100%;text-align:center;font-size:0.9rem;padding:14px 20px}
   .section-label{text-align:center}
   .section-title{text-align:center}
   .step__desc,.feature__desc,.proof__quote-text,.plan__desc{text-align:left}
@@ -372,34 +380,41 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   <div class="container">
     <div class="section-label">vs. the alternatives</div>
     <h2 class="compare__title">Every competitor still needs a dashboard. We don&#39;t.</h2>
-    <div class="compare__mobile" aria-label="TextMarketer highlights">
+    <div class="compare__mobile" aria-label="Competitor comparison">
       <div class="compare__mobile-header">
-        <div class="compare__mobile-heading">What you need</div>
-        <div class="compare__mobile-heading compare__mobile-heading--us">TextMarketer</div>
+        <div class="compare__mobile-heading" style="grid-column:1/2">Feature</div>
+        <div class="compare__mobile-heading" style="grid-column:2/3">Others</div>
+        <div class="compare__mobile-heading compare__mobile-heading--us" style="grid-column:3/4">TextMarketer</div>
       </div>
       <div class="compare__mobile-row">
         <div class="compare__mobile-label">Monthly cost</div>
-        <div class="compare__mobile-val" style="color:var(--accent)">$49&ndash;99</div>
+        <div class="compare__mobile-val compare__mobile-val--them">$249&ndash;$4k</div>
+        <div class="compare__mobile-val compare__mobile-val--us">$49&ndash;99</div>
       </div>
       <div class="compare__mobile-row">
         <div class="compare__mobile-label">No dashboard</div>
-        <div class="compare__mobile-val"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
+        <div class="compare__mobile-val compare__mobile-val--them"><span class="compare__x">&#10005;</span></div>
+        <div class="compare__mobile-val compare__mobile-val--us"><span class="compare__check">&#10003;</span></div>
       </div>
       <div class="compare__mobile-row">
         <div class="compare__mobile-label">Posts in your voice</div>
-        <div class="compare__mobile-val"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
+        <div class="compare__mobile-val compare__mobile-val--them" style="color:var(--text-muted)">~</div>
+        <div class="compare__mobile-val compare__mobile-val--us"><span class="compare__check">&#10003;</span></div>
       </div>
       <div class="compare__mobile-row">
-        <div class="compare__mobile-label">Setup under 10 min</div>
-        <div class="compare__mobile-val"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
+        <div class="compare__mobile-label">10-min setup</div>
+        <div class="compare__mobile-val compare__mobile-val--them"><span class="compare__x">&#10005;</span></div>
+        <div class="compare__mobile-val compare__mobile-val--us"><span class="compare__check">&#10003;</span></div>
       </div>
       <div class="compare__mobile-row">
         <div class="compare__mobile-label">Runs via text</div>
-        <div class="compare__mobile-val"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
+        <div class="compare__mobile-val compare__mobile-val--them"><span class="compare__x">&#10005;</span></div>
+        <div class="compare__mobile-val compare__mobile-val--us"><span class="compare__check">&#10003;</span></div>
       </div>
       <div class="compare__mobile-row">
         <div class="compare__mobile-label">Flat price</div>
-        <div class="compare__mobile-val"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
+        <div class="compare__mobile-val compare__mobile-val--them" style="color:var(--text-muted)">~</div>
+        <div class="compare__mobile-val compare__mobile-val--us"><span class="compare__check">&#10003;</span></div>
       </div>
     </div>
     <div class="compare__scroll-wrap">
@@ -458,9 +473,9 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     </div>
     </div>
     <p class="compare__note">Sources: Hootsuite pricing page, Podium.com, Indeed salary data &mdash; April 2026. We give credit where it's due.</p>
-    <div style="margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-      <button class="btn btn--primary" style="font-size:1rem;padding:16px 32px;" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Replace your $2,500/mo hire for $49 &rarr;</button>
-      <span style="font-size:0.82rem;color:var(--text-muted);font-family:var(--mono)">14-day free trial &nbsp;&middot;&nbsp; No credit card</span>
+    <div class="compare__cta-row">
+      <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Replace your $2,500/mo hire for $49 &rarr;</button>
+      <span class="compare__cta-note">14-day free trial &nbsp;&middot;&nbsp; No credit card</span>
     </div>
   </div>
 </section>
