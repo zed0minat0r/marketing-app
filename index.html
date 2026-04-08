@@ -110,16 +110,16 @@ nav.scrolled{border-color:var(--border)}
 .compare__mobile-val--them{color:var(--text-muted);font-weight:500}
 .compare__mobile-val--us{color:var(--accent)}
 .proof{padding:80px 0;border-top:1px solid var(--border)}
-.proof__quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:24px}
-.proof__quote{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;display:flex;flex-direction:column}
-.proof__quote-text{font-size:0.88rem;line-height:1.65;margin-bottom:16px;color:var(--text);flex:1}
-.proof__quote-meta{display:flex;align-items:center;gap:12px}
-.proof__avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.75rem;font-weight:700;flex-shrink:0;letter-spacing:0.02em}
-.proof__avatar--renee{background:#2e1f0e;color:#c4893a;border:1px solid #5c3d1a}
-.proof__avatar--maria{background:#0e2218;color:#3dc48a;border:1px solid #1a5c3d}
-.proof__avatar--dave{background:#0e1a2e;color:#3a7ac4;border:1px solid #1a3d5c}
-.proof__quote-meta strong{font-size:0.82rem;color:var(--text);display:block;font-weight:600}
-.proof__quote-meta span{font-size:0.78rem;color:var(--text-muted)}
+.proof__threads{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:24px;align-items:start}
+.proof__thread{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.proof__thread-header{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--surface2)}
+.proof__thread-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.proof__thread-name{font-size:0.8rem;font-weight:600;color:var(--text)}
+.proof__thread-biz{font-size:0.75rem;color:var(--text-muted);margin-left:auto;font-family:var(--mono)}
+.proof__thread-msgs{padding:14px;display:flex;flex-direction:column;gap:8px}
+.proof__bubble{max-width:88%;padding:9px 13px;border-radius:14px;font-size:0.83rem;line-height:1.5}
+.proof__bubble--in{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;color:var(--text)}
+.proof__bubble--out{background:var(--accent);color:#141210;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
 .proof__note{font-size:0.78rem;color:var(--text-muted);text-align:center;opacity:0.7}
 .pricing{padding:100px 0;border-top:1px solid var(--border)}
 .pricing__toggle{display:flex;align-items:center;gap:12px;margin:0 auto 40px;width:fit-content;font-size:0.88rem;color:var(--text-muted)}
@@ -186,7 +186,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .pricing__grid{grid-template-columns:1fr;gap:16px}
   .plan--featured{order:-1}
   .phone{max-width:100%;border-radius:16px}
-  .proof__quotes{grid-template-columns:1fr;gap:16px}
+  .proof__threads{grid-template-columns:1fr;gap:16px}
   .compare__title{font-size:1.4rem;text-align:center}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
@@ -195,9 +195,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .compare__cta-note{text-align:center}
   .section-label{text-align:center}
   .section-title{text-align:center}
-  .step__desc,.feature__desc,.proof__quote-text,.plan__desc{text-align:left}
+  .step__desc,.feature__desc,.plan__desc{text-align:left}
   .feature__title,.plan__name,.step__num{text-align:left}
-  .proof__quote-meta{text-align:left}
   .plan--featured::before{font-size:0.75rem}
   .demo__label h2,.demo__label p{text-align:center}
   .pricing__toggle{justify-content:center}
@@ -258,7 +257,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="hero__left">
         <div class="hero__stat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title">Your marketing team<br>lives in your <em>texts</em></h1>
-        <p class="hero__desc">No app, no dashboard, no login ever. TextMarketer is an AI that handles your social posts, ads, and review replies &mdash; entirely over text message. Sign up and your first week of posts arrives within the hour.</p>
+        <p class="hero__desc">No app. No dashboard. No login. Ever. TextMarketer is an AI that handles your social posts, ads, and review replies entirely over text message. Sign up and your first week of posts arrives within the hour.</p>
         <div class="hero__cta-row">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
           <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
@@ -327,16 +326,16 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <h2 class="section-title">Everything that was on your plate, handled.</h2>
     <div class="features__grid">
       <div class="feature">
-        <h3 class="feature__title">3 posts per platform, every week</h3>
-        <p class="feature__desc">3 posts per platform, every week, written in your business voice. You reply YES. We publish.</p>
+        <h3 class="feature__title">Autopilot mode</h3>
+        <p class="feature__desc">Don't want to approve every post? Switch to autopilot. We publish on your schedule and text you a weekly summary of everything that went out.</p>
+      </div>
+      <div class="feature">
+        <h3 class="feature__title">3 posts per week, per platform</h3>
+        <p class="feature__desc">Written in your voice, scheduled and published for you. Reply EDIT on anything that needs a tweak. That's the whole job.</p>
       </div>
       <div class="feature">
         <h3 class="feature__title">A Facebook ad in 30 seconds</h3>
         <p class="feature__desc">Text "run an ad." Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
-      </div>
-      <div class="feature">
-        <h3 class="feature__title">Website audit in plain English</h3>
-        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants.</p>
       </div>
       <div class="feature">
         <h3 class="feature__title">Every Google review answered</h3>
@@ -347,8 +346,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <p class="feature__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
       </div>
       <div class="feature">
-        <h3 class="feature__title">Autopilot mode</h3>
-        <p class="feature__desc">Don't want to approve every post? Switch to autopilot. We publish on your schedule, then text you a weekly summary of everything that went out.</p>
+        <h3 class="feature__title">Website audit in plain English</h3>
+        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants.</p>
       </div>
     </div>
   </div>
@@ -460,41 +459,54 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="proof">
   <div class="container">
-    <div class="section-label">217 businesses on the waitlist</div>
-    <h2 class="section-title">What our customers are saying</h2>
-    <div class="proof__quotes">
-      <div class="proof__quote">
-        <p class="proof__quote-text">"we let our social media person go in february. honest answer — the monday summary text tells me more than she ever did. 'your wednesday posts do 2x the engagement' ok i never knew that"</p>
-        <div class="proof__quote-meta">
-          <div class="proof__avatar proof__avatar--renee">RB</div>
-          <div>
-            <strong>Renee B. &mdash; Studio 44 Salon</strong>
-            <span>Atlanta, GA</span>
-          </div>
+    <div class="section-label">From the waitlist</div>
+    <h2 class="section-title">What they texted us.</h2>
+    <div class="proof__threads">
+
+      <div class="proof__thread">
+        <div class="proof__thread-header">
+          <div class="proof__thread-dot"></div>
+          <span class="proof__thread-name">Renee B.</span>
+          <span class="proof__thread-biz">Studio 44 Salon &middot; Atlanta</span>
+        </div>
+        <div class="proof__thread-msgs">
+          <div class="proof__bubble proof__bubble--in">we let our social media person go in february</div>
+          <div class="proof__bubble proof__bubble--in">honest answer — the monday summary text tells me more than she ever did</div>
+          <div class="proof__bubble proof__bubble--in">"your wednesday posts do 2x the engagement" ok i never knew that</div>
+          <div class="proof__bubble proof__bubble--out">YES</div>
         </div>
       </div>
-      <div class="proof__quote">
-        <p class="proof__quote-text">"ok so i was skeptical but it texted me sunday evening with 3 post options and i just said yes to the first one and it posted. thats it. thats the whole thing"</p>
-        <div class="proof__quote-meta">
-          <div class="proof__avatar proof__avatar--maria">MT</div>
-          <div>
-            <strong>Maria T. &mdash; Bloom &amp; Co. Florals</strong>
-            <span>Phoenix, AZ</span>
-          </div>
+
+      <div class="proof__thread">
+        <div class="proof__thread-header">
+          <div class="proof__thread-dot"></div>
+          <span class="proof__thread-name">Maria T.</span>
+          <span class="proof__thread-biz">Bloom &amp; Co. Florals &middot; Phoenix</span>
+        </div>
+        <div class="proof__thread-msgs">
+          <div class="proof__bubble proof__bubble--in">ok so i was skeptical</div>
+          <div class="proof__bubble proof__bubble--in">it texted me sunday evening with 3 post options and i just said yes to the first one and it posted</div>
+          <div class="proof__bubble proof__bubble--in">thats it. thats the whole thing</div>
+          <div class="proof__bubble proof__bubble--out">YES</div>
         </div>
       </div>
-      <div class="proof__quote">
-        <p class="proof__quote-text">"i don't do social media. my wife set this up, i answered like 4 questions over text and now it just... runs. got a 5-star review last week and it already replied before i even saw it"</p>
-        <div class="proof__quote-meta">
-          <div class="proof__avatar proof__avatar--dave">DK</div>
-          <div>
-            <strong>Dave K. &mdash; Kowalski Plumbing</strong>
-            <span>Chicago, IL</span>
-          </div>
+
+      <div class="proof__thread">
+        <div class="proof__thread-header">
+          <div class="proof__thread-dot"></div>
+          <span class="proof__thread-name">Dave K.</span>
+          <span class="proof__thread-biz">Kowalski Plumbing &middot; Chicago</span>
+        </div>
+        <div class="proof__thread-msgs">
+          <div class="proof__bubble proof__bubble--in">i don't do social media. my wife set this up</div>
+          <div class="proof__bubble proof__bubble--in">i answered like 4 questions over text and now it just... runs</div>
+          <div class="proof__bubble proof__bubble--in">got a 5-star review last week and it already replied before i even saw it</div>
+          <div class="proof__bubble proof__bubble--out">YES</div>
         </div>
       </div>
+
     </div>
-    <p class="proof__note">Names and businesses shared with permission. Feedback from early access, Q1&ndash;Q2 2026.</p>
+    <p class="proof__note">Names shared with permission. From early access signups, Q1 2026.</p>
   </div>
 </section>
 
