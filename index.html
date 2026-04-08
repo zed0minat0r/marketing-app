@@ -88,11 +88,11 @@ nav.scrolled{border-color:var(--border)}
 .step__title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
 .step__desc{font-size:0.9rem;color:var(--text-muted);line-height:1.6}
 .features{padding:100px 0;border-top:1px solid var(--border)}
-.features__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--border)}
-.feature{padding:28px 32px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
-.feature:nth-child(2n){border-right:none}
-.feature__title{font-size:0.95rem;font-weight:700;margin-bottom:6px;letter-spacing:-0.01em}
-.feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
+.features__grid{display:flex;flex-direction:column;border:1px solid var(--border)}
+.feature{padding:22px 32px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:start}
+.feature:last-child{border-bottom:none}
+.feature__title{font-size:0.9rem;font-weight:700;letter-spacing:-0.01em;line-height:1.35;padding-top:2px}
+.feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.55}
 .compare{padding:80px 0;border-top:1px solid var(--border)}
 .compare__scroll{width:100%}
 .compare__title{font-size:1.8rem;font-weight:700;letter-spacing:-0.025em;margin-bottom:36px;max-width:640px;line-height:1.25}
@@ -204,9 +204,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .hero__desc{max-width:100%;text-align:left}
   .hero__trust{text-align:center}
   .steps{grid-template-columns:1fr;gap:24px}
-  .features__grid{grid-template-columns:1fr}
-  .feature{border-right:none;border-bottom:1px solid var(--border)}
-  .feature:nth-last-child(-n+2){border-bottom:1px solid var(--border)}
+  .features__grid{flex-direction:column}
+  .feature{grid-template-columns:1fr;gap:6px}
   .feature:last-child{border-bottom:none}
   .pricing__grid{grid-template-columns:1fr;gap:16px}
   .plan--featured{order:-1}
@@ -330,8 +329,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 <section class="demo" id="demo">
   <div class="container">
     <div class="demo__label">
-      <h2>See exactly how it works</h2>
-      <p>Pick a scenario to walk through a real conversation</p>
+      <h2>Your thumb is the only dashboard you need</h2>
+      <p>Pick a scenario and walk through a real conversation</p>
     </div>
     <div class="phone">
       <div class="phone__header">
