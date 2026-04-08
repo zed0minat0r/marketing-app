@@ -11,9 +11,9 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{overflow-x:hidden}
 :root{
-  --bg:#08090f;--surface:#10121c;--surface2:#181b28;--border:#2a2d3e;
-  --text:#f0f1f8;--text-muted:#8b8fa8;--accent:#7c5cfc;--accent-glow:rgba(124,92,252,0.12);
-  --green:#22c55e;--red:#ef4444;--font:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+  --bg:#141210;--surface:#1c1917;--surface2:#232018;--border:#332f29;
+  --text:#f5f0e8;--text-muted:#7d7060;--accent:#d4f53c;--accent-dark:#a8c42e;--accent-glow:rgba(212,245,60,0.10);
+  --green:#4ade80;--red:#f87171;--font:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
 }
 html{font-size:16px;scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -24,7 +24,7 @@ nav.scrolled{border-color:var(--border)}
 .nav__inner{display:flex;align-items:center;justify-content:space-between}
 .nav__logo{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--text);letter-spacing:-0.02em;display:inline-flex;align-items:center;min-height:44px;gap:8px}
 .nav__logo span{color:var(--accent)}
-.nav__cta{background:var(--accent);color:#fff;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
+.nav__cta{background:var(--accent);color:#141210;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
 .nav__cta:hover{opacity:0.9}
 .hero{padding:140px 0 100px;text-align:center;position:relative;overflow:hidden}
 .hero::before{display:none}
@@ -34,7 +34,7 @@ nav.scrolled{border-color:var(--border)}
 .hero__cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
 .hero__trust{font-size:0.78rem;color:var(--text-muted);margin-top:0;letter-spacing:0.01em}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
-.btn--primary{background:var(--accent);color:#fff}
+.btn--primary{background:var(--accent);color:#141210;font-weight:700}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
 .btn--ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
 .btn--ghost:hover{border-color:var(--text-muted)}
@@ -47,7 +47,7 @@ nav.scrolled{border-color:var(--border)}
 .hero__live-msg{font-size:0.8rem;line-height:1.45;padding:9px 13px;border-radius:14px;max-width:86%;opacity:0;transition:opacity 0.25s}
 .hero__live-msg.visible{opacity:1}
 .hero__live-msg--in{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:3px;color:var(--text)}
-.hero__live-msg--out{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.hero__live-msg--out{background:var(--accent);color:#141210;font-weight:600;align-self:flex-end;border-bottom-right-radius:3px}
 .hero__live-typing{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);padding:10px 14px;border-radius:14px;border-bottom-left-radius:3px;display:none}
 .hero__live-typing.visible{display:flex;gap:4px}
 .hero__live-typing span{width:5px;height:5px;border-radius:50%;background:var(--text-muted);animation:dotPulse 1.4s infinite}
@@ -59,13 +59,13 @@ nav.scrolled{border-color:var(--border)}
 .demo__label p{color:var(--text-muted)}
 .phone{max-width:380px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 25px 50px rgba(0,0,0,0.5)}
 .phone__header{background:var(--surface2);padding:12px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.phone__avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff}
+.phone__avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#141210}
 .phone__name{font-size:0.85rem;font-weight:600}
 .phone__status{font-size:0.75rem;color:var(--green)}
 .phone__messages{padding:20px;min-height:360px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
 .msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:0.88rem;line-height:1.5;animation:msgIn 0.3s ease}
 .msg--in{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
-.msg--out{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.msg--out{background:var(--accent);color:#141210;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
 .msg--typing{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;padding:14px 18px}
 .typing-dots{display:flex;gap:4px}
 .typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--text-muted);animation:dotPulse 1.4s infinite}
@@ -99,7 +99,7 @@ nav.scrolled{border-color:var(--border)}
 .compare__row--head .compare__cell{font-family:var(--mono);font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);padding-bottom:10px}
 .compare__cell{display:table-cell;padding:14px 16px;border-bottom:1px solid var(--border);font-size:0.88rem;text-align:center;vertical-align:middle}
 .compare__cell--feature{text-align:left;font-size:0.85rem;color:var(--text-muted);font-weight:500;width:36%;padding-left:0}
-.compare__cell--us{color:var(--text);font-weight:700;border-left:1px solid var(--border);background:rgba(124,92,252,0.04)}
+.compare__cell--us{color:var(--text);font-weight:700;border-left:1px solid var(--border);background:rgba(212,245,60,0.04)}
 .compare__row--head .compare__cell--us{color:var(--accent)}
 .compare__check{color:var(--accent);font-size:1.1rem;font-weight:700}
 .compare__x{color:var(--border);font-size:1rem}
@@ -116,8 +116,8 @@ nav.scrolled{border-color:var(--border)}
 .pricing__toggle{display:flex;align-items:center;gap:12px;margin:0 auto 40px;width:fit-content;font-size:0.88rem;color:var(--text-muted)}
 .pricing__toggle-btn{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:3px;gap:3px}
 .pricing__toggle-opt{font-size:0.82rem;font-weight:500;padding:6px 14px;min-height:44px;border-radius:100px;cursor:pointer;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);transition:all 0.15s;white-space:nowrap;display:inline-flex;align-items:center}
-.pricing__toggle-opt.active{background:var(--accent);color:#fff}
-.pricing__toggle-save{font-family:var(--mono);font-size:0.75rem;color:var(--accent);background:rgba(124,92,252,0.1);border:1px solid rgba(124,92,252,0.25);padding:2px 8px;border-radius:3px;letter-spacing:0.04em}
+.pricing__toggle-opt.active{background:var(--accent);color:#141210;font-weight:700}
+.pricing__toggle-save{font-family:var(--mono);font-size:0.75rem;color:var(--accent);background:rgba(212,245,60,0.1);border:1px solid rgba(212,245,60,0.25);padding:2px 8px;border-radius:3px;letter-spacing:0.04em}
 .pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .plan{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:32px}
 .plan--featured{border-color:var(--accent);position:relative}
@@ -132,7 +132,7 @@ nav.scrolled{border-color:var(--border)}
 .plan__features li{font-size:0.85rem;padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .plan__features li::before{content:'—';color:var(--accent);font-weight:700;font-size:0.8rem;font-family:var(--mono)}
 .plan__btn{display:block;width:100%;text-align:center;padding:14px;min-height:44px;border-radius:6px;font-weight:600;font-size:0.9rem;border:none;cursor:pointer;font-family:var(--font)}
-.plan__btn--primary{background:var(--accent);color:#fff}
+.plan__btn--primary{background:var(--accent);color:#141210;font-weight:700}
 .plan__btn--ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
 .plan__btn:hover{opacity:0.85}
 .faq{padding:100px 0;border-top:1px solid var(--border)}
@@ -152,7 +152,7 @@ nav.scrolled{border-color:var(--border)}
 .signup-form input{flex:1;min-width:200px;padding:14px 18px;min-height:48px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:0.95rem}
 .signup-form input::placeholder{color:var(--text-muted)}
 .signup-form input:focus{outline:none;border-color:var(--accent)}
-.signup-form button{padding:14px 24px;min-height:48px;border-radius:6px;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;white-space:nowrap}
+.signup-form button{padding:14px 24px;min-height:48px;border-radius:6px;background:var(--accent);color:#141210;border:none;font-family:var(--font);font-size:0.95rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;white-space:nowrap}
 .signup-form button:hover{opacity:0.9}
 .signup-note{font-size:0.78rem;color:var(--text-muted);margin-top:12px;position:relative}
 .signup-note a{padding:14px 2px;margin:-14px 0;display:inline-block;color:var(--text-muted);text-decoration:underline;text-underline-offset:2px}
@@ -321,33 +321,33 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <div class="features__grid">
       <div class="feature">
         <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2"/></svg></span>
-        <h3 class="feature__title">Social Media Posts</h3>
-        <p class="feature__desc">AI writes a week of posts for Instagram, Facebook, TikTok, and LinkedIn. You approve via text. We post them.</p>
+        <h3 class="feature__title">3 posts per platform, every week</h3>
+        <p class="feature__desc">Right tone for your business — warm and seasonal for a florist, direct and local for a plumber. You reply YES. We publish.</p>
       </div>
       <div class="feature">
         <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-        <h3 class="feature__title">Ad Copy &amp; Strategy</h3>
-        <p class="feature__desc">Facebook and Google ad copy with targeting suggestions. Text "run an ad" and get 5 variations in 30 seconds.</p>
+        <h3 class="feature__title">A Facebook ad in 30 seconds</h3>
+        <p class="feature__desc">Text "run an ad." Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
       </div>
       <div class="feature">
         <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-        <h3 class="feature__title">Website Audit</h3>
-        <p class="feature__desc">Paste your URL. Get a scored report with specific fixes. We can even implement the changes for you.</p>
+        <h3 class="feature__title">Know what's wrong with your site</h3>
+        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, in plain English. No jargon.</p>
       </div>
       <div class="feature">
         <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-        <h3 class="feature__title">Review Management</h3>
-        <p class="feature__desc">Get notified of new Google reviews. We draft a response. You reply YES to send it. 30 seconds, done.</p>
+        <h3 class="feature__title">Every Google review answered</h3>
+        <p class="feature__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
       </div>
       <div class="feature">
         <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
-        <h3 class="feature__title">Weekly Report</h3>
-        <p class="feature__desc">Every Monday: "5 posts, 1.2K impressions, 23 new followers, 3 reviews." No dashboard needed.</p>
+        <h3 class="feature__title">Your numbers, every Monday</h3>
+        <p class="feature__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
       </div>
       <div class="feature">
         <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-        <h3 class="feature__title">Proactive Suggestions</h3>
-        <p class="feature__desc">"Your engagement dropped 15% — here are 3 posts to fix it." AI that thinks ahead, not just responds.</p>
+        <h3 class="feature__title">It spots problems before you do</h3>
+        <p class="feature__desc">"Engagement dropped 15% this week — here are 3 posts to fix it." Sent before you even noticed.</p>
       </div>
     </div>
   </div>
@@ -387,11 +387,18 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
       </div>
       <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">No per-message fees</div>
+        <div class="compare__cell compare__cell--feature" role="cell">Flat monthly price</div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Yes" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
+      </div>
+      <div class="compare__row" role="row">
+        <div class="compare__cell compare__cell--feature" role="cell">Advanced email analytics</div>
+        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
+        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Yes" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
+        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Yes" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
+        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__x" style="color:var(--text-muted)" aria-label="No — not our focus">&#10005;</span></div>
       </div>
       <div class="compare__row" role="row">
         <div class="compare__cell compare__cell--feature" role="cell">Entry price</div>
@@ -401,7 +408,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="compare__cell compare__cell--us" role="cell">$49/mo</div>
       </div>
     </div>
-    <p class="compare__note">Sources: Capterra, G2, Emitrr, EmailToolTester &mdash; April 2026</p>
+    <p class="compare__note">Sources: Capterra, G2, Emitrr, EmailToolTester &mdash; April 2026. We give credit where it's due.</p>
   </div>
 </section>
 
@@ -482,7 +489,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <ul class="plan__features">
           <li>Unlimited AI generations</li>
           <li>Unlimited everything</li>
-          <li>Website building &amp; fixes</li>
+          <li>Website audit + copy fixes</li>
           <li>Priority response time</li>
           <li>Custom brand voice training</li>
           <li>Competitor monitoring</li>
@@ -532,9 +539,9 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="final-cta" id="final">
   <div class="container">
-    <p class="final-cta__trust">Closed beta &nbsp;&bull;&nbsp; Limited spots &nbsp;&bull;&nbsp; No login ever</p>
+    <p class="final-cta__trust">Early access &nbsp;&bull;&nbsp; Cancel by text &nbsp;&bull;&nbsp; No login ever</p>
     <h2 class="final-cta__title">Join the waitlist. Be first in line.</h2>
-    <p class="final-cta__sub">We're opening access in waves. Drop your email and we'll reach out when your spot is ready &mdash; no spam, ever.</p>
+    <p class="final-cta__sub">We're opening access in waves. We'll email you when your spot is ready. We'll text you to get started. No spam, ever.</p>
     <form class="signup-form" id="signupForm" onsubmit="handleSignup(event)">
       <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
       <button type="submit">Join the waitlist &rarr;</button>
