@@ -323,6 +323,133 @@ Rationale: A "social media manager" hire, Hootsuite (a tool the target audience 
 
 ---
 
+---
+
+## 19. NEW: April 7 (Round 2) — Social Proof Without Real Customers: What Actually Works
+
+Nigel scored the testimonials section 5.5 and called it the single biggest credibility risk. Research confirms this concern and provides a clear playbook for pre-launch pages that have no real customers yet.
+
+### What Does NOT Work
+- Generic persona diversity ("Renee B. / Maria T. / Dave K.") is immediately recognised as template thinking by sceptical visitors. The "names shared with permission" disclaimer on a product with no customers actively makes things worse — it reads as either dishonest or as a description of three very articulate internal testers.
+- Fabricated testimonials with vague outcomes ("TextMarketer is amazing!") are a credibility net negative. Visitors in 2026 are more attuned to AI-generated copy than ever.
+
+### What Actually Works Before Launch
+
+**1. Waitlist counter as social proof.** Showing a real, live count — "2,531 people are already on the list" — is the single most effective pre-launch social proof element. It must be real. If the number is small (sub-100), do not display it yet. Once it crosses 200-300, surface it prominently near the CTA. Real-time signup notifications (pop-up toasts: "Marcus from Austin just joined") increase conversion 25-40% vs. static testimonials.
+
+**2. Beta tester quotes with specific, measurable outcomes.** One real quote from a genuine beta tester with a specific outcome ("I posted 3 times a week for the first time ever — without opening Instagram once") beats six polished fake testimonials. If internal testers or friends-and-family have used the product, their raw, unpolished words are more credible than cleaned-up copy.
+
+**3. Problem-side social proof.** Instead of testimonials about the product, cite the problem. "52% of small business owners do their own marketing. Only 1 in 3 posts consistently. We're fixing that." This is verifiable, resonant, and does not require customers.
+
+**4. Scenario framing, honestly labelled.** The hypothetical-customer approach can work if it is labelled honestly: "Here is how a salon owner would use TextMarketer in a typical week." This is transparent, lets visitors self-identify, and does not claim to be a testimonial. The demo section already does this implicitly — making it explicit resolves the dishonesty risk.
+
+**5. Founding member framing.** "Be one of the first 500 businesses" creates authentic exclusivity without requiring fake testimonials. This reframes the absence of customers as an advantage: you get in before everyone else.
+
+**Recommendation for TextMarketer:** Remove the current testimonials section entirely. Replace with: (a) a live waitlist counter once signups exceed 200, (b) one or two real beta-tester quotes even if they are rough, and (c) the problem-side statistics already on the page (SMS 98% read rate vs. email 22%) placed closer to the CTA. The demo section is doing all the heavy lifting that testimonials should do — let it.
+
+---
+
+## 20. NEW: April 7 (Round 2) — Resolving the Waitlist-vs-Pricing Tension
+
+Nigel flagged this as Priority 2. Research confirms it is a top conversion killer on pre-launch pages. Here is the specific playbook used by high-converting waitlist pages that show pricing before launch:
+
+### The Core Problem
+Showing "Get Started" buttons next to dollar amounts creates a broken promise. The visitor concludes: "Wait — can I actually buy this or not?" The cognitive dissonance between "join the waitlist" and "choose a plan" causes hesitation and abandonment.
+
+### Three Proven Solutions (pick one, do not mix)
+
+**Option A: "Reserve this plan" CTA with founding-member lock-in.** Replace all "Get Started" buttons with "Reserve [Plan Name]." Add a single line under the pricing cards: "Waitlist pricing — locked in when you join. Prices increase at public launch." This resolves the tension by making pricing visible but converting it into an incentive rather than a transactional promise. High-converting pre-launch copy examples: "Reserve your Starter plan — $49/mo locked in for life," "Founding member pricing — claim yours before May."
+
+**Option B: Remove the pricing section until launch.** Replace with: "Pricing starts at $49/mo — we open in May 2026. Join the waitlist to lock in founding-member rates." This is the cleanest solution and eliminates the cognitive conflict entirely. Drawback: removes a key conversion driver (visitors want to know the cost).
+
+**Option C: Reframe pricing as a preview with clear context.** Add a banner or badge above the pricing section: "LAUNCHING MAY 2026 — These are your founding-member rates." Change CTAs to "Join Waitlist at This Price." This keeps the pricing visible (good for conversion) while making the pre-launch state explicit.
+
+**Recommendation for TextMarketer:** Option A or C. Option A ("Reserve this plan") aligns with the product's "text-first" voice and creates urgency. Option C is lower-friction to implement. Do NOT leave the current "Get Started" buttons — they are actively confusing visitors.
+
+### Data Point
+Top-performing waitlist pages achieve 15-40% conversion. Pages with pricing confusion (visitor cannot determine if they can buy now) drop to 2-5%. The gap is entirely in clarity of CTA intent.
+
+---
+
+## 21. NEW: April 7 (Round 2) — Hero Animation: Play Once vs. Loop
+
+Nigel flagged the hero phone looping as Priority 3. Research now provides precise guidance for how top landing pages handle this in 2026.
+
+### The Problem with Continuous Loops
+- Continuous looping animations overload working memory. Visitors processing the headline and CTA are simultaneously distracted by movement, creating cognitive interference.
+- For users with vestibular disorders, continuous motion is an accessibility issue (WCAG 2.1 Success Criterion 2.3.3 recommends a pause/stop mechanism for any animation that loops more than 3 times).
+- After 2-3 loops, animation becomes noise. Visitors who pause on the page to read the copy are actively annoyed by repeated motion.
+- The 2026 consensus across landing page optimisation literature is: animations should be purposeful and restrained. The most effective hero animations consist of 2-4 well-placed elements, not a continuous loop.
+
+### What High-Converting Pages Do Instead
+- **Play once, freeze on final state.** The animation runs through its sequence once, showing the product in action, then freezes on the final "done" state. This communicates the product story without creating motion noise. The frozen final state becomes a static illustration.
+- **Long-gap replay.** If the animation must loop, the gap between replays should be 20-30 seconds minimum. At 4 seconds (current), it loops ~15 times per minute. At 30 seconds, it loops twice per minute — tolerable.
+- **Intersection Observer trigger.** Animation plays once when the section enters the viewport, not on page load. This means visitors who scroll past the hero on mobile do not miss the animation — they trigger it when they reach it. Linear and Vercel use this pattern.
+- **User-initiated.** The demo section below already does this well (the user clicks to start each flow). Consider making the hero animation user-initiated as well: a "Play" button overlaid on the static final frame.
+
+**Recommendation for TextMarketer:** Play once on page load, freeze on final state (the completed AI message). Add a subtle "Replay" icon in the corner for visitors who want to watch again. This removes the noise, makes the hero feel premium, and respects the visitor's attention. The interactive demo directly below handles the "try it yourself" need.
+
+---
+
+## 22. NEW: April 7 (Round 2) — Textla: A Competitor Worth Tracking
+
+Textla is a small-business SMS platform that did not appear prominently in earlier research. It is worth flagging as the closest pricing competitor to TextMarketer's proposed $49/mo entry point.
+
+### Textla's Position
+- Pricing: $25/mo (monthly) or $19/mo (annual) plus $0.01/SMS segment. No hidden fees, no per-seat charges, no credit bundles.
+- Features: Bulk SMS, two-way conversations, contact segmentation, keyword opt-ins, analytics, scheduling.
+- Target audience: Small businesses with limited marketing budgets. Marketed as "almost no learning curve."
+- Weakness: Users have explicitly asked for AI features that Textla does not yet have. No AI generation, no conversational interface, still requires a web dashboard.
+
+### Why This Matters for TextMarketer
+Textla is the "simple and affordable" SMS tool for small businesses that does NOT have AI and does NOT have a text-first interface. It is a natural before/after comparison: "Textla is what you use when you want SMS marketing with a dashboard. TextMarketer is what you use when you want it without one."
+
+Textla is also priced lower ($25/mo) — but it is a different product category. TextMarketer's AI generation, no-dashboard model, and social media posting capability justify the higher price point. The comparison table already includes Hootsuite and Podium. Consider adding a row comparing Textla specifically for the "simple SMS tool" category.
+
+---
+
+## 23. NEW: April 7 (Round 2) — Waitlist Conversion Benchmarks (Precise Data)
+
+Previous research (Section 14) cited general SaaS conversion benchmarks. This section provides waitlist-specific data that is more actionable for TextMarketer.
+
+### Waitlist-Specific Benchmarks (2026)
+| Performance Tier | Conversion Rate | What It Signals |
+|-----------------|----------------|-----------------|
+| Poor | Under 10% | Value prop unclear, UX friction, wrong audience |
+| Average | 10-20% | Functional but not compelling |
+| Good | 20-30% | Strong value prop, minimal friction |
+| Excellent | 30-40% | Psychological triggers working, strong social proof |
+| Exceptional | 40%+ | Viral loop or referral mechanic active |
+
+- Average across all waitlist pages: ~15.11%
+- Well-optimised waitlist pages: 20-40%
+- Waitlist pages convert ~2.7x better than traditional product pages because "join waitlist" feels low-commitment and exclusive
+- Single-field forms (email only) convert higher initially — but adding phone as step 2 filters for more qualified leads who are genuinely interested in an SMS product
+
+### Key Levers for TextMarketer Specifically
+1. **Queue position display.** "You are #347 in line" creates urgency and validates that others have joined. This single element lifts conversion 15-25%.
+2. **Referral mechanic.** "Refer 3 businesses — skip the queue and get 2 months free." Turns each signup into a growth loop. High-converting pre-launch pages that add referral mechanics see 3-5x more signups from the same traffic.
+3. **Specificity in the confirmation message.** "We open access in waves of 50 businesses starting May 12" beats "We'll be in touch." Specificity reduces post-signup anxiety and increases the probability the visitor stays engaged until launch.
+
+---
+
+## Sources
+
+### New Sources (April 7 Round 2)
+- [SaaS Product Launch Waitlist Strategy 2026 Playbook - Waitlister](https://waitlister.me/growth-hub/guides/saas-product-launch-waitlist)
+- [Waitlist Landing Page: Examples & Best Practices - Moosend](https://moosend.com/blog/waitlist-landing-page/)
+- [How to Create a Waitlist Landing Page That Converts 2026 - Waitlister](https://waitlister.me/growth-hub/guides/waitlist-landing-page-optimization-guide)
+- [Waitlist Page Strategy in 2026 - Unicorn Platform](https://unicornplatform.com/blog/waitlist-page-strategy-in-2026/)
+- [Hero Section Design Complete Guide 2026 - ContentMation](https://contentmation.com/conversion/hero-section-design-guide)
+- [Animation for Landing Page: Strategies, Types, and Impact - Educational Voice](https://educationalvoice.co.uk/animation-for-landing-page/)
+- [The Best Way to Use Animation on Landing Pages - LandingPageFlow](https://www.landingpageflow.com/post/best-way-to-use-animation-on-landing-pages)
+- [Waitlist Landing Page Anatomy, Incentives & Benchmarks - CraftUp](https://craftuplearn.com/blog/waitlist-landing-page-anatomy-incentives-benchmarks)
+- [Waitlist Benchmarks: Conversion Rates - GetWaitlist](https://getwaitlist.com/blog/waitlist-benchmarks-conversion-rates)
+- [Pre-Launch Waitlist Strategy: Build & Convert 400+ Leads - Beyond Labs](https://beyondlabs.io/blogs/how-to-build-a-waitlist-that-turns-into-customers)
+- [Textla Reviews 2026 - G2](https://www.g2.com/products/textla/reviews)
+- [Textla Review 2026: Pricing, Features - Research.com](https://research.com/software/reviews/textla)
+- [10 Proven Startup Waitlist Templates - Prefinery](https://www.prefinery.com/blog/10-proven-startup-waitlist-templates-that-drive-conversions-with-examples/)
+
 ## Sources
 - [SimpleTexting Review 2026 - business.com](https://www.business.com/reviews/simpletexting/)
 - [Best SMS Marketing Platforms 2026 - Research.com](https://research.com/software/best-sms-marketing-platforms)
