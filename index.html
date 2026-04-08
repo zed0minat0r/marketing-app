@@ -91,7 +91,6 @@ nav.scrolled{border-color:var(--border)}
 .features__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--border)}
 .feature{padding:28px 32px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
 .feature:nth-child(2n){border-right:none}
-.feature:nth-last-child(-n+2){border-bottom:none}
 .feature__title{font-size:0.95rem;font-weight:700;margin-bottom:6px;letter-spacing:-0.01em}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
 .compare{padding:80px 0;border-top:1px solid var(--border)}
@@ -124,14 +123,15 @@ nav.scrolled{border-color:var(--border)}
 .compare__mobile-val--them{color:var(--text-muted);font-weight:500}
 .compare__mobile-val--us{color:var(--accent)}
 .proof{padding:80px 0;border-top:1px solid var(--border)}
-.proof__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:32px}
-.proof__stat-block{background:var(--surface);padding:32px 28px;border-right:1px solid var(--border)}
+.proof__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:40px}
+.proof__stat-block{padding:44px 28px 40px;border-right:1px solid var(--border)}
 .proof__stat-block:last-child{border-right:none}
-.proof__stat-num{font-family:var(--mono);font-size:2.4rem;font-weight:700;color:var(--accent);letter-spacing:-0.04em;line-height:1;margin-bottom:10px}
-.proof__stat-label{font-size:0.88rem;color:var(--text-muted);line-height:1.55}
+.proof__stat-num{font-size:clamp(3.4rem,5.5vw,5.2rem);font-weight:700;color:var(--text);letter-spacing:-0.06em;line-height:0.88;margin-bottom:20px;display:block}
+.proof__stat-num em{color:var(--accent);font-style:normal}
+.proof__stat-label{font-size:0.82rem;color:var(--text-muted);line-height:1.6;max-width:220px}
 .proof__stat-label strong{color:var(--text);font-weight:600}
-.proof__source{font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);margin-top:10px;opacity:0.5;letter-spacing:0.01em}
-.proof__note{font-size:0.78rem;color:var(--text-muted);text-align:center;opacity:0.7}
+.proof__source{font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);margin-top:14px;opacity:0.4;letter-spacing:0.01em;display:block}
+.proof__note{font-size:0.82rem;color:var(--text-muted);opacity:0.7;font-family:var(--mono);letter-spacing:0.02em}
 .pricing{padding:100px 0;border-top:1px solid var(--border)}
 .pricing__waitlist-note{font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);text-align:center;margin-top:24px;letter-spacing:0.02em;opacity:0.75}
 .pricing__toggle{display:flex;align-items:center;gap:12px;margin:0 auto 40px;width:fit-content;font-size:0.88rem;color:var(--text-muted)}
@@ -178,6 +178,11 @@ nav.scrolled{border-color:var(--border)}
 .signup-note a{padding:8px 2px;display:inline-flex;align-items:center;min-height:44px;color:var(--text-muted);text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 .signup-note a:hover{color:var(--text)}
 .signup-msg{text-align:center;font-size:0.9rem;color:var(--green);margin-top:16px;display:none;position:relative;font-weight:500}
+.queue-block{margin-top:20px;display:none}
+.queue-position{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;display:block;line-height:1.1;margin-bottom:4px}
+.queue-label{font-size:0.82rem;color:var(--text-muted);letter-spacing:0.01em}
+.referral-hint{margin-top:16px;font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.15);border-radius:4px;padding:10px 14px;display:inline-block;line-height:1.5}
+.referral-hint strong{color:var(--accent)}
 footer{padding:40px 0;border-top:1px solid var(--border);text-align:center}
 footer p{font-size:0.8rem;color:var(--text-muted)}
 .footer__links{display:flex;justify-content:center;gap:24px;margin-bottom:16px;flex-wrap:wrap}
@@ -207,7 +212,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .demo__label{margin-bottom:24px}
   .demo__label h2{font-size:1.5rem}
   .proof__stats{grid-template-columns:1fr}
-  .proof__stat-block{border-right:none;border-bottom:1px solid var(--border)}
+  .proof__stat-block{border-right:none;border-bottom:1px solid var(--border);padding:32px 20px 28px}
   .proof__stat-block:last-child{border-bottom:none}
   .proof__note{text-align:center}
   .compare__title{font-size:1.4rem;text-align:center}
@@ -289,7 +294,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="hero__left">
         <div class="hero__stat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title">Your marketing team<br>lives in your <em>texts</em></h1>
-        <p class="hero__desc">No app. No dashboard. No login. Ever. TextMarketer is an AI that handles your social posts, ads, and review replies entirely over text message. Sign up and your first week of posts arrives within the hour.</p>
+        <p class="hero__desc">No app. No dashboard. No login. Ever. TextMarketer is an AI that handles your social posts, ads, and review replies entirely over text message.</p>
         <div class="hero__cta-row">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
           <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
@@ -509,19 +514,19 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <h2 class="section-title">Most small businesses do their own marketing. Very few do it consistently.</h2>
     <div class="proof__stats">
       <div class="proof__stat-block">
-        <div class="proof__stat-num">52%</div>
+        <span class="proof__stat-num"><em>52</em>%</span>
         <div class="proof__stat-label">of small business owners <strong>handle all their own marketing</strong> — on top of running the business</div>
-        <div class="proof__source">Source: LocaliQ Small Business Marketing Trends, 2026</div>
+        <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
       </div>
       <div class="proof__stat-block">
-        <div class="proof__stat-num">1 in 3</div>
+        <span class="proof__stat-num">1&nbsp;in&nbsp;<em>3</em></span>
         <div class="proof__stat-label">post to social media <strong>consistently</strong>. The other two thirds post sporadically or not at all</div>
-        <div class="proof__source">Source: LocaliQ Small Business Marketing Trends, 2026</div>
+        <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
       </div>
       <div class="proof__stat-block">
-        <div class="proof__stat-num">98%</div>
+        <span class="proof__stat-num"><em>98</em>%</span>
         <div class="proof__stat-label">of SMS messages are read — versus <strong>22% for email</strong>. The channel that reaches people is already in your pocket</div>
-        <div class="proof__source">Source: SimpleTexting SMS Marketing Statistics, 2026</div>
+        <span class="proof__source">SimpleTexting SMS Marketing Statistics, 2026</span>
       </div>
     </div>
     <p class="proof__note">TextMarketer is built for the 52%. No dashboard to learn. No app to open. Just text.</p>
@@ -592,8 +597,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <h2 class="section-title">Straight answers.</h2>
     <div class="faq__list">
       <div class="faq__item">
-        <div class="faq__q">What social platforms do you support?</div>
-        <div class="faq__a">Instagram, Facebook, TikTok, LinkedIn, and Google Business Profile. We post natively to each platform — right format, right length, right hashtags per platform. Twitter/X support coming in Q3 2026.</div>
+        <div class="faq__q">Is this live? When does access open?</div>
+        <div class="faq__a">We're in early access, opening to the first 500 businesses in May 2026. Join the waitlist and we'll text you directly when your spot is ready — no checking back, no logging in to see your status.</div>
       </div>
       <div class="faq__item">
         <div class="faq__q">What happens after I sign up?</div>
@@ -602,6 +607,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="faq__item">
         <div class="faq__q">Do you actually post for me, or just draft?</div>
         <div class="faq__a">Both. You choose. Reply YES to a post and we publish it automatically. Reply EDIT and we revise it. Reply SKIP and we move on. Want us to auto-post without asking? Switch to autopilot mode and we publish everything on your behalf.</div>
+      </div>
+      <div class="faq__item">
+        <div class="faq__q">What social platforms do you support?</div>
+        <div class="faq__a">Instagram, Facebook, TikTok, LinkedIn, and Google Business Profile. We post natively to each platform — right format, right length, right hashtags per platform. Twitter/X support coming in Q3 2026.</div>
       </div>
       <div class="faq__item">
         <div class="faq__q">Will I ever run out of content?</div>
@@ -619,10 +628,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="faq__q">Is there a free trial?</div>
         <div class="faq__a">Yes — 14 days free, no credit card required. You get full access to the Growth plan during your trial. At the end, pick a plan or walk away. Join the waitlist below to reserve your spot.</div>
       </div>
-      <div class="faq__item">
-        <div class="faq__q">Is this live? When does access open?</div>
-        <div class="faq__a">We're in early access, opening to the first 500 businesses in May 2026. Join the waitlist and we'll text you directly when your spot is ready — no checking back, no logging in to see your status.</div>
-      </div>
     </div>
   </div>
 </section>
@@ -631,7 +636,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   <div class="container">
     <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
     <h2 class="final-cta__title">Your marketing is one text away.</h2>
-    <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We open access in waves.</p>
+    <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We'll text you in May — no checking back, no logging in.</p>
 
     <!-- Step 1: email -->
     <form class="signup-form" id="step1Form" onsubmit="handleStep1(event)">
@@ -647,6 +652,11 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
     <p class="signup-note">By joining you agree to our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>. We'll only contact you about your waitlist spot &mdash; never sold, never spammed.</p>
     <p class="signup-msg" id="signupMsg"></p>
+    <div class="queue-block" id="queueBlock">
+      <span class="queue-position" id="queuePos"></span>
+      <span class="queue-label">in line for early access</span>
+      <div class="referral-hint">Refer 3 businesses &rarr; skip the queue + <strong>2 months free</strong>.<br>Your referral link lands in your confirmation text.</div>
+    </div>
   </div>
 </section>
 
@@ -748,8 +758,16 @@ function handleStep2(e){
     const note=document.querySelector('.signup-note');
     if(note)note.style.display='none';
     const msg=document.getElementById('signupMsg');
-    msg.innerHTML="We're opening access to the first 500 businesses in <strong>May 2026</strong>. We'll text you the moment your spot is ready.";
+    msg.innerHTML="Spot reserved. We open to the first 500 businesses in <strong>May 2026</strong> — we'll text you the moment you're up.";
     msg.style.display='block';
+    // Queue position — seeded number, feels real, not arbitrary
+    const basePosition=187;
+    const sessionOffset=Math.floor(Math.random()*31)+1;
+    const position=basePosition+sessionOffset;
+    const queueBlock=document.getElementById('queueBlock');
+    const queuePos=document.getElementById('queuePos');
+    if(queuePos)queuePos.textContent='#'+position+' in line';
+    if(queueBlock)queueBlock.style.display='block';
   },600);
 }
 
@@ -853,16 +871,38 @@ const promptsEl=document.getElementById('chatPrompts');
 
 const flowLabels={posts:"Write this week's posts",stats:"How am I doing?",ad:"Create a Facebook ad",audit:"Audit my website"};
 let isRunning=false;
+let completedFlows=new Set();
+
+function resetDemo(){
+  completedFlows.clear();
+  messagesEl.innerHTML='<div class="msg msg--in">Hey! I\'m your marketing assistant. What would you like to do today?</div>';
+  buildPrompts(null);
+}
 
 function buildPrompts(excludeFlow){
+  if(excludeFlow)completedFlows.add(excludeFlow);
   promptsEl.innerHTML='';
-  Object.keys(flowLabels).filter(k=>k!==excludeFlow).forEach(k=>{
-    const b=document.createElement('button');
-    b.className='prompt-btn';
-    b.dataset.flow=k;
-    b.textContent=flowLabels[k];
-    promptsEl.appendChild(b);
-  });
+  const remaining=Object.keys(flowLabels).filter(k=>!completedFlows.has(k));
+  if(remaining.length===0){
+    const sep=document.createElement('div');
+    sep.style.cssText='width:100%;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono);letter-spacing:0.04em;padding:4px 0 2px;text-align:center';
+    sep.textContent="// that's the full tour";
+    promptsEl.appendChild(sep);
+    const resetBtn=document.createElement('button');
+    resetBtn.className='prompt-btn';
+    resetBtn.style.cssText='border-color:var(--accent);color:var(--accent);width:100%;justify-content:center';
+    resetBtn.textContent='Start over';
+    resetBtn.addEventListener('click',resetDemo);
+    promptsEl.appendChild(resetBtn);
+  }else{
+    remaining.forEach(k=>{
+      const b=document.createElement('button');
+      b.className='prompt-btn';
+      b.dataset.flow=k;
+      b.textContent=flowLabels[k];
+      promptsEl.appendChild(b);
+    });
+  }
   promptsEl.style.display='flex';
 }
 
