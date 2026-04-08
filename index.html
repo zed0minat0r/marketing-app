@@ -130,7 +130,7 @@ nav.scrolled{border-color:var(--border)}
 .proof__stat-num em{color:var(--accent);font-style:normal}
 .proof__stat-label{font-size:0.82rem;color:var(--text-muted);line-height:1.6;max-width:220px}
 .proof__stat-label strong{color:var(--text);font-weight:600}
-.proof__source{font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);margin-top:14px;opacity:0.4;letter-spacing:0.01em;display:block}
+.proof__source{font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);margin-top:14px;opacity:0.4;letter-spacing:0.01em;display:block}
 .proof__note{font-size:0.82rem;color:var(--text-muted);opacity:0.7;font-family:var(--mono);letter-spacing:0.02em}
 .pricing{padding:100px 0;border-top:1px solid var(--border)}
 .pricing__waitlist-note{font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);text-align:center;margin-top:24px;letter-spacing:0.02em;opacity:0.75}
@@ -168,6 +168,11 @@ nav.scrolled{border-color:var(--border)}
 .final-cta__trust{font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:24px;position:relative}
 .final-cta__title{font-size:2.2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px;position:relative}
 .final-cta__sub{color:var(--text-muted);margin-bottom:32px;position:relative}
+.plan-selected{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.8rem;letter-spacing:0.04em;text-transform:uppercase;border:1px solid var(--accent);border-radius:4px;padding:7px 12px;margin-bottom:20px;position:relative}
+.plan-selected__label{color:var(--text-muted)}
+.plan-selected__name{color:var(--accent);font-weight:700}
+.plan-selected__clear{background:none;border:none;color:var(--text-muted);font-size:1rem;cursor:pointer;padding:0 0 0 4px;line-height:1;display:flex;align-items:center;min-height:44px;min-width:44px;justify-content:center}
+.plan-selected__clear:hover{color:var(--text)}
 .signup-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:480px;margin:0 auto;position:relative}
 .signup-form input{flex:1;min-width:200px;padding:14px 18px;min-height:48px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:0.95rem}
 .signup-form input::placeholder{color:var(--text-muted)}
@@ -232,6 +237,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .final-cta__sub{text-align:center}
   .final-cta__trust{text-align:center}
   .faq__list{max-width:100%}
+  .signup-note{text-align:center}
+  .proof__stat-label{max-width:none}
 }
 @media(max-width:480px){
   .hero__title{font-size:1.8rem}
@@ -254,7 +261,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .pricing__toggle{flex-wrap:wrap;justify-content:center;gap:8px}
   .proof__quote-meta{text-align:left;align-items:flex-start}
   .hero__trust{font-size:0.78rem;padding:0 8px;text-align:center}
-  .hero__stat{font-size:0.78rem;word-break:break-word}
+  .hero__stat{font-size:0.78rem;word-break:break-word;overflow-wrap:break-word}
   .plan__name{text-align:left}
   .plan__price-num{font-size:2rem}
   .plan{padding:24px 20px}
@@ -377,20 +384,20 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <h2 class="section-title">Everything that was on your plate, handled.</h2>
     <div class="features__grid">
       <div class="feature">
-        <h3 class="feature__title">Autopilot mode</h3>
-        <p class="feature__desc">Don't want to approve every post? Switch to autopilot. We publish on your schedule and text you a weekly summary of everything that went out.</p>
-      </div>
-      <div class="feature">
-        <h3 class="feature__title">Posts every week, on every platform</h3>
-        <p class="feature__desc">Written in your voice, scheduled and published for you. Reply EDIT on anything that needs a tweak. That's the whole job.</p>
-      </div>
-      <div class="feature">
         <h3 class="feature__title">A Facebook ad in 30 seconds</h3>
         <p class="feature__desc">Text "run an ad." Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
       </div>
       <div class="feature">
         <h3 class="feature__title">Every Google review answered</h3>
         <p class="feature__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
+      </div>
+      <div class="feature">
+        <h3 class="feature__title">Autopilot mode</h3>
+        <p class="feature__desc">Don't want to approve every post? Switch to autopilot. We publish on your schedule and text you a weekly summary of everything that went out.</p>
+      </div>
+      <div class="feature">
+        <h3 class="feature__title">Posts every week, on every platform</h3>
+        <p class="feature__desc">Written in your voice, scheduled and published for you. Reply EDIT on anything that needs a tweak. That's the whole job.</p>
       </div>
       <div class="feature">
         <h3 class="feature__title">Your numbers, every Monday</h3>
@@ -556,7 +563,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
           <li>Weekly performance text</li>
           <li>Review draft responses</li>
         </ul>
-        <button class="plan__btn plan__btn--ghost" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Reserve Starter</button>
+        <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Starter')">Reserve Starter</button>
       </div>
       <div class="plan plan--featured">
         <div class="plan__name">// growth</div>
@@ -570,7 +577,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
           <li>Ad copy generation</li>
           <li>Review auto-responses</li>
         </ul>
-        <button class="plan__btn plan__btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Reserve Growth</button>
+        <button class="plan__btn plan__btn--primary" onclick="selectPlan('Growth')">Reserve Growth</button>
       </div>
       <div class="plan">
         <div class="plan__name">// pro</div>
@@ -584,7 +591,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
           <li>Custom brand voice per location</li>
           <li>Monthly competitor monitoring report</li>
         </ul>
-        <button class="plan__btn plan__btn--ghost" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Reserve Pro</button>
+        <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Pro')">Reserve Pro</button>
       </div>
     </div>
     <p class="pricing__waitlist-note">Waitlist pricing — locked in when you join. Prices increase at public launch.</p>
@@ -637,6 +644,14 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
     <h2 class="final-cta__title">Your marketing is one text away.</h2>
     <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We'll text you in May — no checking back, no logging in.</p>
+
+    <!-- Plan selection indicator (shown when user clicks a plan CTA) -->
+    <div class="plan-selected" id="planSelected" style="display:none">
+      <span class="plan-selected__label">Selected:</span>
+      <span class="plan-selected__name" id="planSelectedName"></span>
+      <button class="plan-selected__clear" onclick="clearPlan()" aria-label="Clear plan selection">&times;</button>
+    </div>
+    <input type="hidden" id="selectedPlan" name="plan" value="">
 
     <!-- Step 1: email -->
     <form class="signup-form" id="step1Form" onsubmit="handleStep1(event)">
@@ -711,6 +726,18 @@ function closeModal(){
 
 document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal()});
 
+function selectPlan(planName){
+  document.getElementById('selectedPlan').value=planName;
+  document.getElementById('planSelectedName').textContent=planName+' plan';
+  document.getElementById('planSelected').style.display='inline-flex';
+  document.getElementById('final').scrollIntoView({behavior:'smooth'});
+}
+
+function clearPlan(){
+  document.getElementById('selectedPlan').value='';
+  document.getElementById('planSelected').style.display='none';
+}
+
 function handleStep1(e){
   e.preventDefault();
   const emailInput=document.getElementById('emailInput');
@@ -757,8 +784,12 @@ function handleStep2(e){
     if(trust)trust.style.display='none';
     const note=document.querySelector('.signup-note');
     if(note)note.style.display='none';
+    const planIndicator=document.getElementById('planSelected');
+    if(planIndicator)planIndicator.style.display='none';
     const msg=document.getElementById('signupMsg');
-    msg.innerHTML="Spot reserved. We open to the first 500 businesses in <strong>May 2026</strong> — we'll text you the moment you're up.";
+    const plan=document.getElementById('selectedPlan').value;
+    const planNote=plan?' Your <strong>'+plan+' plan</strong> price is locked in.':'';
+    msg.innerHTML='Spot reserved.'+planNote+' We open to the first 500 businesses in <strong>May 2026</strong> — we'll text you the moment you're up.';
     msg.style.display='block';
     // Queue position — seeded number, feels real, not arbitrary
     const basePosition=187;
