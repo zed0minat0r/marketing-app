@@ -15,7 +15,7 @@
   --green:#22c55e;--red:#ef4444;--font:DM Sans,system-ui,sans-serif;--mono:JetBrains Mono,monospace;
 }
 html{font-size:16px;scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--accent);text-decoration:none}
 .container{max-width:1120px;margin:0 auto;padding:0 24px}
 
@@ -73,7 +73,7 @@ nav.scrolled{border-color:var(--border)}
 .section-title{font-size:2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:48px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
 .step{position:relative}
-.step__num{font-family:var(--mono);font-size:3rem;font-weight:700;color:var(--surface2);line-height:1;margin-bottom:12px}
+.step__num{font-family:var(--mono);font-size:3rem;font-weight:700;color:#52525b;line-height:1;margin-bottom:12px}
 .step__title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
 .step__desc{font-size:0.9rem;color:var(--text-muted);line-height:1.6}
 
@@ -81,7 +81,8 @@ nav.scrolled{border-color:var(--border)}
 .features{padding:100px 0;border-top:1px solid var(--border)}
 .features__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .feature{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px}
-.feature__icon{font-size:1.5rem;margin-bottom:14px}
+.feature__icon{width:24px;height:24px;margin-bottom:16px;color:var(--accent);display:block}
+.feature__icon svg{width:24px;height:24px;display:block}
 .feature__title{font-size:1rem;font-weight:600;margin-bottom:8px}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
 
@@ -114,9 +115,41 @@ nav.scrolled{border-color:var(--border)}
 .final-cta__sub{color:var(--text-muted);margin-bottom:32px;position:relative}
 .final-cta .btn{position:relative}
 
+/* TESTIMONIAL */
+.testimonial{padding:80px 0;border-top:1px solid var(--border)}
+.testimonial__card{max-width:640px;margin:0 auto;text-align:center}
+.testimonial__stars{color:#f59e0b;font-size:1.2rem;margin-bottom:16px;letter-spacing:2px}
+.testimonial__text{font-size:1.15rem;font-weight:500;line-height:1.6;margin-bottom:20px}
+.testimonial__author{display:flex;align-items:center;justify-content:center;gap:12px}
+.testimonial__avatar{width:44px;height:44px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.75rem;font-weight:700;color:var(--accent)}
+.testimonial__name{font-size:0.9rem;font-weight:600}
+.testimonial__role{font-size:0.8rem;color:var(--text-muted)}
+
+/* FAQ */
+.faq{padding:100px 0;border-top:1px solid var(--border)}
+.faq__list{max-width:680px;margin:0 auto}
+.faq__item{border-bottom:1px solid var(--border);padding:20px 0}
+.faq__q{font-size:1rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;-webkit-tap-highlight-color:transparent}
+.faq__q::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
+.faq__item.open .faq__q::after{transform:rotate(45deg)}
+.faq__a{font-size:0.9rem;color:var(--text-muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease}
+.faq__item.open .faq__a{max-height:200px;padding-top:12px}
+
+/* SIGNUP FORM */
+.signup-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:0 auto;position:relative}
+.signup-form input{flex:1;min-width:200px;padding:14px 18px;min-height:48px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:0.95rem}
+.signup-form input::placeholder{color:var(--text-muted)}
+.signup-form input:focus{outline:none;border-color:var(--accent)}
+.signup-form button{padding:14px 24px;min-height:48px;border-radius:6px;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;white-space:nowrap}
+.signup-form button:hover{opacity:0.9}
+.signup-msg{text-align:center;font-size:0.85rem;color:var(--green);margin-top:12px;display:none;position:relative}
+
 /* FOOTER */
 footer{padding:40px 0;border-top:1px solid var(--border);text-align:center}
 footer p{font-size:0.8rem;color:var(--text-muted)}
+.footer__links{display:flex;justify-content:center;gap:24px;margin-bottom:16px;flex-wrap:wrap}
+.footer__links a{font-size:0.8rem;color:var(--text-muted);transition:color 0.2s}
+.footer__links a:hover{color:var(--text)}
 
 /* MOBILE */
 @media(max-width:768px){
@@ -224,32 +257,32 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <h2 class="section-title">Everything a marketing team does</h2>
     <div class="features__grid">
       <div class="feature">
-        <div class="feature__icon">📱</div>
+        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
         <h3 class="feature__title">Social Media Posts</h3>
         <p class="feature__desc">AI writes a week of posts for Instagram, Facebook, TikTok, and LinkedIn. You approve via text. We post them.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon">💰</div>
+        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <h3 class="feature__title">Ad Copy & Strategy</h3>
         <p class="feature__desc">Facebook and Google ad copy with targeting suggestions. Text "run an ad" and get 5 variations in 30 seconds.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon">🌐</div>
+        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
         <h3 class="feature__title">Website Audit</h3>
         <p class="feature__desc">Paste your URL. Get a scored report with specific fixes. We can even implement the changes for you.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon">⭐</div>
+        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <h3 class="feature__title">Review Management</h3>
         <p class="feature__desc">Get notified of new Google reviews. We draft a response. You reply YES to send it. 30 seconds, done.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon">📊</div>
+        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <h3 class="feature__title">Weekly Report</h3>
         <p class="feature__desc">Every Monday: "This week — 5 posts, 1.2K impressions, 23 new followers, 3 reviews." No dashboard needed.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon">🧠</div>
+        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
         <h3 class="feature__title">Proactive Suggestions</h3>
         <p class="feature__desc">"Your engagement dropped 15% — here are 3 posts to fix it." AI that thinks ahead, not just responds.</p>
       </div>
@@ -260,7 +293,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 <!-- ANTI-SAAS -->
 <section class="antisaas">
   <div class="container">
-    <div class="section-label">The anti-SaaS</div>
     <p class="antisaas__quote">"I don't need another app to log into. I need someone to just handle it."</p>
     <p class="antisaas__sub">— Every small business owner, ever</p>
   </div>
