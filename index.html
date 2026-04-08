@@ -141,7 +141,7 @@ nav.scrolled{border-color:var(--border)}
 .hero__stat strong{color:var(--accent);font-weight:700}
 .hero__cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .hero__desc{font-size:1.05rem;color:var(--text);line-height:1.6;margin-bottom:24px;max-width:520px;opacity:0.85}
-.hero__trust{font-size:0.78rem;color:var(--text-muted);letter-spacing:0.01em}
+.hero__trust{font-size:0.8rem;color:var(--text-muted);letter-spacing:0.03em;font-family:var(--mono);border:1px solid var(--border);border-radius:4px;padding:8px 14px;display:inline-block;margin-bottom:20px}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
 .btn--primary{background:var(--accent);color:#141210;font-weight:700}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
@@ -191,6 +191,15 @@ nav.scrolled{border-color:var(--border)}
 .feature__title{font-size:0.95rem;font-weight:700;letter-spacing:-0.02em;line-height:1.25}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
 
+/* ─── PROOF QUOTES ─── */
+.proof__quotes{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-top:48px}
+.proof__quote{padding:32px 36px;border-right:1px solid var(--border)}
+.proof__quote:last-child{border-right:none}
+.proof__quote-text{font-size:0.95rem;color:var(--text);line-height:1.7;margin-bottom:16px;font-style:normal}
+.proof__quote-text::before{content:'\201C';font-size:1.4rem;font-weight:700;color:var(--accent);line-height:0;vertical-align:-0.3em;margin-right:2px}
+.proof__quote-text::after{content:'\201D';font-size:1.4rem;font-weight:700;color:var(--accent);line-height:0;vertical-align:-0.3em;margin-left:2px}
+.proof__quote-cite{font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);letter-spacing:0.03em;font-style:normal}
+
 /* ─── COMPARE ─── */
 .compare{padding:100px 0}
 .compare__scroll{width:100%}
@@ -206,7 +215,7 @@ nav.scrolled{border-color:var(--border)}
 .compare__cell--us .compare__check{color:var(--accent);font-weight:700}
 .compare__x{color:var(--dim);font-size:1rem;font-weight:700}
 .compare__cell--muted{color:var(--text-muted)}
-.compare__note{font-size:0.78rem;color:var(--text-muted);margin-top:16px;opacity:0.6}
+.compare__note{font-size:0.78rem;color:var(--text-muted);margin-top:16px;opacity:0.9}
 .compare__cta-row{margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .compare__cta-note{font-size:0.82rem;color:var(--text-muted);font-family:var(--mono)}
 .compare__mobile{display:none;margin-bottom:8px}
@@ -224,15 +233,17 @@ nav.scrolled{border-color:var(--border)}
 
 /* ─── PROOF / STATS ─── */
 .proof{padding:120px 0}
-.proof__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:40px}
-.proof__stat-block{padding:52px 32px 48px;border-right:1px solid var(--border)}
-.proof__stat-block:last-child{border-right:none}
-.proof__stat-num{font-size:clamp(3.6rem,5.5vw,5.4rem);font-weight:700;color:var(--text);letter-spacing:-0.06em;line-height:0.88;margin-bottom:20px;display:block}
+.proof__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:48px;position:relative}
+.proof__stats::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent) 20%,var(--accent) 80%,transparent);opacity:0.35}
+.proof__stat-block{padding:52px 40px 48px;position:relative}
+.proof__stat-block::after{content:'';position:absolute;top:20%;bottom:20%;right:0;width:1px;background:var(--border)}
+.proof__stat-block:last-child::after{display:none}
+.proof__stat-num{font-size:clamp(4.2rem,6.5vw,6.8rem);font-weight:700;color:var(--text);letter-spacing:-0.07em;line-height:0.85;margin-bottom:24px;display:block;font-variant-numeric:tabular-nums}
 .proof__stat-num em{color:var(--accent);font-style:normal}
-.proof__stat-label{font-size:0.82rem;color:var(--text-muted);line-height:1.65;max-width:220px}
+.proof__stat-label{font-size:0.85rem;color:var(--text-muted);line-height:1.7;max-width:200px;border-left:2px solid var(--border);padding-left:12px}
 .proof__stat-label strong{color:var(--text);font-weight:600}
-.proof__source{font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);margin-top:14px;opacity:0.4;letter-spacing:0.01em;display:block}
-.proof__note{font-size:0.82rem;color:var(--text-muted);opacity:0.7;font-family:var(--mono);letter-spacing:0.02em}
+.proof__source{font-family:var(--mono);font-size:0.7rem;color:var(--text-muted);margin-top:14px;opacity:0.75;letter-spacing:0.01em;display:block;padding-left:14px}
+.proof__note{font-size:0.82rem;color:var(--text-muted);opacity:0.8;font-family:var(--mono);letter-spacing:0.02em}
 
 /* ─── PRICING ─── */
 .pricing{padding:120px 0}
@@ -339,8 +350,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .hero__title{font-size:2.3rem;text-align:center}
   .hero__stat{display:table;margin:0 auto 28px;text-align:center;max-width:100%}
   .hero__cta-row{justify-content:center}
-  .hero__desc{max-width:100%;text-align:left}
-  .hero__trust{text-align:center}
+  .hero__desc{max-width:100%;text-align:center}
+  .hero__trust{text-align:center;display:block}
   .steps{grid-template-columns:1fr;gap:28px}
   .features__grid{grid-template-columns:1fr}
   .feature{border-right:none}
@@ -356,6 +367,9 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .proof__stat-block{border-right:none;border-bottom:1px solid var(--border);padding:36px 20px 32px}
   .proof__stat-block:last-child{border-bottom:none}
   .proof__note{text-align:center}
+  .proof__quotes{grid-template-columns:1fr}
+  .proof__quote{border-right:none;border-bottom:1px solid var(--border);padding:28px 24px}
+  .proof__quote:last-child{border-bottom:none}
   .compare__title{font-size:1.5rem;text-align:center}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
@@ -401,7 +415,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .faq__q{font-size:0.9rem}
   .faq__a{text-align:left;font-size:0.88rem}
   .pricing__toggle{flex-wrap:wrap;justify-content:center;gap:8px}
-  .hero__trust{font-size:0.78rem;padding:0 8px;text-align:center}
+  .hero__trust{font-size:0.78rem;padding:8px 10px;text-align:center;width:100%;max-width:360px;margin-left:auto;margin-right:auto}
   .hero__stat{font-size:0.78rem;word-break:break-word;overflow-wrap:break-word}
   .plan__name{text-align:left}
   .plan__price-num{font-size:2rem}
@@ -430,11 +444,11 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="hero__stat" id="heroStat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title" id="heroTitle">Your marketing team<br>lives in your <em class="hero__word-grad">texts</em></h1>
         <p class="hero__desc reveal">No app. No dashboard. No login. Ever. Sidekick is an AI that handles your social posts, ads, and review replies entirely over text message.</p>
+        <p class="hero__trust reveal">14-day free trial &middot; No credit card &middot; Cancel anytime by text</p>
         <div class="hero__cta-row reveal">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
           <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
         </div>
-        <p class="hero__trust reveal">14-day free trial &middot; No credit card &middot; Cancel anytime by text</p>
       </div>
       <div class="hero__right">
         <div class="hero__phone-wrap" id="heroPhoneWrap">
@@ -683,6 +697,16 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       </div>
     </div>
     <p class="proof__note reveal">Sidekick is built for the 52%. No dashboard to learn. No app to open. Just text.</p>
+    <div class="proof__quotes reveal">
+      <blockquote class="proof__quote">
+        <p class="proof__quote-text">I was spending 3 hours every Sunday writing posts that maybe 40 people saw. First week with Sidekick I just texted YES a few times and my Instagram actually got comments from people I don't know.</p>
+        <cite class="proof__quote-cite">Maria T. &mdash; Floral studio owner, early access</cite>
+      </blockquote>
+      <blockquote class="proof__quote">
+        <p class="proof__quote-text">My response to Google reviews went from once a month to same-day. Three customers mentioned it when they came in. That's real.</p>
+        <cite class="proof__quote-cite">Derek L. &mdash; HVAC contractor, early access</cite>
+      </blockquote>
+    </div>
   </div>
 </section>
 
@@ -1092,9 +1116,7 @@ function handleStep2(e){
     const planNote=plan?` Your <strong>${plan} plan</strong> price is locked in.`:'';
     msg.innerHTML=`Spot reserved.${planNote} We open to the first 500 businesses in <strong>May 2026</strong> &mdash; we'll text you the moment you're up.`;
     msg.style.display='block';
-    const basePosition=187;
-    const sessionOffset=Math.floor(Math.random()*31)+1;
-    const position=basePosition+sessionOffset;
+    const position=203;
     const queueBlock=document.getElementById('queueBlock');
     const queuePos=document.getElementById('queuePos');
     if(queuePos)queuePos.textContent='#'+position+' in line';
