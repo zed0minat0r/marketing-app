@@ -1,20 +1,22 @@
 # Nigel's Audit — TextMarketer Landing Page
 **Date:** 2026-04-07
 **Auditor:** Nigel (strict British auditor, small business owner perspective)
-**Score:** 7.4 / 10
+**Score:** 7.5 / 10
 
 ---
 
 ## Score History
-6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → **7.4**
+6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → 7.4 → **7.5**
 
 ---
 
 ## Overall Verdict
 
-This is a genuinely well-structured landing page. The core proposition — "manage your entire marketing by text" — is stated clearly, early, and repeated with discipline. The hero split layout with the live animated phone conversation is the single strongest element on the page. The copy has improved substantially from earlier versions; it now reads like someone who understands small business owners, not like a GPT summary of a SaaS playbook.
+A genuine +0.1 improvement over the prior 7.4. The hero auto-play has been fixed — it now plays once and freezes on the final state, showing a replay button instead of looping indefinitely. That was Priority 3 from the last audit. The "Start over" dead-end in the demo section has also been resolved; the demo now surfaces a reset state with a clearly styled button after all four flows complete. These are real UX fixes, not cosmetic gestures, and they deserve credit.
 
-The page earns a 7.4 because it has broken several of Claude's default patterns, the design has a distinctive identity (warm dark palette, Space Grotesk/Mono pairing, acid yellow accent), and the interactive demo is genuinely useful. It drops points for three persistent structural problems: the social proof section is still fabricated and feels fabricated, the pricing section has an unresolved tension between "waitlist" framing and "buy now" pricing cards, and the hero phone widget loops forever with no pause — a form of animation noise that actually undermines credibility on repeat viewing.
+However, the two highest-priority issues from last audit remain unresolved: the fabricated testimonial section still exists with "Renee B.", "Maria T.", and "Dave K." presented as real customer feedback under "Names and businesses shared with permission" — this is the page's most significant trust liability. And the pricing section still shows plan-specific CTAs ("Reserve Starter", "Reserve Growth", "Reserve Pro") that all scroll to the same undifferentiated email form, with no plan preference captured. A small business owner who clicks "Reserve Growth" and sees a generic email field will feel the pricing section was decorative.
+
+The page earns 7.5 for demonstrating iteration discipline and maintaining a distinctive visual identity. It does not yet earn 7.6+ because the social proof problem is structural, not cosmetic, and it has now been flagged across two consecutive audits without movement.
 
 ---
 
@@ -35,15 +37,16 @@ Clean, minimal, fixed. Logo uses monospace with the accent colour on the brand n
 - The description paragraph ("No app. No dashboard. No login. Ever. TextMarketer is an AI...") is slightly long. The first two sentences are gold. The third ("Sign up and your first week of posts arrives within the hour") should move to the "How it works" section — it is a promise, not a description.
 - The ghost "See how it works" CTA button below the primary CTA is good, but its border colour blends almost completely into the dark background on lower-brightness screens. Needs slightly higher contrast on the border.
 
-### 3. Demo Section — 8.0
+### 3. Demo Section — 8.5
 **What works:**
 - Four scenario flows (posts, stats, ad, audit) cover the product's actual value propositions.
 - The typing indicator before each AI response is correct behaviour — it communicates latency honestly.
 - After completing a flow, the prompt buttons update to exclude the flow just run. This is a thoughtful UX detail.
 - Content of the flows is specific ("Joe's Coffee", real post copy, real ad targeting language). Specificity is credibility.
+- The "Start over" state after all four flows complete is now implemented — a dead-end was the previous complaint and it has been resolved. The reset button is appropriately styled in the accent colour with centred alignment.
+- The "// that's the full tour" label before the reset button is a very on-brand touch.
 
 **What does not work:**
-- After running all four flows, there are no more prompt buttons and no reset. A visitor who is engaged enough to try all four scenarios hits a dead end. There should be a "Start over" button.
 - The section heading "See exactly how it works" duplicates the ghost CTA from the hero. Fine, but the sub-copy ("Pick a scenario to walk through a real conversation") is a bit dry. Something like "Your thumb is the only dashboard you need" would maintain the product voice.
 
 ### 4. How It Works — 7.5
@@ -123,8 +126,8 @@ The fabricated testimonials are the single biggest credibility risk. A sceptical
 ### Priority 2 — Resolve the waitlist vs. pricing-cards tension
 The page says "join the waitlist" but shows three plan tiers with "Get Started" buttons. This is confusing. Either rename the CTA buttons to "Reserve this plan" and show "Waitlist pricing — locked in when you join," or remove pricing entirely until launch and replace with "Pricing starts at $49/mo — locked in at waitlist."
 
-### Priority 3 — Stop the hero phone from looping
-The auto-play hero conversation replays on a 4-second gap, which means it loops continuously while the visitor reads the page. Play once, then freeze on the final state. This removes animation noise and makes the hero feel more premium. The demo section below does the interactive work.
+### Priority 3 (RESOLVED) — Hero phone no longer loops
+The auto-play now runs once, freezes on the final state, and shows a replay button. This was the correct fix. Crossed off.
 
 ### Priority 4 — Move the "Is this live?" FAQ to the top
 Question 8 is the highest-anxiety question on the page. Move it to Question 1 or 2. Visitors who are unsure whether this product is real will not scroll eight items deep to find out.
