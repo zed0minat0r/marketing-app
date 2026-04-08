@@ -54,8 +54,8 @@ nav.scrolled{border-color:var(--border)}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
 .btn--primary{background:var(--accent);color:#141210;font-weight:700}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
-.btn--ghost{background:transparent;color:var(--text);border:1px solid rgba(245,240,232,0.25)}
-.btn--ghost:hover{border-color:rgba(245,240,232,0.5)}
+.btn--ghost{background:transparent;color:var(--text);border:1px solid rgba(245,240,232,0.45)}
+.btn--ghost:hover{border-color:rgba(245,240,232,0.75)}
 
 .demo{padding:80px 0;position:relative}
 .demo__label{text-align:center;margin-bottom:40px}
@@ -88,10 +88,11 @@ nav.scrolled{border-color:var(--border)}
 .step__title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
 .step__desc{font-size:0.9rem;color:var(--text-muted);line-height:1.6}
 .features{padding:100px 0;border-top:1px solid var(--border)}
-.features__grid{display:flex;flex-direction:column;border:1px solid var(--border)}
-.feature{padding:22px 32px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:start}
-.feature:last-child{border-bottom:none}
-.feature__title{font-size:0.9rem;font-weight:700;letter-spacing:-0.01em;line-height:1.35;padding-top:2px}
+.features__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--border);border-bottom:none}
+.feature{padding:28px 32px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px;position:relative}
+.feature:nth-child(2n){border-right:none}
+.feature__cmd{font-family:var(--mono);font-size:0.72rem;font-weight:400;color:var(--accent);letter-spacing:0.04em;line-height:1;opacity:0.7}
+.feature__title{font-size:0.95rem;font-weight:700;letter-spacing:-0.02em;line-height:1.25}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.55}
 .compare{padding:80px 0;border-top:1px solid var(--border)}
 .compare__scroll{width:100%}
@@ -204,8 +205,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .hero__desc{max-width:100%;text-align:left}
   .hero__trust{text-align:center}
   .steps{grid-template-columns:1fr;gap:24px}
-  .features__grid{flex-direction:column}
-  .feature{grid-template-columns:1fr;gap:6px}
+  .features__grid{grid-template-columns:1fr}
+  .feature{border-right:none}
   .feature:last-child{border-bottom:none}
   .pricing__grid{grid-template-columns:1fr;gap:16px}
   .plan--featured{order:-1}
@@ -380,28 +381,34 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <h2 class="section-title">Everything that was on your plate, handled.</h2>
     <div class="features__grid">
       <div class="feature">
+        <div class="feature__cmd">&gt; "run an ad"</div>
         <h3 class="feature__title">A Facebook ad in 30 seconds</h3>
-        <p class="feature__desc">Text "run an ad." Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
+        <p class="feature__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
       </div>
       <div class="feature">
+        <div class="feature__cmd">&gt; new review detected</div>
         <h3 class="feature__title">Every Google review answered</h3>
         <p class="feature__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
       </div>
       <div class="feature">
-        <h3 class="feature__title">Autopilot mode</h3>
-        <p class="feature__desc">Don't want to approve every post? Switch to autopilot. We publish on your schedule and text you a weekly summary of everything that went out.</p>
+        <div class="feature__cmd">&gt; "autopilot on"</div>
+        <h3 class="feature__title">Set it and forget it</h3>
+        <p class="feature__desc">Switch to autopilot and we publish on your schedule. A weekly summary lands in your texts — no dashboard, no log-in.</p>
       </div>
       <div class="feature">
+        <div class="feature__cmd">&gt; scheduled: Mon / Wed / Fri</div>
         <h3 class="feature__title">Posts every week, on every platform</h3>
-        <p class="feature__desc">Written in your voice, scheduled and published for you. Reply EDIT on anything that needs a tweak. That's the whole job.</p>
+        <p class="feature__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
       </div>
       <div class="feature">
+        <div class="feature__cmd">&gt; Monday 8am report</div>
         <h3 class="feature__title">Your numbers, every Monday</h3>
         <p class="feature__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
       </div>
       <div class="feature">
+        <div class="feature__cmd">&gt; "audit my website"</div>
         <h3 class="feature__title">Website audit in plain English</h3>
-        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants.</p>
+        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants. <span style="color:var(--text-muted);font-size:0.8rem">(1/mo on Starter, 5/mo on Growth)</span></p>
       </div>
     </div>
   </div>
