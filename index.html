@@ -364,8 +364,12 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .demo__label{margin-bottom:28px}
   .demo__label h2{font-size:1.6rem}
   .proof__stats{grid-template-columns:1fr}
-  .proof__stat-block{border-right:none;border-bottom:1px solid var(--border);padding:36px 20px 32px}
+  .proof__stats::before{display:none}
+  .proof__stat-block{padding:36px 20px 32px;border-bottom:1px solid var(--border)}
+  .proof__stat-block::after{display:none}
   .proof__stat-block:last-child{border-bottom:none}
+  .proof__stat-label{max-width:none;border-left:none;padding-left:0}
+  .proof__source{padding-left:0}
   .proof__note{text-align:center}
   .proof__quotes{grid-template-columns:1fr}
   .proof__quote{border-right:none;border-bottom:1px solid var(--border);padding:28px 24px}
@@ -388,7 +392,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .final-cta__trust{text-align:center}
   .faq__list{max-width:100%}
   .signup-note{text-align:center}
-  .proof__stat-label{max-width:none}
   .how{padding:80px 0}
   .features{padding:80px 0}
   .proof{padding:80px 0}
