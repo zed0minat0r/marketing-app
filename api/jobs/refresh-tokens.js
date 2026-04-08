@@ -103,6 +103,57 @@ async function refreshTwitterToken(account) {
   return tokenExpiresAt;
 }
 
+async function refreshLinkedInToken(account) {
+  // LinkedIn does not support refresh tokens on the basic Marketing Developer Platform.
+  // Tokens expire after 60 days and must be renewed via user re-authorization.
+  // This function is a no-op that throws so the caller can notify the user.
+  throw new Error('LinkedIn tokens cannot be refreshed automatically. User must reconnect.');
+}
+
+async function refreshGoogleToken(account) {
+  if (!account.refresh_token) {
+    throw new Error('No Google refresh token — user must reconnect');
+  }
+
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+  const body = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    refresh_token: account.refresh_token,
+    grant_type: 'refresh_token',
+  });
+
+  const response = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+
+  const data = await response.json();
+  if (data.error) throw new Error(data.error_description || data.error);
+
+  // Google refresh tokens don't expire; new access token expires in 1 hour
+  const tokenExpiresAt = new Date(Date.now() + (data.expires_in || 3600) * 1000).toISOString();
+
+  await upsertSocialAccount({
+    userId: account.user_id,
+    platform: 'google',
+    platformUserId: account.platform_user_id,
+    platformUsername: account.platform_username,
+    accessToken: data.access_token,
+    refreshToken: account.refresh_token, // Refresh token remains the same
+    tokenExpiresAt,
+    scopes: account.scopes,
+  });
+
+  return tokenExpiresAt;
+}
+
+// Pinterest uses long-lived tokens that do not expire in normal circumstances.
+// No refresh is needed; we skip Pinterest accounts in the expiry check.
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -157,6 +208,17 @@ module.exports = async function handler(req, res) {
         refreshed++;
       } else if (account.platform === 'twitter') {
         await refreshTwitterToken(account);
+        refreshed++;
+      } else if (account.platform === 'linkedin') {
+        // LinkedIn cannot be refreshed programmatically — notify user to reconnect
+        await refreshLinkedInToken(account); // Will always throw
+        refreshed++;
+      } else if (account.platform === 'google') {
+        await refreshGoogleToken(account);
+        refreshed++;
+      } else if (account.platform === 'pinterest') {
+        // Pinterest tokens are long-lived (no expiry) — skip silently
+        console.log(`Token refresh: Pinterest tokens do not expire, skipping account ${account.id}`);
         refreshed++;
       } else {
         console.warn(`Token refresh: unknown platform "${account.platform}" for account ${account.id}`);

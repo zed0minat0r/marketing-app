@@ -76,6 +76,30 @@
       "dest": "/api/oauth/twitter/callback.js"
     },
     {
+      "src": "/api/oauth/linkedin/start",
+      "dest": "/api/oauth/linkedin/start.js"
+    },
+    {
+      "src": "/api/oauth/linkedin/callback",
+      "dest": "/api/oauth/linkedin/callback.js"
+    },
+    {
+      "src": "/api/oauth/pinterest/start",
+      "dest": "/api/oauth/pinterest/start.js"
+    },
+    {
+      "src": "/api/oauth/pinterest/callback",
+      "dest": "/api/oauth/pinterest/callback.js"
+    },
+    {
+      "src": "/api/oauth/google/start",
+      "dest": "/api/oauth/google/start.js"
+    },
+    {
+      "src": "/api/oauth/google/callback",
+      "dest": "/api/oauth/google/callback.js"
+    },
+    {
       "src": "/api/jobs/publish",
       "dest": "/api/jobs/publish.js"
     },

@@ -10,7 +10,7 @@
  * Response: { success: true, urls: {...} }
  */
 
-const { getScheduledPost, updateScheduledPost, getSocialAccount, getClient } = require('../../lib/supabase');
+const { getScheduledPost, updateScheduledPost, getSocialAccount, upsertSocialAccount, getClient } = require('../../lib/supabase');
 const { sendSms } = require('../sms/outbound');
 
 // =============================================
@@ -209,6 +209,268 @@ async function postToTwitter(accessToken, content) {
 }
 
 // =============================================
+// LINKEDIN POSTING (UGC Post API)
+// =============================================
+
+/**
+ * Post to LinkedIn as the authenticated member.
+ * Supports text-only and text + link or image attachments.
+ *
+ * @param {string} personUrn - LinkedIn member URN (urn:li:person:{id})
+ * @param {string} accessToken
+ * @param {string} content - Post text
+ * @param {string|null} linkUrl - Optional link to include
+ * @param {string|null} imageUrl - Optional image URL
+ * @returns {Promise<string>} Post URL
+ */
+async function postToLinkedIn(personUrn, accessToken, content, linkUrl, imageUrl) {
+  // Build the UGC post body
+  const shareContent = {
+    shareCommentary: {
+      text: content,
+    },
+    shareMediaCategory: 'NONE',
+  };
+
+  if (linkUrl) {
+    shareContent.shareMediaCategory = 'ARTICLE';
+    shareContent.media = [{
+      status: 'READY',
+      originalUrl: linkUrl,
+    }];
+  } else if (imageUrl) {
+    shareContent.shareMediaCategory = 'IMAGE';
+    shareContent.media = [{
+      status: 'READY',
+      media: imageUrl,
+      description: { text: content.slice(0, 200) },
+    }];
+  }
+
+  const body = {
+    author: personUrn,
+    lifecycleState: 'PUBLISHED',
+    specificContent: {
+      'com.linkedin.ugc.ShareContent': shareContent,
+    },
+    visibility: {
+      'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
+    },
+  };
+
+  const response = await fetch('https://api.linkedin.com/v2/ugcPosts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+      'X-Restli-Protocol-Version': '2.0.0',
+      'LinkedIn-Version': '202304',
+    },
+    body: JSON.stringify(body),
+  });
+
+  const data = await response.json();
+
+  if (data.status >= 400 || data.serviceErrorCode) {
+    throw new Error(`LinkedIn: ${data.message || JSON.stringify(data)}`);
+  }
+
+  // Extract post ID from the response header or body
+  const postUrn = data.id || response.headers?.get('x-restli-id') || '';
+  const postId = postUrn.split(':').pop() || postUrn;
+
+  return postId ? `https://www.linkedin.com/feed/update/${postUrn}/` : 'https://www.linkedin.com/';
+}
+
+// =============================================
+// PINTEREST PIN CREATION (API v5)
+// =============================================
+
+/**
+ * Create a Pinterest pin.
+ * Pinterest requires an image URL. If none is provided and no fallback is
+ * available, we throw PINTEREST_NEEDS_IMAGE so the caller can notify the user.
+ *
+ * @param {string} accessToken
+ * @param {string} content - Pin description
+ * @param {string|null} imageUrl - Public image URL
+ * @param {string|null} boardId - Target board ID (uses first board if null)
+ * @param {string|null} linkUrl - Optional destination link
+ * @returns {Promise<string>} Pin URL
+ */
+async function postToPinterest(accessToken, content, imageUrl, boardId, linkUrl) {
+  // Pinterest requires an image — no text-only pins
+  if (!imageUrl) {
+    throw new Error('PINTEREST_NEEDS_IMAGE');
+  }
+
+  // If no boardId provided, fetch the user's first board
+  let targetBoardId = boardId;
+  if (!targetBoardId) {
+    const boardsRes = await fetch('https://api.pinterest.com/v5/boards?page_size=1', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const boardsData = await boardsRes.json();
+    if (boardsData.code) throw new Error(boardsData.message || 'Pinterest boards fetch failed');
+
+    const firstBoard = boardsData.items?.[0];
+    if (!firstBoard) throw new Error('Pinterest: No boards found. Create a board on Pinterest first.');
+    targetBoardId = firstBoard.id;
+  }
+
+  const pinBody = {
+    board_id: targetBoardId,
+    description: content,
+    media_source: {
+      source_type: 'image_url',
+      url: imageUrl,
+    },
+  };
+
+  if (linkUrl) {
+    pinBody.link = linkUrl;
+  }
+
+  const response = await fetch('https://api.pinterest.com/v5/pins', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(pinBody),
+  });
+
+  const data = await response.json();
+  if (data.code) throw new Error(`Pinterest: ${data.message || JSON.stringify(data)}`);
+
+  return `https://www.pinterest.com/pin/${data.id}/`;
+}
+
+// =============================================
+// GOOGLE BUSINESS PROFILE POSTING
+// =============================================
+
+/**
+ * Refresh a Google access token using the stored refresh token.
+ */
+async function refreshGoogleAccessToken(refreshToken) {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+  const body = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    refresh_token: refreshToken,
+    grant_type: 'refresh_token',
+  });
+
+  const response = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+
+  const data = await response.json();
+  if (data.error) throw new Error(data.error_description || data.error);
+
+  return {
+    accessToken: data.access_token,
+    expiresAt: new Date(Date.now() + (data.expires_in || 3600) * 1000).toISOString(),
+  };
+}
+
+/**
+ * Get the first Google Business Profile location for the authenticated account.
+ * Returns { name, accountName } where name is the resource name (accounts/xxx/locations/yyy).
+ */
+async function getGoogleBusinessLocation(accessToken) {
+  // First get accounts
+  const accountsRes = await fetch('https://mybusinessaccountmanagement.googleapis.com/v1/accounts', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const accountsData = await accountsRes.json();
+
+  if (accountsData.error) throw new Error(`Google Business: ${accountsData.error.message}`);
+
+  const account = accountsData.accounts?.[0];
+  if (!account) throw new Error('Google Business: No business accounts found. Set up a Google Business Profile first.');
+
+  // Get locations for this account
+  const locationsRes = await fetch(
+    `https://mybusinessbusinessinformation.googleapis.com/v1/${account.name}/locations?readMask=name,title`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  const locationsData = await locationsRes.json();
+
+  if (locationsData.error) throw new Error(`Google Business: ${locationsData.error.message}`);
+
+  const location = locationsData.locations?.[0];
+  if (!location) throw new Error('Google Business: No locations found under your business account.');
+
+  return { locationName: location.name, title: location.title || account.accountName };
+}
+
+/**
+ * Create a Google Business Profile local post.
+ * Supports text-only (STANDARD) or text with image (STANDARD with media).
+ *
+ * @param {string} accessToken
+ * @param {string} content - Post text (max 1500 chars)
+ * @param {string|null} imageUrl - Optional image URL
+ * @param {string|null} locationName - GBP location resource name (fetched automatically if null)
+ * @returns {Promise<string>} Post URL
+ */
+async function postToGoogleBusiness(accessToken, content, imageUrl, locationName) {
+  let location = locationName;
+
+  if (!location) {
+    const locationData = await getGoogleBusinessLocation(accessToken);
+    location = locationData.locationName;
+  }
+
+  const postBody = {
+    languageCode: 'en',
+    summary: content.slice(0, 1500),
+    topicType: 'STANDARD',
+  };
+
+  if (imageUrl) {
+    postBody.media = [{
+      mediaFormat: 'PHOTO',
+      sourceUrl: imageUrl,
+    }];
+  }
+
+  const response = await fetch(
+    `https://mybusiness.googleapis.com/v4/${location}/localPosts`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(postBody),
+    }
+  );
+
+  const data = await response.json();
+  if (data.error) throw new Error(`Google Business: ${data.error.message}`);
+
+  // Extract post name for URL construction
+  // Resource name format: accounts/{accountId}/locations/{locationId}/localPosts/{postId}
+  const parts = (data.name || '').split('/');
+  const postId = parts[parts.length - 1];
+  const locationId = parts[3] || '';
+  const accountId = parts[1] || '';
+
+  const postUrl = accountId && locationId && postId
+    ? `https://business.google.com/dashboard/l/${locationId}`
+    : 'https://business.google.com/';
+
+  return postUrl;
+}
+
+// =============================================
 // REFRESH TWITTER TOKEN
 // =============================================
 
@@ -304,6 +566,70 @@ async function publishPost(postId) {
         }
 
         url = await postToTwitter(accessToken, post.content);
+
+      } else if (platform === 'linkedin') {
+        let accessToken = account.access_token;
+
+        // Refresh if expired (LinkedIn tokens expire after 60 days)
+        if (account.token_expires_at && new Date(account.token_expires_at) < new Date()) {
+          throw new Error('LINKEDIN_TOKEN_EXPIRED');
+        }
+
+        // Build the member URN from the stored platform_user_id
+        const personUrn = `urn:li:person:${account.platform_user_id}`;
+        url = await postToLinkedIn(
+          personUrn,
+          accessToken,
+          post.content,
+          post.link_url || null,
+          post.media_url || null
+        );
+
+      } else if (platform === 'pinterest') {
+        let accessToken = account.access_token;
+
+        // Pinterest tokens are long-lived; no refresh needed unless expires_at set
+        if (account.token_expires_at && new Date(account.token_expires_at) < new Date()) {
+          throw new Error('PINTEREST_TOKEN_EXPIRED');
+        }
+
+        url = await postToPinterest(
+          accessToken,
+          post.content,
+          post.media_url || null,
+          post.board_id || null,
+          post.link_url || null
+        );
+
+      } else if (platform === 'google') {
+        let accessToken = account.access_token;
+
+        // Google access tokens expire in 1 hour — always refresh if expiry is set
+        if (account.refresh_token &&
+            account.token_expires_at &&
+            new Date(account.token_expires_at) < new Date(Date.now() + 60 * 1000)) {
+          const refreshed = await refreshGoogleAccessToken(account.refresh_token);
+          accessToken = refreshed.accessToken;
+
+          // Update stored token
+          await upsertSocialAccount({
+            userId: account.user_id,
+            platform: 'google',
+            platformUserId: account.platform_user_id,
+            platformUsername: account.platform_username,
+            accessToken: refreshed.accessToken,
+            refreshToken: account.refresh_token,
+            tokenExpiresAt: refreshed.expiresAt,
+            scopes: account.scopes,
+          });
+        }
+
+        url = await postToGoogleBusiness(
+          accessToken,
+          post.content,
+          post.media_url || null,
+          post.location_name || null
+        );
       }
 
       if (url) urls[platform] = url;
@@ -333,6 +659,60 @@ async function publishPost(postId) {
         } catch (notifyErr) {
           console.error('Failed to notify user about Instagram image requirement:', notifyErr.message);
         }
+      } else if (err.message === 'PINTEREST_NEEDS_IMAGE') {
+        errors[platform] = 'Pinterest requires an image URL to create a pin. Reply with your post text and an image URL.';
+
+        try {
+          const { data: userData } = await getClient()
+            .from('users')
+            .select('phone')
+            .eq('id', post.user_id)
+            .single();
+          if (userData?.phone) {
+            await sendSms(userData.phone,
+              'Pinterest requires an image to create a pin. Reply with an image URL along with your post text.'
+            ).catch(console.error);
+          }
+        } catch (notifyErr) {
+          console.error('Failed to notify user about Pinterest image requirement:', notifyErr.message);
+        }
+
+      } else if (err.message === 'LINKEDIN_TOKEN_EXPIRED') {
+        errors[platform] = 'LinkedIn connection has expired. Please reconnect by texting "Connect LinkedIn".';
+
+        try {
+          const { data: userData } = await getClient()
+            .from('users')
+            .select('phone')
+            .eq('id', post.user_id)
+            .single();
+          if (userData?.phone) {
+            await sendSms(userData.phone,
+              'Your LinkedIn connection has expired. Text "Connect LinkedIn" to reconnect.'
+            ).catch(console.error);
+          }
+        } catch (notifyErr) {
+          console.error('Failed to notify user about LinkedIn token expiry:', notifyErr.message);
+        }
+
+      } else if (err.message === 'PINTEREST_TOKEN_EXPIRED') {
+        errors[platform] = 'Pinterest connection has expired. Please reconnect by texting "Connect Pinterest".';
+
+        try {
+          const { data: userData } = await getClient()
+            .from('users')
+            .select('phone')
+            .eq('id', post.user_id)
+            .single();
+          if (userData?.phone) {
+            await sendSms(userData.phone,
+              'Your Pinterest connection has expired. Text "Connect Pinterest" to reconnect.'
+            ).catch(console.error);
+          }
+        } catch (notifyErr) {
+          console.error('Failed to notify user about Pinterest token expiry:', notifyErr.message);
+        }
+
       } else {
         errors[platform] = err.message;
       }

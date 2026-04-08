@@ -89,6 +89,153 @@ async function collectInstagramInsights(postId, igMediaId, accessToken) {
   return results;
 }
 
+async function collectLinkedInMetrics(ugcPostUrn, accessToken) {
+  // LinkedIn UGC Post Statistics API
+  // Requires the share URN — extract from the post URL or the stored URN
+  // URL format: https://www.linkedin.com/feed/update/urn:li:ugcPost:{id}/
+  // We encode the URN for use in the query parameter
+  const encodedUrn = encodeURIComponent(ugcPostUrn);
+
+  const url = `https://api.linkedin.com/v2/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${encodedUrn}&shares[0]=${encodedUrn}`;
+
+  // Fallback: use the share statistics endpoint for member posts
+  const memberUrl = `https://api.linkedin.com/v2/memberNetworkSizes?q=member&networks=List()`;
+
+  // Use the ugcPost share statistics endpoint
+  const statsUrl = `https://api.linkedin.com/v2/shareStatistics?q=activity&activity=${encodedUrn}`;
+
+  const response = await fetch(statsUrl, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'X-Restli-Protocol-Version': '2.0.0',
+      'LinkedIn-Version': '202304',
+    },
+  });
+
+  const data = await response.json();
+
+  // Handle the case where stats are not yet available (post too new)
+  if (data.status >= 400 || !data.elements) {
+    // Return zeros gracefully — LinkedIn stats can take a few hours to populate
+    return {
+      impressions: 0,
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      clicks: 0,
+      raw: data,
+    };
+  }
+
+  const stats = data.elements?.[0]?.totalShareStatistics || {};
+
+  return {
+    impressions: stats.impressionCount || 0,
+    likes: stats.likeCount || 0,
+    comments: stats.commentCount || 0,
+    shares: stats.shareCount || 0,
+    clicks: stats.clickCount || 0,
+    raw: data,
+  };
+}
+
+async function collectPinterestMetrics(pinId, accessToken) {
+  // Pinterest Pin Analytics API (v5)
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+  const metrics = ['IMPRESSION', 'SAVE', 'PIN_CLICK', 'OUTBOUND_CLICK'].join(',');
+  const url = `https://api.pinterest.com/v5/pins/${pinId}/analytics?start_date=${yesterday}&end_date=${today}&metric_types=${metrics}`;
+
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  const data = await response.json();
+
+  if (data.code) {
+    // Non-fatal: analytics may not be available immediately
+    console.warn(`Pinterest analytics not available for pin ${pinId}:`, data.message);
+    return { impressions: 0, saves: 0, clicks: 0, raw: data };
+  }
+
+  // Aggregate all_no_product metrics across date range
+  const allDays = data.all?.daily_metrics || [];
+  const totals = allDays.reduce((acc, day) => ({
+    impressions: acc.impressions + (day.IMPRESSION || 0),
+    saves: acc.saves + (day.SAVE || 0),
+    clicks: acc.clicks + (day.PIN_CLICK || 0) + (day.OUTBOUND_CLICK || 0),
+  }), { impressions: 0, saves: 0, clicks: 0 });
+
+  return {
+    impressions: totals.impressions,
+    saves: totals.saves,
+    clicks: totals.clicks,
+    raw: data,
+  };
+}
+
+async function collectGoogleBusinessMetrics(locationName, accessToken) {
+  // Google Business Profile Insights API
+  // Fetches views and clicks for a location
+  const endTime = new Date().toISOString();
+  const startTime = new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString();
+
+  const body = {
+    locationNames: [locationName],
+    basicRequest: {
+      metricRequests: [
+        { metric: 'QUERIES_DIRECT', options: ['AGGREGATED_TOTAL'] },
+        { metric: 'QUERIES_INDIRECT', options: ['AGGREGATED_TOTAL'] },
+        { metric: 'VIEWS_MAPS', options: ['AGGREGATED_TOTAL'] },
+        { metric: 'VIEWS_SEARCH', options: ['AGGREGATED_TOTAL'] },
+        { metric: 'ACTIONS_WEBSITE', options: ['AGGREGATED_TOTAL'] },
+        { metric: 'ACTIONS_PHONE', options: ['AGGREGATED_TOTAL'] },
+      ],
+      timeRange: { startTime, endTime },
+    },
+  };
+
+  const response = await fetch('https://mybusiness.googleapis.com/v4/locations:reportInsights', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  const data = await response.json();
+
+  if (data.error) {
+    console.warn('Google Business insights error:', data.error.message);
+    return { impressions: 0, clicks: 0, raw: data };
+  }
+
+  const locationMetrics = data.locationMetrics?.[0]?.metricValues || [];
+  let views = 0;
+  let clicks = 0;
+
+  for (const mv of locationMetrics) {
+    const total = mv.value?.metricOption === 'AGGREGATED_TOTAL'
+      ? parseInt(mv.value?.uint64Values?.[0] || '0', 10)
+      : 0;
+
+    switch (mv.metric) {
+      case 'VIEWS_MAPS':
+      case 'VIEWS_SEARCH':
+        views += total;
+        break;
+      case 'ACTIONS_WEBSITE':
+      case 'ACTIONS_PHONE':
+        clicks += total;
+        break;
+    }
+  }
+
+  return { impressions: views, clicks, raw: data };
+}
+
 async function collectTwitterMetrics(tweetId, accessToken) {
   const url = `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=public_metrics,non_public_metrics`;
 
@@ -209,6 +356,109 @@ module.exports = async function handler(req, res) {
               continue;
             }
             metrics = await collectTwitterMetrics(tweetId, account.access_token);
+
+          } else if (platform === 'linkedin') {
+            // URL format: https://www.linkedin.com/feed/update/urn:li:ugcPost:{id}/
+            // Extract the full URN from the URL path
+            let postUrn;
+            try {
+              const url = new URL(platformPostUrl);
+              const parts = url.pathname.split('/').filter(Boolean);
+              // parts = ['feed', 'update', 'urn:li:ugcPost:xxx']
+              const updateIdx = parts.indexOf('update');
+              if (updateIdx !== -1 && parts[updateIdx + 1]) {
+                postUrn = decodeURIComponent(parts[updateIdx + 1]);
+              }
+            } catch (_) { /* invalid URL */ }
+
+            if (!postUrn) {
+              console.error(`Analytics: could not parse LinkedIn post URN from URL: ${platformPostUrl}`);
+              failed++;
+              continue;
+            }
+            metrics = await collectLinkedInMetrics(postUrn, account.access_token);
+
+          } else if (platform === 'pinterest') {
+            // URL format: https://www.pinterest.com/pin/{pinId}/
+            let pinId;
+            try {
+              const url = new URL(platformPostUrl);
+              const parts = url.pathname.split('/').filter(Boolean);
+              // parts = ['pin', 'pinId']
+              if (parts[0] === 'pin' && parts[1]) {
+                pinId = parts[1];
+              }
+            } catch (_) { /* invalid URL */ }
+
+            if (!pinId) {
+              console.error(`Analytics: could not parse Pinterest pin ID from URL: ${platformPostUrl}`);
+              failed++;
+              continue;
+            }
+            metrics = await collectPinterestMetrics(pinId, account.access_token);
+
+          } else if (platform === 'google') {
+            // For Google Business, we need the location resource name.
+            // The post URL points to the dashboard — we use the account's stored data.
+            // Google Business insights are location-level, not post-level.
+            // We fetch location metrics and attribute them to the most recent post.
+
+            // Refresh token if needed (Google tokens expire in 1 hour)
+            let accessToken = account.access_token;
+            if (account.refresh_token &&
+                account.token_expires_at &&
+                new Date(account.token_expires_at) < new Date(Date.now() + 60 * 1000)) {
+              try {
+                const clientId = process.env.GOOGLE_CLIENT_ID;
+                const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+                const body = new URLSearchParams({
+                  client_id: clientId,
+                  client_secret: clientSecret,
+                  refresh_token: account.refresh_token,
+                  grant_type: 'refresh_token',
+                });
+                const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                  body: body.toString(),
+                });
+                const tokenData = await tokenRes.json();
+                if (!tokenData.error) {
+                  accessToken = tokenData.access_token;
+                }
+              } catch (refreshErr) {
+                console.warn('Google token refresh in analytics failed:', refreshErr.message);
+              }
+            }
+
+            // Get location name from the Business Profile API
+            const accountsRes = await fetch(
+              'https://mybusinessaccountmanagement.googleapis.com/v1/accounts',
+              { headers: { Authorization: `Bearer ${accessToken}` } }
+            );
+            const accountsData = await accountsRes.json();
+            const gbAccount = accountsData.accounts?.[0];
+
+            if (!gbAccount) {
+              console.warn(`Analytics: no Google Business account found for user ${post.user_id}`);
+              failed++;
+              continue;
+            }
+
+            const locationsRes = await fetch(
+              `https://mybusinessbusinessinformation.googleapis.com/v1/${gbAccount.name}/locations?readMask=name`,
+              { headers: { Authorization: `Bearer ${accessToken}` } }
+            );
+            const locationsData = await locationsRes.json();
+            const location = locationsData.locations?.[0];
+
+            if (!location) {
+              console.warn(`Analytics: no Google Business locations found for user ${post.user_id}`);
+              failed++;
+              continue;
+            }
+
+            metrics = await collectGoogleBusinessMetrics(location.name, accessToken);
           }
 
           await insertAnalyticsSnapshot({
