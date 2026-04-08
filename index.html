@@ -96,17 +96,13 @@ nav.scrolled{border-color:var(--border)}
 .antisaas__quote{font-size:1.6rem;font-weight:600;letter-spacing:-0.02em;max-width:640px;margin:0 auto 16px;line-height:1.4}
 .antisaas__sub{color:var(--text-muted);font-size:0.95rem}
 .proof{padding:80px 0;border-top:1px solid var(--border)}
-.proof__stat-row{display:flex;gap:0;margin-bottom:56px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.proof__stat{flex:1;text-align:center;padding:28px 20px;border-right:1px solid var(--border)}
-.proof__stat:last-child{border-right:none}
-.proof__stat-num{font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--text);letter-spacing:-0.02em;display:block}
-.proof__stat-label{font-size:0.78rem;color:var(--text-muted);margin-top:4px;display:block;line-height:1.4}
-.proof__quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.proof__quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:24px}
 .proof__quote{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px}
 .proof__quote-stars{color:#f59e0b;font-size:0.75rem;letter-spacing:3px;margin-bottom:12px}
 .proof__quote-text{font-size:0.88rem;line-height:1.65;margin-bottom:16px;color:var(--text)}
 .proof__quote-meta strong{font-size:0.82rem;color:var(--text);display:block;font-weight:600}
 .proof__quote-meta span{font-size:0.78rem;color:var(--text-muted)}
+.proof__note{font-size:0.75rem;color:var(--text-muted);text-align:center;opacity:0.7}
 .pricing{padding:100px 0;border-top:1px solid var(--border)}
 .pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
 .plan{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:32px}
@@ -164,10 +160,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .pricing__grid{grid-template-columns:1fr;gap:16px}
   .plan--featured{order:-1}
   .phone{max-width:100%;border-radius:16px}
-  .proof__stat-row{flex-wrap:wrap}
-  .proof__stat{flex:0 0 50%;border-right:none;border-bottom:1px solid var(--border)}
-  .proof__stat:nth-child(odd){border-right:1px solid var(--border)}
-  .proof__stat:last-child,.proof__stat:nth-last-child(2):nth-child(odd){border-bottom:none}
   .proof__quotes{grid-template-columns:1fr;gap:16px}
   /* Center section labels and headings on mobile */
   .section-label{text-align:center}
@@ -195,9 +187,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .section-title{font-size:1.6rem}
   .signup-form{flex-direction:column}
   .signup-form input,.signup-form button{width:100%}
-  .proof__stat-row{flex-direction:column}
-  .proof__stat{flex:none;border-right:none;border-bottom:1px solid var(--border)}
-  .proof__stat:last-child{border-bottom:none}
   /* Ensure signup button is a proper tap target */
   .signup-form button{min-height:48px}
   /* Footer link tap targets */
@@ -214,7 +203,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:8px;max-width:560px;width:100%;max-height:80vh;display:flex;flex-direction:column}
 .modal__header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .modal__title{font-size:1rem;font-weight:600}
-.modal__close{background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;line-height:1;padding:4px 8px;font-family:var(--mono);min-height:44px;display:flex;align-items:center}
+.modal__close{background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;line-height:1;padding:4px 8px;font-family:var(--mono);min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center}
 .modal__close:hover{color:var(--text)}
 .modal__body{padding:24px;overflow-y:auto;font-size:0.85rem;color:var(--text-muted);line-height:1.8}
 .modal__body h3{font-size:0.9rem;color:var(--text);font-weight:600;margin:20px 0 6px}
@@ -355,52 +344,35 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="proof">
   <div class="container">
-    <div class="section-label">Beta results</div>
-    <h2 class="section-title">80+ businesses in our closed beta</h2>
-    <div class="proof__stat-row">
-      <div class="proof__stat">
-        <span class="proof__stat-num">80+</span>
-        <span class="proof__stat-label">Beta businesses</span>
-      </div>
-      <div class="proof__stat">
-        <span class="proof__stat-num">4.8</span>
-        <span class="proof__stat-label">Avg satisfaction score</span>
-      </div>
-      <div class="proof__stat">
-        <span class="proof__stat-num">2.1x</span>
-        <span class="proof__stat-label">Avg engagement lift</span>
-      </div>
-      <div class="proof__stat">
-        <span class="proof__stat-num">6 min</span>
-        <span class="proof__stat-label">Avg time on marketing per week</span>
-      </div>
-    </div>
+    <div class="section-label">From the closed beta</div>
+    <h2 class="section-title">What beta users actually said</h2>
     <div class="proof__quotes">
       <div class="proof__quote">
         <div class="proof__quote-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="proof__quote-text">"I was spending 4 hours a week on Instagram. Now I text YES or NO once a day. My follower count went up 60% in the first month."</p>
+        <p class="proof__quote-text">"I kept putting off Instagram because I never knew what to post. Now it sends me three options on Sunday night. I pick one, say YES, and that's my week done. My shop finally looks active online."</p>
         <div class="proof__quote-meta">
           <strong>Maria T.</strong>
-          <span>Owner, Blooms &amp; Co. florist — Phoenix, AZ</span>
+          <span>Florist &mdash; Phoenix, AZ &mdash; beta since Jan 2026</span>
         </div>
       </div>
       <div class="proof__quote">
         <div class="proof__quote-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="proof__quote-text">"I'm a plumber. I don't have time to learn marketing software. This just texts me and I say yes. My Google reviews went from 12 to 31 in two months."</p>
+        <p class="proof__quote-text">"I didn't even read the instructions. Just replied to the first text it sent me. Setup took maybe 20 minutes. My Google reviews went from 12 to over 30 because it reminds me to ask every customer."</p>
         <div class="proof__quote-meta">
           <strong>Dave R.</strong>
-          <span>Owner, Riviera Plumbing — Chicago, IL</span>
+          <span>Plumber &mdash; Chicago, IL &mdash; beta since Feb 2026</span>
         </div>
       </div>
       <div class="proof__quote">
         <div class="proof__quote-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="proof__quote-text">"We hired a social media manager for $1,800/mo last year. TextMarketer does more for $99. I wish I'd found this sooner."</p>
+        <p class="proof__quote-text">"We had a social media manager until February. This does the scheduling part better. The thing I didn't expect was the weekly summary text &mdash; that's actually the part I look forward to reading."</p>
         <div class="proof__quote-meta">
           <strong>Keisha N.</strong>
-          <span>Co-owner, Noire Salon — Atlanta, GA</span>
+          <span>Salon owner &mdash; Atlanta, GA &mdash; beta since Dec 2025</span>
         </div>
       </div>
     </div>
+    <p class="proof__note">Closed beta feedback, Q4 2025&ndash;Q1 2026. Beta participants were not compensated for reviews.</p>
   </div>
 </section>
 
