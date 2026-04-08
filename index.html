@@ -189,7 +189,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 @media(max-width:768px){
   .hero{padding:100px 0 60px}
   .hero__split{grid-template-columns:1fr;gap:40px}
-  .hero__live{max-width:320px}
+  .hero__right{display:flex;justify-content:center;width:100%}
+  .hero__live{max-width:320px;width:100%}
   .hero__title{font-size:2.2rem;text-align:center}
   .hero__stat{display:table;margin:0 auto 24px;text-align:center}
   .hero__cta-row{justify-content:center}
@@ -207,8 +208,9 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .compare__title{font-size:1.4rem;text-align:center}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
-  .compare__cta-row{flex-direction:column;align-items:flex-start}
+  .compare__cta-row{flex-direction:column;align-items:center}
   .compare__cta-row .btn{width:100%;text-align:center;font-size:0.9rem;padding:14px 20px}
+  .compare__cta-note{text-align:center}
   .section-label{text-align:center}
   .section-title{text-align:center}
   .step__desc,.feature__desc,.proof__quote-text,.plan__desc{text-align:left}
@@ -216,25 +218,36 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .proof__quote-meta{text-align:left}
   .plan--featured::before{font-size:0.75rem}
   .demo__label h2,.demo__label p{text-align:center}
+  .pricing__toggle{justify-content:center}
+  .final-cta__title{text-align:center}
+  .final-cta__sub{text-align:center}
+  .final-cta__trust{text-align:center}
 }
 @media(max-width:480px){
   .hero__title{font-size:1.8rem}
   .hero__cta-row{flex-direction:column;align-items:center}
-  .btn{width:100%;text-align:center}
+  .hero__cta-row .btn{width:100%;max-width:320px}
   .nav__cta{padding:10px 16px;font-size:0.82rem}
   .phone__prompts{gap:6px}
-  .prompt-btn{font-size:0.8rem;padding:10px 14px;min-height:44px}
-  .final-cta__title{font-size:1.8rem}
-  .section-title{font-size:1.6rem}
-  .signup-form{flex-direction:column}
-  .signup-form input,.signup-form button{width:100%}
-  .footer__links a{padding:6px 0;display:inline-flex;align-items:center;min-height:44px}
+  .prompt-btn{font-size:0.82rem;padding:10px 14px;min-height:44px}
+  .final-cta__title{font-size:1.8rem;text-align:center}
+  .section-title{font-size:1.6rem;text-align:center}
+  .section-label{text-align:center}
+  .signup-form{flex-direction:column;align-items:stretch}
+  .signup-form input{min-width:0;width:100%}
+  .signup-form button{width:100%}
+  .footer__links{justify-content:center}
+  .footer__links a{padding:8px 4px;display:inline-flex;align-items:center;min-height:44px}
   .step__num,.step__title{text-align:left}
   .faq__a{text-align:left}
   .pricing__toggle{flex-wrap:wrap;justify-content:center;gap:8px}
-  .proof__quote-meta{text-align:center}
+  .proof__quote-meta{text-align:left;align-items:flex-start}
   .hero__trust{font-size:0.78rem;padding:0 8px;text-align:center}
   .plan__name{text-align:left}
+  .compare__mobile-label{font-size:0.78rem;padding:10px 8px}
+  .compare__mobile-val{font-size:0.82rem;padding:10px 4px}
+  .compare__mobile-heading{font-size:0.75rem;padding:8px 6px}
+  .hero__live-msg{font-size:0.82rem}
 }
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
 .modal-overlay.open{display:flex}
@@ -264,28 +277,14 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="hero__left">
         <div class="hero__stat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title">Your marketing team<br>lives in your <em>texts</em></h1>
-        <p class="hero__desc">TextMarketer is an AI that handles your social posts, ads, and review replies &mdash; entirely over text message. Sign up and your first week of posts arrives within the hour. No app, no dashboard, no login ever.</p>
+        <p class="hero__desc">No app, no dashboard, no login ever. TextMarketer is an AI that handles your social posts, ads, and review replies &mdash; entirely over text message. Sign up and your first week of posts arrives within the hour.</p>
         <div class="hero__cta-row">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
           <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
         </div>
         <p class="hero__trust">14-day free trial &middot; No credit card &middot; Cancel anytime by text</p>
       </div>
-      <div class="hero__right">
-        <div class="hero__live" aria-label="Live demo preview" aria-live="polite">
-          <div class="hero__live-header">
-            <div class="hero__live-dot"></div>
-            <div class="hero__live-name">TextMarketer</div>
-            <div class="hero__live-badge">live</div>
-          </div>
-          <div class="hero__live-msgs" id="heroMsgs">
-            <div class="hero__live-typing" id="heroTyping"><span></span><span></span><span></span></div>
-            <div class="hero__live-msg hero__live-msg--in" id="heroMsg1"></div>
-            <div class="hero__live-msg hero__live-msg--out" id="heroMsg2"></div>
-            <div class="hero__live-msg hero__live-msg--in" id="heroMsg3"></div>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </section>
@@ -348,7 +347,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <div class="features__grid">
       <div class="feature">
         <h3 class="feature__title">3 posts per platform, every week</h3>
-        <p class="feature__desc">3 posts per week, every platform, written in your business voice. You reply YES. We publish.</p>
+        <p class="feature__desc">3 posts per platform, every week, written in your business voice. You reply YES. We publish.</p>
       </div>
       <div class="feature">
         <h3 class="feature__title">A Facebook ad in 30 seconds</h3>
