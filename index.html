@@ -393,12 +393,12 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="compare">
   <div class="container">
-    <div class="section-label">vs. the alternatives</div>
+    <div class="section-label">vs. Hootsuite, Podium &amp; hiring someone</div>
     <h2 class="compare__title">Every competitor still needs a dashboard. We don&#39;t.</h2>
     <div class="compare__mobile" aria-label="Competitor comparison">
       <div class="compare__mobile-header">
         <div class="compare__mobile-heading" style="grid-column:1/2">Feature</div>
-        <div class="compare__mobile-heading" style="grid-column:2/3">Others</div>
+        <div class="compare__mobile-heading" style="grid-column:2/3">Hootsuite / Podium</div>
         <div class="compare__mobile-heading compare__mobile-heading--us" style="grid-column:3/4">TextMarketer</div>
       </div>
       <div class="compare__mobile-row">
@@ -609,7 +609,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="faq">
   <div class="container">
-    <h2 class="section-title">Questions we get a lot</h2>
+    <div class="section-label">Before you join</div>
+    <h2 class="section-title">Straight answers.</h2>
     <div class="faq__list">
       <div class="faq__item">
         <div class="faq__q">What social platforms do you support?</div>
@@ -638,6 +639,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="faq__item">
         <div class="faq__q">Is there a free trial?</div>
         <div class="faq__a">Yes — 14 days free, no credit card required. You get full access to the Growth plan during your trial. At the end, pick a plan or walk away. Join the waitlist below to reserve your spot.</div>
+      </div>
+      <div class="faq__item">
+        <div class="faq__q">Is this live? When does access open?</div>
+        <div class="faq__a">We're in early access, opening to the first 500 businesses in May 2026. Join the waitlist and we'll text you directly when your spot is ready — no checking back, no logging in to see your status.</div>
       </div>
     </div>
   </div>
@@ -757,8 +762,14 @@ function handleStep2(e){
   setTimeout(()=>{
     document.getElementById('step2Form').style.display='none';
     document.getElementById('formSub').style.display='none';
+    const title=document.querySelector('.final-cta__title');
+    if(title)title.textContent="You're in.";
+    const trust=document.querySelector('.final-cta__trust');
+    if(trust)trust.style.display='none';
+    const note=document.querySelector('.signup-note');
+    if(note)note.style.display='none';
     const msg=document.getElementById('signupMsg');
-    msg.innerHTML="You're on the list. We're opening access to the first 500 businesses in <strong>May 2026</strong> — we'll text you when your spot is ready.";
+    msg.innerHTML="We're opening access to the first 500 businesses in <strong>May 2026</strong>. We'll text you the moment your spot is ready.";
     msg.style.display='block';
   },600);
 }
@@ -858,11 +869,28 @@ const promptsEl=document.getElementById('chatPrompts');
   runHeroConvo();
 })();
 
+const flowLabels={posts:"Write this week's posts",stats:"How am I doing?",ad:"Create a Facebook ad",audit:"Audit my website"};
+let isRunning=false;
+
+function buildPrompts(excludeFlow){
+  promptsEl.innerHTML='';
+  Object.keys(flowLabels).filter(k=>k!==excludeFlow).forEach(k=>{
+    const b=document.createElement('button');
+    b.className='prompt-btn';
+    b.dataset.flow=k;
+    b.textContent=flowLabels[k];
+    promptsEl.appendChild(b);
+  });
+  promptsEl.style.display='flex';
+}
+
 promptsEl.addEventListener('click',async(e)=>{
   const btn=e.target.closest('.prompt-btn');
-  if(!btn||!btn.dataset.flow)return;
-  const flow=flows[btn.dataset.flow];
+  if(!btn||!btn.dataset.flow||isRunning)return;
+  const flowKey=btn.dataset.flow;
+  const flow=flows[flowKey];
   if(!flow)return;
+  isRunning=true;
   promptsEl.style.display='none';
   for(const msg of flow){
     if(msg.type==='typing'){
@@ -883,17 +911,8 @@ promptsEl.addEventListener('click',async(e)=>{
       await new Promise(r=>setTimeout(r,400));
     }
   }
-  const reset=document.createElement('button');
-  reset.className='prompt-btn';
-  reset.textContent='\u2190 Try another';
-  reset.style.cssText='margin:12px auto;display:flex;min-height:44px;align-items:center;justify-content:center';
-  reset.onclick=()=>{
-    messagesEl.innerHTML='<div class="msg msg--in">Hey! I\'m your marketing assistant. What would you like to do today?</div>';
-    promptsEl.innerHTML='<button class="prompt-btn" data-flow="posts">Write this week\'s posts</button><button class="prompt-btn" data-flow="stats">How am I doing?</button><button class="prompt-btn" data-flow="ad">Create a Facebook ad</button><button class="prompt-btn" data-flow="audit">Audit my website</button>';
-    promptsEl.style.display='flex';
-    reset.remove();
-  };
-  messagesEl.appendChild(reset);
+  isRunning=false;
+  buildPrompts(flowKey);
 });
 </script>
 </body>
