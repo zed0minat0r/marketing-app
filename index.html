@@ -45,7 +45,7 @@ nav.scrolled{border-color:var(--border)}
 .phone__header{background:var(--surface2);padding:12px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
 .phone__avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff}
 .phone__name{font-size:0.85rem;font-weight:600}
-.phone__status{font-size:0.7rem;color:var(--green)}
+.phone__status{font-size:0.75rem;color:var(--green)}
 .phone__messages{padding:20px;min-height:360px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
 .msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:0.88rem;line-height:1.5;animation:msgIn 0.3s ease}
 .msg--in{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
@@ -93,7 +93,7 @@ nav.scrolled{border-color:var(--border)}
 .pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
 .plan{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:32px}
 .plan--featured{border-color:var(--accent);position:relative}
-.plan--featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:0.7rem;font-weight:700;padding:4px 12px;border-radius:100px;letter-spacing:0.03em;text-transform:uppercase}
+.plan--featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:0.75rem;font-weight:700;padding:4px 12px;border-radius:100px;letter-spacing:0.03em;text-transform:uppercase}
 .plan__name{font-family:var(--mono);font-size:0.85rem;font-weight:500;color:var(--accent);margin-bottom:8px}
 .plan__price{font-size:2.5rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:4px}
 .plan__price span{font-size:1rem;font-weight:400;color:var(--text-muted)}
@@ -145,6 +145,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .proof__stat:nth-child(odd){border-right:1px solid var(--border)}
   .proof__stat:last-child,.proof__stat:nth-last-child(2):nth-child(odd){border-bottom:none}
   .proof__quotes{grid-template-columns:1fr;gap:16px}
+  /* Center section labels and headings on mobile */
+  .section-label{text-align:center}
+  .section-title{text-align:center}
+  .how .section-title,.features .section-title,.proof .section-title,.pricing .section-title,.faq .section-title{text-align:center}
 }
 @media(max-width:480px){
   .hero__title{font-size:1.8rem}
@@ -153,7 +157,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .nav__cta{padding:10px 16px;font-size:0.82rem}
   .antisaas__quote{font-size:1.3rem}
   .phone__prompts{gap:6px}
-  .prompt-btn{font-size:0.8rem;padding:10px 14px}
+  /* Fix prompt-btn tap target: restore min-height */
+  .prompt-btn{font-size:0.8rem;padding:10px 14px;min-height:44px}
+  /* Fix phone status font-size: was 0.7rem (11.2px), below 12px minimum */
+  .phone__status{font-size:0.75rem}
   .final-cta__title{font-size:1.8rem}
   .section-title{font-size:1.6rem}
   .signup-form{flex-direction:column}
@@ -161,6 +168,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .proof__stat-row{flex-direction:column}
   .proof__stat{flex:none;border-right:none;border-bottom:1px solid var(--border)}
   .proof__stat:last-child{border-bottom:none}
+  /* Ensure signup button is a proper tap target */
+  .signup-form button{min-height:48px}
+  /* Footer link tap targets */
+  .footer__links a{padding:6px 0;display:inline-block;min-height:44px;line-height:32px}
 }
 </style>
 </head>
