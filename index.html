@@ -25,7 +25,7 @@ nav.scrolled{border-color:var(--border)}
 .nav__inner{display:flex;align-items:center;justify-content:space-between}
 .nav__logo{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--text);letter-spacing:-0.02em}
 .nav__logo span{color:var(--accent)}
-.nav__cta{background:var(--accent);color:#fff;padding:10px 20px;border-radius:6px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;transition:opacity 0.2s}
+.nav__cta{background:var(--accent);color:#fff;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
 .nav__cta:hover{opacity:0.9}
 
 /* HERO */
@@ -36,7 +36,7 @@ nav.scrolled{border-color:var(--border)}
 .hero__title em{font-style:normal;color:var(--accent)}
 .hero__sub{font-size:1.15rem;color:var(--text-muted);max-width:520px;margin:0 auto 40px;line-height:1.7}
 .hero__cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{padding:14px 28px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s}
+.btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
 .btn--primary{background:var(--accent);color:#fff}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
 .btn--ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
@@ -52,7 +52,7 @@ nav.scrolled{border-color:var(--border)}
 .phone__avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff}
 .phone__name{font-size:0.85rem;font-weight:600}
 .phone__status{font-size:0.7rem;color:var(--green)}
-.phone__messages{padding:20px;min-height:360px;display:flex;flex-direction:column;gap:10px}
+.phone__messages{padding:20px;min-height:360px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
 .msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:0.88rem;line-height:1.5;animation:msgIn 0.3s ease}
 .msg--in{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
 .msg--out{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
@@ -64,7 +64,7 @@ nav.scrolled{border-color:var(--border)}
 @keyframes dotPulse{0%,100%{opacity:0.3}50%{opacity:1}}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .phone__prompts{padding:12px 20px 20px;display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--border)}
-.prompt-btn{font-family:var(--font);font-size:0.78rem;font-weight:500;padding:8px 14px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;transition:all 0.15s}
+.prompt-btn{font-family:var(--font);font-size:0.82rem;font-weight:500;padding:11px 16px;min-height:44px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center}
 .prompt-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* HOW IT WORKS */
@@ -103,7 +103,7 @@ nav.scrolled{border-color:var(--border)}
 .plan__features{list-style:none;margin-bottom:28px}
 .plan__features li{font-size:0.85rem;padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .plan__features li::before{content:'✓';color:var(--green);font-weight:700;font-size:0.8rem}
-.plan__btn{display:block;width:100%;text-align:center;padding:12px;border-radius:6px;font-weight:600;font-size:0.9rem}
+.plan__btn{display:block;width:100%;text-align:center;padding:14px;min-height:44px;border-radius:6px;font-weight:600;font-size:0.9rem}
 .plan__btn--primary{background:var(--accent);color:#fff}
 .plan__btn--ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
 
@@ -132,7 +132,12 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .hero__title{font-size:1.8rem}
   .hero__cta-row{flex-direction:column;align-items:center}
   .btn{width:100%;text-align:center}
-  .nav__cta{padding:8px 16px;font-size:0.8rem}
+  .nav__cta{padding:10px 16px;font-size:0.82rem}
+  .antisaas__quote{font-size:1.3rem}
+  .phone__prompts{gap:6px}
+  .prompt-btn{font-size:0.8rem;padding:10px 14px}
+  .final-cta__title{font-size:1.8rem}
+  .section-title{font-size:1.6rem}
 }
 </style>
 </head>
@@ -396,7 +401,10 @@ promptsEl.addEventListener('click',async(e)=>{
   reset.className='prompt-btn';
   reset.textContent='↩ Try another';
   reset.style.margin='12px auto';
-  reset.style.display='block';
+  reset.style.display='flex';
+  reset.style.minHeight='44px';
+  reset.style.alignItems='center';
+  reset.style.justifyContent='center';
   reset.onclick=()=>{
     messagesEl.innerHTML='<div class="msg msg--in">Hey! I\'m your marketing assistant. What would you like to do today? 👇</div>';
     promptsEl.style.display='flex';
