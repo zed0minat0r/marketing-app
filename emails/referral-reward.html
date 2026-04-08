@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>You skipped the queue</title>
+<style>
+  body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  body { margin: 0; padding: 0; background-color: #0e0d0b; font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .email-wrapper { background-color: #0e0d0b; padding: 40px 20px; }
+  .email-container { max-width: 560px; margin: 0 auto; background-color: #141210; border: 1px solid #332f29; border-radius: 4px; overflow: hidden; }
+  .email-header { background-color: #141210; border-bottom: 1px solid #332f29; padding: 24px 32px; }
+  .logo { font-family: 'Space Mono', 'Courier New', monospace; font-weight: 700; font-size: 18px; color: #f5f0e8; letter-spacing: -0.02em; text-decoration: none; }
+  .logo span { color: #d4f53c; }
+  .email-body { padding: 36px 32px; }
+  h1 { font-family: 'Space Grotesk', -apple-system, sans-serif; font-size: 26px; font-weight: 700; color: #f5f0e8; line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 16px 0; }
+  h2 { font-family: 'Space Grotesk', -apple-system, sans-serif; font-size: 18px; font-weight: 600; color: #f5f0e8; margin: 0 0 12px 0; letter-spacing: -0.02em; }
+  p { font-size: 15px; line-height: 1.65; color: #b0a898; margin: 0 0 20px 0; }
+  p.lead { font-size: 17px; color: #d4cfc5; }
+  a { color: #d4f53c; text-decoration: none; }
+  .mono-tag { font-family: 'Space Mono', monospace; font-size: 11px; color: #141210; letter-spacing: 0.06em; text-transform: uppercase; background: #d4f53c; border-radius: 3px; padding: 4px 8px; display: inline-block; margin-bottom: 14px; font-weight: 700; }
+  .reward-banner { background: linear-gradient(135deg, rgba(212,245,60,0.12) 0%, rgba(212,245,60,0.04) 100%); border: 1px solid rgba(212,245,60,0.3); border-radius: 4px; padding: 24px; margin: 24px 0; text-align: center; }
+  .reward-banner .icon { font-size: 36px; display: block; margin-bottom: 12px; }
+  .reward-banner .headline { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: #d4f53c; letter-spacing: -0.02em; margin: 0 0 6px 0; }
+  .reward-banner .subline { font-size: 14px; color: #b0a898; margin: 0; }
+  .reward-pills { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+  .pill { background: #1c1917; border: 1px solid #332f29; border-radius: 3px; padding: 10px 16px; flex: 1; min-width: 140px; }
+  .pill .pill-label { font-family: 'Space Mono', monospace; font-size: 10px; color: #7d7060; letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .pill .pill-value { font-size: 15px; font-weight: 700; color: #f5f0e8; }
+  .btn-primary { display: inline-block; background-color: #d4f53c; color: #141210; font-family: 'Space Grotesk', -apple-system, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.01em; padding: 13px 28px; border-radius: 4px; text-decoration: none; margin: 12px 0 24px 0; }
+  .divider { border: none; border-top: 1px solid #332f29; margin: 28px 0; }
+  .what-next { background: #1c1917; border-radius: 4px; padding: 20px 24px; margin: 20px 0; }
+  .what-next h2 { font-size: 15px; margin-bottom: 12px; }
+  .what-next ul { margin: 0; padding-left: 0; list-style: none; }
+  .what-next ul li { font-size: 14px; color: #b0a898; padding: 6px 0; display: flex; align-items: center; gap: 10px; }
+  .check { color: #d4f53c; font-size: 16px; font-weight: 700; }
+  .email-footer { background-color: #0e0d0b; border-top: 1px solid #332f29; padding: 24px 32px; text-align: center; }
+  .email-footer p { font-size: 12px; color: #4a443c; margin: 0 0 6px 0; line-height: 1.5; }
+  .email-footer a { color: #7d7060; font-size: 12px; }
+  @media only screen and (max-width: 600px) {
+    .email-body, .email-header, .email-footer { padding-left: 20px !important; padding-right: 20px !important; }
+    h1 { font-size: 22px !important; }
+    .btn-primary { display: block !important; text-align: center; }
+    .reward-pills { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+  <table class="email-container" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+      <td class="email-header">
+        <a href="https://zed0minat0r.github.io/marketing-app/" class="logo">sidekick<span>_</span></a>
+      </td>
+    </tr>
+    <tr>
+      <td class="email-body">
+        <div class="mono-tag">referral unlocked</div>
+        <h1>You did it. Queue skipped.</h1>
+        <p class="lead">You got 3 referrals. That's enough to jump the line and earn 2 months free when Sidekick launches.</p>
+
+        <div class="reward-banner">
+          <span class="icon">&#9889;</span>
+          <p class="headline">2 months free, unlocked</p>
+          <p class="subline">Applied automatically to your account when we launch</p>
+        </div>
+
+        <div class="reward-pills">
+          <div class="pill">
+            <span class="pill-label">referrals sent</span>
+            <span class="pill-value">{{REFERRAL_COUNT}} people</span>
+          </div>
+          <div class="pill">
+            <span class="pill-label">free months earned</span>
+            <span class="pill-value">2 months</span>
+          </div>
+          <div class="pill">
+            <span class="pill-label">queue status</span>
+            <span class="pill-value" style="color:#d4f53c;">Skipped</span>
+          </div>
+        </div>
+
+        <p>You're now in the priority launch group. We'll reach out directly when your spot is ready &mdash; before everyone else on the waitlist.</p>
+
+        <a href="{{REFERRAL_URL}}" class="btn-primary">Keep sharing (earn more free months)</a>
+
+        <hr class="divider">
+
+        <div class="what-next">
+          <h2>What happens next</h2>
+          <ul>
+            <li><span class="check">&#10003;</span> You're confirmed in the priority launch group</li>
+            <li><span class="check">&#10003;</span> 2 free months applied automatically at signup</li>
+            <li><span class="check">&#10003;</span> We'll text you the moment Sidekick is live</li>
+          </ul>
+        </div>
+
+        <p style="font-size:13px;color:#7d7060;">Each additional 3 referrals earns another free month. No cap.</p>
+      </td>
+    </tr>
+    <tr>
+      <td class="email-footer">
+        <p>Sidekick &mdash; Your marketing sidekick, via text.</p>
+        <p><a href="{{UNSUBSCRIBE_URL}}">Unsubscribe</a> &nbsp;&middot;&nbsp; <a href="https://zed0minat0r.github.io/marketing-app/">sidekick</a></p>
+        <p style="color:#3a3628;margin-top:8px;">You're receiving this because you joined the Sidekick waitlist.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
