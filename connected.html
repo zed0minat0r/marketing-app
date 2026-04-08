@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Connected — TextMarketer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+      background: #0a0a0a;
+      color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 28px;
+    }
+
+    .icon.success { background: #0d2b1a; color: #22c55e; }
+    .icon.error { background: #2b0d0d; color: #ef4444; }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #999;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .instructions {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 16px 20px;
+      text-align: left;
+    }
+
+    .instructions p {
+      margin: 0;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .instructions strong {
+      color: #f0f0f0;
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .brand {
+      margin-top: 40px;
+      font-size: 13px;
+      color: #444;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="content">
+    <!-- Populated by JS based on URL params -->
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
+    const platform = params.get('platform') || 'account';
+    const reason = params.get('reason');
+
+    const platformDisplay = {
+      instagram: 'Instagram',
+      facebook: 'Facebook',
+      twitter: 'X (Twitter)',
+      meta: 'Facebook & Instagram',
+    }[platform] || platform;
+
+    const content = document.getElementById('content');
+
+    if (status === 'success') {
+      content.innerHTML = `
+        <div class="icon success">&#10003;</div>
+        <h1>${platformDisplay} Connected</h1>
+        <p>Your ${platformDisplay} account is now linked to TextMarketer. You can close this tab and return to your messages.</p>
+        <div class="instructions">
+          <p><strong>What's next</strong></p>
+          <p>Try texting: "Write a post about our latest special" — I'll draft it and ask for your approval before posting.</p>
+        </div>
+        <div class="brand">TextMarketer</div>
+      `;
+    } else {
+      const errorMsg = reason
+        ? `Error: ${decodeURIComponent(reason)}`
+        : 'The connection could not be completed. This usually happens when you take too long or deny access.';
+
+      content.innerHTML = `
+        <div class="icon error">&#10007;</div>
+        <h1>Connection Failed</h1>
+        <p>${errorMsg}</p>
+        <div class="instructions">
+          <p><strong>Try again</strong></p>
+          <p>Text "Connect ${platformDisplay}" to get a new link. Links expire after 15 minutes.</p>
+        </div>
+        <div class="brand">TextMarketer</div>
+      `;
+    }
+  </script>
+</body>
+</html>

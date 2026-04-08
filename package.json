@@ -1,0 +1,40 @@
+{
+  "name": "marketing-app",
+  "version": "2.0.0",
+  "description": "TextMarketer — AI marketing platform via SMS. Built on Twilio + Claude + Supabase.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zed0minat0r/marketing-app.git"
+  },
+  "keywords": [
+    "marketing",
+    "sms",
+    "ai",
+    "twilio",
+    "claude",
+    "supabase"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/zed0minat0r/marketing-app/issues"
+  },
+  "homepage": "https://github.com/zed0minat0r/marketing-app#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@supabase/supabase-js": "^2.102.1",
+    "@upstash/qstash": "^2.10.1",
+    "stripe": "^17.7.0",
+    "twilio": "^5.13.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}

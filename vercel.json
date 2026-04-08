@@ -1,0 +1,99 @@
+{
+  "version": 2,
+  "buildCommand": "npm install",
+  "functions": {
+    "api/sms/inbound.js": {
+      "memory": 256,
+      "maxDuration": 30
+    },
+    "api/jobs/publish.js": {
+      "memory": 256,
+      "maxDuration": 60
+    },
+    "api/jobs/collect-analytics.js": {
+      "memory": 512,
+      "maxDuration": 300
+    },
+    "api/jobs/weekly-summary.js": {
+      "memory": 512,
+      "maxDuration": 300
+    },
+    "api/jobs/refresh-tokens.js": {
+      "memory": 256,
+      "maxDuration": 60
+    },
+    "api/stripe/webhook.js": {
+      "memory": 256,
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/stripe/webhook",
+      "dest": "/api/stripe/webhook.js",
+      "headers": {
+        "x-vercel-body-parser": "off"
+      }
+    },
+    {
+      "src": "/api/sms/inbound",
+      "dest": "/api/sms/inbound.js"
+    },
+    {
+      "src": "/api/sms/outbound",
+      "dest": "/api/sms/outbound.js"
+    },
+    {
+      "src": "/api/sms/send",
+      "dest": "/api/sms/outbound.js"
+    },
+    {
+      "src": "/api/ai/generate",
+      "dest": "/api/ai/generate.js"
+    },
+    {
+      "src": "/api/social/post",
+      "dest": "/api/social/post.js"
+    },
+    {
+      "src": "/api/oauth/meta/start",
+      "dest": "/api/oauth/meta/start.js"
+    },
+    {
+      "src": "/api/oauth/meta/callback",
+      "dest": "/api/oauth/meta/callback.js"
+    },
+    {
+      "src": "/api/oauth/twitter/start",
+      "dest": "/api/oauth/twitter/start.js"
+    },
+    {
+      "src": "/api/oauth/twitter/callback",
+      "dest": "/api/oauth/twitter/callback.js"
+    },
+    {
+      "src": "/api/jobs/publish",
+      "dest": "/api/jobs/publish.js"
+    },
+    {
+      "src": "/api/jobs/collect-analytics",
+      "dest": "/api/jobs/collect-analytics.js"
+    },
+    {
+      "src": "/api/jobs/weekly-summary",
+      "dest": "/api/jobs/weekly-summary.js"
+    },
+    {
+      "src": "/api/jobs/refresh-tokens",
+      "dest": "/api/jobs/refresh-tokens.js"
+    },
+    {
+      "src": "/connected",
+      "dest": "/connected.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
