@@ -256,7 +256,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="hero__left">
         <div class="hero__stat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title">Your marketing team<br>lives in your <em>texts</em></h1>
-        <p style="font-size:1rem;color:var(--text-muted);line-height:1.55;margin-bottom:24px;max-width:420px;">AI that texts you posts, ads, and review replies &mdash; entirely over SMS. No app, no login, no dashboard.</p>
+        <p style="font-size:1.05rem;color:var(--text);line-height:1.55;margin-bottom:24px;max-width:420px;opacity:0.85;">TextMarketer is an AI that handles your social posts, ads, and review replies &mdash; entirely over text message. No app to download, no dashboard to learn, no login ever.</p>
         <div class="hero__cta-row">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
           <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
@@ -347,8 +347,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <p class="feature__desc">Text "run an ad." Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
       </div>
       <div class="feature">
-        <h3 class="feature__title">Know what's wrong with your site</h3>
-        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, in plain English. No jargon.</p>
+        <h3 class="feature__title">Website audit in plain English</h3>
+        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants.</p>
       </div>
       <div class="feature">
         <h3 class="feature__title">Every Google review answered</h3>
@@ -395,10 +395,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
       </div>
       <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">AI-native (not bolted on)</div>
+        <div class="compare__cell compare__cell--feature" role="cell">Posts written in your voice</div>
+        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Partial" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Add-on extra" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
       </div>
       <div class="compare__row" role="row">
@@ -431,8 +431,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="proof">
   <div class="container">
-    <div class="section-label">Early access</div>
-    <h2 class="section-title">What we heard in beta</h2>
+    <div class="section-label">47 businesses in closed beta</div>
+    <h2 class="section-title">What business owners are saying</h2>
     <div class="proof__quotes">
       <div class="proof__quote">
         <p class="proof__quote-text">"we let our social media person go in february. honest answer — the monday summary text tells me more than she ever did. 'your wednesday posts do 2x the engagement' ok i never knew that"</p>
@@ -544,8 +544,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="faq__a">Instagram, Facebook, TikTok, LinkedIn, and Google Business Profile. We post natively to each platform — right format, right length, right hashtags per platform. Twitter/X support coming in Q3 2026.</div>
       </div>
       <div class="faq__item">
-        <div class="faq__q">What counts as an "AI generation"?</div>
-        <div class="faq__a">Each piece of content we create counts as one generation — a social post, an ad variation, a review response, a website audit, or a weekly report. Editing a post you already approved does not count. Unused generations do not roll over.</div>
+        <div class="faq__q">Will I ever run out of content?</div>
+        <div class="faq__a">On the Starter plan, we create up to 100 pieces of content per month — roughly 4 posts per week plus review responses and a website audit. Growth gives you 500, which covers daily posting, ad variations, and more. Pro is unlimited. Edits on content we already sent don't count against your limit.</div>
       </div>
       <div class="faq__item">
         <div class="faq__q">Can I cancel anytime?</div>
@@ -689,6 +689,10 @@ window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20
     obs.observe(heroLive);
   }
 
+  // Pause on hover so users can read the conversation
+  heroLive.addEventListener('mouseenter',()=>{paused=true;});
+  heroLive.addEventListener('mouseleave',()=>{paused=false;});
+
   runSequence();
 })();
 
@@ -733,7 +737,9 @@ function handleStep1(e){
   btn.disabled=true;
   setTimeout(()=>{
     document.getElementById('step1Form').style.display='none';
-    document.getElementById('formSub').textContent='Almost done. What number should we text when your spot opens?';
+    const title=document.querySelector('.final-cta__title');
+    if(title)title.textContent='One more thing.';
+    document.getElementById('formSub').textContent='What number should we text when your spot opens?';
     const step2=document.getElementById('step2Form');
     step2.style.display='flex';
     document.getElementById('phoneInput').focus();
