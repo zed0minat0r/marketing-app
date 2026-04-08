@@ -113,14 +113,20 @@ nav.scrolled{border-color:var(--border)}
 .proof__quote-meta span{font-size:0.78rem;color:var(--text-muted)}
 .proof__note{font-size:0.75rem;color:var(--text-muted);text-align:center;opacity:0.7}
 .pricing{padding:100px 0;border-top:1px solid var(--border)}
-.pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.pricing__toggle{display:flex;align-items:center;gap:12px;margin:0 auto 40px;width:fit-content;font-size:0.88rem;color:var(--text-muted)}
+.pricing__toggle-btn{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:3px;gap:3px}
+.pricing__toggle-opt{font-size:0.82rem;font-weight:500;padding:6px 14px;border-radius:100px;cursor:pointer;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);transition:all 0.15s;white-space:nowrap}
+.pricing__toggle-opt.active{background:var(--accent);color:#fff}
+.pricing__toggle-save{font-family:var(--mono);font-size:0.72rem;color:var(--accent);background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.25);padding:2px 8px;border-radius:3px;letter-spacing:0.04em}
+.pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .plan{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:32px}
 .plan--featured{border-color:var(--accent);position:relative}
 /* plan--featured badge bumped to 0.75rem (12px) — 0.72rem was 11.52px below minimum */
 .plan--featured::before{content:'// most popular';position:absolute;top:-12px;left:24px;background:var(--bg);border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.75rem;font-weight:500;padding:3px 10px;border-radius:4px;letter-spacing:0.04em}
 .plan__name{font-family:var(--mono);font-size:0.85rem;font-weight:500;color:var(--accent);margin-bottom:8px}
-.plan__price{font-size:2.5rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:4px}
-.plan__price span{font-size:1rem;font-weight:400;color:var(--text-muted)}
+.plan__price{margin-bottom:4px;display:flex;align-items:baseline;gap:4px}
+.plan__price-num{font-size:2.5rem;font-weight:700;letter-spacing:-0.03em}
+.plan__price-period{font-size:1rem;font-weight:400;color:var(--text-muted)}
 .plan__desc{font-size:0.85rem;color:var(--text-muted);margin-bottom:24px}
 .plan__features{list-style:none;margin-bottom:28px}
 .plan__features li{font-size:0.85rem;padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
@@ -436,10 +442,17 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   <div class="container">
     <div class="section-label">Pricing</div>
     <h2 class="section-title">Less than your cheapest employee</h2>
+    <div class="pricing__toggle">
+      <div class="pricing__toggle-btn" role="group" aria-label="Billing period">
+        <button class="pricing__toggle-opt active" id="toggleMonthly" onclick="setBilling('monthly')">Monthly</button>
+        <button class="pricing__toggle-opt" id="toggleAnnual" onclick="setBilling('annual')">Annual</button>
+      </div>
+      <span class="pricing__toggle-save">Save 20%</span>
+    </div>
     <div class="pricing__grid">
       <div class="plan">
         <div class="plan__name">// starter</div>
-        <div class="plan__price">$49<span>/mo</span></div>
+        <div class="plan__price"><span class="plan__price-num" data-monthly="$49" data-annual="$39">$49</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You have 1&ndash;2 social accounts and want to post consistently without thinking about it</p>
         <ul class="plan__features">
           <li>100 AI generations/mo <span style="color:var(--text-muted);font-size:0.78rem">(~4 posts/wk + reviews)</span></li>
@@ -452,7 +465,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       </div>
       <div class="plan plan--featured">
         <div class="plan__name">// growth</div>
-        <div class="plan__price">$99<span>/mo</span></div>
+        <div class="plan__price"><span class="plan__price-num" data-monthly="$99" data-annual="$79">$99</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You want consistent posting, paid ads, and review management handled &mdash; with full visibility via daily texts</p>
         <ul class="plan__features">
           <li>500 AI generations/mo <span style="color:var(--text-muted);font-size:0.78rem">(enough for daily posts + ads)</span></li>
@@ -466,7 +479,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       </div>
       <div class="plan">
         <div class="plan__name">// pro</div>
-        <div class="plan__price">$199<span>/mo</span></div>
+        <div class="plan__price"><span class="plan__price-num" data-monthly="$199" data-annual="$159">$199</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You want everything including website fixes. We handle changes and send you a summary &mdash; one text to approve each</p>
         <ul class="plan__features">
           <li>Unlimited AI generations</li>
@@ -623,6 +636,17 @@ function handleSignup(e){
     msg.textContent='Done — we just texted '+formatted+'. Check your phone.';
     msg.style.display='block';
   },800);
+}
+
+function setBilling(mode){
+  document.getElementById('toggleMonthly').classList.toggle('active',mode==='monthly');
+  document.getElementById('toggleAnnual').classList.toggle('active',mode==='annual');
+  document.querySelectorAll('.plan__price-num').forEach(el=>{
+    el.textContent=mode==='annual'?el.dataset.annual:el.dataset.monthly;
+  });
+  document.querySelectorAll('.plan__price-period').forEach(el=>{
+    el.textContent=mode==='annual'?'/mo billed annually':'/mo';
+  });
 }
 
 document.querySelectorAll('.faq__q').forEach(q=>{
