@@ -296,17 +296,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
               <div class="phone__avatar">TM</div>
               <div>
                 <div class="phone__name">TextMarketer</div>
-                <div class="phone__status">&#x25cf; Online</div>
+                <div class="phone__status" id="heroStatus">&#x25cf; Online</div>
               </div>
             </div>
-            <div class="phone__messages" style="min-height:280px;max-height:340px">
-              <div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today?</div>
-              <div class="msg msg--out">Write this week's posts</div>
-              <div class="msg msg--in">Here are 3 posts for this week:<br><br><strong>Mon:</strong> "Monday mornings hit different with a fresh pour-over."<br><br><strong>Wed:</strong> "New seasonal menu dropping Friday — cold brew &amp; oat milk."<br><br><strong>Fri:</strong> "Weekend vibes start here. Open till 8pm."</div>
-              <div class="msg msg--in">Reply YES to schedule all, or EDIT to change one.</div>
-              <div class="msg msg--out">YES</div>
-              <div class="msg msg--in">Done. All 3 posts are scheduled. I'll text you a summary Monday morning.</div>
-            </div>
+            <div class="phone__messages" id="heroMessages" style="min-height:280px;max-height:340px"></div>
           </div>
         </div>
       </div>
@@ -765,7 +758,7 @@ function handleStep2(e){
     document.getElementById('step2Form').style.display='none';
     document.getElementById('formSub').style.display='none';
     const msg=document.getElementById('signupMsg');
-    msg.textContent="You're on the list. We'll text you the moment your spot opens.";
+    msg.innerHTML="You're on the list. We're opening access to the first 500 businesses in <strong>May 2026</strong> — we'll text you when your spot is ready.";
     msg.style.display='block';
   },600);
 }
@@ -824,6 +817,47 @@ const flows={
 const messagesEl=document.getElementById('chatMessages');
 const promptsEl=document.getElementById('chatPrompts');
 
+// Hero auto-play conversation
+(function heroAutoPlay(){
+  const heroMsgs=document.getElementById('heroMessages');
+  if(!heroMsgs)return;
+  const heroConvo=[
+    {type:'in',text:"Hey! I'm your marketing assistant. What would you like to do today?",delay:600},
+    {type:'out',text:"Write this week's posts",delay:1000},
+    {type:'typing',delay:1600},
+    {type:'in',text:"Here are 3 posts for Joe's Coffee:\n\nMon: \"Monday mornings hit different.\"\n\nWed: \"New seasonal menu dropping Friday — cold brew & oat milk.\"\n\nFri: \"Weekend vibes start here. Open till 8pm.\"",delay:600},
+    {type:'in',text:'Reply YES to schedule all, or EDIT to change one.',delay:900},
+    {type:'out',text:'YES',delay:1200},
+    {type:'typing',delay:900},
+    {type:'in',text:"Done. All 3 posts are scheduled. I'll text you a Monday morning summary.",delay:3200},
+  ];
+  let heroTimer;
+  async function runHeroConvo(){
+    heroMsgs.innerHTML='';
+    for(const msg of heroConvo){
+      await new Promise(r=>setTimeout(r,msg.delay));
+      if(msg.type==='typing'){
+        const t=document.createElement('div');
+        t.className='msg msg--typing';
+        t.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+        heroMsgs.appendChild(t);
+        heroMsgs.scrollTop=heroMsgs.scrollHeight;
+        await new Promise(r=>setTimeout(r,1100));
+        t.remove();
+      }else{
+        const d=document.createElement('div');
+        d.className='msg msg--'+(msg.type==='out'?'out':'in');
+        d.textContent=msg.text;
+        d.style.whiteSpace='pre-wrap';
+        heroMsgs.appendChild(d);
+        heroMsgs.scrollTop=heroMsgs.scrollHeight;
+      }
+    }
+    heroTimer=setTimeout(runHeroConvo,4000);
+  }
+  runHeroConvo();
+})();
+
 promptsEl.addEventListener('click',async(e)=>{
   const btn=e.target.closest('.prompt-btn');
   if(!btn||!btn.dataset.flow)return;
@@ -855,6 +889,7 @@ promptsEl.addEventListener('click',async(e)=>{
   reset.style.cssText='margin:12px auto;display:flex;min-height:44px;align-items:center;justify-content:center';
   reset.onclick=()=>{
     messagesEl.innerHTML='<div class="msg msg--in">Hey! I\'m your marketing assistant. What would you like to do today?</div>';
+    promptsEl.innerHTML='<button class="prompt-btn" data-flow="posts">Write this week\'s posts</button><button class="prompt-btn" data-flow="stats">How am I doing?</button><button class="prompt-btn" data-flow="ad">Create a Facebook ad</button><button class="prompt-btn" data-flow="audit">Audit my website</button>';
     promptsEl.style.display='flex';
     reset.remove();
   };
