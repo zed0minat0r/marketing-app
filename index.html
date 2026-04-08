@@ -22,7 +22,7 @@ a{color:var(--accent);text-decoration:none}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;background:rgba(9,9,11,0.85);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color 0.3s}
 nav.scrolled{border-color:var(--border)}
 .nav__inner{display:flex;align-items:center;justify-content:space-between}
-.nav__logo{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--text);letter-spacing:-0.02em}
+.nav__logo{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--text);letter-spacing:-0.02em;display:inline-flex;align-items:center;min-height:44px}
 .nav__logo span{color:var(--accent)}
 .nav__cta{background:var(--accent);color:#fff;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
 .nav__cta:hover{opacity:0.9}
@@ -126,7 +126,7 @@ nav.scrolled{border-color:var(--border)}
 .signup-form button{padding:14px 24px;min-height:48px;border-radius:6px;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;white-space:nowrap}
 .signup-form button:hover{opacity:0.9}
 .signup-note{font-size:0.78rem;color:var(--text-muted);margin-top:12px;position:relative}
-.signup-note a{color:var(--text-muted);text-decoration:underline;text-underline-offset:2px}
+.signup-note a{padding:14px 2px;margin:-14px 0;display:inline-block;color:var(--text-muted);text-decoration:underline;text-underline-offset:2px}
 .signup-note a:hover{color:var(--text)}
 .signup-msg{text-align:center;font-size:0.9rem;color:var(--green);margin-top:16px;display:none;position:relative;font-weight:500}
 footer{padding:40px 0;border-top:1px solid var(--border);text-align:center}
