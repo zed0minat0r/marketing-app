@@ -2,6 +2,18 @@
   "version": 2,
   "buildCommand": "npm install",
   "functions": {
+    "api/referral/generate.js": {
+      "memory": 128,
+      "maxDuration": 10
+    },
+    "api/referral/track.js": {
+      "memory": 128,
+      "maxDuration": 5
+    },
+    "api/referral/convert.js": {
+      "memory": 256,
+      "maxDuration": 15
+    },
     "api/sms/inbound.js": {
       "memory": 256,
       "maxDuration": 30
@@ -42,6 +54,18 @@
       "headers": {
         "x-vercel-body-parser": "off"
       }
+    },
+    {
+      "src": "/api/referral/generate",
+      "dest": "/api/referral/generate.js"
+    },
+    {
+      "src": "/api/referral/track",
+      "dest": "/api/referral/track.js"
+    },
+    {
+      "src": "/api/referral/convert",
+      "dest": "/api/referral/convert.js"
     },
     {
       "src": "/api/sms/inbound",

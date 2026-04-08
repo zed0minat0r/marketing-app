@@ -21,6 +21,10 @@ CREATE TABLE IF NOT EXISTS users (
   plan                    TEXT DEFAULT 'starter',        -- starter, growth, pro
   stripe_customer_id      TEXT,
   stripe_subscription_id  TEXT,
+  referral_code           TEXT UNIQUE,                   -- 6-char alphanumeric, generated on signup
+  queue_position          INT,                           -- waitlist position; lower = earlier access
+  referral_count          INT DEFAULT 0,                 -- number of successful referral conversions
+  referral_reward_claimed BOOLEAN DEFAULT FALSE,         -- true when 3+ referrals reward granted
   onboarding_complete     BOOLEAN DEFAULT FALSE,
   onboarding_step         TEXT DEFAULT 'name',           -- name, type, tone, done
   generations_used        INT DEFAULT 0,                 -- reset monthly
@@ -31,6 +35,8 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);
 CREATE INDEX IF NOT EXISTS idx_users_stripe_customer ON users(stripe_customer_id);
+CREATE INDEX IF NOT EXISTS idx_users_referral_code ON users(referral_code);
+CREATE INDEX IF NOT EXISTS idx_users_queue_position ON users(queue_position);
 
 -- =============================================
 -- CONVERSATIONS (message log)
@@ -221,6 +227,26 @@ CREATE POLICY "Service role full access" ON oauth_links
   FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
 
 -- =============================================
+-- REFERRALS
+-- =============================================
+CREATE TABLE IF NOT EXISTS referrals (
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  referrer_user_id  UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  referred_email    TEXT,
+  referred_phone    TEXT,
+  status            TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'converted')),
+  created_at        TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_referrals_referrer_user_id ON referrals(referrer_user_id);
+CREATE INDEX IF NOT EXISTS idx_referrals_referred_phone ON referrals(referred_phone);
+CREATE INDEX IF NOT EXISTS idx_referrals_status ON referrals(status);
+
+ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Service role full access" ON referrals
+  FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
+
+-- =============================================
 -- HELPER FUNCTIONS
 -- =============================================
 
@@ -240,6 +266,71 @@ RETURNS VOID AS $$
   SET generations_used = 0,
       updated_at = NOW();
 $$ LANGUAGE sql;
+
+-- Generate a unique 6-char alphanumeric referral code
+CREATE OR REPLACE FUNCTION generate_referral_code()
+RETURNS TEXT AS $$
+DECLARE
+  chars TEXT := 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  code TEXT;
+  exists BOOLEAN;
+BEGIN
+  LOOP
+    code := '';
+    FOR i IN 1..6 LOOP
+      code := code || substr(chars, floor(random() * length(chars) + 1)::int, 1);
+    END LOOP;
+    SELECT EXISTS (SELECT 1 FROM users WHERE referral_code = code) INTO exists;
+    EXIT WHEN NOT exists;
+  END LOOP;
+  RETURN code;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Assign queue position atomically (max + 1)
+CREATE OR REPLACE FUNCTION assign_queue_position(user_id_input UUID)
+RETURNS INT AS $$
+DECLARE
+  next_pos INT;
+BEGIN
+  SELECT COALESCE(MAX(queue_position), 0) + 1 INTO next_pos FROM users;
+  UPDATE users SET queue_position = next_pos WHERE id = user_id_input;
+  RETURN next_pos;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Credit referrer: increment referral_count, move queue up by 50
+CREATE OR REPLACE FUNCTION credit_referrer(referrer_id_input UUID)
+RETURNS TABLE(new_referral_count INT, new_queue_position INT, reward_claimed BOOLEAN) AS $$
+DECLARE
+  v_count INT;
+  v_pos INT;
+  v_reward BOOLEAN;
+BEGIN
+  UPDATE users
+  SET
+    referral_count = referral_count + 1,
+    queue_position = GREATEST(1, COALESCE(queue_position, 9999) - 50),
+    updated_at = NOW()
+  WHERE id = referrer_id_input
+  RETURNING referral_count, queue_position, referral_reward_claimed
+  INTO v_count, v_pos, v_reward;
+
+  -- Grant reward at 3 referrals (if not already claimed)
+  IF v_count >= 3 AND NOT v_reward THEN
+    UPDATE users
+    SET
+      queue_position = 1,
+      referral_reward_claimed = TRUE,
+      updated_at = NOW()
+    WHERE id = referrer_id_input;
+    v_pos := 1;
+    v_reward := TRUE;
+  END IF;
+
+  RETURN QUERY SELECT v_count, v_pos, v_reward;
+END;
+$$ LANGUAGE plpgsql;
 
 -- Clean up expired OAuth states and links
 CREATE OR REPLACE FUNCTION cleanup_expired_oauth()

@@ -32,6 +32,9 @@ const {
   getUpcomingPosts,
   cancelPost,
   incrementGenerationsUsed,
+  ensureReferralCode,
+  ensureQueuePosition,
+  getReferralStats,
 } = require('../../lib/supabase');
 const {
   ONBOARDING_MESSAGES,
@@ -39,6 +42,8 @@ const {
   PLAN_LIMITS,
   INTENTS,
 } = require('../../lib/constants');
+
+const REFERRALS_TO_REWARD = 3;
 
 /**
  * Validate Twilio webhook signature.
@@ -177,6 +182,39 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
 }
 
 /**
+ * Handle a referral link request via SMS.
+ * Generates (or returns) the user's referral code + link,
+ * then composes a reply with their count and queue position.
+ */
+async function handleReferralRequest(user) {
+  // Ensure user has a referral code and queue position
+  const [referralCode, queuePosition] = await Promise.all([
+    ensureReferralCode(user.id),
+    ensureQueuePosition(user.id),
+  ]);
+
+  // Get up-to-date stats
+  const stats = await getReferralStats(user.id);
+  const count = stats.referralCount || 0;
+  const pos = stats.queuePosition || queuePosition;
+  const appUrl = (process.env.APP_URL || 'https://trysidekick.com').replace(/\/$/, '');
+  const link = `${appUrl}/?ref=${referralCode}`;
+
+  const more = REFERRALS_TO_REWARD - count;
+  let statusLine;
+  if (stats.rewardClaimed) {
+    statusLine = `You have referred ${count} people and earned your reward (2 months free + front of line)!`;
+  } else if (more <= 0) {
+    statusLine = `You have referred ${count}/${REFERRALS_TO_REWARD} -- reward incoming!`;
+  } else {
+    const plural = more === 1 ? 'referral' : 'referrals';
+    statusLine = `You have referred ${count}/${REFERRALS_TO_REWARD}. ${more} more ${plural} = skip the line + 2 months free.`;
+  }
+
+  return `Your Sidekick referral link:\n${link}\n\nQueue position: #${pos}\n${statusLine}`;
+}
+
+/**
  * Main inbound SMS handler.
  */
 module.exports = async function handler(req, res) {
@@ -271,6 +309,12 @@ module.exports = async function handler(req, res) {
         const posts = await getUpcomingPosts(user.id);
         replyText = formatPostsList(posts);
         intent = INTENTS.LIST_SCHEDULE;
+      }
+
+      // Handle REFERRAL link request
+      else if (preClassified === INTENTS.REFERRAL) {
+        replyText = await handleReferralRequest(user);
+        intent = INTENTS.REFERRAL;
       }
 
       // For everything else, use Claude
