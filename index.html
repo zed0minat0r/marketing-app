@@ -35,6 +35,7 @@ nav.scrolled{border-color:var(--border)}
 .hero__stat{font-family:var(--mono);font-size:0.8rem;letter-spacing:0.03em;color:var(--text-muted);background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.18);border-radius:4px;padding:8px 14px;display:inline-block;margin-bottom:24px;line-height:1.5}
 .hero__stat strong{color:var(--accent);font-weight:700}
 .hero__cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.hero__desc{font-size:1.05rem;color:var(--text);line-height:1.55;margin-bottom:24px;max-width:420px;opacity:0.85}
 .hero__trust{font-size:0.78rem;color:var(--text-muted);margin-top:0;letter-spacing:0.01em}
 .hero__right{display:flex;align-items:center;justify-content:center}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
@@ -193,6 +194,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .hero__title{font-size:2.2rem;text-align:center}
   .hero__stat{display:block;text-align:center;width:100%}
   .hero__cta-row{justify-content:center}
+  .hero__desc{max-width:100%;text-align:center}
   .hero__trust{text-align:center}
   .steps{grid-template-columns:1fr;gap:24px}
   .features__grid{grid-template-columns:1fr}
@@ -266,7 +268,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="hero__left">
         <div class="hero__stat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title">Your marketing team<br>lives in your <em>texts</em></h1>
-        <p style="font-size:1.05rem;color:var(--text);line-height:1.55;margin-bottom:24px;max-width:420px;opacity:0.85;">TextMarketer is an AI that handles your social posts, ads, and review replies &mdash; entirely over text message. No app to download, no dashboard to learn, no login ever.</p>
+        <p class="hero__desc">TextMarketer is an AI that handles your social posts, ads, and review replies &mdash; entirely over text message. No app to download, no dashboard to learn, no login ever.</p>
         <div class="hero__cta-row">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
           <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
