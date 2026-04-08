@@ -1,151 +1,216 @@
-# Nigel's Audit — Sidekick Landing Page
-**Date:** 2026-04-07
-**Auditor:** Nigel (strict British auditor, small business owner perspective)
-**Score:** 7.5 / 10
-
----
-
-## Score History
-6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → 7.4 → **7.5**
+# Sidekick Landing Page — Audit Report
+**Auditor:** Nigel  
+**Date:** 2026-04-07  
+**Score:** 7.6 / 10  
+**Score History:** 6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → 7.4 → 7.5 → **7.6**
 
 ---
 
 ## Overall Verdict
 
-A genuine +0.1 improvement over the prior 7.4. The hero auto-play has been fixed — it now plays once and freezes on the final state, showing a replay button instead of looping indefinitely. That was Priority 3 from the last audit. The "Start over" dead-end in the demo section has also been resolved; the demo now surfaces a reset state with a clearly styled button after all four flows complete. These are real UX fixes, not cosmetic gestures, and they deserve credit.
-
-However, the two highest-priority issues from last audit remain unresolved: the fabricated testimonial section still exists with "Renee B.", "Maria T.", and "Dave K." presented as real customer feedback under "Names and businesses shared with permission" — this is the page's most significant trust liability. And the pricing section still shows plan-specific CTAs ("Reserve Starter", "Reserve Growth", "Reserve Pro") that all scroll to the same undifferentiated email form, with no plan preference captured. A small business owner who clicks "Reserve Growth" and sees a generic email field will feel the pricing section was decorative.
-
-The page earns 7.5 for demonstrating iteration discipline and maintaining a distinctive visual identity. It does not yet earn 7.6+ because the social proof problem is structural, not cosmetic, and it has now been flagged across two consecutive audits without movement.
+A genuinely competent landing page for an early-stage product. The concept is strong, the copy is specific, and the page has personality. This cycle fixed the JS crash (confirmed: no syntax errors, all interactive elements functional) and tightened the mobile compare table. The score edges up from 7.5 to 7.6, but it is not yet a page that compels immediate sign-up from a sceptical small business owner. The core weakness is trust: no testimonials, no logos, no social proof beyond statistics. A plumber or florist visiting this page will wonder whether anyone else has tried it.
 
 ---
 
-## Section-by-Section Breakdown
+## JavaScript Audit — PASS
 
-### 1. Navigation — 8.0
-Clean, minimal, fixed. Logo uses monospace with the accent colour on the brand name — distinctive without being gimmicky. Single CTA in the nav ("Join waitlist") is correct; no menu clutter. The `scrolled` border-bottom on scroll is a tasteful touch. Nothing to change here.
+Last cycle had a critical JS crash. This cycle: **all clear**.
 
-### 2. Hero — 7.5
-**What works:**
-- The stat bar ("SMS read 98% of the time / Email: 22%") is a smart piece of credibility placed before the headline. It earns the headline rather than just asserting it.
-- "Your marketing team lives in your texts" is a genuine improvement over earlier versions. Compact, concrete, memorable.
-- The split layout with the phone widget on the right is correct — the demo IS the product. Showing it in the hero is the right call.
-- Trust line beneath the CTAs ("14-day free trial · No credit card · Cancel anytime by text") is appropriately modest.
+- Syntax check: PASS (Node.js validation)
+- Hero auto-play conversation: logic intact, plays on load, freezes on final state, replay button appears correctly
+- Interactive demo flows (posts, stats, ad, audit): all four flows present and structurally sound, isRunning guard prevents double-execution
+- FAQ accordion: proper open/close toggle with only one item open at a time
+- Pricing toggle (monthly/annual): switches prices and period text, shows/hides "Save 20%" pill
+- Plan selection: passes plan name to final CTA, shows indicator, clears correctly
+- Two-step signup form: step 1 (email) -> step 2 (phone) -> confirmation with queue position
+- Modal (Privacy, Terms): open/close via overlay click and Escape key
+- Nav scroll border: fires on scroll with passive listener
 
-**What does not work:**
-- The hero phone auto-plays a loop on a 4-second restart. After the second or third loop, it becomes noise. A busy small business owner who pauses on the page does not want to watch the same script replay. One pass, then freeze on the final state — or loop much more slowly (30-second gap between replays).
-- The description paragraph ("No app. No dashboard. No login. Ever. Sidekick is an AI...") is slightly long. The first two sentences are gold. The third ("Sign up and your first week of posts arrives within the hour") should move to the "How it works" section — it is a promise, not a description.
-- The ghost "See how it works" CTA button below the primary CTA is good, but its border colour blends almost completely into the dark background on lower-brightness screens. Needs slightly higher contrast on the border.
+No crashes. No console.log debris. No infinite loops. Full marks on JS.
 
-### 3. Demo Section — 8.5
-**What works:**
-- Four scenario flows (posts, stats, ad, audit) cover the product's actual value propositions.
-- The typing indicator before each AI response is correct behaviour — it communicates latency honestly.
-- After completing a flow, the prompt buttons update to exclude the flow just run. This is a thoughtful UX detail.
-- Content of the flows is specific ("Joe's Coffee", real post copy, real ad targeting language). Specificity is credibility.
-- The "Start over" state after all four flows complete is now implemented — a dead-end was the previous complaint and it has been resolved. The reset button is appropriately styled in the accent colour with centred alignment.
-- The "// that's the full tour" label before the reset button is a very on-brand touch.
+---
 
-**What does not work:**
-- The section heading "See exactly how it works" duplicates the ghost CTA from the hero. Fine, but the sub-copy ("Pick a scenario to walk through a real conversation") is a bit dry. Something like "Your thumb is the only dashboard you need" would maintain the product voice.
+## Section Scores
 
-### 4. How It Works — 7.5
-Three-step grid is appropriately simple. The numbered labels (monospace, bordered, uppercase) are a design choice that works. Step copy is specific and actionable — "Answer 5 questions," "Reply YES to post," "Reply EDIT to change it." This section lands well.
-
-One weakness: Step 2 ("AI does the work") describes content generation with two examples (florist, plumber). This is the right instinct but the paragraph ends slightly abruptly. The transition from "does the work" to "you just approve" would benefit from one line acknowledging the approval loop — currently the section reads as if Steps 2 and 3 are discontinuous.
-
-### 5. Features Grid — 7.0
-Six features in a 2x3 bordered grid. The structure is correct — it mirrors the product's actual feature set without padding it with meaningless extras. The copy for each feature is specific and command-oriented ("Text 'run an ad.' Get 3 variations... Reply the number you like. Done.").
-
-**What does not work:**
-- The grid uses `border-bottom:none` on the last two items (CSS rule `feature:nth-last-child(-n+2)`), which means the grid has an open bottom edge. On dark backgrounds this creates a floating quality that looks unfinished. Add a bottom border on the container or close the grid properly.
-- "Website audit in plain English" as a feature implies the product can audit any website. But looking at the FAQ, this is limited (1/month on Starter). The feature description does not mention this limitation at all. A small business owner who signs up expecting unlimited audits will be annoyed.
-
-### 6. Comparison Table — 7.5
-The desktop table (4-column comparison with Social Media Manager, Hootsuite, Podium, Sidekick) is well-executed. The mobile version (3-column: Hootsuite/Podium combined, Sidekick) is a reasonable collapse, and the CSS hiding/showing is done correctly.
+### 1. Hero — 7.5/10
 
 **What works:**
-- The source citation at the bottom ("Sources: Hootsuite pricing page, Podium.com, Indeed salary data — April 2026") is a genuinely good credibility move. Most landing pages make up comparison data. Citing sources is honest and differentiating.
-- The CTA inside the compare section ("Replace your $2,500/mo hire for $49") is aggressive in the right way — it quantifies the comparison into a single concrete swap.
+- Split layout (copy left, animated phone right) is smart and immediately shows what the product does
+- "Your marketing team lives in your texts" is a clear, punchy headline
+- The animated phone conversation auto-plays and demonstrates the value proposition without the user doing anything
+- "No app. No dashboard. No login. Ever." — excellent frictionless promise
+- Stat bar ("SMS is read 98% of the time") adds credibility before the hero even loads
+- Replay button appears after animation ends — thoughtful UX
 
 **What does not work:**
-- "Partial" checkmarks (greyed-out checks for competitors) are slightly misleading. A greyed check implies partial capability, but for "Posts written in your voice" a Social Media Manager clearly does this better than a SaaS tool. Using a tilde character (~) in the mobile view but a greyed check in the desktop view creates inconsistency.
+- Hero animation starts at 600ms delay — an impatient user might scroll before it fires
+- Trust line ("14-day free trial · No credit card · Cancel anytime by text") is buried below the CTA buttons in small grey text. This is conversion-critical information and deserves more visual weight.
+- No visible social proof in the hero (no "Join 500+ businesses" or similar)
 
-### 7. Social Proof — 5.5
-This is the weakest section. Three fabricated text thread testimonials from "Renee B. (Studio 44 Salon, Atlanta)," "Maria T. (Bloom & Co. Florals, Phoenix)," and "Dave K. (Kowalski Plumbing, Chicago)." The copy reads like AI-generated testimonials — which it is. The problem is not the format (fake text bubbles are fine as a UI device); the problem is that small business owners will recognise the "relatable everyman" diversity of the three personas as template thinking.
+### 2. Interactive Demo — 8.0/10
 
-"Names and businesses shared with permission" is a legal disclaimer that implies these are real — but the product is in pre-launch (no customers yet). This note is either misleading or describes internal beta testers who sound suspiciously articulate.
-
-At 5.5 this section actively hurts the page. It would be better to:
-- Replace with 3 honest "scenarios" framed as hypotheticals ("Here's how a salon owner would use Sidekick")
-- Or remove it entirely and let the demo section do the social proof work
-- Or clearly label them as "early access testers" with extremely specific outcomes and real names only if available
-
-### 8. Pricing — 7.5
 **What works:**
-- Three-tier with Starter/Growth/Pro is standard but the copy for each plan description is excellent. "You have 1-2 social accounts and want to post consistently without thinking about it" — that is a real customer speaking. This kind of second-person plan description is what separates competent landing pages from generic ones.
-- Annual toggle that shows "Save 20%" pill only when annual is selected is correct UX.
-- The `// comment syntax` plan names (monospace) match the site's design language.
+- Four flows (posts, stats, ad, audit) cover the product's core use cases
+- The incremental unlock pattern (completed flows disappear, "that's the full tour" appears) is genuinely clever
+- Copy inside the flows is specific: "Joe's Coffee," real numbers, real commands (YES, EDIT, SKIP)
+- Typing indicator (animated dots) sells the conversational feel
+- "Start over" button with accent border is a tidy touch
 
 **What does not work:**
-- The page is framed as a waitlist ("Join the waitlist," "Opening in May 2026"), yet the pricing section has "Get Started" buttons that scroll to the signup form. This creates a cognitive dissonance. A small business owner asks: "Can I actually sign up now, or am I just joining a list?" The pricing cards need a clear "Waitlist pricing — locked in when you join" framing, or the CTAs need to say "Reserve this plan" instead of "Get Started."
-- The Pro plan description ("You run multiple locations, manage marketing for clients") suggests agency use. But the product's identity is specifically built around the solo-operator small business owner. Pivoting to agencies in the Pro tier creates a brand identity crack that observant visitors will notice.
+- Demo sub-copy "Pick a scenario and walk through a real conversation" is flat — it tells rather than teases
+- On slow connections, the 400ms inter-message delay feels slightly choppy
 
-### 9. FAQ — 8.0
-Eight questions with direct, confident answers. "Text CANCEL at any time" answers the cancellation fear directly. "Nothing posts without your YES" answers the trust concern. The format (accordion, clean, no icons) is correct. The copy does not dodge any question.
+### 3. How It Works — 7.0/10
 
-One minor note: the question "Is this live? When does access open?" should be Question 1, not Question 8. This is the highest-anxiety question a first-time visitor has. Burying it last ensures many visitors scroll away before they get the context they need to trust the page.
-
-### 10. Final CTA / Signup — 7.0
 **What works:**
-- Two-step form (email first, then phone) is smart — it reduces initial commitment and increases completion rate.
-- The confirmation message ("We're opening access to the first 500 businesses in May 2026. We'll text you the moment your spot is ready.") is specific and appropriately low-pressure.
-- Privacy/Terms links in the footer note use a proper tap-target override (min-height: 44px).
+- Three steps are clear and scannable
+- Step descriptions are genuinely specific (5 questions, first posts in an hour, YES/EDIT/SKIP commands)
+- Step 02 copy ("a florist gets warm and seasonal, a plumber gets direct and local") is strong differentiation
 
 **What does not work:**
-- The headline "Your marketing is one text away" is good but the sub-copy "Enter your email to hold your spot. We open access in waves." is passive and slightly corporate-sounding. "Waves" is unclear jargon. "We'll text you in May — no checking back, no logging in" would be more on-brand.
-- The form step transition uses `setTimeout` of 500ms to swap from email to phone step. This feels like a bug (lag) rather than a feature. The transition should be immediate or use a proper CSS fade.
+- The three-step grid is visually flat. No connecting element, no visual treatment differentiating the steps from plain paragraphs. A first-time visitor scanning quickly might miss the numbered progression.
+- "Up and running in under an hour" undersells the ongoing zero-effort value, which is the actual promise.
 
-### 11. Footer — 7.5
-Minimal, correct. Privacy, Terms, email contact. Copyright line repeats the tagline ("Your marketing, in your texts") — a tiny brand-consistent detail. Nothing to fix.
+### 4. Features Grid — 7.0/10
 
-### 12. Design / Visual Identity — 7.5
-The warm dark palette (#141210) avoids the flat-grey fatigue of most SaaS dark modes. The acid yellow (#d4f53c) accent is bold and consistent — it appears on the primary CTA, the accent logo text, the highlighted comparison column, and the outgoing message bubbles in the demo. This is disciplined use of a signature colour.
+**What works:**
+- Command-prefix labels (> "run an ad") are distinctive and reinforce the text-first concept
+- Six features cover the main use cases without being exhaustive
+- 2-column grid with shared borders looks structured and professional
 
-Space Grotesk (sans-serif) for body, Space Mono for labels/plan names/logos — a pairing that communicates "modern but not pretentious." Neither font is in Claude's default aesthetic repertoire (Inter, Nunito). The rule has been followed.
+**What does not work:**
+- Feature titles are functional but not exciting — scope for sharper copywriting
+- "Website audit in plain English" feels like a product stretch for a florist or plumber who came for social media help. Could confuse.
+- The inline size note "(1/mo on Starter, 5/mo on Growth)" inside the feature card is clutter. Limits belong in pricing, not in the value proposition.
 
-Animation is restrained throughout, with one exception: the hero phone auto-looping. Everything else — the `msgIn` keyframe, the typing dots, the FAQ accordion, the nav scroll border — is functional, not decorative.
+### 5. Comparison Table — 7.5/10
+
+**What works:**
+- Desktop table is well-structured, accessible (role="table"), and makes Sidekick look like the obvious winner
+- Mobile table renders correctly
+- CTA at the bottom ("Replace your $2,500/mo hire for $49") is the most visceral CTA on the page
+
+**What does not work:**
+- BRAND INCONSISTENCY: The mobile compare table column header still reads "TextMkt" — the old brand name. The desktop table correctly says "Sidekick." This is a live bug visible to every mobile visitor. Embarrassing for a page asking people to trust you with their business.
+- The disclaimer note is at 60% opacity. Hiding sources undermines the credibility they are meant to provide.
+
+### 6. Social Proof / Stats Section — 6.5/10
+
+**What works:**
+- Large typographic numbers (52%, 1 in 3, 98%) are visually impactful
+- Sources are cited — good
+- The closing line "Sidekick is built for the 52%" ties stats back to product
+
+**What does not work:**
+- These are industry statistics, not product testimonials. There is zero social proof that Sidekick works. No beta users, no pilot businesses, no one-sentence quote.
+- The stats validate the market, not the product. A sceptical business owner reads "52% handle their own marketing" and thinks: "yes, that's me, so what has Sidekick actually done for anyone?"
+- Section header "The problem we're fixing" positions this as a problem statement, not a proof section.
+
+### 7. Pricing — 7.5/10
+
+**What works:**
+- Three tiers are well-differentiated by use case, not just feature count
+- Monthly/annual toggle works correctly, shows "Save 20%" pill
+- "// most popular" badge on Growth is distinctive, not generic
+- "Less than your cheapest employee" headline earns attention
+- Waitlist price lock note is a smart urgency lever
+
+**What does not work:**
+- The "//" comment notation in plan names is clever but will confuse non-technical small business owners. A florist does not recognise code comments.
+- Pro plan at $199/mo targeting "multiple locations" is a different customer than the solo business owner the hero speaks to. The product identity blurs.
+
+### 8. FAQ — 8.0/10
+
+**What works:**
+- Eight questions cover real objections a sceptical business owner would have
+- Answers are direct and specific — particularly "Text CANCEL at any time" and the YES/EDIT/SKIP mechanics
+- Accordion works correctly, only one item open at a time
+- "Straight answers." as the section title is confident and on-brand
+
+**What does not work:**
+- The first FAQ ("Is this live?") immediately reveals this is a pre-launch waitlist product. That is honest, but it is the first thing a reader sees — confirming the product does not exist yet. Consider ordering differently.
+- "We open to the first 500 businesses in May 2026" — from April 2026 that is very close. If May passes without launch, trust evaporates.
+
+### 9. Final CTA / Sign-Up — 7.0/10
+
+**What works:**
+- Two-step form (email then phone) reduces friction by splitting the ask
+- Queue position creates a sense of scarcity
+- "Refer 3 businesses → skip the queue + 2 months free" is a working referral mechanic
+- Confirmation copy is warm and specific
+
+**What does not work:**
+- The queue position is seeded to a random range of 188–217. Anyone signing up twice will notice the number is never the same twice. This is a trust risk.
+- "Your marketing is one text away" is the weakest headline on the page — vague and generic.
+- No visual hierarchy in the final CTA section — the trust bullets, title, sub-copy, plan indicator, form, note, and confirmation all compete equally.
+
+### 10. Design / Visual Identity — 7.5/10
+
+**What works:**
+- Dark warm theme with acid yellow accent is distinctive — not the usual teal/purple SaaS palette
+- Space Grotesk + Space Mono pairing has personality and reinforces the tech-meets-utility positioning
+- Minimal decoration — the page does not use hero images, gradients, or blob SVGs that scream "Claude made this"
+- Consistent border-based sectioning gives a newspaper/editorial feel
+
+**What does not work:**
+- The page is almost entirely text. There is one animated phone mock and everything else is words in grids. For a product that handles visual marketing, the page itself does not demonstrate visual confidence.
+- Proof/stats section and features section feel visually identical — same border, same font sizes. No visual variety across sections makes the page feel longer than it is.
+
+### 11. Mobile Responsiveness — 7.0/10
+
+**What works:**
+- Media queries at 768px and 480px are comprehensive
+- Tap targets consistently meet 44px minimum
+- Single-column layouts on mobile are correct
+- Hero title scales with clamp()
+
+**What does not work:**
+- "TextMkt" label in the mobile compare table is a live regression. Mobile is where most small business owners will land.
+- Hero description is left-aligned on mobile while title is centre-aligned — a mismatch.
+- The ghost "See how it works" button is effectively invisible on most phones (below the fold after the primary CTA button stacks).
 
 ---
 
 ## Prioritised Recommendations
 
-### Priority 1 — Fix the social proof section (or remove it)
-The fabricated testimonials are the single biggest credibility risk. A sceptical small business owner will recognise "Renee B. / Maria T. / Dave K." as template personas. Either source real early-access testers with specific numbers, reframe as honest hypotheticals, or cut the section and extend the demo section.
+### Fix Immediately
 
-### Priority 2 — Resolve the waitlist vs. pricing-cards tension
-The page says "join the waitlist" but shows three plan tiers with "Get Started" buttons. This is confusing. Either rename the CTA buttons to "Reserve this plan" and show "Waitlist pricing — locked in when you join," or remove pricing entirely until launch and replace with "Pricing starts at $49/mo — locked in at waitlist."
+1. **"TextMkt" in mobile compare table header (line ~424)** — One-line fix. Change to "Sidekick." Brand inconsistency on the most-visited viewport is inexcusable.
+2. **Add any testimonial or beta user quote** — The single biggest conversion gap. Even one quoted pilot user with "early access" framing would address the zero-social-proof problem.
+3. **Rewrite the final CTA headline** — "Your marketing is one text away" is the weakest copy on the page. Replace with something specific and urgent.
 
-### Priority 3 (RESOLVED) — Hero phone no longer loops
-The auto-play now runs once, freezes on the final state, and shows a replay button. This was the correct fix. Crossed off.
+### High Priority
 
-### Priority 4 — Move the "Is this live?" FAQ to the top
-Question 8 is the highest-anxiety question on the page. Move it to Question 1 or 2. Visitors who are unsure whether this product is real will not scroll eight items deep to find out.
+4. **Hero trust line needs more visual weight** — Move "14-day free trial · No credit card · Cancel anytime by text" above the CTA buttons or give it a bordered treatment so it registers.
+5. **FAQ ordering** — Lead with "Can I cancel anytime?" or "Is there a free trial?" not "Is this live?" which immediately undermines confidence.
+6. **Queue position seeding** — Make the queue position static or remove it. The random 31-person range is noticeable on repeat visits.
 
-### Priority 5 — Fix the features grid border gap
-The bottom edge of the features grid is open (no border-bottom on the container). On dark backgrounds this looks unfinished. Add a border-bottom to the `.features__grid` container or adjust the nth-child rule.
+### Nice to Have
 
----
-
-## What Genuinely Works
-- The core product proposition is clear, specific, and consistent throughout
-- The interactive demo is the strongest element on the page and earns its prominent placement
-- The comparison table cites real sources — a rare and trust-building move
-- The pricing copy uses second-person customer voice rather than feature lists
-- The design system is coherent and distinctive — not AI-generic
-- The FAQ is honest and direct
-- The two-step signup form is correctly sequenced (email before phone)
+7. Remove inline plan limits from feature card descriptions. Put them only in pricing.
+8. Add visual variety between sections — the proof and features sections are structurally identical.
+9. Consider testing the "//" plan name notation with non-technical users before launch.
+10. Increase source citation opacity on compare table from 60% to 90%.
 
 ---
 
-*Nigel grades on a real-world curve. 7.0 = better than most. 8.0 = would actively choose over competitors.*
+## Score Summary
+
+| Section | Score |
+|---|---|
+| Hero | 7.5 |
+| Interactive Demo | 8.0 |
+| How It Works | 7.0 |
+| Features Grid | 7.0 |
+| Comparison Table | 7.5 |
+| Social Proof / Stats | 6.5 |
+| Pricing | 7.5 |
+| FAQ | 8.0 |
+| Final CTA / Sign-Up | 7.0 |
+| Design / Visual Identity | 7.5 |
+| Mobile Responsiveness | 7.0 |
+| **Overall** | **7.6** |
+
+---
+
+*Nigel — strict British auditor. 5.0=average, 6.0=generic, 7.0=better than most, 8.0=would choose over competitors.*
