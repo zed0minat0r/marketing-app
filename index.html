@@ -174,8 +174,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .proof__quotes{grid-template-columns:1fr;gap:16px}
   .compare__title{font-size:1.4rem;text-align:center}
   .compare{overflow-x:hidden}
-  .compare .container{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
-  .compare__table{display:block;min-width:460px}
+  .compare__scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+  .compare__table{display:block;min-width:380px}
   .compare__row,.compare__row--head{display:flex}
   .compare__cell{flex:1;padding:12px 8px;font-size:0.78rem;min-width:80px}
   .compare__cell--feature{min-width:120px;flex:1.5}
@@ -664,7 +664,7 @@ function closeModal(){
 
 document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal()});
 
-function handleSignup(e){
+function handleStep1(e){
   e.preventDefault();
   const emailInput=document.getElementById('emailInput');
   const email=emailInput.value.trim();
@@ -675,11 +675,35 @@ function handleSignup(e){
   }
   emailInput.style.borderColor='';
   const btn=e.target.querySelector('button');
-  btn.textContent='Adding you...';
+  btn.textContent='Got it...';
   btn.disabled=true;
   setTimeout(()=>{
-    document.getElementById('signupForm').style.display='none';
+    document.getElementById('step1Form').style.display='none';
+    document.getElementById('formSub').textContent='Almost done. What number should we text when your spot opens?';
+    const step2=document.getElementById('step2Form');
+    step2.style.display='flex';
+    document.getElementById('phoneInput').focus();
+  },500);
+}
+
+function handleStep2(e){
+  e.preventDefault();
+  const phoneInput=document.getElementById('phoneInput');
+  const phone=phoneInput.value.trim();
+  if(!phone||phone.replace(/\D/g,'').length<10){
+    phoneInput.style.borderColor='var(--red)';
+    phoneInput.focus();
+    return;
+  }
+  phoneInput.style.borderColor='';
+  const btn=e.target.querySelector('button');
+  btn.textContent='Locking you in...';
+  btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('step2Form').style.display='none';
+    document.getElementById('formSub').style.display='none';
     const msg=document.getElementById('signupMsg');
+    msg.textContent="You're on the list. We'll text you the moment your spot opens.";
     msg.style.display='block';
   },600);
 }
