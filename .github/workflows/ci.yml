@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        env:
+          # 64-char hex key (32 bytes) — safe test value only, never used in prod
+          ENCRYPTION_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          # Supabase — tests mock the client, but the module loads env vars at import
+          SUPABASE_URL: https://test.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+          # Twilio — signature validation is skipped when TWILIO_AUTH_TOKEN is absent
+          TWILIO_ACCOUNT_SID: ACtest00000000000000000000000000000
+          # QStash — signature verification is skipped when keys are absent
+          QSTASH_CURRENT_SIGNING_KEY: ''
+          QSTASH_NEXT_SIGNING_KEY: ''
+          # App URL
+          APP_URL: https://sidekick.app
+          # Node environment
+          NODE_ENV: test
+        run: npm test
