@@ -247,6 +247,82 @@ Small business owners are getting blindsided by fees they didn't know existed:
 
 ---
 
+---
+
+## 14. NEW: April 7 — Landing Page Conversion Intelligence
+
+### Phone Number in Signup Form: Counterintuitive Data
+Research shows that asking for a phone number too early in signup forms HURTS conversions for most SaaS products — but TextMarketer is a special case. The product IS delivered via SMS. Not collecting a phone number at signup creates a trust gap (Nigel flagged this as Priority 1 and Priority 3). The solution most aligned with conversion data: use a two-step "breadcrumb" form — first collect email (low friction), then immediately follow up with "What's the best number to reach you?" as step 2. This is less threatening than asking for phone upfront and solves the missing chapter in the onboarding story.
+
+### SaaS Conversion Benchmarks (2026)
+- Median SaaS landing page conversion rate: 3.8%
+- Pages that load within 1 second convert 3x higher than pages taking 5 seconds
+- Mobile now drives 82.9% of landing page traffic; mobile pages convert at 11.7% vs 10.7% desktop
+- Single-field forms (email only) convert ~7%; three-field forms convert ~10% — but higher field count attracts more qualified leads
+- Interactive demos showing actual product lift conversions significantly vs. static screenshots
+- Most common high-converting CTA: "Start free" or "Try for free" — outperforms "Book a demo" for self-serve tools
+- Social proof near the CTA (not buried in a separate section) measurably improves conversion
+
+### The Split-Screen Hero Pattern (2026 Trend)
+Datadog, Linear, and Vercel all use a split-screen hero: headline + CTA on the left, live product preview on the right. This directly addresses Nigel's Priority 5 — the animated chat widget should move alongside the headline, not below the CTA buttons. The split layout lets users see what the product does while reading the value proposition simultaneously.
+
+### Interactive Demo Is Now Table Stakes
+As of 2026, interactive embedded demos are the leading conversion driver across SaaS landing pages. Amplitude, Forest Admin, and Zendesk embed full guided product tours. Abstract 3D graphics and illustration-based heroes are declining. TextMarketer's interactive demo is already ahead of most competitors — the gap is its placement (too far down the page) and the framing ("Try it right now" reads as deceptive since it's scripted; "See exactly how it works" is more honest and still compelling).
+
+---
+
+## 15. NEW: April 7 — Podium's Pricing Gap Creates a Real Opening
+
+Podium is the closest true competitor to TextMarketer's vision: AI-native, text-first, local business focused. But Podium starts at $399-599/month (Core/Pro tiers) with AI Employee as an additional add-on cost. That is 8-12x TextMarketer's proposed $49/month entry price. 100,000+ local businesses use Podium — and many are likely price-sensitive. Podium's Yelp gap (no integration), its complexity for non-technical owners, and its opaque custom pricing are real friction points.
+
+Recommendation: The comparison table on the landing page should replace SimpleTexting or Klaviyo with Podium. A small business owner in Phoenix who has heard of Podium is a much more credible comparison than one who has heard of Klaviyo (an e-commerce email platform). The "$399+/mo vs $49/mo" price delta is a stronger conversion argument than any feature comparison.
+
+---
+
+## 16. NEW: April 7 — AI SMS Market Tailwinds (Macro)
+
+- U.S. SMS marketing market projected to reach $12-19 billion by 2030 (~20% CAGR)
+- 84% of consumers have opted into receiving SMS from at least one business (2025)
+- SMS open rates: 90-98%, with 80% of messages read within 5 minutes
+- SMS response rates: ~45% vs ~6% for email — a 7.5x gap
+- Global conversational commerce: $12.6B in 2026, projected $22.6B by 2031 (12.3% CAGR)
+- AI agents predicted to handle 95% of customer engagements by end of 2026
+- These are landing page proof points that belong in the hero sub-headline or trust bar — not buried in FAQ
+
+Recommendation: Surface one or two of these statistics on the landing page. "SMS is read 90% of the time. Email is read 6% of the time." This framing positions the channel itself as the product insight — it makes the choice feel obvious before the visitor even reads about features.
+
+---
+
+## 17. NEW: April 7 — Emerging AI-Native Competitors to Watch
+
+These players did not exist or were unknown at last report. They compete in adjacent spaces and could encroach on TextMarketer's territory:
+
+- **ReachifyAI** — purpose-built for restaurants; combines AI voice, SMS, and live chat. No-dashboard approach for a specific vertical.
+- **Emitrr** — AI agent "Sarah" for SMS; local business focus; more affordable than Podium. Growing G2 presence.
+- **Gumloop** — AI-native workflow automation, positioning as "Zapier but with AI agents." Not SMS-specific but could enable DIY text marketing.
+- **Salesmsg AI Agents** — qualify leads and book meetings 24/7 via SMS; credit-based plans starting $25/mo; trained on your business documents.
+
+The vertical-specific angle (ReachifyAI for restaurants) is worth watching. If TextMarketer's onboarding handles "what kind of business do you run" well, it can compete across verticals without specializing. But a restaurant-first or salon-first version of the landing page with industry-specific demo flows could significantly improve conversion for targeted ad campaigns.
+
+---
+
+## 18. NEW: April 7 — Comparison Table Fix (Actionable)
+
+Nigel flagged Priority 6: replace SimpleTexting and Klaviyo in the comparison table with more credible alternatives. Here is the recommended new table:
+
+| Feature | Hiring a Social Media Manager | Hootsuite (Team) | Podium (Core) | **TextMarketer** |
+|---------|-------------------------------|------------------|---------------|-----------------|
+| Monthly cost | $2,500-$4,000 | $249/user/mo | $399+/mo | **$49-99/mo** |
+| No login required | Yes | No | No | **Yes** |
+| Works via text | Sometimes | No | Partial | **Yes** |
+| Setup time | Days-weeks | Hours-days | 1-6 weeks | **Under an hour** |
+| AI-native | No | No | Add-on extra | **Yes** |
+| Transparent pricing | Negotiable | Yes | No | **Yes** |
+
+Rationale: A "social media manager" hire, Hootsuite (a tool the target audience has heard of), and Podium (the AI-native incumbent) are the three alternatives a small business owner in Phoenix would actually consider. This comparison is credible and the price contrast is stark.
+
+---
+
 ## Sources
 - [SimpleTexting Review 2026 - business.com](https://www.business.com/reviews/simpletexting/)
 - [Best SMS Marketing Platforms 2026 - Research.com](https://research.com/software/best-sms-marketing-platforms)
@@ -293,3 +369,22 @@ Small business owners are getting blindsided by fees they didn't know existed:
 - [HubSpot Community - 10DLC Requirements 2026](https://community.hubspot.com/t5/Tips-Tricks-Best-Practices/New-10DLC-SMS-registration-requirements-2026/m-p/1243020)
 - [SMS Marketing Benchmarks 2026 - Sakari](https://sakari.io/blog/sms-marketing-statistics-data-backed-insights-for-2025-2026)
 - [Roadway AI - Growth Marketing Tools 2026](https://www.roadwayai.com/blog/best-growth-marketing-tools-2026)
+
+### New Sources (April 7 Deep Dive)
+- [Top SMS Marketing Platforms for E-Commerce 2026 - ECD](https://www.ecdigitalstrategy.com/blog/best-sms-marketing-platforms-ecommerce-2026/)
+- [Best SMS Marketing Platforms 2026 - Sender](https://www.sender.net/blog/sms-marketing-platforms/)
+- [Attentive vs Klaviyo 2026 - Klaviyo](https://www.klaviyo.com/compare/klaviyo-vs-attentive)
+- [Podium Reviews 2026 - SocialPilot](https://www.socialpilot.co/reviews/tools/podium)
+- [Podium AI Employee: Get 30% More Sales - Podium](https://www.podium.com/product/ai-employee)
+- [Podium Pricing & Features - Emitrr](https://emitrr.com/blog/podium-pricing/)
+- [10 SaaS Landing Page Trends for 2026 - SaaSFrame](https://www.saasframe.io/blog/10-saas-landing-page-trends-for-2026-with-real-examples)
+- [Best SaaS Landing Page Examples 2026 - Veza Digital](https://www.vezadigital.com/post/best-saas-landing-page-examples)
+- [Top Landing Page Design Trends B2B SaaS 2026 - SaaS Hero](https://www.saashero.net/content/top-landing-page-design-trends/)
+- [SaaS Landing Page Best Practices 2025 - Grafit Agency](https://www.grafit.agency/blog/saas-landing-page-best-practices)
+- [Landing Page Conversion Stats 2026 - Genesys Growth](https://genesysgrowth.com/blog/landing-page-conversion-stats-for-marketing-leaders)
+- [How AI is Transforming SMS Marketing 2025 - Emitrr](https://emitrr.com/blog/ai-sms-marketing/)
+- [SMS Marketing Statistics 2025-2026 - Sakari](https://sakari.io/blog/sms-marketing-statistics-data-backed-insights-for-2025-2026)
+- [AI SMS Chatbots for Small Business - TextDrip](https://textdrip.com/blog/ai-sms-chatbots-for-small-business-marketing)
+- [Business Texting Trends 2026 - Text-em-all](https://www.text-em-all.com/blog/business-texting-trends-2026)
+- [We Studied 100 Dev Tool Landing Pages - Evil Martians](https://evilmartians.com/chronicles/we-studied-100-devtool-landing-pages-here-is-what-actually-works-in-2025)
+- [Vercel Landing Page UI Design - SaaSFrame](https://www.saasframe.io/examples/vercel-landing-page)
