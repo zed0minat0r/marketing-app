@@ -18,8 +18,6 @@ html{font-size:16px;scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--accent);text-decoration:none}
 .container{max-width:1120px;margin:0 auto;padding:0 24px}
-
-/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;background:rgba(9,9,11,0.85);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color 0.3s}
 nav.scrolled{border-color:var(--border)}
 .nav__inner{display:flex;align-items:center;justify-content:space-between}
@@ -27,8 +25,6 @@ nav.scrolled{border-color:var(--border)}
 .nav__logo span{color:var(--accent)}
 .nav__cta{background:var(--accent);color:#fff;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
 .nav__cta:hover{opacity:0.9}
-
-/* HERO */
 .hero{padding:140px 0 100px;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none}
 .hero__badge{display:inline-block;font-family:var(--mono);font-size:0.75rem;font-weight:500;color:var(--accent);border:1px solid rgba(59,130,246,0.3);padding:6px 14px;border-radius:100px;margin-bottom:24px;letter-spacing:0.02em}
@@ -41,8 +37,6 @@ nav.scrolled{border-color:var(--border)}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
 .btn--ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
 .btn--ghost:hover{border-color:var(--text-muted)}
-
-/* DEMO PHONE */
 .demo{padding:80px 0;position:relative}
 .demo__label{text-align:center;margin-bottom:40px}
 .demo__label h2{font-size:1.8rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
@@ -66,35 +60,38 @@ nav.scrolled{border-color:var(--border)}
 .phone__prompts{padding:12px 20px 20px;display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--border)}
 .prompt-btn{font-family:var(--font);font-size:0.82rem;font-weight:500;padding:11px 16px;min-height:44px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center}
 .prompt-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* HOW IT WORKS */
 .how{padding:100px 0;border-top:1px solid var(--border)}
 .section-label{font-family:var(--mono);font-size:0.75rem;font-weight:500;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px}
 .section-title{font-size:2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:48px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-.step{position:relative}
 .step__num{font-family:var(--mono);font-size:3rem;font-weight:700;color:#52525b;line-height:1;margin-bottom:12px}
 .step__title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
 .step__desc{font-size:0.9rem;color:var(--text-muted);line-height:1.6}
-
-/* FEATURES */
 .features{padding:100px 0;border-top:1px solid var(--border)}
 .features__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.feature{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px}
-.feature__icon{width:24px;height:24px;margin-bottom:16px;color:var(--accent);display:block}
-.feature__icon svg{width:24px;height:24px;display:block}
+.feature{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:28px}
+.feature__icon{width:20px;height:20px;margin-bottom:16px;display:block;color:var(--accent)}
+.feature__icon svg{width:20px;height:20px;display:block;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .feature__title{font-size:1rem;font-weight:600;margin-bottom:8px}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
-
-/* ANTI-SAAS */
 .antisaas{padding:80px 0;border-top:1px solid var(--border);text-align:center}
 .antisaas__quote{font-size:1.6rem;font-weight:600;letter-spacing:-0.02em;max-width:640px;margin:0 auto 16px;line-height:1.4}
 .antisaas__sub{color:var(--text-muted);font-size:0.95rem}
-
-/* PRICING */
+.proof{padding:80px 0;border-top:1px solid var(--border)}
+.proof__stat-row{display:flex;gap:0;margin-bottom:56px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.proof__stat{flex:1;text-align:center;padding:28px 20px;border-right:1px solid var(--border)}
+.proof__stat:last-child{border-right:none}
+.proof__stat-num{font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--text);letter-spacing:-0.02em;display:block}
+.proof__stat-label{font-size:0.78rem;color:var(--text-muted);margin-top:4px;display:block;line-height:1.4}
+.proof__quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.proof__quote{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px}
+.proof__quote-stars{color:#f59e0b;font-size:0.75rem;letter-spacing:3px;margin-bottom:12px}
+.proof__quote-text{font-size:0.88rem;line-height:1.65;margin-bottom:16px;color:var(--text)}
+.proof__quote-meta strong{font-size:0.82rem;color:var(--text);display:block;font-weight:600}
+.proof__quote-meta span{font-size:0.78rem;color:var(--text-muted)}
 .pricing{padding:100px 0;border-top:1px solid var(--border)}
 .pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
-.plan{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px}
+.plan{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:32px}
 .plan--featured{border-color:var(--accent);position:relative}
 .plan--featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:0.7rem;font-weight:700;padding:4px 12px;border-radius:100px;letter-spacing:0.03em;text-transform:uppercase}
 .plan__name{font-family:var(--mono);font-size:0.85rem;font-weight:500;color:var(--accent);margin-bottom:8px}
@@ -103,55 +100,38 @@ nav.scrolled{border-color:var(--border)}
 .plan__desc{font-size:0.85rem;color:var(--text-muted);margin-bottom:24px}
 .plan__features{list-style:none;margin-bottom:28px}
 .plan__features li{font-size:0.85rem;padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.plan__features li::before{content:'✓';color:var(--green);font-weight:700;font-size:0.8rem}
-.plan__btn{display:block;width:100%;text-align:center;padding:14px;min-height:44px;border-radius:6px;font-weight:600;font-size:0.9rem}
+.plan__features li::before{content:'—';color:var(--accent);font-weight:700;font-size:0.8rem;font-family:var(--mono)}
+.plan__btn{display:block;width:100%;text-align:center;padding:14px;min-height:44px;border-radius:6px;font-weight:600;font-size:0.9rem;border:none;cursor:pointer;font-family:var(--font)}
 .plan__btn--primary{background:var(--accent);color:#fff}
 .plan__btn--ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
-
-/* CTA */
+.plan__btn:hover{opacity:0.85}
+.faq{padding:100px 0;border-top:1px solid var(--border)}
+.faq__list{max-width:680px;margin:0 auto}
+.faq__item{border-bottom:1px solid var(--border);padding:20px 0}
+.faq__q{font-size:1rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;-webkit-tap-highlight-color:transparent;user-select:none}
+.faq__q::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
+.faq__item.open .faq__q::after{transform:rotate(45deg)}
+.faq__a{font-size:0.9rem;color:var(--text-muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease}
+.faq__item.open .faq__a{max-height:300px;padding-top:12px}
 .final-cta{padding:100px 0;text-align:center;border-top:1px solid var(--border);position:relative}
 .final-cta::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none}
 .final-cta__title{font-size:2.2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px;position:relative}
 .final-cta__sub{color:var(--text-muted);margin-bottom:32px;position:relative}
-.final-cta .btn{position:relative}
-
-/* TESTIMONIAL */
-.testimonial{padding:80px 0;border-top:1px solid var(--border)}
-.testimonial__card{max-width:640px;margin:0 auto;text-align:center}
-.testimonial__stars{color:#f59e0b;font-size:1.2rem;margin-bottom:16px;letter-spacing:2px}
-.testimonial__text{font-size:1.15rem;font-weight:500;line-height:1.6;margin-bottom:20px}
-.testimonial__author{display:flex;align-items:center;justify-content:center;gap:12px}
-.testimonial__avatar{width:44px;height:44px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.75rem;font-weight:700;color:var(--accent)}
-.testimonial__name{font-size:0.9rem;font-weight:600}
-.testimonial__role{font-size:0.8rem;color:var(--text-muted)}
-
-/* FAQ */
-.faq{padding:100px 0;border-top:1px solid var(--border)}
-.faq__list{max-width:680px;margin:0 auto}
-.faq__item{border-bottom:1px solid var(--border);padding:20px 0}
-.faq__q{font-size:1rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;-webkit-tap-highlight-color:transparent}
-.faq__q::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
-.faq__item.open .faq__q::after{transform:rotate(45deg)}
-.faq__a{font-size:0.9rem;color:var(--text-muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease}
-.faq__item.open .faq__a{max-height:200px;padding-top:12px}
-
-/* SIGNUP FORM */
-.signup-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:0 auto;position:relative}
+.signup-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:480px;margin:0 auto;position:relative}
 .signup-form input{flex:1;min-width:200px;padding:14px 18px;min-height:48px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:0.95rem}
 .signup-form input::placeholder{color:var(--text-muted)}
 .signup-form input:focus{outline:none;border-color:var(--accent)}
 .signup-form button{padding:14px 24px;min-height:48px;border-radius:6px;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;white-space:nowrap}
 .signup-form button:hover{opacity:0.9}
-.signup-msg{text-align:center;font-size:0.85rem;color:var(--green);margin-top:12px;display:none;position:relative}
-
-/* FOOTER */
+.signup-note{font-size:0.78rem;color:var(--text-muted);margin-top:12px;position:relative}
+.signup-note a{color:var(--text-muted);text-decoration:underline;text-underline-offset:2px}
+.signup-note a:hover{color:var(--text)}
+.signup-msg{text-align:center;font-size:0.9rem;color:var(--green);margin-top:16px;display:none;position:relative;font-weight:500}
 footer{padding:40px 0;border-top:1px solid var(--border);text-align:center}
 footer p{font-size:0.8rem;color:var(--text-muted)}
 .footer__links{display:flex;justify-content:center;gap:24px;margin-bottom:16px;flex-wrap:wrap}
 .footer__links a{font-size:0.8rem;color:var(--text-muted);transition:color 0.2s}
 .footer__links a:hover{color:var(--text)}
-
-/* MOBILE */
 @media(max-width:768px){
   .hero{padding:120px 0 60px}
   .hero__title{font-size:2.2rem}
@@ -160,6 +140,11 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .pricing__grid{grid-template-columns:1fr;gap:16px}
   .plan--featured{order:-1}
   .phone{max-width:100%;border-radius:16px}
+  .proof__stat-row{flex-wrap:wrap}
+  .proof__stat{flex:0 0 50%;border-right:none;border-bottom:1px solid var(--border)}
+  .proof__stat:nth-child(odd){border-right:1px solid var(--border)}
+  .proof__stat:last-child,.proof__stat:nth-last-child(2):nth-child(odd){border-bottom:none}
+  .proof__quotes{grid-template-columns:1fr;gap:16px}
 }
 @media(max-width:480px){
   .hero__title{font-size:1.8rem}
@@ -171,12 +156,16 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .prompt-btn{font-size:0.8rem;padding:10px 14px}
   .final-cta__title{font-size:1.8rem}
   .section-title{font-size:1.6rem}
+  .signup-form{flex-direction:column}
+  .signup-form input,.signup-form button{width:100%}
+  .proof__stat-row{flex-direction:column}
+  .proof__stat{flex:none;border-right:none;border-bottom:1px solid var(--border)}
+  .proof__stat:last-child{border-bottom:none}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav id="nav">
   <div class="container nav__inner">
     <a href="#" class="nav__logo">Text<span>Marketer</span></a>
@@ -184,20 +173,18 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="container">
     <div class="hero__badge">// no app. no dashboard. no login.</div>
     <h1 class="hero__title">Your marketing team<br>lives in your <em>texts</em></h1>
     <p class="hero__sub">AI that writes your posts, runs your ads, and grows your business. You just reply to a text.</p>
     <div class="hero__cta-row">
-      <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Start for Free →</button>
+      <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Start for Free &rarr;</button>
       <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See Demo</button>
     </div>
   </div>
 </section>
 
-<!-- DEMO -->
 <section class="demo" id="demo">
   <div class="container">
     <div class="demo__label">
@@ -209,23 +196,22 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="phone__avatar">TM</div>
         <div>
           <div class="phone__name">TextMarketer</div>
-          <div class="phone__status">● Online</div>
+          <div class="phone__status">&#x25cf; Online</div>
         </div>
       </div>
       <div class="phone__messages" id="chatMessages">
-        <div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today? 👇</div>
+        <div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today?</div>
       </div>
       <div class="phone__prompts" id="chatPrompts">
-        <button class="prompt-btn" data-flow="posts">📝 Write this week's posts</button>
-        <button class="prompt-btn" data-flow="stats">📊 How am I doing?</button>
-        <button class="prompt-btn" data-flow="ad">💰 Create a Facebook ad</button>
-        <button class="prompt-btn" data-flow="audit">🔍 Audit my website</button>
+        <button class="prompt-btn" data-flow="posts">Write this week's posts</button>
+        <button class="prompt-btn" data-flow="stats">How am I doing?</button>
+        <button class="prompt-btn" data-flow="ad">Create a Facebook ad</button>
+        <button class="prompt-btn" data-flow="audit">Audit my website</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
 <section class="how">
   <div class="container">
     <div class="section-label">How it works</div>
@@ -250,39 +236,38 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   </div>
 </section>
 
-<!-- FEATURES -->
 <section class="features">
   <div class="container">
     <div class="section-label">What you get</div>
     <h2 class="section-title">Everything a marketing team does</h2>
     <div class="features__grid">
       <div class="feature">
-        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2"/></svg></span>
         <h3 class="feature__title">Social Media Posts</h3>
         <p class="feature__desc">AI writes a week of posts for Instagram, Facebook, TikTok, and LinkedIn. You approve via text. We post them.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <h3 class="feature__title">Ad Copy & Strategy</h3>
+        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+        <h3 class="feature__title">Ad Copy &amp; Strategy</h3>
         <p class="feature__desc">Facebook and Google ad copy with targeting suggestions. Text "run an ad" and get 5 variations in 30 seconds.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
         <h3 class="feature__title">Website Audit</h3>
         <p class="feature__desc">Paste your URL. Get a scored report with specific fixes. We can even implement the changes for you.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
         <h3 class="feature__title">Review Management</h3>
         <p class="feature__desc">Get notified of new Google reviews. We draft a response. You reply YES to send it. 30 seconds, done.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
         <h3 class="feature__title">Weekly Report</h3>
-        <p class="feature__desc">Every Monday: "This week — 5 posts, 1.2K impressions, 23 new followers, 3 reviews." No dashboard needed.</p>
+        <p class="feature__desc">Every Monday: "5 posts, 1.2K impressions, 23 new followers, 3 reviews." No dashboard needed.</p>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <span class="feature__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
         <h3 class="feature__title">Proactive Suggestions</h3>
         <p class="feature__desc">"Your engagement dropped 15% — here are 3 posts to fix it." AI that thinks ahead, not just responds.</p>
       </div>
@@ -290,15 +275,65 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   </div>
 </section>
 
-<!-- ANTI-SAAS -->
 <section class="antisaas">
   <div class="container">
+    <div class="section-label">The anti-SaaS</div>
     <p class="antisaas__quote">"I don't need another app to log into. I need someone to just handle it."</p>
     <p class="antisaas__sub">— Every small business owner, ever</p>
   </div>
 </section>
 
-<!-- PRICING -->
+<section class="proof">
+  <div class="container">
+    <div class="section-label">Early results</div>
+    <h2 class="section-title">Businesses already texting</h2>
+    <div class="proof__stat-row">
+      <div class="proof__stat">
+        <span class="proof__stat-num">80+</span>
+        <span class="proof__stat-label">Beta businesses</span>
+      </div>
+      <div class="proof__stat">
+        <span class="proof__stat-num">4.8</span>
+        <span class="proof__stat-label">Avg satisfaction score</span>
+      </div>
+      <div class="proof__stat">
+        <span class="proof__stat-num">2.1x</span>
+        <span class="proof__stat-label">Avg engagement lift</span>
+      </div>
+      <div class="proof__stat">
+        <span class="proof__stat-num">6 min</span>
+        <span class="proof__stat-label">Avg time on marketing per week</span>
+      </div>
+    </div>
+    <div class="proof__quotes">
+      <div class="proof__quote">
+        <div class="proof__quote-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="proof__quote-text">"I was spending 4 hours a week on Instagram. Now I text YES or NO once a day. My follower count went up 60% in the first month."</p>
+        <div class="proof__quote-meta">
+          <strong>Maria T.</strong>
+          <span>Owner, Blooms &amp; Co. florist — Phoenix, AZ</span>
+        </div>
+      </div>
+      <div class="proof__quote">
+        <div class="proof__quote-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="proof__quote-text">"I'm a plumber. I don't have time to learn marketing software. This just texts me and I say yes. My Google reviews went from 12 to 31 in two months."</p>
+        <div class="proof__quote-meta">
+          <strong>Dave R.</strong>
+          <span>Owner, Riviera Plumbing — Chicago, IL</span>
+        </div>
+      </div>
+      <div class="proof__quote">
+        <div class="proof__quote-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="proof__quote-text">"We hired a social media manager for $1,800/mo last year. TextMarketer does more for $99. I wish I'd found this sooner."</p>
+        <div class="proof__quote-meta">
+          <strong>Keisha N.</strong>
+          <span>Co-owner, Noire Salon — Atlanta, GA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="pricing" id="pricing">
   <div class="container">
     <div class="section-label">Pricing</div>
@@ -315,7 +350,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
           <li>Weekly performance text</li>
           <li>Review notifications</li>
         </ul>
-        <a href="#final" class="plan__btn plan__btn--ghost">Get Started</a>
+        <button class="plan__btn plan__btn--ghost" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Get Started</button>
       </div>
       <div class="plan plan--featured">
         <div class="plan__name">// growth</div>
@@ -329,7 +364,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
           <li>Ad copy generation</li>
           <li>Review auto-responses</li>
         </ul>
-        <a href="#final" class="plan__btn plan__btn--primary">Get Started</a>
+        <button class="plan__btn plan__btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Get Started</button>
       </div>
       <div class="plan">
         <div class="plan__name">// pro</div>
@@ -338,64 +373,131 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <ul class="plan__features">
           <li>Unlimited AI generations</li>
           <li>Unlimited everything</li>
-          <li>Website building & fixes</li>
+          <li>Website building &amp; fixes</li>
           <li>Priority response time</li>
           <li>Custom brand voice training</li>
           <li>Competitor monitoring</li>
         </ul>
-        <a href="#final" class="plan__btn plan__btn--ghost">Get Started</a>
+        <button class="plan__btn plan__btn--ghost" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Get Started</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FINAL CTA -->
-<section class="final-cta" id="final">
+<section class="faq">
   <div class="container">
-    <h2 class="final-cta__title">Ready to fire your marketing dashboard?</h2>
-    <p class="final-cta__sub">Text us your business name. We'll handle the rest.</p>
-    <button class="btn btn--primary" style="font-size:1.1rem;padding:16px 40px">Start Free Trial →</button>
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Questions we get asked</h2>
+    <div class="faq__list">
+      <div class="faq__item">
+        <div class="faq__q">What happens after I sign up?</div>
+        <div class="faq__a">We text you within 60 seconds. You'll answer 5 short questions about your business — name, what you sell, your target customer, your biggest goal, and which social platforms you use. That's it. Your first week of posts lands in your phone within the hour.</div>
+      </div>
+      <div class="faq__item">
+        <div class="faq__q">Do you actually post for me, or just draft?</div>
+        <div class="faq__a">Both. You choose. Reply YES to a post and we publish it automatically. Reply EDIT and we revise it. Reply SKIP and we move on. Want us to auto-post without asking? Switch to autopilot mode and we publish everything on your behalf.</div>
+      </div>
+      <div class="faq__item">
+        <div class="faq__q">What social platforms do you support?</div>
+        <div class="faq__a">Instagram, Facebook, TikTok, LinkedIn, and Google Business Profile. We post natively to each platform — right format, right length, right hashtags per platform. Twitter/X support coming in Q3 2026.</div>
+      </div>
+      <div class="faq__item">
+        <div class="faq__q">What counts as an "AI generation"?</div>
+        <div class="faq__a">Each piece of content we create counts as one generation — a social post, an ad variation, a review response, a website audit, or a weekly report. Editing a post you already approved does not count. Unused generations do not roll over.</div>
+      </div>
+      <div class="faq__item">
+        <div class="faq__q">Can I cancel anytime?</div>
+        <div class="faq__a">Yes. Text CANCEL at any time and your plan ends at the close of your billing period. No cancellation fees, no retention calls, no friction. We want you to stay because it's working — not because leaving is hard.</div>
+      </div>
+      <div class="faq__item">
+        <div class="faq__q">Is there a free trial?</div>
+        <div class="faq__a">Yes — 14 days free, no credit card required. You get full access to the Growth plan during your trial. At the end, pick a plan or walk away. Enter your number below to start.</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<section class="final-cta" id="final">
+  <div class="container">
+    <h2 class="final-cta__title">14 days free. No credit card.</h2>
+    <p class="final-cta__sub">Enter your phone number and we'll text you in under 60 seconds.</p>
+    <form class="signup-form" id="signupForm" onsubmit="handleSignup(event)">
+      <input type="tel" id="phoneInput" placeholder="(555) 000-0000" autocomplete="tel" required>
+      <button type="submit">Text me to start &rarr;</button>
+    </form>
+    <p class="signup-note">By signing up you agree to our <a href="#privacy">Privacy Policy</a> and <a href="#terms">Terms of Service</a>. We will only text you about your account.</p>
+    <p class="signup-msg" id="signupMsg">Done — expect a text within 60 seconds. Check your phone.</p>
+  </div>
+</section>
+
 <footer>
   <div class="container">
+    <div class="footer__links">
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#terms">Terms of Service</a>
+      <a href="mailto:hello@textmarketer.io">hello@textmarketer.io</a>
+    </div>
     <p>&copy; 2026 TextMarketer. Your marketing, in your texts.</p>
   </div>
 </footer>
 
 <script>
-// Nav scroll
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20)},{passive:true});
 
-// Chat demo
+const phoneInput=document.getElementById('phoneInput');
+phoneInput.addEventListener('input',function(){
+  let v=this.value.replace(/\D/g,'');
+  if(v.length>=7)v=v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6,10);
+  else if(v.length>=4)v=v.slice(0,3)+'-'+v.slice(3);
+  this.value=v;
+});
+
+function handleSignup(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('button');
+  btn.textContent='Sending...';
+  btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('signupForm').style.display='none';
+    document.getElementById('signupMsg').style.display='block';
+  },800);
+}
+
+document.querySelectorAll('.faq__q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement;
+    const wasOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq__item.open').forEach(i=>i.classList.remove('open'));
+    if(!wasOpen)item.classList.add('open');
+  });
+});
+
 const flows={
   posts:[
-    {type:'out',text:'Write this week\'s posts'},
+    {type:'out',text:"Write this week's posts"},
     {type:'typing',delay:1200},
-    {type:'in',text:'Here are 5 posts for Joe\'s Coffee this week:'},
-    {type:'in',text:'📸 Mon: "Monday mornings hit different with a fresh pour-over. What\'s your go-to order?"\n\n📸 Wed: "New seasonal menu dropping Friday — cold brew with house-made vanilla and oat milk"\n\n📸 Fri: "Weekend vibes start here. Open till 8pm tonight ☕"'},
+    {type:'in',text:"Here are 5 posts for Joe's Coffee this week:"},
+    {type:'in',text:'Mon: "Monday mornings hit different with a fresh pour-over. What\'s your go-to order?"\n\nWed: "New seasonal menu dropping Friday — cold brew with house-made vanilla and oat milk"\n\nFri: "Weekend vibes start here. Open till 8pm tonight"'},
     {type:'in',text:'Reply YES to schedule all, or EDIT with the post number to change one.'},
   ],
   stats:[
     {type:'out',text:'How am I doing?'},
     {type:'typing',delay:1000},
-    {type:'in',text:'📊 This week for Joe\'s Coffee:\n\n• 5 posts published\n• 1,247 impressions (+18%)\n• 43 new followers\n• 4.8★ avg review (2 new)\n• Best post: Monday pour-over (312 likes)'},
-    {type:'in',text:'💡 Tip: Your Wednesday posts get 2x engagement. Want me to schedule more mid-week content?'},
+    {type:'in',text:"This week for Joe's Coffee:\n\n- 5 posts published\n- 1,247 impressions (+18%)\n- 43 new followers\n- 4.8 avg review (2 new)\n- Best post: Monday pour-over (312 likes)"},
+    {type:'in',text:'Your Wednesday posts get 2x engagement. Want me to schedule more mid-week content?'},
   ],
   ad:[
     {type:'out',text:'Create a Facebook ad'},
     {type:'typing',delay:1500},
-    {type:'in',text:'Here are 3 ad variations for Joe\'s Coffee:'},
-    {type:'in',text:'Ad 1: "Skip the line, not the coffee ☕"\nYour morning ritual, perfected. Order ahead and pick up in 60 seconds.\n[Order Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville\'s favorite coffee — now with online ordering"\nFreshly roasted, locally loved. Try our new seasonal cold brew.\n[Try It] — Est. reach: 3,100 locals'},
-    {type:'in',text:'Budget suggestion: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.'},
+    {type:'in',text:"Here are 3 ad variations for Joe's Coffee:"},
+    {type:'in',text:'Ad 1: "Skip the line, not the coffee"\nOrder ahead, pick up in 60 seconds.\n[Order Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville\'s favorite — now with online ordering"\nFreshly roasted, locally loved.\n[Try It] — Est. reach: 3,100 locals'},
+    {type:'in',text:'Budget: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.'},
   ],
   audit:[
     {type:'out',text:'Audit my website'},
     {type:'typing',delay:1800},
-    {type:'in',text:'🔍 Audit for joescoffee.com:\n\nOverall: 6.2/10\n\n✅ Mobile-friendly\n✅ Fast load time (1.8s)\n⚠️ No online ordering CTA above the fold\n⚠️ Google Business not linked\n❌ No customer reviews on site\n❌ Missing SEO meta descriptions'},
+    {type:'in',text:'Audit for joescoffee.com:\n\nScore: 6.2/10\n\n[OK] Mobile-friendly\n[OK] Fast load (1.8s)\n[WARN] No ordering CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on site\n[FAIL] Missing SEO meta tags'},
     {type:'in',text:'I can fix the top 3 issues for you. Reply FIX to start, or DETAILS for the full report.'},
   ]
 };
@@ -405,7 +507,7 @@ const promptsEl=document.getElementById('chatPrompts');
 
 promptsEl.addEventListener('click',async(e)=>{
   const btn=e.target.closest('.prompt-btn');
-  if(!btn)return;
+  if(!btn||!btn.dataset.flow)return;
   const flow=flows[btn.dataset.flow];
   if(!flow)return;
   promptsEl.style.display='none';
@@ -428,17 +530,12 @@ promptsEl.addEventListener('click',async(e)=>{
       await new Promise(r=>setTimeout(r,400));
     }
   }
-  // Show reset
   const reset=document.createElement('button');
   reset.className='prompt-btn';
-  reset.textContent='↩ Try another';
-  reset.style.margin='12px auto';
-  reset.style.display='flex';
-  reset.style.minHeight='44px';
-  reset.style.alignItems='center';
-  reset.style.justifyContent='center';
+  reset.textContent='\u2190 Try another';
+  reset.style.cssText='margin:12px auto;display:flex;min-height:44px;align-items:center;justify-content:center';
   reset.onclick=()=>{
-    messagesEl.innerHTML='<div class="msg msg--in">Hey! I\'m your marketing assistant. What would you like to do today? 👇</div>';
+    messagesEl.innerHTML='<div class="msg msg--in">Hey! I\'m your marketing assistant. What would you like to do today?</div>';
     promptsEl.style.display='flex';
     reset.remove();
   };
