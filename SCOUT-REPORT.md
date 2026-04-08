@@ -433,6 +433,133 @@ Previous research (Section 14) cited general SaaS conversion benchmarks. This se
 
 ---
 
+---
+
+## 24. NEW: April 7 — Apple-Tier Landing Page Design: Specific Techniques for Sidekick
+
+This section is focused on implementation — what exact CSS and JS patterns should Builder use to make Sidekick's landing page feel premium. All techniques below work in a single HTML file with no frameworks.
+
+### How Apple Product Pages Actually Work
+
+Apple's MacBook Pro, iPhone, and Vision Pro pages use one primary technique: **scroll-synced canvas image sequences**. The mechanics are:
+
+1. A `<canvas>` element is `position: fixed`, centered with `transform: translate(-50%, -50%)`, and fills the viewport.
+2. The `<body>` is set to 400-600vh total height — this creates the scroll "room" for the animation without actually having multiple sections.
+3. On each scroll event, a `scrollFraction` is calculated: `scrollTop / (scrollHeight - innerHeight)`.
+4. That fraction maps to a frame index across 100-150 pre-loaded JPEG frames.
+5. `requestAnimationFrame()` draws the correct frame to canvas — hardware-accelerated, no flash, 60fps.
+6. Text/copy overlays use `position: sticky` on top of the fixed canvas, fading in and out as scroll progresses.
+
+**Why this works:** Canvas uses the GPU via requestAnimationFrame. Image swap is hardware-accelerated. The result looks like a video but responds instantly to finger scroll speed — faster or slower depending on the user.
+
+**The critical limitation:** Requires 100-150 pre-loaded images (~2-8MB total). For Sidekick, this is appropriate ONLY for a key hero moment (phone with AI conversation appearing), not the whole page.
+
+### CSS Scroll-Driven Animations (No JS Required for Basic Effects)
+
+The modern approach uses native CSS `animation-timeline` with `scroll()` or `view()`. No JS, no library:
+
+```css
+/* Element fades in as it enters the viewport */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  animation: fade-up linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 40%;
+}
+```
+
+**Browser support caveat (critical for Sidekick):** Chrome/Edge: full support. Firefox: requires flag. Safari: no native support as of April 2026. This means CSS scroll-driven animations CANNOT be the primary technique — use as progressive enhancement only. Wrap in `@supports (animation-timeline: scroll())` and provide a static fallback.
+
+### The Reliable Cross-Browser Technique: Intersection Observer
+
+This works in every browser, requires zero libraries, and is more performant than scroll event listeners:
+
+```javascript
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      // Stagger delay by index
+      entry.target.style.transitionDelay = `${i * 80}ms`;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target); // fire once only
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+```
+
+The `.visible` class triggers a CSS transition — opacity 0 to 1, translateY(20px) to 0. The `observer.unobserve()` call is critical — it fires once and stops, so elements do not re-animate when scrolling back up (Apple's pattern; not the cheap library default).
+
+### What Linear.app Does (And Sidekick Should Steal)
+
+Linear uses two animation patterns that are distinctive and immediately recognisable as premium:
+
+1. **Stepped grid-dot sequences** — a 3200ms animation cycling through 16 discrete states using `steps(1, end)` timing (not smooth easing — intentionally quantised). This creates a technical, engineered aesthetic. For Sidekick, a small animated SMS-typing dot indicator or message-delivered tick could use this technique.
+
+2. **Staggered opacity waves ("UpDown")** — a 2800ms pattern where items pulse in a wave. `animation-delay` increases by ~175ms per item. The result looks alive without being distracting. Applied to a row of feature icons or message bubbles this would be distinctive.
+
+3. **Typography system** — Linear defines 9 title sizes and 6 text sizes with letter-spacing and line-height customised per size. The headline is large, tightly tracked, and `text-wrap: balance` prevents orphaned words. Sidekick should adopt at least 4 defined type sizes rather than arbitrary `font-size` values.
+
+### What Stripe Does (Premium Without Motion)
+
+Stripe's premium feel comes from layout and restraint, not animation:
+
+- **Bento grid** — feature cards in a CSS Grid with mixed aspect ratios. Not all cards are the same size. The asymmetry signals confidence.
+- **Social proof rotation** — logo strip rotates with a CSS `opacity` cross-fade, not a slide. Subtle. Could work for the Sidekick "trusted by" section once customers exist.
+- **Wave/gradient imagery** — the hero background is an SVG wave gradient, not a photo. This prevents the page from looking stock-photo cheap. Sidekick's current hero background is worth auditing for this.
+- **Accordion-style expandable stories** — enterprise features collapse by default, expand on click. This prevents overwhelming the visitor while keeping depth available. Consider for Sidekick's "How it works" section.
+
+### What Vercel Does (The Performance-First Premium)
+
+Vercel uses:
+
+- **Geist** — a custom typeface (available free). If Sidekick wants a non-default look without paying for a font, Geist is an excellent choice. Anti-Inter, anti-DM Sans, signals technical sophistication.
+- **Globe with node pulses** — SVG/Canvas animation showing server nodes. The equivalent for Sidekick: a visual of SMS signals pinging from a phone. Simple canvas dot-pulse animation, not a library dependency.
+- **Light/dark persistence via localStorage** — theme toggle stored locally. For Sidekick, defaulting to dark and offering a toggle is a low-effort way to feel premium and respect user preference.
+- **requestAnimationFrame performance tracking** — Vercel measures "content visible" timing. This is overkill for Sidekick but the mindset is right: every animation should be tested against a 375px mobile on a mid-range Android, not a MacBook Pro.
+
+### Gradient Text (Apple's iPhone 14 Pro Pattern)
+
+Apple uses `background-clip: text` for headline gradients — this is now standard across premium pages:
+
+```css
+.gradient-headline {
+  background: linear-gradient(135deg, #fff 30%, #888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+```
+
+The shimmer variant animates `background-position` over 3-4 seconds. Used sparingly (one word in a headline, not a paragraph) this reads as Apple-quality. Used broadly it looks like a Fiverr landing page.
+
+### Specific Recommendations for Sidekick (Ranked by Impact/Effort)
+
+**Do immediately (low effort, high visual impact):**
+1. Replace all `scroll` event listeners with IntersectionObserver. Fire once. No re-trigger on scroll back. Add 80ms stagger between sibling elements.
+2. Add `text-wrap: balance` to all headlines to eliminate orphaned words.
+3. Set the hero phone animation to play once on load, freeze on final state. Add a small "replay" icon. Remove the loop.
+4. Use `background-clip: text` on one key word in the hero headline — the word "texts" or the brand name. Not the full headline.
+
+**Do in next iteration (medium effort, distinctive result):**
+5. Replace the current font with Geist (free, Google Fonts equivalent available). Immediately breaks the AI-generated look.
+6. Add Linear-style stepped grid animation to the SMS typing indicator — `steps(1, end)` timing instead of smooth ease.
+7. Apply a bento grid to the features section — two large cards flanking three smaller ones. Break the uniform card grid.
+
+**Do only if image assets are available (high effort, Apple-level result):**
+8. Canvas image sequence for the hero phone materialising on scroll — 60-80 frames is sufficient for a single object. Beyond that, use CSS transitions.
+
+### The Single Biggest Mistake to Avoid
+
+Stacking animations. Linear uses 2 animation patterns across the entire page. Apple uses 1 dominant technique per section. Vercel's globe is the only animation on the hero. The instinct when building is to add more — but every additional animation competes for attention and signals low confidence in the core content. Sidekick's current interactive demo IS the premium element. Everything else should be still or nearly still to let it breathe.
+
+---
+
 ## Sources
 
 ### New Sources (April 7 Round 2)
