@@ -77,42 +77,52 @@ module.exports = async function handler(req, res) {
       const metrics = await getWeeklyMetrics(user.id, weekStart);
 
       // Skip if no posts this week
-      if (metrics.posts.length === 0) {
+      if (!metrics.posts || metrics.posts.length === 0) {
         skipped++;
         continue;
       }
 
-      // Find top post by engagement
+      // Find top post by engagement (guard against NaN)
       let topPost = null;
       let maxEngagement = 0;
       for (const post of metrics.posts) {
         const postSnapshots = metrics.snapshots.filter(s => s.post_id === post.id);
-        const engagement = postSnapshots.reduce((sum, s) =>
+        const rawEngagement = postSnapshots.reduce((sum, s) =>
           sum + (s.likes || 0) + (s.comments || 0) + (s.shares || 0), 0
         );
+        const engagement = Number.isFinite(rawEngagement) ? rawEngagement : 0;
         if (engagement > maxEngagement) {
           maxEngagement = engagement;
           topPost = post;
         }
       }
 
+      // Guard totals against NaN
+      const totalReach = Number.isFinite(metrics.totals.reach) ? metrics.totals.reach : 0;
+      const totalEngagement = Number.isFinite(metrics.totals.engagement) ? metrics.totals.engagement : 0;
+      const totalImpressions = Number.isFinite(metrics.totals.impressions) ? metrics.totals.impressions : 0;
+
       // Get previous week for comparison
       const prevWeekStart = new Date(weekStart);
       prevWeekStart.setDate(prevWeekStart.getDate() - 7);
       const prevMetrics = await getWeeklyMetrics(user.id, prevWeekStart.toISOString().split('T')[0]);
+      const prevReach = Number.isFinite(prevMetrics?.totals?.reach) ? prevMetrics.totals.reach : 0;
+
+      // Compute top post likes safely
+      const topPostLikes = topPost
+        ? metrics.snapshots
+            .filter(s => s.post_id === topPost.id)
+            .reduce((sum, s) => sum + (s.likes || 0), 0)
+        : 0;
 
       // Generate summary with Claude
       const summary = await generateWeeklySummary(user, {
         postsCount: metrics.posts.length,
-        totalReach: metrics.totals.reach,
-        totalEngagement: metrics.totals.engagement,
-        prevReach: prevMetrics.totals.reach,
-        topPostContent: topPost?.content,
-        topPostLikes: topPost
-          ? metrics.snapshots
-              .filter(s => s.post_id === topPost.id)
-              .reduce((sum, s) => sum + (s.likes || 0), 0)
-          : 0,
+        totalReach,
+        totalEngagement,
+        prevReach,
+        topPostContent: topPost?.content || null,
+        topPostLikes: Number.isFinite(topPostLikes) ? topPostLikes : 0,
       });
 
       // Send the summary
@@ -124,9 +134,9 @@ module.exports = async function handler(req, res) {
         userId: user.id,
         weekStart,
         postsCount: metrics.posts.length,
-        totalReach: metrics.totals.reach,
-        totalImpressions: metrics.totals.impressions,
-        totalEngagement: metrics.totals.engagement,
+        totalReach,
+        totalImpressions,
+        totalEngagement,
         topPostId: topPost?.id || null,
         summaryText: summary,
         sentAt: new Date().toISOString(),

@@ -18,13 +18,28 @@ const { getClient, updateUser } = require('../../lib/supabase');
 const { sendSms } = require('../sms/outbound');
 const { PLAN_LIMITS } = require('../../lib/constants');
 
+// Validate Stripe price env vars on startup — log clear warnings if missing
+const STRIPE_PRICE_VARS = {
+  STRIPE_PRICE_STARTER: process.env.STRIPE_PRICE_STARTER,
+  STRIPE_PRICE_GROWTH: process.env.STRIPE_PRICE_GROWTH,
+  STRIPE_PRICE_PRO: process.env.STRIPE_PRICE_PRO,
+};
+
+for (const [varName, value] of Object.entries(STRIPE_PRICE_VARS)) {
+  if (!value) {
+    console.warn(`WARNING: ${varName} is not set. Subscriptions using this price ID will fall back to "starter" plan.`);
+  }
+}
+
 // Map Stripe price IDs to plan names
 // These price IDs must match your actual Stripe price IDs in env vars
-const PRICE_TO_PLAN = {
-  [process.env.STRIPE_PRICE_STARTER]: 'starter',
-  [process.env.STRIPE_PRICE_GROWTH]: 'growth',
-  [process.env.STRIPE_PRICE_PRO]: 'pro',
-};
+const PRICE_TO_PLAN = Object.fromEntries(
+  Object.entries({
+    [process.env.STRIPE_PRICE_STARTER]: 'starter',
+    [process.env.STRIPE_PRICE_GROWTH]: 'growth',
+    [process.env.STRIPE_PRICE_PRO]: 'pro',
+  }).filter(([key]) => key && key !== 'undefined')
+);
 
 function getPlanFromSubscription(subscription) {
   const priceId = subscription.items?.data?.[0]?.price?.id;

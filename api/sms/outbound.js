@@ -10,6 +10,7 @@
  */
 
 const twilio = require('twilio');
+const { requireInternalAuth } = require('../../lib/internal-auth');
 
 let _client = null;
 
@@ -60,6 +61,9 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Internal endpoints require shared-secret auth
+  if (!requireInternalAuth(req, res)) return;
 
   const { to, body } = req.body || {};
 

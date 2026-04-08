@@ -19,7 +19,7 @@ const { sendSms } = require('./outbound');
 const { checkRateLimit } = require('../../lib/rate-limit');
 const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
-const { classifyIntent, getDraftResponse, parseCancelCommand } = require('../../lib/intent');
+const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand } = require('../../lib/intent');
 const {
   getUserByPhone,
   createUser,
@@ -102,7 +102,8 @@ function formatPostsList(posts) {
  * Returns { handled: true, replyText } or { handled: false }.
  */
 async function handleDraftResponse(user, messageBody, recentMessages) {
-  const draftResponse = getDraftResponse(messageBody);
+  const trimmed = (messageBody || '').trim();
+  const draftResponse = getDraftResponse(trimmed);
   if (!draftResponse) return { handled: false };
 
   // Find the most recent draft in conversation
@@ -160,7 +161,14 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
     }
 
     case 'edit': {
-      // Let Claude handle EDIT — it will use the conversation context
+      // Check if this is a structured EDIT N <instruction> command
+      const editCmd = parseEditCommand(trimmed);
+      if (editCmd) {
+        // Structured edit: user said "EDIT 1 make it shorter" etc.
+        // Let Claude handle it with the parsed instruction injected as context
+        return { handled: false, editInstruction: editCmd.instruction };
+      }
+      // Plain "EDIT" or "change it" — let Claude handle with full context
       return { handled: false };
     }
   }

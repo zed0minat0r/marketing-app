@@ -10,6 +10,7 @@
 
 const { getClient, upsertSocialAccount } = require('../../lib/supabase');
 const { sendSms } = require('../sms/outbound');
+const { decrypt } = require('../../lib/crypto');
 
 async function verifyQStashSignature(req) {
   const currentKey = process.env.QSTASH_CURRENT_SIGNING_KEY;
@@ -127,10 +128,29 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: error.message });
   }
 
+  // Decrypt tokens before use (stored encrypted in DB)
+  const decryptedAccounts = (accounts || []).map(account => {
+    try {
+      return {
+        ...account,
+        access_token: account.access_token ? decrypt(account.access_token) : null,
+        refresh_token: account.refresh_token ? decrypt(account.refresh_token) : null,
+      };
+    } catch (err) {
+      console.warn(`Token decryption failed for account ${account.id} — using raw value:`, err.message);
+      return account;
+    }
+  });
+
   let refreshed = 0;
   let failed = 0;
 
-  for (const account of (accounts || [])) {
+  for (const account of decryptedAccounts) {
+    // Safe access: users is a nested object from the join; guard every level
+    const userPhone = (account.users && typeof account.users === 'object')
+      ? account.users.phone || null
+      : null;
+
     try {
       if (account.platform === 'facebook' || account.platform === 'instagram') {
         await refreshMetaToken(account);
@@ -138,16 +158,19 @@ module.exports = async function handler(req, res) {
       } else if (account.platform === 'twitter') {
         await refreshTwitterToken(account);
         refreshed++;
+      } else {
+        console.warn(`Token refresh: unknown platform "${account.platform}" for account ${account.id}`);
       }
     } catch (err) {
-      console.error(`Token refresh failed for account ${account.id}:`, err.message);
+      console.error(`Token refresh failed for account ${account.id} (${account.platform}):`, err.message);
       failed++;
 
       // Notify user if refresh fails so they can reconnect
-      if (account.users?.phone) {
-        const platform = account.platform.charAt(0).toUpperCase() + account.platform.slice(1);
-        await sendSms(account.users.phone,
-          `Your ${platform} connection needs to be renewed. Text "Connect ${platform}" to reconnect.`
+      if (userPhone) {
+        const platformDisplay = (account.platform || 'social media')
+          .charAt(0).toUpperCase() + (account.platform || '').slice(1);
+        await sendSms(userPhone,
+          `Your ${platformDisplay} connection needs to be renewed. Text "Connect ${platformDisplay}" to reconnect.`
         ).catch(console.error);
       }
 

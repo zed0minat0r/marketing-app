@@ -22,6 +22,14 @@
       "memory": 256,
       "maxDuration": 60
     },
+    "api/jobs/reset-generations.js": {
+      "memory": 128,
+      "maxDuration": 30
+    },
+    "api/jobs/cleanup-conversations.js": {
+      "memory": 256,
+      "maxDuration": 60
+    },
     "api/stripe/webhook.js": {
       "memory": 256,
       "maxDuration": 10
@@ -41,10 +49,6 @@
     },
     {
       "src": "/api/sms/outbound",
-      "dest": "/api/sms/outbound.js"
-    },
-    {
-      "src": "/api/sms/send",
       "dest": "/api/sms/outbound.js"
     },
     {
@@ -86,6 +90,14 @@
     {
       "src": "/api/jobs/refresh-tokens",
       "dest": "/api/jobs/refresh-tokens.js"
+    },
+    {
+      "src": "/api/jobs/reset-generations",
+      "dest": "/api/jobs/reset-generations.js"
+    },
+    {
+      "src": "/api/jobs/cleanup-conversations",
+      "dest": "/api/jobs/cleanup-conversations.js"
     },
     {
       "src": "/connected",

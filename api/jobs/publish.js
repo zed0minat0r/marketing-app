@@ -93,6 +93,27 @@ module.exports = async function handler(req, res) {
       return res.status(404).json({ error: 'Post not found' });
     }
 
+    // Idempotency check: if already posted or publishing, return early
+    // This prevents double-publishing when QStash retries the same job
+    if (post.status === 'posted') {
+      console.log(`Idempotency: post ${post_id} already posted — skipping`);
+      return res.status(200).json({ success: true, message: 'Already posted (idempotent)' });
+    }
+    if (post.status === 'publishing') {
+      // Another invocation is in flight — check if it's stale (>5 min)
+      const updatedAt = new Date(post.updated_at || 0);
+      const staleCutoff = new Date(Date.now() - 5 * 60 * 1000);
+      if (updatedAt > staleCutoff) {
+        console.log(`Idempotency: post ${post_id} is currently publishing — skipping duplicate`);
+        return res.status(200).json({ success: true, message: 'Publishing in progress (idempotent)' });
+      }
+      // Stale "publishing" status — reset and try again
+      console.warn(`Post ${post_id} stuck in "publishing" for >5min — retrying`);
+    }
+    if (post.status === 'canceled') {
+      return res.status(200).json({ success: false, message: 'Post was canceled' });
+    }
+
     // Get user for SMS notification
     const { data: userData } = await getClient()
       .from('users')

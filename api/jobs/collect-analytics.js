@@ -139,8 +139,11 @@ module.exports = async function handler(req, res) {
 
     for (const post of (posts || [])) {
       for (const platform of post.platforms) {
-        const platformPostId = post.published_urls?.[platform];
-        if (!platformPostId) continue;
+        const platformPostUrl = post.published_urls?.[platform];
+        if (!platformPostUrl) {
+          console.warn(`Analytics: no URL for post ${post.id} on ${platform}, skipping`);
+          continue;
+        }
 
         try {
           const { getSocialAccount } = require('../../lib/supabase');
@@ -150,13 +153,61 @@ module.exports = async function handler(req, res) {
           let metrics = {};
 
           if (platform === 'facebook') {
-            const fbPostId = platformPostId.split('/posts/').join('_');
+            // URL format: https://facebook.com/PAGEID/posts/POSTID
+            let fbPostId;
+            try {
+              const url = new URL(platformPostUrl);
+              const parts = url.pathname.split('/').filter(Boolean);
+              // parts = ['PAGEID', 'posts', 'POSTID'] -> join as 'PAGEID_POSTID'
+              const postsIdx = parts.indexOf('posts');
+              if (postsIdx !== -1 && parts[postsIdx - 1] && parts[postsIdx + 1]) {
+                fbPostId = `${parts[postsIdx - 1]}_${parts[postsIdx + 1]}`;
+              }
+            } catch (_) { /* invalid URL */ }
+
+            if (!fbPostId || !fbPostId.includes('_')) {
+              console.error(`Analytics: could not parse Facebook post ID from URL: ${platformPostUrl}`);
+              failed++;
+              continue;
+            }
             metrics = await collectFacebookInsights(post.id, fbPostId, account.access_token);
+
           } else if (platform === 'instagram') {
-            const igMediaId = platformPostId.split('/p/')[1]?.split('/')[0] || platformPostId;
+            // URL format: https://instagram.com/p/MEDIAID/
+            let igMediaId;
+            try {
+              const url = new URL(platformPostUrl);
+              const parts = url.pathname.split('/').filter(Boolean);
+              // parts = ['p', 'MEDIAID']
+              if (parts[0] === 'p' && parts[1]) {
+                igMediaId = parts[1];
+              }
+            } catch (_) { /* invalid URL */ }
+
+            if (!igMediaId) {
+              console.error(`Analytics: could not parse Instagram media ID from URL: ${platformPostUrl}`);
+              failed++;
+              continue;
+            }
             metrics = await collectInstagramInsights(post.id, igMediaId, account.access_token);
+
           } else if (platform === 'twitter') {
-            const tweetId = platformPostId.split('/status/')[1]?.split('/')[0] || platformPostId;
+            // URL format: https://twitter.com/i/web/status/TWEETID
+            let tweetId;
+            try {
+              const url = new URL(platformPostUrl);
+              const parts = url.pathname.split('/').filter(Boolean);
+              const statusIdx = parts.indexOf('status');
+              if (statusIdx !== -1 && parts[statusIdx + 1]) {
+                tweetId = parts[statusIdx + 1];
+              }
+            } catch (_) { /* invalid URL */ }
+
+            if (!tweetId) {
+              console.error(`Analytics: could not parse tweet ID from URL: ${platformPostUrl}`);
+              failed++;
+              continue;
+            }
             metrics = await collectTwitterMetrics(tweetId, account.access_token);
           }
 

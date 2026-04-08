@@ -12,11 +12,15 @@
 
 const { generateResponse } = require('../../lib/claude');
 const { getUserByPhone, getRecentMessages, getSocialAccounts } = require('../../lib/supabase');
+const { requireInternalAuth } = require('../../lib/internal-auth');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Internal endpoints require shared-secret auth
+  if (!requireInternalAuth(req, res)) return;
 
   const { user_id, message, conversation_history } = req.body || {};
 
