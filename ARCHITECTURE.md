@@ -1,4 +1,4 @@
-# TextMarketer -- Full Architecture Document
+# Sidekick -- Full Architecture Document
 
 **Last updated:** 2026-04-07
 **Author:** Architect Agent
@@ -131,7 +131,7 @@ User receives SMS reply
 ### Onboarding Flow (First-Time User)
 
 ```
-System: Welcome to TextMarketer! I am your AI marketing team.
+System: Welcome to Sidekick! I am your AI marketing team.
         Let us get you set up. What is your business name?
 User:   Mike's Pizza
 System: Great! What type of business is Mike's Pizza?
@@ -147,7 +147,7 @@ System: You are all set! Mike's Pizza is ready to go.
 ### Claude System Prompt Structure
 
 ```
-You are TextMarketer, an AI marketing assistant for small businesses.
+You are Sidekick, an AI marketing assistant for small businesses.
 You communicate exclusively via SMS. Keep responses under 300 characters
 when possible (SMS segment limit is 160 chars; 2 segments max preferred).
 
@@ -193,7 +193,7 @@ Users connect their social accounts via a one-time OAuth flow (sent as a link in
 ```
 User:   Connect my Instagram
 System: Tap this link to connect your Instagram account:
-        https://textmarketer.com/connect/instagram?token=abc123
+        https://sidekick.app/connect/instagram?token=abc123
         (Link expires in 15 minutes)
      |
      v
@@ -300,7 +300,7 @@ User:   YES
 Server:
   1. Insert into scheduled_posts with status='queued'
   2. Create QStash scheduled message:
-     POST https://textmarketer.com/api/jobs/publish
+     POST https://sidekick.app/api/jobs/publish
      Deliver-At: 2026-04-10T20:00:00Z (Friday 4pm ET -> UTC)
      Body: { post_id: "uuid-here" }
      |
@@ -675,7 +675,7 @@ GET /connected
 
 ```
 USER  ->  "Hi"
-BOT   <-  "Welcome to TextMarketer! I am your AI marketing
+BOT   <-  "Welcome to Sidekick! I am your AI marketing
            team, right here in your texts.
            First -- what is your business called?"
 USER  ->  "Mike's Pizza"
@@ -771,7 +771,7 @@ BOT   <-  "Happy hour post canceled. 2 posts remaining."
 ```
 USER  ->  "Connect my Instagram"
 BOT   <-  "Tap this link to connect Instagram:
-           https://textmarketer.com/api/oauth/meta/start?token=abc123
+           https://sidekick.app/api/oauth/meta/start?token=abc123
 
            (Expires in 15 minutes)"
 
@@ -1084,6 +1084,6 @@ UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 
 # App
-APP_URL=https://textmarketer.com
+APP_URL=https://sidekick.app
 ENCRYPTION_KEY=  # for pgcrypto token encryption
 ```

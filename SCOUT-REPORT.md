@@ -88,10 +88,10 @@ From 2025-2026 surveys and trend reports:
 
 ---
 
-## 6. Actionable Recommendations for TextMarketer
+## 6. Actionable Recommendations for Sidekick
 
 ### The Gap in the Market
-Every competitor requires a web dashboard. Every competitor treats SMS as a channel, not the interface. TextMarketer's "marketing team in your texts" positioning is genuinely unique.
+Every competitor requires a web dashboard. Every competitor treats SMS as a channel, not the interface. Sidekick's "marketing team in your texts" positioning is genuinely unique.
 
 ### How to Differentiate
 
@@ -102,7 +102,7 @@ No login. No dashboard. No app. This is the headline. The landing page should ma
 Target $29-49/mo for the core plan. Undercut competitors on complexity, not necessarily on price. The value prop is "you save 5+ hours/week" not "we're cheaper per text."
 
 **3. AI-native, not AI-added.**
-Competitors bolt AI onto existing dashboards. TextMarketer should be AI-first: the AI writes your campaigns, suggests timing, segments your audience, and reports results -- all via text conversation. This is a fundamentally different architecture.
+Competitors bolt AI onto existing dashboards. Sidekick should be AI-first: the AI writes your campaigns, suggests timing, segments your audience, and reports results -- all via text conversation. This is a fundamentally different architecture.
 
 **4. Lean into the "anti-SaaS" positioning.**
 Small business owners are drowning in SaaS subscriptions. Marketing this as "the marketing tool that isn't a tool" resonates with the 50% who have zero marketing staff.
@@ -114,7 +114,7 @@ Sign up with your phone number. Get a welcome text. Answer 5 questions about you
 The landing page MUST have an interactive text conversation demo. This is the #1 thing that will convert visitors. Let them experience the product before signing up. Simulate: "Hey! I'm your marketing AI. What kind of business do you run?" and walk through creating a campaign in 4 texts.
 
 **7. Steal Community.com's playbook, democratize it.**
-Community.com proved text-first works at scale ($90M raised, 20M subscribers). But they serve celebrities and Fortune 500. TextMarketer brings the same model to the local pizza shop, hair salon, and yoga studio.
+Community.com proved text-first works at scale ($90M raised, 20M subscribers). But they serve celebrities and Fortune 500. Sidekick brings the same model to the local pizza shop, hair salon, and yoga studio.
 
 ### Landing Page Priorities
 1. Hero: Bold headline about never logging into another dashboard
@@ -161,7 +161,7 @@ Community.com proved text-first works at scale ($90M raised, 20M subscribers). B
 
 ## 8. NEW: The 10DLC Registration Nightmare
 
-This is a massive, underappreciated pain point that TextMarketer can solve:
+This is a massive, underappreciated pain point that Sidekick can solve:
 
 - **Since Feb 1, 2025**, carriers block ALL unregistered 10DLC traffic — total service disruption
 - Registration takes **1-6 weeks** depending on provider and approval backlog
@@ -170,7 +170,7 @@ This is a massive, underappreciated pain point that TextMarketer can solve:
 - What used to be "load a list and hit send" now requires brand registration, campaign verification, and carrier-specific compliance
 - Small businesses (clinics, real estate teams, salons) often don't know 10DLC exists until their messages stop delivering
 
-**TextMarketer Opportunity:** Handle ALL 10DLC registration, compliance, and carrier management behind the scenes. The business owner texts "I want to start marketing" and we handle everything. This alone is a massive differentiator — turning a multi-week bureaucratic nightmare into a conversational onboarding flow.
+**Sidekick Opportunity:** Handle ALL 10DLC registration, compliance, and carrier management behind the scenes. The business owner texts "I want to start marketing" and we handle everything. This alone is a massive differentiator — turning a multi-week bureaucratic nightmare into a conversational onboarding flow.
 
 ---
 
@@ -189,7 +189,7 @@ Small business owners are getting blindsided by fees they didn't know existed:
 | Additional user seats | $10-20/month each | Growing teams |
 | Short code leasing | $500-1,000/month | Scale-seekers |
 
-**TextMarketer Opportunity:** Dead-simple pricing. One price. All-inclusive. No segmentation surprises, no registration fees passed through, no per-seat charges. "Your marketing team costs $X/month. That's it."
+**Sidekick Opportunity:** Dead-simple pricing. One price. All-inclusive. No segmentation surprises, no registration fees passed through, no per-seat charges. "Your marketing team costs $X/month. That's it."
 
 ---
 
@@ -201,7 +201,7 @@ Small business owners are getting blindsided by fees they didn't know existed:
 - Consumers and businesses questioning stacked monthly charges, unclear value, endless renewals
 - Marketing tools are a major culprit — small businesses juggle email platform + social scheduler + CRM + SMS tool + analytics + ad manager
 
-**TextMarketer Opportunity:** Position as the ANTI-subscription. "Cancel three tools, replace them with one text thread." The fact that TextMarketer lives in iMessage/SMS means it doesn't even feel like a subscription — it feels like texting your marketing person.
+**Sidekick Opportunity:** Position as the ANTI-subscription. "Cancel three tools, replace them with one text thread." The fact that Sidekick lives in iMessage/SMS means it doesn't even feel like a subscription — it feels like texting your marketing person.
 
 ---
 
@@ -213,13 +213,13 @@ Small business owners are getting blindsided by fees they didn't know existed:
 - Businesses using conversational AI report **30% cost reduction** in customer service
 - The shift: from "browse and click" to "ask and buy" — purchases completed within the same chat
 
-**TextMarketer Opportunity:** TextMarketer isn't just an SMS marketing tool — it's positioned at the intersection of conversational commerce and AI agents. The product roadmap can expand from "send campaigns via text" to "run your entire customer relationship via text" — marketing, sales, support, all in one thread. This is a $12B+ market that's doubling in 5 years.
+**Sidekick Opportunity:** Sidekick isn't just an SMS marketing tool — it's positioned at the intersection of conversational commerce and AI agents. The product roadmap can expand from "send campaigns via text" to "run your entire customer relationship via text" — marketing, sales, support, all in one thread. This is a $12B+ market that's doubling in 5 years.
 
 ---
 
 ## 12. NEW: Revised Competitive Positioning Matrix
 
-| Feature | SimpleTexting | Klaviyo | Attentive | Community.com | **TextMarketer** |
+| Feature | SimpleTexting | Klaviyo | Attentive | Community.com | **Sidekick** |
 |---------|--------------|---------|-----------|---------------|-----------------|
 | No dashboard needed | No | No | No | No | **YES** |
 | No app to download | No | No | No | No | **YES** |
@@ -233,17 +233,17 @@ Small business owners are getting blindsided by fees they didn't know existed:
 
 ---
 
-## 13. NEW: Top 5 Gaps TextMarketer Must Exploit
+## 13. NEW: Top 5 Gaps Sidekick Must Exploit
 
-1. **The Onboarding Gap:** Every competitor requires days-to-weeks of setup (10DLC registration, dashboard training, list importing). TextMarketer should get someone from signup to first campaign in under 10 minutes, all via text.
+1. **The Onboarding Gap:** Every competitor requires days-to-weeks of setup (10DLC registration, dashboard training, list importing). Sidekick should get someone from signup to first campaign in under 10 minutes, all via text.
 
-2. **The Complexity Gap:** Klaviyo requires "prior email marketing knowledge." Attentive requires dedicated marketing staff. TextMarketer's user is the owner who cuts hair, makes pizza, or teaches yoga — and has zero marketing background.
+2. **The Complexity Gap:** Klaviyo requires "prior email marketing knowledge." Attentive requires dedicated marketing staff. Sidekick's user is the owner who cuts hair, makes pizza, or teaches yoga — and has zero marketing background.
 
-3. **The Pricing Transparency Gap:** Hidden fees are industry-standard. Emoji surcharges. Segmentation costs. Per-seat pricing. TextMarketer should be radically simple: one price, everything included.
+3. **The Pricing Transparency Gap:** Hidden fees are industry-standard. Emoji surcharges. Segmentation costs. Per-seat pricing. Sidekick should be radically simple: one price, everything included.
 
-4. **The Interface Gap:** Every single competitor — from $29/mo SimpleTexting to enterprise Attentive — requires a web dashboard. TextMarketer is the ONLY product where the interface IS the phone's native messaging app.
+4. **The Interface Gap:** Every single competitor — from $29/mo SimpleTexting to enterprise Attentive — requires a web dashboard. Sidekick is the ONLY product where the interface IS the phone's native messaging app.
 
-5. **The SaaS Fatigue Gap:** Small businesses are drowning in 30-50 subscriptions. TextMarketer doesn't add another login to remember, another tab to open, another password to reset. It's just... texting.
+5. **The SaaS Fatigue Gap:** Small businesses are drowning in 30-50 subscriptions. Sidekick doesn't add another login to remember, another tab to open, another password to reset. It's just... texting.
 
 ---
 
@@ -252,7 +252,7 @@ Small business owners are getting blindsided by fees they didn't know existed:
 ## 14. NEW: April 7 — Landing Page Conversion Intelligence
 
 ### Phone Number in Signup Form: Counterintuitive Data
-Research shows that asking for a phone number too early in signup forms HURTS conversions for most SaaS products — but TextMarketer is a special case. The product IS delivered via SMS. Not collecting a phone number at signup creates a trust gap (Nigel flagged this as Priority 1 and Priority 3). The solution most aligned with conversion data: use a two-step "breadcrumb" form — first collect email (low friction), then immediately follow up with "What's the best number to reach you?" as step 2. This is less threatening than asking for phone upfront and solves the missing chapter in the onboarding story.
+Research shows that asking for a phone number too early in signup forms HURTS conversions for most SaaS products — but Sidekick is a special case. The product IS delivered via SMS. Not collecting a phone number at signup creates a trust gap (Nigel flagged this as Priority 1 and Priority 3). The solution most aligned with conversion data: use a two-step "breadcrumb" form — first collect email (low friction), then immediately follow up with "What's the best number to reach you?" as step 2. This is less threatening than asking for phone upfront and solves the missing chapter in the onboarding story.
 
 ### SaaS Conversion Benchmarks (2026)
 - Median SaaS landing page conversion rate: 3.8%
@@ -267,13 +267,13 @@ Research shows that asking for a phone number too early in signup forms HURTS co
 Datadog, Linear, and Vercel all use a split-screen hero: headline + CTA on the left, live product preview on the right. This directly addresses Nigel's Priority 5 — the animated chat widget should move alongside the headline, not below the CTA buttons. The split layout lets users see what the product does while reading the value proposition simultaneously.
 
 ### Interactive Demo Is Now Table Stakes
-As of 2026, interactive embedded demos are the leading conversion driver across SaaS landing pages. Amplitude, Forest Admin, and Zendesk embed full guided product tours. Abstract 3D graphics and illustration-based heroes are declining. TextMarketer's interactive demo is already ahead of most competitors — the gap is its placement (too far down the page) and the framing ("Try it right now" reads as deceptive since it's scripted; "See exactly how it works" is more honest and still compelling).
+As of 2026, interactive embedded demos are the leading conversion driver across SaaS landing pages. Amplitude, Forest Admin, and Zendesk embed full guided product tours. Abstract 3D graphics and illustration-based heroes are declining. Sidekick's interactive demo is already ahead of most competitors — the gap is its placement (too far down the page) and the framing ("Try it right now" reads as deceptive since it's scripted; "See exactly how it works" is more honest and still compelling).
 
 ---
 
 ## 15. NEW: April 7 — Podium's Pricing Gap Creates a Real Opening
 
-Podium is the closest true competitor to TextMarketer's vision: AI-native, text-first, local business focused. But Podium starts at $399-599/month (Core/Pro tiers) with AI Employee as an additional add-on cost. That is 8-12x TextMarketer's proposed $49/month entry price. 100,000+ local businesses use Podium — and many are likely price-sensitive. Podium's Yelp gap (no integration), its complexity for non-technical owners, and its opaque custom pricing are real friction points.
+Podium is the closest true competitor to Sidekick's vision: AI-native, text-first, local business focused. But Podium starts at $399-599/month (Core/Pro tiers) with AI Employee as an additional add-on cost. That is 8-12x Sidekick's proposed $49/month entry price. 100,000+ local businesses use Podium — and many are likely price-sensitive. Podium's Yelp gap (no integration), its complexity for non-technical owners, and its opaque custom pricing are real friction points.
 
 Recommendation: The comparison table on the landing page should replace SimpleTexting or Klaviyo with Podium. A small business owner in Phoenix who has heard of Podium is a much more credible comparison than one who has heard of Klaviyo (an e-commerce email platform). The "$399+/mo vs $49/mo" price delta is a stronger conversion argument than any feature comparison.
 
@@ -295,14 +295,14 @@ Recommendation: Surface one or two of these statistics on the landing page. "SMS
 
 ## 17. NEW: April 7 — Emerging AI-Native Competitors to Watch
 
-These players did not exist or were unknown at last report. They compete in adjacent spaces and could encroach on TextMarketer's territory:
+These players did not exist or were unknown at last report. They compete in adjacent spaces and could encroach on Sidekick's territory:
 
 - **ReachifyAI** — purpose-built for restaurants; combines AI voice, SMS, and live chat. No-dashboard approach for a specific vertical.
 - **Emitrr** — AI agent "Sarah" for SMS; local business focus; more affordable than Podium. Growing G2 presence.
 - **Gumloop** — AI-native workflow automation, positioning as "Zapier but with AI agents." Not SMS-specific but could enable DIY text marketing.
 - **Salesmsg AI Agents** — qualify leads and book meetings 24/7 via SMS; credit-based plans starting $25/mo; trained on your business documents.
 
-The vertical-specific angle (ReachifyAI for restaurants) is worth watching. If TextMarketer's onboarding handles "what kind of business do you run" well, it can compete across verticals without specializing. But a restaurant-first or salon-first version of the landing page with industry-specific demo flows could significantly improve conversion for targeted ad campaigns.
+The vertical-specific angle (ReachifyAI for restaurants) is worth watching. If Sidekick's onboarding handles "what kind of business do you run" well, it can compete across verticals without specializing. But a restaurant-first or salon-first version of the landing page with industry-specific demo flows could significantly improve conversion for targeted ad campaigns.
 
 ---
 
@@ -310,7 +310,7 @@ The vertical-specific angle (ReachifyAI for restaurants) is worth watching. If T
 
 Nigel flagged Priority 6: replace SimpleTexting and Klaviyo in the comparison table with more credible alternatives. Here is the recommended new table:
 
-| Feature | Hiring a Social Media Manager | Hootsuite (Team) | Podium (Core) | **TextMarketer** |
+| Feature | Hiring a Social Media Manager | Hootsuite (Team) | Podium (Core) | **Sidekick** |
 |---------|-------------------------------|------------------|---------------|-----------------|
 | Monthly cost | $2,500-$4,000 | $249/user/mo | $399+/mo | **$49-99/mo** |
 | No login required | Yes | No | No | **Yes** |
@@ -331,7 +331,7 @@ Nigel scored the testimonials section 5.5 and called it the single biggest credi
 
 ### What Does NOT Work
 - Generic persona diversity ("Renee B. / Maria T. / Dave K.") is immediately recognised as template thinking by sceptical visitors. The "names shared with permission" disclaimer on a product with no customers actively makes things worse — it reads as either dishonest or as a description of three very articulate internal testers.
-- Fabricated testimonials with vague outcomes ("TextMarketer is amazing!") are a credibility net negative. Visitors in 2026 are more attuned to AI-generated copy than ever.
+- Fabricated testimonials with vague outcomes ("Sidekick is amazing!") are a credibility net negative. Visitors in 2026 are more attuned to AI-generated copy than ever.
 
 ### What Actually Works Before Launch
 
@@ -341,11 +341,11 @@ Nigel scored the testimonials section 5.5 and called it the single biggest credi
 
 **3. Problem-side social proof.** Instead of testimonials about the product, cite the problem. "52% of small business owners do their own marketing. Only 1 in 3 posts consistently. We're fixing that." This is verifiable, resonant, and does not require customers.
 
-**4. Scenario framing, honestly labelled.** The hypothetical-customer approach can work if it is labelled honestly: "Here is how a salon owner would use TextMarketer in a typical week." This is transparent, lets visitors self-identify, and does not claim to be a testimonial. The demo section already does this implicitly — making it explicit resolves the dishonesty risk.
+**4. Scenario framing, honestly labelled.** The hypothetical-customer approach can work if it is labelled honestly: "Here is how a salon owner would use Sidekick in a typical week." This is transparent, lets visitors self-identify, and does not claim to be a testimonial. The demo section already does this implicitly — making it explicit resolves the dishonesty risk.
 
 **5. Founding member framing.** "Be one of the first 500 businesses" creates authentic exclusivity without requiring fake testimonials. This reframes the absence of customers as an advantage: you get in before everyone else.
 
-**Recommendation for TextMarketer:** Remove the current testimonials section entirely. Replace with: (a) a live waitlist counter once signups exceed 200, (b) one or two real beta-tester quotes even if they are rough, and (c) the problem-side statistics already on the page (SMS 98% read rate vs. email 22%) placed closer to the CTA. The demo section is doing all the heavy lifting that testimonials should do — let it.
+**Recommendation for Sidekick:** Remove the current testimonials section entirely. Replace with: (a) a live waitlist counter once signups exceed 200, (b) one or two real beta-tester quotes even if they are rough, and (c) the problem-side statistics already on the page (SMS 98% read rate vs. email 22%) placed closer to the CTA. The demo section is doing all the heavy lifting that testimonials should do — let it.
 
 ---
 
@@ -364,7 +364,7 @@ Showing "Get Started" buttons next to dollar amounts creates a broken promise. T
 
 **Option C: Reframe pricing as a preview with clear context.** Add a banner or badge above the pricing section: "LAUNCHING MAY 2026 — These are your founding-member rates." Change CTAs to "Join Waitlist at This Price." This keeps the pricing visible (good for conversion) while making the pre-launch state explicit.
 
-**Recommendation for TextMarketer:** Option A or C. Option A ("Reserve this plan") aligns with the product's "text-first" voice and creates urgency. Option C is lower-friction to implement. Do NOT leave the current "Get Started" buttons — they are actively confusing visitors.
+**Recommendation for Sidekick:** Option A or C. Option A ("Reserve this plan") aligns with the product's "text-first" voice and creates urgency. Option C is lower-friction to implement. Do NOT leave the current "Get Started" buttons — they are actively confusing visitors.
 
 ### Data Point
 Top-performing waitlist pages achieve 15-40% conversion. Pages with pricing confusion (visitor cannot determine if they can buy now) drop to 2-5%. The gap is entirely in clarity of CTA intent.
@@ -387,13 +387,13 @@ Nigel flagged the hero phone looping as Priority 3. Research now provides precis
 - **Intersection Observer trigger.** Animation plays once when the section enters the viewport, not on page load. This means visitors who scroll past the hero on mobile do not miss the animation — they trigger it when they reach it. Linear and Vercel use this pattern.
 - **User-initiated.** The demo section below already does this well (the user clicks to start each flow). Consider making the hero animation user-initiated as well: a "Play" button overlaid on the static final frame.
 
-**Recommendation for TextMarketer:** Play once on page load, freeze on final state (the completed AI message). Add a subtle "Replay" icon in the corner for visitors who want to watch again. This removes the noise, makes the hero feel premium, and respects the visitor's attention. The interactive demo directly below handles the "try it yourself" need.
+**Recommendation for Sidekick:** Play once on page load, freeze on final state (the completed AI message). Add a subtle "Replay" icon in the corner for visitors who want to watch again. This removes the noise, makes the hero feel premium, and respects the visitor's attention. The interactive demo directly below handles the "try it yourself" need.
 
 ---
 
 ## 22. NEW: April 7 (Round 2) — Textla: A Competitor Worth Tracking
 
-Textla is a small-business SMS platform that did not appear prominently in earlier research. It is worth flagging as the closest pricing competitor to TextMarketer's proposed $49/mo entry point.
+Textla is a small-business SMS platform that did not appear prominently in earlier research. It is worth flagging as the closest pricing competitor to Sidekick's proposed $49/mo entry point.
 
 ### Textla's Position
 - Pricing: $25/mo (monthly) or $19/mo (annual) plus $0.01/SMS segment. No hidden fees, no per-seat charges, no credit bundles.
@@ -401,16 +401,16 @@ Textla is a small-business SMS platform that did not appear prominently in earli
 - Target audience: Small businesses with limited marketing budgets. Marketed as "almost no learning curve."
 - Weakness: Users have explicitly asked for AI features that Textla does not yet have. No AI generation, no conversational interface, still requires a web dashboard.
 
-### Why This Matters for TextMarketer
-Textla is the "simple and affordable" SMS tool for small businesses that does NOT have AI and does NOT have a text-first interface. It is a natural before/after comparison: "Textla is what you use when you want SMS marketing with a dashboard. TextMarketer is what you use when you want it without one."
+### Why This Matters for Sidekick
+Textla is the "simple and affordable" SMS tool for small businesses that does NOT have AI and does NOT have a text-first interface. It is a natural before/after comparison: "Textla is what you use when you want SMS marketing with a dashboard. Sidekick is what you use when you want it without one."
 
-Textla is also priced lower ($25/mo) — but it is a different product category. TextMarketer's AI generation, no-dashboard model, and social media posting capability justify the higher price point. The comparison table already includes Hootsuite and Podium. Consider adding a row comparing Textla specifically for the "simple SMS tool" category.
+Textla is also priced lower ($25/mo) — but it is a different product category. Sidekick's AI generation, no-dashboard model, and social media posting capability justify the higher price point. The comparison table already includes Hootsuite and Podium. Consider adding a row comparing Textla specifically for the "simple SMS tool" category.
 
 ---
 
 ## 23. NEW: April 7 (Round 2) — Waitlist Conversion Benchmarks (Precise Data)
 
-Previous research (Section 14) cited general SaaS conversion benchmarks. This section provides waitlist-specific data that is more actionable for TextMarketer.
+Previous research (Section 14) cited general SaaS conversion benchmarks. This section provides waitlist-specific data that is more actionable for Sidekick.
 
 ### Waitlist-Specific Benchmarks (2026)
 | Performance Tier | Conversion Rate | What It Signals |
@@ -426,7 +426,7 @@ Previous research (Section 14) cited general SaaS conversion benchmarks. This se
 - Waitlist pages convert ~2.7x better than traditional product pages because "join waitlist" feels low-commitment and exclusive
 - Single-field forms (email only) convert higher initially — but adding phone as step 2 filters for more qualified leads who are genuinely interested in an SMS product
 
-### Key Levers for TextMarketer Specifically
+### Key Levers for Sidekick Specifically
 1. **Queue position display.** "You are #347 in line" creates urgency and validates that others have joined. This single element lifts conversion 15-25%.
 2. **Referral mechanic.** "Refer 3 businesses — skip the queue and get 2 months free." Turns each signup into a growth loop. High-converting pre-launch pages that add referral mechanics see 3-5x more signups from the same traffic.
 3. **Specificity in the confirmation message.** "We open access in waves of 50 businesses starting May 12" beats "We'll be in touch." Specificity reduces post-signup anxiety and increases the probability the visitor stays engaged until launch.

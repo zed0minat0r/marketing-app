@@ -70,7 +70,7 @@ module.exports = async function handler(req, res) {
 
     // Build Meta OAuth URL
     const appId = process.env.META_APP_ID;
-    const appUrl = process.env.APP_URL || 'https://textmarketer.com';
+    const appUrl = process.env.APP_URL || 'https://sidekick.app';
     const redirectUri = encodeURIComponent(`${appUrl}/api/oauth/meta/callback`);
     const scopeEncoded = encodeURIComponent(META_SCOPES);
 

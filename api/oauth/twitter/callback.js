@@ -85,7 +85,7 @@ module.exports = async function handler(req, res) {
     const verifier = storedState.state.split(':').slice(1).join(':');
     const userId = storedState.user_id;
 
-    const appUrl = process.env.APP_URL || 'https://textmarketer.com';
+    const appUrl = process.env.APP_URL || 'https://sidekick.app';
     const redirectUri = `${appUrl}/api/oauth/twitter/callback`;
 
     // Exchange code for tokens

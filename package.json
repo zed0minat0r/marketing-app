@@ -1,7 +1,7 @@
 {
   "name": "marketing-app",
   "version": "2.0.0",
-  "description": "TextMarketer — AI marketing platform via SMS. Built on Twilio + Claude + Supabase.",
+  "description": "Sidekick — AI marketing platform via SMS. Built on Twilio + Claude + Supabase.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

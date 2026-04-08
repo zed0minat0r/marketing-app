@@ -77,7 +77,7 @@ module.exports = async function handler(req, res) {
     }
 
     const userId = oauthState.user_id;
-    const appUrl = process.env.APP_URL || 'https://textmarketer.com';
+    const appUrl = process.env.APP_URL || 'https://sidekick.app';
     const redirectUri = `${appUrl}/api/oauth/meta/callback`;
 
     // Exchange code for short-lived token

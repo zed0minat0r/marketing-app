@@ -1,4 +1,4 @@
-# Nigel's Audit — TextMarketer Landing Page
+# Nigel's Audit — Sidekick Landing Page
 **Date:** 2026-04-07
 **Auditor:** Nigel (strict British auditor, small business owner perspective)
 **Score:** 7.5 / 10
@@ -34,7 +34,7 @@ Clean, minimal, fixed. Logo uses monospace with the accent colour on the brand n
 
 **What does not work:**
 - The hero phone auto-plays a loop on a 4-second restart. After the second or third loop, it becomes noise. A busy small business owner who pauses on the page does not want to watch the same script replay. One pass, then freeze on the final state — or loop much more slowly (30-second gap between replays).
-- The description paragraph ("No app. No dashboard. No login. Ever. TextMarketer is an AI...") is slightly long. The first two sentences are gold. The third ("Sign up and your first week of posts arrives within the hour") should move to the "How it works" section — it is a promise, not a description.
+- The description paragraph ("No app. No dashboard. No login. Ever. Sidekick is an AI...") is slightly long. The first two sentences are gold. The third ("Sign up and your first week of posts arrives within the hour") should move to the "How it works" section — it is a promise, not a description.
 - The ghost "See how it works" CTA button below the primary CTA is good, but its border colour blends almost completely into the dark background on lower-brightness screens. Needs slightly higher contrast on the border.
 
 ### 3. Demo Section — 8.5
@@ -62,7 +62,7 @@ Six features in a 2x3 bordered grid. The structure is correct — it mirrors the
 - "Website audit in plain English" as a feature implies the product can audit any website. But looking at the FAQ, this is limited (1/month on Starter). The feature description does not mention this limitation at all. A small business owner who signs up expecting unlimited audits will be annoyed.
 
 ### 6. Comparison Table — 7.5
-The desktop table (4-column comparison with Social Media Manager, Hootsuite, Podium, TextMarketer) is well-executed. The mobile version (3-column: Hootsuite/Podium combined, TextMarketer) is a reasonable collapse, and the CSS hiding/showing is done correctly.
+The desktop table (4-column comparison with Social Media Manager, Hootsuite, Podium, Sidekick) is well-executed. The mobile version (3-column: Hootsuite/Podium combined, Sidekick) is a reasonable collapse, and the CSS hiding/showing is done correctly.
 
 **What works:**
 - The source citation at the bottom ("Sources: Hootsuite pricing page, Podium.com, Indeed salary data — April 2026") is a genuinely good credibility move. Most landing pages make up comparison data. Citing sources is honest and differentiating.
@@ -77,7 +77,7 @@ This is the weakest section. Three fabricated text thread testimonials from "Ren
 "Names and businesses shared with permission" is a legal disclaimer that implies these are real — but the product is in pre-launch (no customers yet). This note is either misleading or describes internal beta testers who sound suspiciously articulate.
 
 At 5.5 this section actively hurts the page. It would be better to:
-- Replace with 3 honest "scenarios" framed as hypotheticals ("Here's how a salon owner would use TextMarketer")
+- Replace with 3 honest "scenarios" framed as hypotheticals ("Here's how a salon owner would use Sidekick")
 - Or remove it entirely and let the demo section do the social proof work
 - Or clearly label them as "early access testers" with extremely specific outcomes and real names only if available
 

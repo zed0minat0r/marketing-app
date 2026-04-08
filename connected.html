@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Account Connected — TextMarketer</title>
+  <title>Account Connected — Sidekick</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -108,12 +108,12 @@
       content.innerHTML = `
         <div class="icon success">&#10003;</div>
         <h1>${platformDisplay} Connected</h1>
-        <p>Your ${platformDisplay} account is now linked to TextMarketer. You can close this tab and return to your messages.</p>
+        <p>Your ${platformDisplay} account is now linked to Sidekick. You can close this tab and return to your messages.</p>
         <div class="instructions">
           <p><strong>What's next</strong></p>
           <p>Try texting: "Write a post about our latest special" — I'll draft it and ask for your approval before posting.</p>
         </div>
-        <div class="brand">TextMarketer</div>
+        <div class="brand">Sidekick</div>
       `;
     } else {
       const errorMsg = reason
@@ -128,7 +128,7 @@
           <p><strong>Try again</strong></p>
           <p>Text "Connect ${platformDisplay}" to get a new link. Links expire after 15 minutes.</p>
         </div>
-        <div class="brand">TextMarketer</div>
+        <div class="brand">Sidekick</div>
       `;
     }
   </script>

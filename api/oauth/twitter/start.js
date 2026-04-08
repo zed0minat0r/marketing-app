@@ -69,7 +69,7 @@ module.exports = async function handler(req, res) {
       });
 
     const clientId = process.env.TWITTER_CLIENT_ID;
-    const appUrl = process.env.APP_URL || 'https://textmarketer.com';
+    const appUrl = process.env.APP_URL || 'https://sidekick.app';
     const redirectUri = encodeURIComponent(`${appUrl}/api/oauth/twitter/callback`);
     const scopeEncoded = encodeURIComponent(TWITTER_SCOPES);
 
