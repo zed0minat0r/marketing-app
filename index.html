@@ -54,8 +54,8 @@ nav.scrolled{border-color:var(--border)}
 .btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
 .btn--primary{background:var(--accent);color:#141210;font-weight:700}
 .btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
-.btn--ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
-.btn--ghost:hover{border-color:var(--text-muted)}
+.btn--ghost{background:transparent;color:var(--text);border:1px solid rgba(245,240,232,0.25)}
+.btn--ghost:hover{border-color:rgba(245,240,232,0.5)}
 
 .demo{padding:80px 0;position:relative}
 .demo__label{text-align:center;margin-bottom:40px}
@@ -258,7 +258,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .faq__q{font-size:0.9rem}
   .faq__a{text-align:left;font-size:0.88rem}
   .pricing__toggle{flex-wrap:wrap;justify-content:center;gap:8px}
-  .proof__quote-meta{text-align:left;align-items:flex-start}
   .hero__trust{font-size:0.78rem;padding:0 8px;text-align:center}
   .hero__stat{font-size:0.78rem;word-break:break-word;overflow-wrap:break-word}
   .plan__name{text-align:left}
@@ -269,8 +268,6 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .compare__mobile-val{font-size:0.82rem;padding:10px 4px}
   .compare__mobile-heading{font-size:0.78rem;padding:8px 6px}
   .compare__cta-row .btn{font-size:0.85rem}
-  .proof__bubble{font-size:0.82rem}
-  .proof__thread-biz{font-size:0.75rem}
 }
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
 .modal-overlay.open{display:flex}
@@ -366,7 +363,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="step">
         <div class="step__num">02</div>
         <h3 class="step__title">AI does the work</h3>
-        <p class="step__desc">We generate posts, ad copy, and review responses in your business's voice — a florist gets warm and seasonal, a plumber gets direct and local. No generic filler.</p>
+        <p class="step__desc">We generate posts, ad copy, and review responses in your business's voice — a florist gets warm and seasonal, a plumber gets direct and local. No generic filler. Each piece lands in your texts, ready for your approval before anything goes live.</p>
       </div>
       <div class="step">
         <div class="step__num">03</div>
@@ -477,7 +474,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       </div>
       <div class="compare__row" role="row">
         <div class="compare__cell compare__cell--feature" role="cell">Posts written in your voice</div>
-        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Partial" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
+        <div class="compare__cell compare__cell--muted" role="cell" aria-label="Partial" style="font-size:1rem;letter-spacing:0.04em">~</div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
@@ -499,7 +496,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="compare__row" role="row">
         <div class="compare__cell compare__cell--feature" role="cell">Transparent flat price</div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__check" aria-label="Yes" style="color:var(--text-muted);font-weight:400">&#10003;</span></div>
+        <div class="compare__cell compare__cell--muted" role="cell" aria-label="Partial" style="font-size:1rem;letter-spacing:0.04em">~</div>
         <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
         <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
       </div>
@@ -747,18 +744,13 @@ function handleStep1(e){
     return;
   }
   emailInput.style.borderColor='';
-  const btn=e.target.querySelector('button');
-  btn.textContent='Got it...';
-  btn.disabled=true;
-  setTimeout(()=>{
-    document.getElementById('step1Form').style.display='none';
-    const title=document.querySelector('.final-cta__title');
-    if(title)title.textContent='One more thing.';
-    document.getElementById('formSub').textContent='What number should we text when your spot opens?';
-    const step2=document.getElementById('step2Form');
-    step2.style.display='flex';
-    document.getElementById('phoneInput').focus();
-  },500);
+  document.getElementById('step1Form').style.display='none';
+  const title=document.querySelector('.final-cta__title');
+  if(title)title.textContent='One more thing.';
+  document.getElementById('formSub').textContent='What number should we text when your spot opens?';
+  const step2=document.getElementById('step2Form');
+  step2.style.display='flex';
+  document.getElementById('phoneInput').focus();
 }
 
 function handleStep2(e){
