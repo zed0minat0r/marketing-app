@@ -642,3 +642,173 @@ Stacking animations. Linear uses 2 animation patterns across the entire page. Ap
 - [Business Texting Trends 2026 - Text-em-all](https://www.text-em-all.com/blog/business-texting-trends-2026)
 - [We Studied 100 Dev Tool Landing Pages - Evil Martians](https://evilmartians.com/chronicles/we-studied-100-devtool-landing-pages-here-is-what-actually-works-in-2025)
 - [Vercel Landing Page UI Design - SaaSFrame](https://www.saasframe.io/examples/vercel-landing-page)
+
+---
+
+---
+
+## 25. NEW: April 7 (Round 3) — Pre-Launch Conversion Mechanics: What Actually Gets 30%+
+
+Previous reports cited general benchmarks (20-40% for well-optimised waitlist pages). This section breaks down the specific structural techniques that separate 30%+ pages from 10-15% pages. All data from analysis of Robinhood (1M signups), Superhuman (180K waitlist), and post-mortems from 2025-2026 SaaS launches.
+
+### The Four-Stage Decision Sequence
+
+Every high-converting pre-launch page works visitors through four invisible stages in this order:
+
+1. **Fit** — "Is this for someone like me?" Achieved with a tight subheadline naming the exact user ("For small business owners who do their own marketing"). Most pages skip this and jump to features.
+2. **Value** — "What do I gain by joining early?" The founding-member pricing lock-in or queue-skip incentive lives here, not in a CTA. The value must be visible before the button.
+3. **Confidence** — "Will this actually exist?" Credibility signals: waitlist count, real quotes, named founders, launch timeline. These reduce the fear of wasting an email address.
+4. **Action** — "How easy is it?" Single field. Phone keyboard on mobile. No second thoughts.
+
+Sidekick currently runs stage 1 (sort of), stage 4 (well), but skips a clear stage 2 value proposition above the CTA and delivers stage 3 (waitlist count) in a footer stat that most mobile visitors never see.
+
+### The Referral Loop Is the Biggest Unlocked Lever
+
+Pages that add a referral mechanic see 3-5x more signups from the same traffic — not from increased conversion rate but from each signup generating additional traffic. Sidekick's FAQ mentions "Refer 3 businesses → skip the queue + 2 months free" but this is buried. The referral mechanic should appear in the confirmation flow (after email submission) and in a visible callout near the waitlist CTA. Robinhood's entire 1M signup list was built almost entirely through referral ordering mechanics.
+
+### The Single-Field Rule
+
+Every field added to a form reduces conversion. Every additional step adds friction. The optimal pre-launch form: one field (email), submit, then collect phone separately in the confirmation state or via follow-up text. Sidekick's two-step form (email then phone) is correctly structured. The gap is that the transition to step 2 does not explain why the phone number matters in the context of this specific product ("We'll text you when your spot opens — that's literally the product"). This explanation should appear in the step 2 form header, not in the fine print.
+
+### Fake Urgency Destroys Trust With 2026 Visitors
+
+Countdown timers that reset, "Only 12 spots left" messaging that never decrements, and fabricated social proof are immediately recognised by modern visitors. The Nigel audit flagged the "203" waitlist count as borderline — research confirms this. If the number is real and tracked, use it. If it is simulated, switch to a round approximation ("200+ businesses") which reads as an estimate rather than a precise (and therefore suspicious) figure.
+
+---
+
+## 26. NEW: April 7 (Round 3) — Social Proof Without Real Customers: 2026 Playbook
+
+This builds on Section 19 (April 7 Round 2) with new research specific to what the best pre-launch pages actually do in 2026. The previous section covered the theory; this section covers specific mechanics.
+
+### Twitter/X Testimonials Are the Highest-Credibility Format
+
+Embedded or screenshot Twitter/X posts from real people who responded to a founder's tweet ("We're building X — would this solve your problem?") are the most trusted form of pre-launch social proof in 2026. They are unedited public statements, verifiable by anyone who clicks through, and organic (the person said it without being paid). Even 3-5 responses to a founder tweet, shown as screenshots with handles visible, outperform polished fabricated testimonials in A/B tests.
+
+Actionable for Sidekick: If the founder has posted anything on X/LinkedIn about the product and received any responses — positive or even curious questions — those are embeddable social proof. "Is this real? I need this." from a real handle is worth more than "Sidekick transformed our marketing." from a fake name.
+
+### Problem-Side Proof Converts Cold Visitors Better Than Product Praise
+
+The research confirms a counterintuitive finding: statistics about the problem convert cold traffic better than testimonials about the solution. "52% of small business owners handle their own marketing. Only 1 in 3 posts consistently." does more persuasion work for a pre-launch page than "This is amazing!" from a beta user, because it makes the visitor identify with the problem before they evaluate the product.
+
+Sidekick's current stats section (the weakest-scoring section in Nigel's audit) attempts this but is undermined by the citation issue and the abstract stat display. The fix: replace the large number display with a short, verifiable sentence in plain text, placed directly above the CTA. "Most small business owners skip marketing for weeks at a time — not because they don't want to, but because they don't have time." This requires no citation and is verifiably true by lived experience.
+
+### "Founding Member" Framing Is Doing More Work Than Testimonials
+
+The highest-converting pre-launch pages in 2025-2026 lean on exclusivity rather than validation. "Be one of the first 500 businesses" and "Founding-member pricing locked in for life" convert better than testimonials because they make the visitor feel like an early adopter rather than a skeptic being sold to. The psychology shifts from "prove it to me" to "I want to be in before everyone else."
+
+Sidekick has the bones of this (queue position, referral mechanics) but has not committed to the founding-member identity fully. The pricing section could anchor this: rename the plans "Founder Starter / Founder Growth / Founder Pro" during the waitlist period with a single line: "Waitlist members lock in these rates for life. Price increases at public launch."
+
+---
+
+## 27. NEW: April 7 (Round 3) — Scroll Animation Performance: Hard Data
+
+Previous reports (Sections 21 and 24) addressed this qualitatively. This section provides specific performance numbers from 2025-2026 testing data.
+
+### The INP Problem (Interaction to Next Paint, 2026 Standard)
+
+Google replaced First Input Delay with INP as the Core Web Vitals standard in 2025. INP measures responsiveness throughout the entire session, not just on first click. This change specifically penalises pages with heavy scroll handlers because:
+
+- A scroll event listener that fires continuously can block the main thread and create poor INP scores
+- Poor INP (over 200ms) now directly impacts Google ranking
+- 47-48% of mobile websites fail Core Web Vitals — the leading cause is scroll-intensive pages
+
+### Specific Overhead Numbers
+
+From 2025-2026 performance benchmarks:
+
+| Animation type | CPU time per frame | LCP impact |
+|---------------|-------------------|------------|
+| Fade-in (CSS, transform only) | 12-18ms | Minimal |
+| Parallax / scroll-linked position | 35-52ms | +1.1-2.7s |
+| Sticky positioning with JS updates | 28-45ms | +0.8-2.4s |
+| Canvas requestAnimationFrame | 8-14ms (GPU) | Minimal |
+
+**The key number:** Parallax/scroll-tracking LCP averages 3.2-4.8 seconds vs. 2.1 seconds for static equivalents. Every second of LCP above 2.5 seconds increases bounce rate by 32%.
+
+### What This Means for Sidekick's Scroll Architecture
+
+Sidekick uses scroll event listeners for the how-it-works conversation, the features carousel, and the hero wordmark shrink. These are the exact pattern that causes INP issues on mid-range Android devices. The fix is not to remove the effects — they are the best part of the page — but to debounce or throttle the scroll listeners and offload position calculations to CSS where possible.
+
+Specific recommendation: Convert the hero wordmark shrink from a JS scroll listener to a CSS `position: sticky` + `scale()` transform. The CSS engine handles this on the compositor thread, bypassing the main thread entirely. No JS, no INP impact, same visual result.
+
+### Mobile Bounce Rate Risk Is Real But Overstated
+
+One e-commerce brand removed extensive scroll animations from their product pages and saw conversion rates increase by 3-5% while bounce rates dropped. However, research also shows that lightweight conversation-like animations (which is closer to Sidekick's pattern) saw a 30% boost in engagement and a 22% drop in bounce rates. The distinction is between purposeful narrative animations (what Sidekick has) and decorative parallax effects (what the e-commerce brand removed). Sidekick's scroll-driven SMS conversation is purposeful — removing it would likely hurt conversion, not help. The priority is performance optimisation (debounced listeners, CSS offloading), not removal.
+
+---
+
+## 28. NEW: April 7 (Round 3) — Competitor Updates: Emitrr, Salesmsg AI 2.0, Podium
+
+### Emitrr — Now the Closest AI-Native Affordable Competitor
+
+Emitrr has moved from a generic SMS platform to a specifically AI-native local business tool. Their "AI Agent Sarah" positions them directly against Sidekick's audience. Key 2026 updates:
+
+- **Pricing:** Standard plan starts at $42/month for 500 message credits. AI agents available as a flat $99/month add-on. Still requires a web dashboard.
+- **AI capabilities:** Auto-response, message translation, message tuning, AI rule engine — all bolt-on features on top of a traditional dashboard.
+- **HIPAA compliance:** Specifically targeting healthcare and medical businesses — a vertical Sidekick has not addressed.
+- **Capterra 5/5 support rating:** Strong reviews, growing presence.
+- **Still dashboard-required:** No text-first interface. Emitrr has the AI but not the "no dashboard" positioning.
+
+The gap Sidekick exploits against Emitrr: Emitrr is still a web app with AI features. It is not a conversational interface that lives in the owner's SMS app.
+
+### Salesmsg AI Agents 2.0 — Upgraded and Now a Real Threat
+
+Salesmsg shipped significant AI updates in late 2025 and March 2026. These are material changes since last scouted:
+
+- **AI Agents 2.0:** Broadcast reply tools, inbox automation, flexible enrollment, pause/resume controls. Includes a booking AI agent (schedules appointments over SMS) and an AI calling agent (voice conversations).
+- **IVR SMS integration:** Automatically texts callers when they press keys in IVR menu — bridging voice and SMS.
+- **AI Knowledge Base:** Upgraded to answer questions from business-specific documents, not just generic responses.
+- **Pricing:** Still credit-based starting at $25/month. Dashboard-required.
+
+Salesmsg is getting closer to Sidekick's vision but is building it as a feature layer on top of a CRM/sales tool aimed at sales teams, not small business owners. Their onboarding is still complex.
+
+### Podium — Doubled Down on AI Employee, Still Expensive
+
+Podium's 2026 positioning is now "AI Employee" as a core product. The AI Employee handles calls, texts, and web chat 24/7 and is claimed to generate "30% more sales." Key facts:
+
+- **Pro plan: $599/month per location.** AI Employee is an add-on cost on top of this.
+- **Pricing still opaque:** No public pricing on the main site; requires a sales call. Users report surprise billing for 10DLC compliance and extra seats.
+- **Target is local business** (salons, auto dealerships, healthcare, furniture) — exact same audience as Sidekick.
+- **No text-first interface:** Podium is a full communication platform with webchat, phone, reviews, and payments. The SMS component is one of many features.
+
+The key attack vector against Podium remains the price gap: $599/month vs. $49/month. For the same small business owner who uses Podium for reviews and payments, Sidekick is not a replacement — it is a supplement. But for the owner who is considering Podium only for marketing, Sidekick is a 12x cheaper alternative with a simpler interface.
+
+---
+
+## 29. NEW: April 7 (Round 3) — The Single Biggest Gap vs. Best Pre-Launch Pages
+
+Nigel scored the page at 7.6 and identified the trust layer as the ceiling. Research confirms and narrows this to one specific structural gap that best-in-class pre-launch pages have and Sidekick does not.
+
+**The missing element: a visible, specific launch promise.**
+
+The highest-converting waitlist pages — Superhuman, Robinhood, Notion AI beta — all shared one structural element Sidekick lacks: a specific, visible commitment about what happens after signup and when. Not "we'll be in touch." Not "join the waitlist." A precise promise: "We open access in waves of 50 businesses starting May 12. You'll get a personal text from our team when your wave opens."
+
+This specificity does three things:
+1. It makes the launch feel real (a date exists, the team has a plan)
+2. It sets post-signup expectations (reducing the anxiety that makes people unsubscribe or ignore the launch email)
+3. It ties directly into Sidekick's product mechanic — the promise that you will be personally texted is itself the first demo of the product
+
+Sidekick's confirmation flow currently says "You are #[N] in line" and gives a referral prompt. This is good. What is missing is the "here is exactly what happens next and when" sentence. The best pre-launch pages treat the confirmation state as the most important moment — when the visitor is warmest — and invest heavily in it.
+
+Actionable: Add one sentence to the post-submission confirmation: "We'll personally text you when your spot opens — that's the product, starting with you." No date required if one isn't set, but a rough timeframe ("this spring") is better than silence.
+
+---
+
+### New Sources (April 7 Round 3)
+- [Waitlist Landing Page Examples - Flowjam](https://www.flowjam.com/blog/waitlist-landing-page-examples-10-high-converting-pre-launch-designs-how-to-build-yours)
+- [Pre-Launch Waitlist Strategy - Kickoff Labs](https://kickofflabs.com/blog/pre-launch-waitlist-guide/)
+- [Social Proof for SaaS Landing Pages 2026 - LaunchWall](https://launchwall.online/blog/social-proof-for-saas-landing-pages)
+- [12 Best Ways to Use Landing Page Social Proof 2026 - Nudgify](https://www.nudgify.com/social-proof-landing-pages/)
+- [The Ultimate Social Proof Strategy for SaaS 2026 - Ravefy](https://ravefy.io/blog/social-proof-strategy-for-saas-landing-pages)
+- [Scroll-Driven Animations Performance - Everything Design](https://www.everything.design/blog/scroll-animations-performance)
+- [Scrolling Effects in Web Design 2026 - Digital Silk](https://www.digitalsilk.com/digital-trends/scrolling-effects/)
+- [Parallax Scrolling Performance - Webtegrity](https://www.webtegrity.com/why-parallax-scrolling-can-hurt-performance/)
+- [Core Web Vitals 2026 Optimization - Sky SEO Digital](https://skyseodigital.com/core-web-vitals-optimization-complete-guide-for-2026/)
+- [Animation Conversion Rates - Educational Voice](https://educationalvoice.co.uk/animation-conversion-rates/)
+- [Emitrr Pricing & Plans 2026 - KrispCall](https://krispcall.com/general/emitrr-pricing/)
+- [Salesmsg AI SMS Platform 2026 - GetApp](https://www.getapp.com/marketing-software/a/salesmsg/)
+- [Salesmsg March 2026 Updates - Salesmsg Changelog](https://feedback.salesmessage.com/changelog/march-salesmsg-product-updates-search-ivr-sms-call-recordings-activecampaign-liv)
+- [Podium Pricing Breakdown 2026 - SocialPilot](https://www.socialpilot.co/reviews/blogs/podium-pricing)
+- [Hero Section Design Best Practices 2026 - Perfect Afternoon](https://www.perfectafternoon.com/2025/hero-section-design/)
+- [10 Best Landing Page Designs 2026 - The Thunderclap](https://www.thethunderclap.com/blog/best-landing-page-designs)
+- [Best Pre-Launch Landing Page Examples 2026 - LaunchBoom](https://www.launchboom.com/crowdfunding-tips/best-pre-launch-landing-page-examples/)
