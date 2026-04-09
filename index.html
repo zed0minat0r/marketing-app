@@ -186,7 +186,11 @@ nav.scrolled{border-color:var(--border)}
 .features{padding:120px 0}
 .features__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--border);border-bottom:none}
 .feature{padding:32px 36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px;position:relative}
-.feature:nth-child(2n){border-right:none}
+.feature:nth-child(3),.feature:nth-child(5){border-right:none}
+.feature--hero{grid-column:1/-1;border-right:none;padding:48px 48px 44px;display:grid;grid-template-columns:1fr 1fr;gap:0 56px;align-items:start}
+.feature--hero .feature__cmd{grid-column:1/-1;margin-bottom:4px}
+.feature--hero .feature__title{font-size:1.35rem;letter-spacing:-0.03em;line-height:1.15;align-self:start}
+.feature--hero .feature__desc{font-size:0.92rem;line-height:1.65;align-self:start;color:var(--text-muted)}
 .feature__cmd{font-family:var(--mono);font-size:0.75rem;font-weight:400;color:var(--accent);letter-spacing:0.04em;line-height:1;opacity:0.7;min-height:1em}
 .feature__title{font-size:0.95rem;font-weight:700;letter-spacing:-0.02em;line-height:1.25}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
@@ -346,6 +350,9 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .steps{grid-template-columns:1fr;gap:28px}
   .features__grid{grid-template-columns:1fr}
   .feature{border-right:none}
+  .feature--hero{grid-column:auto;padding:32px 24px;display:flex;flex-direction:column;gap:10px}
+  .feature--hero .feature__title{font-size:1.05rem}
+  .feature--hero .feature__desc{font-size:0.88rem}
   .pricing__grid{grid-template-columns:1fr;gap:16px}
   .plan--featured{order:-1;overflow:visible}
   .plan__price{justify-content:flex-start}
@@ -530,7 +537,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
     <div class="section-label reveal">What you get</div>
     <h2 class="section-title reveal">Everything that was on your plate, handled.</h2>
     <div class="features__grid">
-      <div class="feature reveal">
+      <div class="feature feature--hero reveal">
         <div class="feature__cmd" data-cmd='&gt; "run an ad"'></div>
         <h3 class="feature__title">A Facebook ad in 30 seconds</h3>
         <p class="feature__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
