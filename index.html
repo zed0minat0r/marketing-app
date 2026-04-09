@@ -1403,6 +1403,26 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero__sub{font-size:0.9rem;margin-bottom:24px;max-width:100%;text-align:left}
   .hero__cta-row{margin-bottom:16px;gap:10px}
   .hero__trust{font-size:0.75rem;letter-spacing:0.04em;margin-top:4px}
+
+  /* Final CTA: reduce padding so content isn't squeezed on 375px */
+  .final-cta__inner{padding:0 20px}
+
+  /* Referral tap targets: bump to 44px minimum */
+  .referral-link-row{flex-wrap:wrap;gap:8px}
+  .referral-link-input{min-height:44px;display:flex;align-items:center;flex:1;min-width:0}
+  .referral-copy-btn{min-height:44px;padding:8px 18px;width:100%}
+
+  /* Demo label: reduce bottom gap on mobile */
+  .demo__label{margin-bottom:40px}
+
+  /* Compare mobile table: allow column header text to wrap */
+  .compare__mobile-heading{word-break:break-word;hyphens:auto}
+
+  /* Feature card body text: explicit left-align on mobile */
+  .feature-card__desc{text-align:left}
+
+  /* Proof waitlist: ensure it doesn't overflow container */
+  .proof__waitlist{width:100%;box-sizing:border-box;padding:16px 20px}
 }
 </style>
 </head>
