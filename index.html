@@ -99,7 +99,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 /* ─── HERO ─── */
 .hero-stage{
   position:relative;
-  height:300vh;
+  height:240vh;
 }
 .hero-sticky{
   position:sticky;
@@ -1197,13 +1197,189 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 .modal__body h3:first-child{margin-top:0}
 .modal__body p{margin-bottom:12px}
 
+/* ─── FILM GRAIN ─── */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:9999;
+  pointer-events:none;
+  width:100%;height:100%;
+  opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+  background-size:180px 180px;
+}
+
+/* ─── SCROLL GLOW ─── */
+#scrollGlow{
+  position:fixed;
+  left:0;right:0;
+  top:0;
+  height:100vh;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(ellipse 60% 40% at 50% 50%, rgba(212,245,60,0.05) 0%, transparent 70%);
+  transition:background 0.1s linear;
+  will-change:background;
+}
+
+/* ─── DOT GRID HERO BACKGROUND ─── */
+.hero__dot-grid{
+  position:absolute;inset:0;
+  pointer-events:none;
+  background-image:radial-gradient(circle, rgba(212,245,60,0.18) 1px, transparent 1px);
+  background-size:28px 28px;
+  animation:dotGridPulse 4s ease-in-out infinite;
+  z-index:0;
+}
+@keyframes dotGridPulse{
+  0%,100%{opacity:0.03}
+  50%{opacity:0.07}
+}
+
+/* ─── HERO TYPEWRITER ─── */
+.hero__typewriter-wrap{
+  margin-top:40px;
+  max-width:600px;
+  text-align:left;
+  background:rgba(255,255,255,0.02);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(212,245,60,0.1);
+  border-radius:8px;
+  padding:20px 24px;
+  position:relative;
+  z-index:2;
+}
+.hero__typewriter-label{
+  font-family:var(--mono);
+  font-size:0.65rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  opacity:0.7;
+  margin-bottom:10px;
+}
+.hero__typewriter-text{
+  font-family:var(--mono);
+  font-size:clamp(1.1rem, 2.8vw, 1.55rem);
+  line-height:1.55;
+  color:var(--text);
+  min-height:2.5em;
+  position:relative;
+}
+.hero__typewriter-text .tw-word{
+  display:inline;
+}
+.hero__typewriter-text .tw-word.glow-word{
+  text-shadow:0 0 12px rgba(212,245,60,0.8), 0 0 24px rgba(212,245,60,0.4);
+  transition:text-shadow 0.5s ease;
+}
+.hero__typewriter-text .tw-cursor{
+  display:inline-block;
+  width:2px;height:1.1em;
+  background:var(--accent);
+  vertical-align:middle;
+  margin-left:2px;
+  animation:cursorBlink 1s step-end infinite;
+}
+@keyframes cursorBlink{
+  0%,100%{opacity:1}
+  50%{opacity:0}
+}
+.hero__typewriter-text.shimmer-active{
+  background:linear-gradient(90deg, var(--text) 0%, var(--accent) 30%, #fff 50%, var(--accent) 70%, var(--text) 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmerSweep 2s linear forwards;
+}
+@keyframes shimmerSweep{
+  from{background-position:200% center}
+  to{background-position:-200% center}
+}
+
+/* ─── HOW IT WORKS: GLASSMORPHISM MESSAGES ─── */
+.how-phone__msgs{
+  perspective:600px;
+}
+.how-msg--in.how-msg-glass{
+  background:rgba(255,255,255,0.04);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(212,245,60,0.15);
+  color:var(--text);
+  transform:translateZ(0px);
+  transition:opacity 0.32s ease, transform 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
+}
+.how-msg--in.how-msg-glass.visible{
+  border-color:rgba(212,245,60,0.35);
+  box-shadow:0 0 16px rgba(212,245,60,0.08), 0 4px 12px rgba(0,0,0,0.3);
+  transform:translateZ(8px);
+}
+.how-msg--out.how-msg-glass{
+  transform:translateZ(-4px);
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* ─── DEMO PHONE PREMIUM ─── */
+.demo__phone-glow{
+  position:relative;
+  display:inline-block;
+}
+.demo__phone-glow .phone{
+  border:1px solid rgba(212,245,60,0.2);
+  box-shadow:
+    0 0 30px rgba(212,245,60,0.08),
+    0 40px 80px rgba(0,0,0,0.5);
+}
+.demo__phone-glow::after{
+  content:'';
+  position:absolute;
+  bottom:-60px;
+  left:10%;
+  right:10%;
+  height:30%;
+  background:inherit;
+  transform:scaleY(-1);
+  opacity:0.12;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%);
+  pointer-events:none;
+  filter:blur(4px);
+}
+
+/* ─── SECTION GRADIENT TRANSITIONS ─── */
+.section-gradient-top{
+  height:1px;
+  background:linear-gradient(to right, transparent, var(--border), transparent);
+  border:none;
+}
+
+/* ─── PRICING GLASSMORPHISM ─── */
+.plan{
+  background:rgba(28,25,23,0.7);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.plan--featured{
+  background:rgba(35,32,24,0.85);
+  box-shadow:0 0 40px rgba(212,245,60,0.12);
+  border:1px solid rgba(212,245,60,0.2) !important;
+}
+
 /* ─── REDUCED MOTION: flat layout ─── */
 @media(prefers-reduced-motion:reduce){
+  body::before{display:none}
+  #scrollGlow{display:none}
+  .hero__dot-grid{animation:none}
+  .hero__typewriter-text{animation:none}
+  .hero__typewriter-text .tw-cursor{animation:none}
   .hero-stage{height:auto}
   .hero-sticky{position:relative;height:auto;min-height:100vh}
   .hero__wordmark{position:relative;top:auto;left:auto;transform:none;font-size:4rem;margin-bottom:24px}
   .hero__content{position:relative;opacity:1;pointer-events:auto;padding:60px 32px 80px}
-  .hero__phone-rise{position:relative;bottom:auto;left:auto;transform:none;margin:40px auto 0}
+  .hero__phone-rise{display:none!important}
   .how-stage{height:auto}
   .how-sticky{position:relative;height:auto;padding:80px 0}
   .how__step-label,.how__step-title,.how__step-desc{opacity:1;transform:none}
@@ -1219,12 +1395,22 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .final-cta{height:auto;padding:140px 0}
 }
 
+/* ─── MOBILE: disable expensive effects ─── */
+@media(max-width:480px){
+  body::before{display:none}
+  #scrollGlow{display:none}
+  .how-msg--in.how-msg-glass{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .hero__dot-grid{animation:none;opacity:0.04}
+  .demo__phone-glow::after{display:none}
+  .plan{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .plan--featured{backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   .container{padding:0 20px}
   .hero__wordmark{font-size:18vw}
-  .hero-stage{height:250vh}
-  .hero__phone-rise{width:280px}
+  .hero-stage{height:200vh}
   .how-stage{height:350vh}
   .how__layout{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:32px 0;padding:0 20px}
   .how__step-col{text-align:center;align-items:center}
@@ -1268,28 +1454,13 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .proof__stat-num{font-size:clamp(4rem,18vw,8rem)}
   .faq__q{font-size:0.92rem}
 
-  /* ── MOBILE HERO: text top half, phone bottom half, clean split ── */
   .hero__content{
-    top:0;
-    right:0;
-    bottom:auto;
-    left:0;
-    height:auto;
-    inset:0 0 auto 0;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:76px 24px 24px;
-    background:var(--bg);
-    z-index:3;
+    padding:76px 24px 40px;
     gap:6px;
   }
-  /* Phone sits below content — visible and properly sized */
-  .hero__phone-rise{
-    top:auto;
-    bottom:0;
-    width:280px;
-    z-index:2;
+  .hero__typewriter-wrap{
+    margin-top:24px;
+    padding:16px 18px;
   }
   .hero__eyebrow{font-size:0.68rem;margin-bottom:20px}
   .hero__eyebrow::before,.hero__eyebrow::after{width:20px}
@@ -1301,6 +1472,9 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 </style>
 </head>
 <body>
+
+<!-- SCROLL GLOW -->
+<div id="scrollGlow"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -1316,35 +1490,32 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 <div class="hero-stage" id="heroStage">
   <div class="hero-sticky" id="heroSticky">
 
+    <!-- Dot grid background -->
+    <div class="hero__dot-grid"></div>
+
     <!-- Massive wordmark that shrinks -->
     <div class="hero__wordmark" id="heroWordmark">Sidekick</div>
 
-    <!-- Phone rising from bottom -->
-    <div class="hero__phone-rise" id="heroPhoneRise">
-      <div class="phone" style="position:relative">
-        <div class="phone__notch"><div class="phone__notch-pill"></div></div>
-        <div class="phone__header">
-          <div class="phone__avatar">TM</div>
-          <div>
-            <div class="phone__name">Sidekick</div>
-            <div class="phone__status" id="heroStatus">&#x25cf; Online</div>
-          </div>
-        </div>
-        <div class="phone__messages" id="heroMessages" style="min-height:260px;max-height:320px"></div>
-        <button class="hero__replay" id="heroReplay" aria-label="Replay animation">&#x21BA; replay</button>
-      </div>
+    <!-- Phone rising from bottom: hidden, replaced by typewriter -->
+    <div class="hero__phone-rise" id="heroPhoneRise" style="display:none">
     </div>
 
     <!-- Hero content fades in after wordmark settles -->
     <div class="hero__content" id="heroContent">
       <div class="hero__eyebrow">AI marketing for small business</div>
       <h1 class="hero__headline">Your marketing team<br>lives in your <em>texts</em></h1>
-      <p class="hero__sub">Sidekick runs your marketing entirely over text — social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
+      <p class="hero__sub">Sidekick runs your marketing entirely over text &mdash; social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
       <div class="hero__cta-row">
         <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
         <button class="btn btn--ghost" onclick="document.getElementById('demo-section').scrollIntoView({behavior:'smooth'})">See how it works</button>
       </div>
       <p class="hero__trust">Plans from $49/mo &nbsp;&middot;&nbsp; 14-day free trial &nbsp;&middot;&nbsp; No credit card</p>
+
+      <!-- Typewriter replaces phone -->
+      <div class="hero__typewriter-wrap" id="heroTypewriterWrap" style="opacity:0;transition:opacity 0.5s ease">
+        <div class="hero__typewriter-label">sidekick &rsaquo; weekly brief</div>
+        <div class="hero__typewriter-text" id="heroTypewriterText"><span class="tw-cursor"></span></div>
+      </div>
     </div>
 
   </div>
@@ -1376,21 +1547,21 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <div class="how-phone__msgs" id="howMsgList">
             <!-- Step 1 messages -->
             <div class="how-msg how-msg--time" data-step="0" data-seq="0">Today 9:41 AM</div>
-            <div class="how-msg how-msg--in" data-step="0" data-seq="1">Hey! I'm Sidekick. What's your business name?</div>
-            <div class="how-msg how-msg--out" data-step="0" data-seq="2">Mike's Pizza</div>
-            <div class="how-msg how-msg--in" data-step="0" data-seq="3">Great! What do you sell, and who's your customer?</div>
-            <div class="how-msg how-msg--out" data-step="0" data-seq="4">Wood-fired pizza. Families &amp; date nights.</div>
-            <div class="how-msg how-msg--in" data-step="0" data-seq="5">Got it. Which platforms — Instagram, Facebook, or both?</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="0" data-seq="1">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?</div>
+            <div class="how-msg how-msg--out how-msg-glass" data-step="0" data-seq="2">Mike&rsquo;s Pizza</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="0" data-seq="3">Great! What do you sell, and who&rsquo;s your customer?</div>
+            <div class="how-msg how-msg--out how-msg-glass" data-step="0" data-seq="4">Wood-fired pizza. Families &amp; date nights.</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="0" data-seq="5">Got it. Which platforms &mdash; Instagram, Facebook, or both?</div>
             <!-- Step 2 messages -->
-            <div class="how-msg how-msg--out" data-step="1" data-seq="0">Both please</div>
-            <div class="how-msg how-msg--in" data-step="1" data-seq="1">Here are 3 posts for this week:</div>
-            <div class="how-msg how-msg--in" data-step="1" data-seq="2">1/ Friday night, wood-fired magic. Our Margherita never misses. Link in bio.</div>
-            <div class="how-msg how-msg--in" data-step="1" data-seq="3">2/ Date night sorted. Reserve your table before the weekend fills up.</div>
-            <div class="how-msg how-msg--in" data-step="1" data-seq="4">3/ Family pizza night? We've got the table. Bring everyone.</div>
+            <div class="how-msg how-msg--out how-msg-glass" data-step="1" data-seq="0">Both please</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="1">Here are 3 posts for this week:</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="2">1/ Friday night, wood-fired magic. Our Margherita never misses. Link in bio.</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="3">2/ Date night sorted. Reserve your table before the weekend fills up.</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="4">3/ Family pizza night? We&rsquo;ve got the table. Bring everyone.</div>
             <!-- Step 3 messages -->
-            <div class="how-msg how-msg--out" data-step="2" data-seq="0">YES</div>
-            <div class="how-msg how-msg--in" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
-            <div class="how-msg how-msg--in" data-step="2" data-seq="2">You'll see reach stats here next Monday. That's it — go make some pizza.</div>
+            <div class="how-msg how-msg--out how-msg-glass" data-step="2" data-seq="0">YES</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
+            <div class="how-msg how-msg--in how-msg-glass" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
           </div>
           <div class="how-check" id="howCheck">
             <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1502,23 +1673,25 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <p class="demo__sub">Pick a scenario and walk through a real conversation</p>
     </div>
     <div class="demo__phone-wrap" id="demoPhoneWrap">
-      <div class="phone">
-        <div class="phone__notch"><div class="phone__notch-pill"></div></div>
-        <div class="phone__header">
-          <div class="phone__avatar">TM</div>
-          <div>
-            <div class="phone__name">Sidekick</div>
-            <div class="phone__status">&#x25cf; Online</div>
+      <div class="demo__phone-glow">
+        <div class="phone">
+          <div class="phone__notch"><div class="phone__notch-pill"></div></div>
+          <div class="phone__header">
+            <div class="phone__avatar">TM</div>
+            <div>
+              <div class="phone__name">Sidekick</div>
+              <div class="phone__status">&#x25cf; Online</div>
+            </div>
           </div>
-        </div>
-        <div class="phone__messages" id="chatMessages">
-          <div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today?</div>
-        </div>
-        <div class="phone__prompts" id="chatPrompts">
-          <button class="prompt-btn" data-flow="posts">Write this week's posts</button>
-          <button class="prompt-btn" data-flow="stats">How am I doing?</button>
-          <button class="prompt-btn" data-flow="ad">Create a Facebook ad</button>
-          <button class="prompt-btn" data-flow="audit">Audit my website</button>
+          <div class="phone__messages" id="chatMessages">
+            <div class="msg msg--in">Hey! I&rsquo;m your marketing assistant. What would you like to do today?</div>
+          </div>
+          <div class="phone__prompts" id="chatPrompts">
+            <button class="prompt-btn" data-flow="posts">Write this week&rsquo;s posts</button>
+            <button class="prompt-btn" data-flow="stats">How am I doing?</button>
+            <button class="prompt-btn" data-flow="ad">Create a Facebook ad</button>
+            <button class="prompt-btn" data-flow="audit">Audit my website</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1817,6 +1990,25 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 /* ─── PREFERSMOTION CHECK ─── */
 const prefersMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
 
+/* ─── SCROLL GLOW ─── */
+(function initScrollGlow() {
+  const glowEl = document.getElementById('scrollGlow');
+  if (!glowEl || !prefersMotion) return;
+  let ticking = false;
+  function updateGlow() {
+    const scrollY = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const pct = maxScroll > 0 ? scrollY / maxScroll : 0;
+    const centerY = 20 + pct * 80;
+    glowEl.style.background = `radial-gradient(ellipse 60% 40% at 50% ${centerY}%, rgba(212,245,60,0.05) 0%, transparent 70%)`;
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(updateGlow); ticking = true; }
+  }, {passive: true});
+  updateGlow();
+})();
+
 /* ─── NAV ─── */
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
@@ -1827,7 +2019,6 @@ window.addEventListener('scroll', () => {
 (function initHero() {
   const stage = document.getElementById('heroStage');
   const wordmark = document.getElementById('heroWordmark');
-  const phoneRise = document.getElementById('heroPhoneRise');
   const heroContent = document.getElementById('heroContent');
 
   if (!prefersMotion) {
@@ -1839,38 +2030,28 @@ window.addEventListener('scroll', () => {
     wordmark.style.marginBottom = '24px';
     heroContent.style.opacity = '1';
     heroContent.classList.add('visible');
-    phoneRise.style.transform = 'translateX(-50%) translateY(0)';
-    phoneRise.style.opacity = '1';
     return;
   }
 
-  let heroAnimDone = false;
+  let typewriterTriggered = false;
 
   function updateHero() {
     const stageRect = stage.getBoundingClientRect();
     const stageH = stage.offsetHeight;
     const vh = window.innerHeight;
 
-    // scrolled through hero: 0 at top, 1 at end of stage
     const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
-
-    // Phase 1: 0 -> 0.35: wordmark shrinks, moves up
-    // Phase 2: 0.35 -> 0.6: phone rises, wordmark continues shrinking
-    // Phase 3: 0.6 -> 0.85: content fades in, wordmark becomes logo-sized
-    // Phase 4: 0.85+: hero stays put
 
     // Wordmark transform
     const wPhase = Math.min(1, scrolled / 0.85);
     const easedW = 1 - Math.pow(1 - wPhase, 2);
-    // Start: fontSize ~20vw centered. End: ~2.2rem at top-left (nav logo position)
     const startSize = Math.min(window.innerWidth * 0.20, 280);
-    const endSize = 18; // px, nav logo size
+    const endSize = 18;
     const currentSize = startSize - (startSize - endSize) * easedW;
 
-    // Position: start centered, end at nav (top:30px left:32px)
     const startX = window.innerWidth / 2;
     const startY = window.innerHeight / 2;
-    const endX = 48; // ~nav logo position
+    const endX = 48;
     const endY = 30;
     const currentX = startX + (endX - startX) * easedW;
     const currentY = startY + (endY - startY) * easedW;
@@ -1881,17 +2062,6 @@ window.addEventListener('scroll', () => {
     wordmark.style.transform = 'translate(-50%, -50%)';
     wordmark.style.opacity = scrolled > 0.7 ? String(1 - (scrolled - 0.7) / 0.15) : '1';
 
-    // Phone rise: phase 0.3 -> 0.65
-    const pPhase = Math.max(0, Math.min(1, (scrolled - 0.3) / 0.35));
-    const easedP = 1 - Math.pow(1 - pPhase, 3);
-    // From bottom (translateY 100%) to resting position
-    // On mobile: phone peeks from bottom — solid bg on content above prevents bleed-through
-    const phoneEndY = window.innerWidth <= 480 ? 15 : -35;
-    const phoneY = 100 - (100 - phoneEndY) * easedP;
-    const phoneScale = 0.7 + 0.3 * easedP;
-    phoneRise.style.transform = `translateX(-50%) translateY(${phoneY}%) scale(${phoneScale})`;
-    phoneRise.style.opacity = String(Math.min(1, pPhase * 2));
-
     // Content fade in: phase 0.6 -> 0.85
     const cPhase = Math.max(0, Math.min(1, (scrolled - 0.60) / 0.25));
     heroContent.style.opacity = String(cPhase);
@@ -1901,10 +2071,10 @@ window.addEventListener('scroll', () => {
       heroContent.classList.remove('visible');
     }
 
-    // Start hero auto-play once phone is in position
-    if (pPhase >= 0.85 && !heroAnimDone) {
-      heroAnimDone = true;
-      runHeroConvo();
+    // Trigger typewriter once content is fading in
+    if (cPhase >= 0.5 && !typewriterTriggered) {
+      typewriterTriggered = true;
+      startTypewriter();
     }
   }
 
@@ -1912,59 +2082,63 @@ window.addEventListener('scroll', () => {
   updateHero();
 })();
 
-/* ─── HERO AUTO-PLAY ─── */
-const heroConvo = [
-  {type:'in', text:`Hey! I'm your marketing assistant. What would you like to do today?`, delay:400},
-  {type:'out', text:`Write this week's posts`, delay:900},
-  {type:'typing', delay:1400},
-  {type:'in', text:`Here are 3 posts for Joe's Coffee:\n\nMon: "Monday mornings hit different."\n\nWed: "New seasonal menu dropping Friday — cold brew & oat milk."\n\nFri: "Weekend vibes start here. Open till 8pm."`, delay:500},
-  {type:'in', text:`Reply YES to schedule all, or EDIT to change one.`, delay:800},
-  {type:'out', text:`YES`, delay:1000},
-  {type:'typing', delay:800},
-  {type:'in', text:`Done. All 3 posts are scheduled. I'll text you a Monday morning summary.`, delay:2800},
-];
-let heroConvoRan = false;
+/* ─── HERO TYPEWRITER ─── */
+const TYPEWRITER_MESSAGE = `Hey Mike, here are 3 posts for this week. Reply YES to schedule all, or EDIT to change one.`;
 
-async function runHeroConvo() {
-  if (heroConvoRan) return;
-  heroConvoRan = true;
-  const heroMsgs = document.getElementById('heroMessages');
-  const replayBtn = document.getElementById('heroReplay');
-  if (!heroMsgs) return;
-  heroMsgs.innerHTML = '';
-  if (replayBtn) replayBtn.classList.remove('visible');
-  for (const msg of heroConvo) {
-    await new Promise(r => setTimeout(r, msg.delay));
-    if (msg.type === 'typing') {
-      const t = document.createElement('div');
-      t.className = 'msg msg--typing';
-      t.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-      heroMsgs.appendChild(t);
-      heroMsgs.scrollTop = heroMsgs.scrollHeight;
-      await new Promise(r => setTimeout(r, 1100));
-      t.remove();
-    } else {
-      const d = document.createElement('div');
-      d.className = 'msg msg--' + (msg.type === 'out' ? 'out' : 'in');
-      d.textContent = msg.text;
-      d.style.whiteSpace = 'pre-wrap';
-      heroMsgs.appendChild(d);
-      heroMsgs.scrollTop = heroMsgs.scrollHeight;
-    }
+let typewriterDone = false;
+
+async function startTypewriter() {
+  if (typewriterDone) return;
+  typewriterDone = true;
+
+  const wrap = document.getElementById('heroTypewriterWrap');
+  const textEl = document.getElementById('heroTypewriterText');
+  if (!wrap || !textEl) return;
+
+  wrap.style.opacity = '1';
+
+  const words = TYPEWRITER_MESSAGE.split(' ');
+  textEl.innerHTML = '<span class="tw-cursor"></span>';
+
+  const cursor = textEl.querySelector('.tw-cursor');
+
+  for (let wi = 0; wi < words.length; wi++) {
+    const word = words[wi];
+    const span = document.createElement('span');
+    span.className = 'tw-word';
+    span.textContent = (wi === 0 ? '' : ' ') + word;
+    textEl.insertBefore(span, cursor);
+
+    // Glow as it appears
+    span.classList.add('glow-word');
+    await new Promise(r => setTimeout(r, 90));
+    setTimeout(() => {
+      span.style.textShadow = 'none';
+      span.classList.remove('glow-word');
+    }, 500);
+
+    await new Promise(r => setTimeout(r, 75));
   }
-  if (replayBtn) replayBtn.classList.add('visible');
+
+  // Shimmer sweep after done
+  await new Promise(r => setTimeout(r, 400));
+  textEl.classList.add('shimmer-active');
+  // After shimmer, remove (keeps cursor)
+  setTimeout(() => {
+    textEl.classList.remove('shimmer-active');
+    textEl.style.color = 'var(--text)';
+  }, 2200);
 }
 
-async function replayHeroConvo() {
-  heroConvoRan = false;
-  await runHeroConvo();
+// If reduced motion, show static text immediately
+if (!prefersMotion) {
+  const wrap = document.getElementById('heroTypewriterWrap');
+  const textEl = document.getElementById('heroTypewriterText');
+  if (wrap && textEl) {
+    wrap.style.opacity = '1';
+    textEl.innerHTML = TYPEWRITER_MESSAGE + '<span class="tw-cursor"></span>';
+  }
 }
-
-const heroReplayBtn = document.getElementById('heroReplay');
-if (heroReplayBtn) heroReplayBtn.addEventListener('click', replayHeroConvo);
-
-// If reduced motion, just run it immediately
-if (!prefersMotion) { runHeroConvo(); }
 
 /* ─── HOW IT WORKS: SCROLL-DRIVEN SMS CONVO ─── */
 (function initHow() {
@@ -2310,7 +2484,7 @@ function handleStep2(e) {
     document.getElementById('step2Form').style.display = 'none';
     document.getElementById('formSub').style.display = 'none';
     const title = document.querySelector('.final-cta__title');
-    if (title) title.textContent = `You're in.`;
+    if (title) title.textContent = `You\u2019re in.`;
     const trust = document.querySelector('.final-cta__trust');
     if (trust) trust.style.display = 'none';
     const note = document.querySelector('.signup-note');
@@ -2360,35 +2534,35 @@ document.querySelectorAll('.faq__q').forEach(q => {
 /* ─── DEMO FLOWS ─── */
 const flows = {
   posts: [
-    {type:'out', text:`Write this week's posts`},
-    {type:'typing', delay:1200},
-    {type:'in', text:`Here are 5 posts for Joe's Coffee this week:`},
-    {type:'in', text:`Mon: "Monday mornings hit different with a fresh pour-over. What's your go-to order?"\n\nWed: "New seasonal menu dropping Friday — cold brew with house-made vanilla and oat milk"\n\nFri: "Weekend vibes start here. Open till 8pm tonight"`},
-    {type:'in', text:`Reply YES to schedule all, or EDIT with the post number to change one.`},
+    {type:`out`, text:`Write this week's posts`},
+    {type:`typing`, delay:1200},
+    {type:`in`, text:`Here are 5 posts for Joe's Coffee this week:`},
+    {type:`in`, text:`Mon: "Monday mornings hit different with a fresh pour-over. What's your go-to order?"\n\nWed: "New seasonal menu dropping Friday — cold brew with house-made vanilla and oat milk"\n\nFri: "Weekend vibes start here. Open till 8pm tonight"`},
+    {type:`in`, text:`Reply YES to schedule all, or EDIT with the post number to change one.`},
   ],
   stats: [
-    {type:'out', text:`How am I doing?`},
-    {type:'typing', delay:1000},
-    {type:'in', text:`This week for Joe's Coffee:\n\n- 5 posts published\n- 1,247 impressions (+18%)\n- 43 new followers\n- 4.8 avg review (2 new)\n- Best post: Monday pour-over (312 likes)`},
-    {type:'in', text:`Your Wednesday posts get 2x engagement. Want me to schedule more mid-week content?`},
+    {type:`out`, text:`How am I doing?`},
+    {type:`typing`, delay:1000},
+    {type:`in`, text:`This week for Joe's Coffee:\n\n- 5 posts published\n- 1,247 impressions (+18%)\n- 43 new followers\n- 4.8 avg review (2 new)\n- Best post: Monday pour-over (312 likes)`},
+    {type:`in`, text:`Your Wednesday posts get 2x engagement. Want me to schedule more mid-week content?`},
   ],
   ad: [
-    {type:'out', text:`Create a Facebook ad`},
-    {type:'typing', delay:1500},
-    {type:'in', text:`Here are 3 ad variations for Joe's Coffee:`},
-    {type:'in', text:`Ad 1: "Skip the line, not the coffee"\nOrder ahead, pick up in 60 seconds.\n[Order Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville's favorite — now with online ordering"\nFreshly roasted, locally loved.\n[Try It] — Est. reach: 3,100 locals`},
-    {type:'in', text:`Budget: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.`},
+    {type:`out`, text:`Create a Facebook ad`},
+    {type:`typing`, delay:1500},
+    {type:`in`, text:`Here are 3 ad variations for Joe's Coffee:`},
+    {type:`in`, text:`Ad 1: "Skip the line, not the coffee"\nOrder ahead, pick up in 60 seconds.\n[Order Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville's favorite — now with online ordering"\nFreshly roasted, locally loved.\n[Try It] — Est. reach: 3,100 locals`},
+    {type:`in`, text:`Budget: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.`},
   ],
   audit: [
-    {type:'out', text:`Audit my website`},
-    {type:'typing', delay:1800},
-    {type:'in', text:`Audit for joescoffee.com:\n\nScore: 6.2/10\n\n[OK] Mobile-friendly\n[OK] Fast load (1.8s)\n[WARN] No ordering CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on site\n[FAIL] Missing SEO meta tags`},
-    {type:'in', text:`I can fix the top 3 issues for you. Reply FIX to start, or DETAILS for the full report.`},
+    {type:`out`, text:`Audit my website`},
+    {type:`typing`, delay:1800},
+    {type:`in`, text:`Audit for joescoffee.com:\n\nScore: 6.2/10\n\n[OK] Mobile-friendly\n[OK] Fast load (1.8s)\n[WARN] No ordering CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on site\n[FAIL] Missing SEO meta tags`},
+    {type:`in`, text:`I can fix the top 3 issues for you. Reply FIX to start, or DETAILS for the full report.`},
   ]
 };
 
-const messagesEl = document.getElementById('chatMessages');
-const promptsEl = document.getElementById('chatPrompts');
+const messagesEl = document.getElementById(`chatMessages`);
+const promptsEl = document.getElementById(`chatPrompts`);
 const flowLabels = {
   posts: `Write this week's posts`,
   stats: `How am I doing?`,
@@ -2400,7 +2574,7 @@ let completedFlows = new Set();
 
 function resetDemo() {
   completedFlows.clear();
-  messagesEl.innerHTML = `<div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today?</div>`;
+  messagesEl.innerHTML = `<div class="msg msg--in">Hey! I\u2019m your marketing assistant. What would you like to do today?</div>`;
   buildPrompts(null);
 }
 
@@ -2411,7 +2585,7 @@ function buildPrompts(excludeFlow) {
   if (remaining.length === 0) {
     const sep = document.createElement('div');
     sep.style.cssText = 'width:100%;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono);letter-spacing:0.04em;padding:4px 0 2px;text-align:center';
-    sep.textContent = `// that's the full tour`;
+    sep.textContent = `// that\u2019s the full tour`;
     promptsEl.appendChild(sep);
     const resetBtn = document.createElement('button');
     resetBtn.className = 'prompt-btn';
