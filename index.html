@@ -197,22 +197,6 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   letter-spacing:0.06em;
 }
 
-/* Phone rising from bottom */
-.hero__phone-rise{
-  position:absolute;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%) translateY(100%) scale(0.7);
-  will-change:transform,opacity;
-  width:340px;
-  max-width:90vw;
-  z-index:1;
-}
-.hero__phone-rise.positioned{
-  bottom:auto;
-  top:50%;
-  transform:translateX(-50%) translateY(-40%) scale(1);
-}
 
 /* ─── PHONE COMPONENT ─── */
 .phone{
@@ -940,6 +924,8 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   background:var(--surface2);
   position:relative;
   z-index:1;
+  box-shadow:0 0 40px rgba(212,245,60,0.08);
+  border:1px solid rgba(212,245,60,0.2) !important;
 }
 .plan--featured::before{
   content:'Most popular';
@@ -1275,19 +1261,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     0 40px 80px rgba(0,0,0,0.5);
 }
 
-/* ─── SECTION GRADIENT TRANSITIONS ─── */
-.section-gradient-top{
-  height:1px;
-  background:linear-gradient(to right, transparent, var(--border), transparent);
-  border:none;
-}
 
-/* ─── PRICING FEATURED ─── */
-.plan--featured{
-  background:var(--surface2);
-  box-shadow:0 0 40px rgba(212,245,60,0.08);
-  border:1px solid rgba(212,245,60,0.2) !important;
-}
 
 /* ─── REDUCED MOTION: flat layout ─── */
 @media(prefers-reduced-motion:reduce){
@@ -1298,8 +1272,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero-sticky{position:relative;height:auto;min-height:100vh}
   .hero__wordmark{position:relative;top:auto;left:auto;transform:none;font-size:4rem;margin-bottom:24px}
   .hero__content{position:relative;opacity:1;pointer-events:auto;padding:60px 32px 80px}
-  .hero__phone-rise{display:none!important}
-  .how-stage{height:auto}
+.how-stage{height:auto}
   .how-sticky{position:relative;height:auto;padding:80px 0}
   .how__step-label,.how__step-title,.how__step-desc{opacity:1;transform:none}
   .how-msg{opacity:1;transform:none}
@@ -1317,7 +1290,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 /* ─── MOBILE: disable expensive effects ─── */
 @media(max-width:480px){
   .hero__dot-grid{animation:none;opacity:0.04}
-  .demo__phone-glow::after{display:none}
 }
 
 /* ─── RESPONSIVE ─── */
@@ -1438,9 +1410,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <!-- Massive wordmark that shrinks -->
     <div class="hero__wordmark" id="heroWordmark">Sidekick</div>
 
-    <!-- Phone rising from bottom: hidden, replaced by typewriter -->
-    <div class="hero__phone-rise" id="heroPhoneRise" style="display:none">
-    </div>
 
     <!-- Hero content fades in after wordmark settles -->
     <div class="hero__content" id="heroContent">
