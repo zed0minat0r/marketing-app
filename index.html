@@ -39,450 +39,1270 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden;scroll-behavior:smooth}
 :root{
-  --bg:#141210;--surface:#1c1917;--surface2:#232018;--border:#332f29;
-  --text:#f5f0e8;--text-muted:#7d7060;--accent:#d4f53c;
-  --green:#4ade80;--red:#f87171;
+  --bg:#0e0d0b;
+  --bg2:#141210;
+  --surface:#1c1917;
+  --surface2:#232018;
+  --border:#2a2620;
+  --border2:#332f29;
+  --text:#f0ebe0;
+  --text-muted:#5e5749;
+  --text-dim:#8a7e6e;
+  --accent:#d4f53c;
+  --accent-dim:rgba(212,245,60,0.08);
+  --green:#4ade80;
+  --red:#f87171;
   --font:'Geist',system-ui,sans-serif;
   --mono:'Geist Mono',monospace;
-  --dim:#3a3628;
 }
-html{font-size:16px}
+html{overflow-x:hidden;font-size:16px;scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--accent);text-decoration:none}
-.container{max-width:1120px;margin:0 auto;padding:0 24px}
-
-/* ─── SECTION DIVIDERS ─── */
-.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent);margin:0}
-
-/* ─── SCROLL REVEAL ─── */
-@media(prefers-reduced-motion:no-preference){
-  .reveal{opacity:0;transform:translateY(40px);transition:opacity 0.6s ease,transform 0.6s ease}
-  .reveal.revealed{opacity:1;transform:translateY(0)}
-  .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.6s ease,transform 0.6s ease}
-  .reveal-left.revealed{opacity:1;transform:translateX(0)}
-  .reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.6s ease,transform 0.6s ease}
-  .reveal-right.revealed{opacity:1;transform:translateX(0)}
-}
+.container{max-width:1120px;margin:0 auto;padding:0 32px}
 
 /* ─── NAV ─── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;background:rgba(20,18,16,0.92);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color 0.3s}
-nav.scrolled{border-color:var(--border)}
-.nav__inner{display:flex;align-items:center;justify-content:space-between}
-.nav__logo{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--text);letter-spacing:-0.02em;display:inline-flex;align-items:center;min-height:44px;gap:8px}
-.nav__logo span{color:var(--accent)}
-.nav__cta{background:var(--accent);color:#141210;padding:10px 20px;min-height:44px;border-radius:6px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;transition:opacity 0.2s;display:inline-flex;align-items:center}
-.nav__cta:hover{opacity:0.9}
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0;height:60px;
+  display:flex;align-items:center;
+  background:rgba(14,13,11,0);
+  transition:background 0.4s ease,border-color 0.4s ease;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:var(--border)}
+.nav__inner{display:flex;align-items:center;justify-content:space-between;width:100%}
+.nav__logo{
+  font-family:var(--mono);font-weight:700;font-size:1rem;
+  color:var(--text);letter-spacing:-0.02em;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.nav__logo-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent);
+  display:inline-block;
+}
+.nav__cta{
+  background:var(--accent);color:#0e0d0b;
+  padding:9px 20px;border-radius:4px;
+  font-size:0.82rem;font-weight:700;
+  border:none;cursor:pointer;
+  transition:opacity 0.2s;
+  display:inline-flex;align-items:center;
+  font-family:var(--font);
+  letter-spacing:0.01em;
+}
+.nav__cta:hover{opacity:0.88}
 
 /* ─── HERO ─── */
-.hero{padding:140px 0 100px;position:relative;overflow:hidden}
-.hero__split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
-.hero__left{display:flex;flex-direction:column}
-.hero__right{display:flex;justify-content:center;align-items:flex-start}
-.hero__phone-wrap{width:100%;max-width:360px;position:relative}
-.hero__replay{position:absolute;bottom:12px;right:12px;background:rgba(20,18,16,0.85);border:1px solid var(--border);color:var(--text-muted);font-family:var(--mono);font-size:0.75rem;letter-spacing:0.04em;padding:5px 10px;border-radius:4px;cursor:pointer;display:none;transition:all 0.15s;z-index:10;min-height:44px;min-width:44px;align-items:center;gap:5px}
-.hero__replay:hover{border-color:var(--accent);color:var(--accent)}
-.hero__replay.visible{display:inline-flex}
-.hero__phone-wrap .phone{max-width:100%;margin:0}
-
-/* Hero phone scale-in */
-@media(prefers-reduced-motion:no-preference){
-  .hero__phone-wrap{
-    transform:scale(0.8);
-    filter:blur(8px);
-    opacity:0;
-    transition:transform 0.9s cubic-bezier(0.22,1,0.36,1),filter 0.9s ease,opacity 0.9s ease;
-    transition-delay:0.3s
-  }
-  .hero__phone-wrap.phone-revealed{
-    transform:scale(1);
-    filter:blur(0);
-    opacity:1
-  }
+.hero-stage{
+  position:relative;
+  height:300vh;
+}
+.hero-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
 }
 
-.hero__title{font-size:clamp(2.6rem,5.5vw,4.6rem);font-weight:700;line-height:1.02;letter-spacing:-0.04em;margin-bottom:28px;text-wrap:balance}
-.hero__title em{font-style:normal}
-
-/* Gradient animated word */
-.hero__word-grad{
-  background:linear-gradient(90deg,var(--accent) 0%,#fff 50%,var(--accent) 100%);
-  background-size:200% auto;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text
-}
-@media(prefers-reduced-motion:no-preference){
-  .hero__word-grad{animation:gradShift 4s linear infinite}
-}
-@keyframes gradShift{to{background-position:200% center}}
-
-/* Word-by-word hero animation */
-@media(prefers-reduced-motion:no-preference){
-  .hero__word{display:inline-block;opacity:0;transform:translateY(16px);transition:opacity 0.45s ease,transform 0.45s ease}
-  .hero__word.word-in{opacity:1;transform:translateY(0)}
+/* Radial spotlight */
+.hero-sticky::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 110%, rgba(212,245,60,0.05) 0%, transparent 70%);
+  pointer-events:none;
 }
 
-/* Hero stat slide in */
-@media(prefers-reduced-motion:no-preference){
-  .hero__stat{
-    opacity:0;
-    transform:translateX(-24px);
-    transition:opacity 0.5s ease,transform 0.5s ease
-  }
-  .hero__stat.stat-in{
-    opacity:1;
-    transform:translateX(0)
-  }
+.hero__wordmark{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:clamp(10rem, 20vw, 22rem);
+  font-weight:700;
+  letter-spacing:-0.06em;
+  color:var(--text);
+  white-space:nowrap;
+  pointer-events:none;
+  will-change:transform,opacity,font-size;
+  line-height:1;
+  transition:none;
+  font-family:var(--font);
+  /* start big, centered */
 }
 
-.hero__stat{font-family:var(--mono);font-size:0.8rem;letter-spacing:0.03em;color:var(--text-muted);background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.18);border-radius:4px;padding:8px 14px;display:inline-block;margin-bottom:28px;line-height:1.5}
-.hero__stat strong{color:var(--accent);font-weight:700}
-.hero__cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.hero__desc{font-size:1.05rem;color:var(--text);line-height:1.6;margin-bottom:24px;max-width:520px;opacity:0.85}
-.hero__trust{font-size:0.8rem;color:var(--text-muted);letter-spacing:0.03em;font-family:var(--mono);border:1px solid var(--border);border-radius:4px;padding:8px 14px;display:inline-block;margin-bottom:20px}
-.btn{padding:14px 28px;min-height:48px;border-radius:6px;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center}
-.btn--primary{background:var(--accent);color:#141210;font-weight:700}
-.btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
-.btn--ghost{background:transparent;color:var(--text);border:1px solid rgba(245,240,232,0.45)}
-.btn--ghost:hover{border-color:rgba(245,240,232,0.75)}
+.hero__content{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 32px;
+  opacity:0;
+  will-change:opacity;
+  pointer-events:none;
+}
+.hero__content.visible{pointer-events:auto}
 
-/* ─── DEMO ─── */
-.demo{padding:100px 0;position:relative}
-.demo__label{text-align:center;margin-bottom:40px}
-.demo__label h2{font-size:1.9rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:8px;text-wrap:balance}
-.demo__label p{color:var(--text-muted)}
-.phone{max-width:380px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.55)}
-.phone__header{background:var(--surface2);padding:12px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.phone__avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#141210}
-.phone__name{font-size:0.85rem;font-weight:600}
-.phone__status{font-size:0.75rem;color:var(--green)}
-.phone__messages{padding:20px;min-height:360px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
-.msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:0.88rem;line-height:1.5;animation:msgIn 0.3s ease}
-.msg--in{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
-.msg--out{background:var(--accent);color:#141210;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
-.msg--typing{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;padding:14px 18px}
+.hero__eyebrow{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:28px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero__eyebrow::before,.hero__eyebrow::after{
+  content:'';display:block;width:32px;height:1px;background:var(--border2);
+}
+
+.hero__headline{
+  font-size:clamp(2rem,4vw,3.8rem);
+  font-weight:700;
+  line-height:1.05;
+  letter-spacing:-0.04em;
+  margin-bottom:20px;
+  max-width:760px;
+  text-wrap:balance;
+}
+.hero__headline em{font-style:normal;color:var(--accent)}
+
+.hero__sub{
+  font-size:1.05rem;
+  color:var(--text-dim);
+  max-width:480px;
+  line-height:1.65;
+  margin-bottom:36px;
+}
+
+.hero__cta-row{
+  display:flex;gap:12px;align-items:center;margin-bottom:24px;
+}
+
+.hero__trust{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  color:var(--text-muted);
+  letter-spacing:0.06em;
+}
+
+/* Phone rising from bottom */
+.hero__phone-rise{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%) translateY(100%) scale(0.7);
+  will-change:transform,opacity;
+  width:340px;
+  max-width:90vw;
+}
+.hero__phone-rise.positioned{
+  bottom:auto;
+  top:50%;
+  transform:translateX(-50%) translateY(-40%) scale(1);
+}
+
+/* ─── PHONE COMPONENT ─── */
+.phone{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 32px 64px rgba(0,0,0,0.6),
+    0 8px 24px rgba(0,0,0,0.4);
+}
+.phone__notch{
+  height:28px;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.phone__notch-pill{
+  width:80px;height:8px;
+  background:var(--border2);border-radius:4px;
+}
+.phone__header{
+  background:var(--surface2);
+  padding:10px 18px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.phone__avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;color:#0e0d0b;
+  flex-shrink:0;
+}
+.phone__name{font-size:0.85rem;font-weight:600;line-height:1.2}
+.phone__status{font-size:0.72rem;color:var(--green)}
+.phone__messages{
+  padding:16px;
+  min-height:280px;
+  max-height:360px;
+  overflow-y:auto;
+  display:flex;flex-direction:column;gap:8px;
+  scroll-behavior:smooth;
+}
+.msg{
+  max-width:82%;
+  padding:9px 13px;
+  border-radius:14px;
+  font-size:0.84rem;
+  line-height:1.5;
+  animation:msgIn 0.25s ease;
+}
+.msg--in{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
+  color:var(--text);
+}
+.msg--out{
+  background:var(--accent);
+  color:#0e0d0b;
+  align-self:flex-end;
+  border-bottom-right-radius:4px;
+  font-weight:600;
+}
+.msg--typing{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
+  padding:12px 16px;
+}
 .typing-dots{display:flex;gap:4px}
-.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--text-muted);animation:dotPulse 1.4s infinite}
+.typing-dots span{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--text-muted);
+  animation:dotPulse 1.4s infinite;
+}
 .typing-dots span:nth-child(2){animation-delay:0.2s}
 .typing-dots span:nth-child(3){animation-delay:0.4s}
-@keyframes dotPulse{0%,100%{opacity:0.3}50%{opacity:1}}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.phone__prompts{padding:12px 20px 20px;display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--border)}
-.prompt-btn{font-family:var(--font);font-size:0.82rem;font-weight:500;padding:11px 16px;min-height:44px;border-radius:100px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center}
+@keyframes dotPulse{0%,100%{opacity:0.25}50%{opacity:1}}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.phone__prompts{
+  padding:10px 16px 16px;
+  display:flex;flex-wrap:wrap;gap:7px;
+  border-top:1px solid var(--border);
+}
+.prompt-btn{
+  font-family:var(--font);
+  font-size:0.8rem;font-weight:500;
+  padding:9px 14px;min-height:40px;
+  border-radius:100px;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;
+  transition:all 0.15s;
+  display:inline-flex;align-items:center;
+}
 .prompt-btn:hover{border-color:var(--accent);color:var(--accent)}
 
+/* ─── HERO REPLAY ─── */
+.hero__replay{
+  position:absolute;bottom:14px;right:14px;
+  background:rgba(20,18,16,0.85);
+  border:1px solid var(--border2);
+  color:var(--text-muted);
+  font-family:var(--mono);font-size:0.72rem;letter-spacing:0.04em;
+  padding:5px 10px;border-radius:4px;
+  cursor:pointer;display:none;
+  transition:all 0.15s;z-index:10;
+}
+.hero__replay:hover{border-color:var(--accent);color:var(--accent)}
+.hero__replay.visible{display:block}
+
+/* ─── BTN ─── */
+.btn{
+  padding:13px 28px;min-height:46px;
+  border-radius:5px;font-size:0.92rem;font-weight:600;
+  border:none;cursor:pointer;
+  transition:all 0.2s;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font);
+}
+.btn--primary{background:var(--accent);color:#0e0d0b;font-weight:700}
+.btn--primary:hover{opacity:0.9;transform:translateY(-1px)}
+.btn--ghost{
+  background:transparent;color:var(--text);
+  border:1px solid rgba(240,235,224,0.2);
+}
+.btn--ghost:hover{border-color:rgba(240,235,224,0.45)}
+.btn--sm{padding:10px 20px;font-size:0.85rem;min-height:40px}
+
 /* ─── HOW IT WORKS ─── */
-.how{padding:120px 0}
-.section-label{font-family:var(--mono);font-size:0.78rem;font-weight:500;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px}
-.section-title{font-size:2.1rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:56px;text-wrap:balance}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
-.step__num{font-family:var(--mono);font-size:0.75rem;font-weight:500;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;display:inline-block;border:1px solid var(--border);padding:2px 8px;border-radius:2px}
-.step__title{font-size:1.1rem;font-weight:600;margin-bottom:10px;letter-spacing:-0.02em}
-.step__desc{font-size:0.9rem;color:var(--text-muted);line-height:1.65}
+.how-stage{
+  position:relative;
+  height:400vh;
+}
+.how-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+}
+
+.how__container{
+  position:relative;
+  width:100%;
+  max-width:1120px;
+  margin:0 auto;
+  padding:0 32px;
+}
+
+.how__step-bg{
+  position:absolute;
+  top:50%;left:0;
+  transform:translateY(-50%);
+  font-size:clamp(12rem,22vw,26rem);
+  font-weight:700;
+  font-family:var(--font);
+  color:transparent;
+  -webkit-text-stroke:1px rgba(240,235,224,0.04);
+  line-height:1;
+  letter-spacing:-0.08em;
+  pointer-events:none;
+  user-select:none;
+  will-change:opacity;
+  transition:opacity 0.5s ease;
+}
+
+.how__step-content{
+  position:relative;
+  max-width:580px;
+  z-index:1;
+}
+.how__step-label{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:20px;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity 0.4s ease, transform 0.4s ease;
+}
+.how__step-label.in{opacity:1;transform:none}
+
+.how__step-title{
+  font-size:clamp(2rem,4vw,3.6rem);
+  font-weight:700;
+  letter-spacing:-0.04em;
+  line-height:1.05;
+  margin-bottom:20px;
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity 0.45s ease 0.08s, transform 0.45s ease 0.08s;
+}
+.how__step-title.in{opacity:1;transform:none}
+
+.how__step-desc{
+  font-size:1.05rem;
+  color:var(--text-dim);
+  line-height:1.7;
+  max-width:480px;
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity 0.45s ease 0.16s, transform 0.45s ease 0.16s;
+}
+.how__step-desc.in{opacity:1;transform:none}
+
+.how__progress{
+  position:absolute;
+  right:32px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:12px;
+  align-items:flex-end;
+}
+.how__progress-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--border2);
+  transition:background 0.3s ease, transform 0.3s ease;
+}
+.how__progress-dot.active{background:var(--accent);transform:scale(1.5)}
 
 /* ─── FEATURES ─── */
-.features{padding:120px 0}
-.features__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--border);border-bottom:none}
-.feature{padding:32px 36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px;position:relative}
-.feature:nth-child(3),.feature:nth-child(5){border-right:none}
-.feature--hero{grid-column:1/-1;border-right:none;padding:48px 48px 44px;display:grid;grid-template-columns:1fr 1fr;gap:0 56px;align-items:start}
-.feature--hero .feature__cmd{grid-column:1/-1;margin-bottom:4px}
-.feature--hero .feature__title{font-size:1.35rem;letter-spacing:-0.03em;line-height:1.15;align-self:start}
-.feature--hero .feature__desc{font-size:0.92rem;line-height:1.65;align-self:start;color:var(--text-muted)}
-.feature__cmd{font-family:var(--mono);font-size:0.75rem;font-weight:400;color:var(--accent);letter-spacing:0.04em;line-height:1;opacity:0.7;min-height:1em}
-.feature__title{font-size:0.95rem;font-weight:700;letter-spacing:-0.02em;line-height:1.25}
-.feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
+.features-stage{
+  position:relative;
+  height:500vh;
+}
+.features-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  background:var(--bg);
+  border-top:1px solid var(--border);
+}
 
-/* ─── PROOF WAITLIST ─── */
-.proof__waitlist{display:flex;align-items:center;gap:20px;border:1px solid var(--border);border-radius:6px;padding:28px 36px;margin-top:48px;background:rgba(255,255,255,0.02)}
-.proof__waitlist-num{font-family:var(--mono);font-size:2.8rem;font-weight:700;color:var(--accent);letter-spacing:-0.04em;white-space:nowrap;line-height:1}
-.proof__waitlist-label{font-size:0.95rem;color:var(--text-muted);line-height:1.5}
+.features-track-wrap{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+}
+
+.features-track{
+  display:flex;
+  will-change:transform;
+  width:max-content;
+  gap:0;
+  height:100vh;
+  align-items:center;
+}
+
+.feature-card{
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:80px 10vw;
+  flex-shrink:0;
+  border-left:1px solid var(--border);
+  position:relative;
+}
+.feature-card:first-child{border-left:none}
+
+.feature-card__inner{
+  max-width:640px;
+}
+.feature-card__cmd{
+  font-family:var(--mono);
+  font-size:0.78rem;
+  color:var(--accent);
+  letter-spacing:0.06em;
+  margin-bottom:24px;
+  min-height:1.2em;
+  opacity:0.7;
+}
+.feature-card__num{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:16px;
+}
+.feature-card__title{
+  font-size:clamp(2rem,4vw,3.8rem);
+  font-weight:700;
+  letter-spacing:-0.04em;
+  line-height:1.05;
+  margin-bottom:20px;
+}
+.feature-card__desc{
+  font-size:1.05rem;
+  color:var(--text-dim);
+  line-height:1.7;
+  max-width:480px;
+}
+
+/* Features scrollbar indicator */
+.features-progress{
+  position:absolute;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;gap:8px;
+  z-index:10;
+}
+.feat-dot{
+  width:20px;height:3px;border-radius:2px;
+  background:var(--border2);
+  transition:background 0.3s, width 0.3s;
+}
+.feat-dot.active{background:var(--accent);width:32px}
+
+/* ─── DEMO ─── */
+.demo{
+  padding:140px 0;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.demo__label{text-align:center;margin-bottom:64px}
+.demo__eyebrow{
+  font-family:var(--mono);font-size:0.72rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:16px;
+}
+.demo__title{
+  font-size:clamp(2.2rem,4vw,3.6rem);
+  font-weight:700;letter-spacing:-0.04em;
+  line-height:1.05;
+  text-wrap:balance;
+}
+.demo__title em{font-style:normal;color:var(--accent)}
+.demo__sub{
+  margin-top:12px;
+  font-size:1rem;
+  color:var(--text-muted);
+}
+
+.demo__phone-wrap{
+  max-width:400px;
+  margin:0 auto;
+  transform:scale(0.9) translateY(20px);
+  opacity:0;
+  transition:transform 0.8s cubic-bezier(0.22,1,0.36,1), opacity 0.8s ease;
+}
+.demo__phone-wrap.in{transform:scale(1) translateY(0);opacity:1}
 
 /* ─── COMPARE ─── */
-.compare{padding:100px 0}
-.compare__title{font-size:1.9rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:36px;max-width:640px;line-height:1.2;text-wrap:balance}
-.compare__table{width:100%;border:1px solid var(--border);border-collapse:collapse;display:table}
+.compare{
+  padding:140px 0;
+  background:var(--bg);
+}
+.compare__eyebrow{
+  font-family:var(--mono);font-size:0.72rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:16px;
+}
+.compare__title{
+  font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:700;letter-spacing:-0.04em;
+  line-height:1.1;margin-bottom:64px;
+  max-width:600px;text-wrap:balance;
+}
+
+/* Desktop table */
+.compare__scroll-wrap{display:block}
+.compare__table{
+  width:100%;border-collapse:collapse;
+  border-top:1px solid var(--border);
+}
 .compare__row{display:table-row}
-.compare__row--head .compare__cell{font-family:var(--mono);font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);padding-bottom:10px}
-.compare__cell{display:table-cell;padding:14px 16px;border-bottom:1px solid var(--border);font-size:0.88rem;text-align:center;vertical-align:middle}
-.compare__cell--feature{text-align:left;font-size:0.85rem;color:var(--text-muted);font-weight:500;width:36%;padding-left:0}
-.compare__cell--us{color:var(--text);font-weight:700;border-left:1px solid var(--border);background:rgba(212,245,60,0.04)}
-.compare__row--head .compare__cell--us{color:var(--accent)}
-.compare__check{color:var(--green);font-size:1.1rem;font-weight:400}
+.compare__row--head .compare__cell{
+  font-family:var(--mono);font-size:0.72rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--text-muted);padding:16px;padding-bottom:12px;
+}
+.compare__cell{
+  display:table-cell;padding:16px;
+  border-bottom:1px solid var(--border);
+  font-size:0.88rem;text-align:center;vertical-align:middle;
+}
+.compare__cell--feature{
+  text-align:left;font-size:0.85rem;
+  color:var(--text-dim);font-weight:500;
+  width:36%;padding-left:0;
+}
+.compare__cell--us{
+  color:var(--text);font-weight:700;
+  border-left:1px solid var(--border);
+  background:rgba(212,245,60,0.04);
+}
+.compare__row--head .compare__cell--us{
+  color:var(--accent);
+}
+/* Row slide in */
+@media(prefers-reduced-motion:no-preference){
+  .compare__row:not(.compare__row--head){
+    opacity:0;transform:translateX(-24px);
+    transition:opacity 0.5s ease,transform 0.5s ease;
+  }
+  .compare__row.row-in{opacity:1;transform:none}
+}
+.compare__check{color:var(--green);font-size:1rem}
 .compare__cell--us .compare__check{color:var(--accent);font-weight:700}
-.compare__x{color:var(--dim);font-size:1rem;font-weight:700}
+.compare__x{color:var(--border2);font-size:0.9rem;font-weight:700}
 .compare__cell--muted{color:var(--text-muted)}
-.compare__note{font-size:0.78rem;color:var(--text-muted);margin-top:16px;opacity:0.9}
-.compare__cta-row{margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.compare__note{
+  font-size:0.78rem;color:var(--text-muted);
+  margin-top:20px;opacity:0.8;
+  font-family:var(--mono);
+}
+.compare__cta-row{margin-top:40px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .compare__cta-note{font-size:0.82rem;color:var(--text-muted);font-family:var(--mono)}
+
+/* Mobile compare */
 .compare__mobile{display:none;margin-bottom:8px}
-.compare__mobile-header{display:grid;grid-template-columns:1.4fr 1fr 1.1fr;gap:0;border:1px solid var(--border);border-radius:6px 6px 0 0;overflow:hidden}
-.compare__mobile-heading{font-family:var(--mono);font-size:0.78rem;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);padding:9px 10px;background:var(--surface2);border-bottom:1px solid var(--border);border-right:1px solid var(--border);overflow-wrap:break-word;word-break:break-word}
+.compare__mobile-header{
+  display:grid;grid-template-columns:1.4fr 1fr 1.1fr;
+  border:1px solid var(--border);border-radius:4px 4px 0 0;overflow:hidden;
+}
+.compare__mobile-heading{
+  font-family:var(--mono);font-size:0.72rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:0.04em;
+  color:var(--text-muted);padding:9px 10px;
+  background:var(--surface2);border-bottom:1px solid var(--border);
+  border-right:1px solid var(--border);
+}
 .compare__mobile-heading:last-child{border-right:none}
-.compare__mobile-heading--us{color:var(--accent);background:rgba(212,245,60,0.06)}
-.compare__mobile-row{display:grid;grid-template-columns:1.4fr 1fr 1.1fr;gap:0;border-left:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
-.compare__mobile-row:last-child{border-radius:0 0 6px 6px;overflow:hidden}
-.compare__mobile-label{font-size:0.8rem;color:var(--text-muted);font-weight:500;padding:11px 10px;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.3}
-.compare__mobile-val{font-size:0.88rem;font-weight:700;padding:11px 6px;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border)}
-.compare__mobile-val:last-child{border-right:none;background:rgba(212,245,60,0.05)}
+.compare__mobile-heading--us{color:var(--accent);background:var(--accent-dim)}
+.compare__mobile-row{
+  display:grid;grid-template-columns:1.4fr 1fr 1.1fr;
+  border-left:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.compare__mobile-row:last-child{border-radius:0 0 4px 4px;overflow:hidden}
+.compare__mobile-label{
+  font-size:0.8rem;color:var(--text-muted);font-weight:500;
+  padding:11px 10px;border-right:1px solid var(--border);
+  display:flex;align-items:center;line-height:1.3;
+}
+.compare__mobile-val{
+  font-size:0.88rem;font-weight:700;padding:11px 6px;
+  display:flex;align-items:center;justify-content:center;
+  border-right:1px solid var(--border);
+}
+.compare__mobile-val:last-child{border-right:none;background:var(--accent-dim)}
 .compare__mobile-val--them{color:var(--text-muted);font-weight:500}
 .compare__mobile-val--us{color:var(--accent)}
 
 /* ─── PROOF / STATS ─── */
-.proof{padding:120px 0}
-.proof__stats{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-bottom:48px;position:relative}
-.proof__stats::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent) 20%,var(--accent) 80%,transparent);opacity:0.35}
-.proof__stat-block{padding:52px 40px 48px;position:relative}
-.proof__stat-block::after{content:'';position:absolute;top:20%;bottom:20%;right:0;width:1px;background:var(--border)}
-.proof__stat-block:last-child::after{display:none}
-.proof__stat-num{font-size:clamp(4.2rem,6.5vw,6.8rem);font-weight:700;color:var(--text);letter-spacing:-0.07em;line-height:0.85;margin-bottom:24px;display:block;font-variant-numeric:tabular-nums}
+.proof{
+  padding:0;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.proof__inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.proof__stat-block{
+  padding:100px 64px;
+  position:relative;
+  border-right:1px solid var(--border);
+}
+.proof__stat-block:last-child{border-right:none}
+
+.proof__stat-num{
+  font-size:clamp(6rem,14vw,16rem);
+  font-weight:700;
+  color:var(--text);
+  letter-spacing:-0.08em;
+  line-height:0.85;
+  margin-bottom:32px;
+  display:block;
+  font-variant-numeric:tabular-nums;
+  will-change:opacity;
+}
 .proof__stat-num em{color:var(--accent);font-style:normal}
-.proof__stat-label{font-size:0.85rem;color:var(--text-muted);line-height:1.7;max-width:200px;border-left:2px solid var(--border);padding-left:12px}
+
+.proof__stat-label{
+  font-size:0.95rem;
+  color:var(--text-muted);
+  line-height:1.7;
+  max-width:220px;
+  padding-left:14px;
+  border-left:2px solid var(--border);
+}
 .proof__stat-label strong{color:var(--text);font-weight:600}
-.proof__source{font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);margin-top:14px;opacity:0.75;letter-spacing:0.01em;display:block;padding-left:14px}
-.proof__note{font-size:0.82rem;color:var(--text-muted);opacity:0.8;font-family:var(--mono);letter-spacing:0.02em}
+.proof__source{
+  font-family:var(--mono);font-size:0.72rem;
+  color:var(--text-muted);margin-top:12px;
+  opacity:0.6;letter-spacing:0.01em;
+  display:block;padding-left:16px;
+}
+
+.proof__coda{
+  padding:48px 64px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:32px;flex-wrap:wrap;
+}
+.proof__note{
+  font-size:0.88rem;
+  color:var(--text-muted);
+  font-family:var(--mono);
+  letter-spacing:0.02em;
+}
+.proof__waitlist{
+  display:flex;align-items:center;gap:20px;
+  background:var(--accent-dim);
+  border:1px solid rgba(212,245,60,0.15);
+  border-radius:4px;padding:20px 28px;
+}
+.proof__waitlist-num{
+  font-family:var(--mono);
+  font-size:2.4rem;font-weight:700;
+  color:var(--accent);letter-spacing:-0.04em;
+  white-space:nowrap;line-height:1;
+}
+.proof__waitlist-label{
+  font-size:0.88rem;color:var(--text-muted);line-height:1.5;
+}
 
 /* ─── PRICING ─── */
-.pricing{padding:120px 0}
-.pricing__waitlist-note{font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);text-align:center;margin-top:24px;letter-spacing:0.02em;opacity:0.75}
-.pricing__toggle{display:flex;align-items:center;gap:12px;margin:0 auto 48px;width:fit-content;font-size:0.88rem;color:var(--text-muted)}
-.pricing__toggle-btn{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:3px;gap:3px}
-.pricing__toggle-opt{font-size:0.82rem;font-weight:500;padding:6px 14px;min-height:44px;border-radius:100px;cursor:pointer;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);transition:all 0.15s;white-space:nowrap;display:inline-flex;align-items:center}
-.pricing__toggle-opt.active{background:var(--accent);color:#141210;font-weight:700}
-.pricing__toggle-save{font-family:var(--mono);font-size:0.75rem;color:var(--accent);background:rgba(212,245,60,0.1);border:1px solid rgba(212,245,60,0.25);padding:2px 8px;border-radius:3px;letter-spacing:0.04em}
-.pricing__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.plan{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:32px}
-.plan--featured{border-color:var(--accent);position:relative}
-.plan--featured::before{content:'// most popular';position:absolute;top:-12px;left:24px;background:var(--bg);border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.75rem;font-weight:500;padding:3px 10px;border-radius:4px;letter-spacing:0.04em}
+.pricing{
+  padding:140px 0;
+  background:var(--bg);
+}
+.section-eyebrow{
+  font-family:var(--mono);font-size:0.72rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:16px;
+}
+.section-headline{
+  font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:700;letter-spacing:-0.04em;
+  line-height:1.1;margin-bottom:64px;
+  text-wrap:balance;
+}
 
-/* Featured plan one-shot glow */
+.pricing__toggle{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:56px;
+  font-size:0.88rem;color:var(--text-muted);
+}
+.pricing__toggle-btn{
+  display:flex;background:var(--surface);
+  border:1px solid var(--border2);border-radius:100px;
+  padding:3px;gap:3px;
+}
+.pricing__toggle-opt{
+  font-size:0.82rem;font-weight:500;
+  padding:7px 16px;min-height:40px;
+  border-radius:100px;cursor:pointer;
+  border:none;background:transparent;
+  color:var(--text-muted);font-family:var(--font);
+  transition:all 0.2s;white-space:nowrap;
+  display:inline-flex;align-items:center;
+}
+.pricing__toggle-opt.active{background:var(--accent);color:#0e0d0b;font-weight:700}
+.pricing__toggle-save{
+  font-family:var(--mono);font-size:0.72rem;
+  color:var(--accent);
+  background:rgba(212,245,60,0.1);
+  border:1px solid rgba(212,245,60,0.25);
+  padding:2px 8px;border-radius:3px;letter-spacing:0.04em;
+}
+
+.pricing__grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  perspective:1000px;
+}
+
+.plan{
+  background:var(--surface);
+  padding:40px 32px;
+  border-right:1px solid var(--border);
+  position:relative;
+  transform:translateY(0) rotateX(0);
+  transition:transform 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+  opacity:0;
+}
+@media(prefers-reduced-motion:no-preference){
+  .plan{transform:translateY(40px) rotateX(4deg);opacity:0}
+  .plan.plan-in{transform:translateY(0) rotateX(0);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .plan{opacity:1;transform:none}
+}
+.plan:last-child{border-right:none}
+.plan--featured{
+  background:var(--surface2);
+  position:relative;
+  z-index:1;
+}
+.plan--featured::before{
+  content:'Most popular';
+  position:absolute;
+  top:-1px;left:50%;
+  transform:translateX(-50%);
+  background:var(--accent);
+  color:#0e0d0b;
+  font-family:var(--mono);font-size:0.7rem;font-weight:700;
+  padding:4px 12px;
+  letter-spacing:0.06em;text-transform:uppercase;
+  border-radius:0 0 4px 4px;
+}
+
 @keyframes planGlow{
   0%{box-shadow:0 0 0 0 rgba(212,245,60,0)}
-  30%{box-shadow:0 0 32px 8px rgba(212,245,60,0.18)}
+  40%{box-shadow:0 0 40px 4px rgba(212,245,60,0.12)}
   100%{box-shadow:0 0 0 0 rgba(212,245,60,0)}
 }
-.plan--featured.glow-once{animation:planGlow 1.6s ease forwards}
+.plan--featured.glow-once{animation:planGlow 2s ease forwards}
 
-.plan__name{font-family:var(--mono);font-size:0.85rem;font-weight:500;color:var(--text-muted);margin-bottom:8px}
+.plan__name{
+  font-family:var(--mono);font-size:0.78rem;font-weight:500;
+  color:var(--text-muted);margin-bottom:12px;letter-spacing:0.04em;
+}
 .plan--featured .plan__name{color:var(--accent)}
-.plan__price{margin-bottom:4px;display:flex;align-items:baseline;gap:4px}
-.plan__price-num{font-size:2.5rem;font-weight:700;letter-spacing:-0.03em}
-.plan__price-period{font-size:1rem;font-weight:400;color:var(--text-muted)}
-.plan__desc{font-size:0.85rem;color:var(--text-muted);margin-bottom:24px}
-.plan__features{list-style:none;margin-bottom:28px}
-.plan__features li{font-size:0.85rem;padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.plan__features li::before{content:'—';color:var(--text-muted);font-weight:400;font-size:0.8rem;font-family:var(--mono)}
-.plan__btn{display:block;width:100%;text-align:center;padding:14px;min-height:44px;border-radius:6px;font-weight:600;font-size:0.9rem;border:none;cursor:pointer;font-family:var(--font)}
-.plan__btn--primary{background:var(--accent);color:#141210;font-weight:700}
-.plan__btn--ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
-.plan__btn:hover{opacity:0.85}
+.plan__price{
+  margin-bottom:6px;display:flex;align-items:baseline;gap:4px;
+}
+.plan__price-num{
+  font-size:3rem;font-weight:700;letter-spacing:-0.04em;
+}
+.plan__price-period{
+  font-size:0.95rem;font-weight:400;color:var(--text-muted);
+}
+.plan__desc{
+  font-size:0.85rem;color:var(--text-muted);margin-bottom:28px;line-height:1.6;
+}
+.plan__features{
+  list-style:none;margin-bottom:32px;
+}
+.plan__features li{
+  font-size:0.85rem;padding:7px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:8px;
+  line-height:1.4;
+}
+.plan__features li::before{
+  content:'—';color:var(--text-muted);
+  font-weight:400;font-size:0.8rem;
+  font-family:var(--mono);flex-shrink:0;margin-top:1px;
+}
+.plan__btn{
+  display:block;width:100%;text-align:center;
+  padding:13px;min-height:44px;
+  border-radius:4px;font-weight:600;font-size:0.88rem;
+  border:none;cursor:pointer;font-family:var(--font);
+  transition:opacity 0.2s;
+}
+.plan__btn--primary{background:var(--accent);color:#0e0d0b;font-weight:700}
+.plan__btn--ghost{
+  background:transparent;
+  border:1px solid var(--border2);color:var(--text);
+}
+.plan__btn:hover{opacity:0.82}
+.pricing__waitlist-note{
+  font-family:var(--mono);font-size:0.75rem;
+  color:var(--text-muted);text-align:center;
+  margin-top:28px;letter-spacing:0.02em;opacity:0.7;
+}
 
 /* ─── FAQ ─── */
-.faq{padding:120px 0;overflow-x:hidden}
-.faq__list{max-width:680px;margin:0 auto}
-.faq__item{border-bottom:1px solid var(--border);padding:20px 0}
-.faq__q{font-size:1rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;-webkit-tap-highlight-color:transparent;user-select:none}
-.faq__q::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
+.faq{
+  padding:140px 0;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+}
+.faq__list{
+  max-width:680px;margin:0 auto;
+}
+.faq__item{
+  border-bottom:1px solid var(--border);
+  padding:22px 0;
+}
+.faq__q{
+  font-size:1rem;font-weight:600;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  min-height:44px;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+  letter-spacing:-0.01em;
+}
+.faq__q::after{
+  content:'+';font-family:var(--mono);font-size:1.2rem;
+  color:var(--text-muted);transition:transform 0.25s;flex-shrink:0;
+}
 .faq__item.open .faq__q::after{transform:rotate(45deg)}
-.faq__a{font-size:0.9rem;color:var(--text-muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease}
-.faq__item.open .faq__a{max-height:300px;padding-top:12px}
+.faq__a{
+  font-size:0.9rem;color:var(--text-muted);line-height:1.75;
+  max-height:0;overflow:hidden;
+  transition:max-height 0.35s ease,padding 0.35s ease;
+}
+.faq__item.open .faq__a{max-height:320px;padding-top:14px}
 
 /* ─── FINAL CTA ─── */
-.final-cta{padding:140px 0;text-align:center;position:relative}
-.final-cta__trust{font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:24px;position:relative}
-.final-cta__title{font-size:2.4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:12px;position:relative;text-wrap:balance}
-.final-cta__sub{color:var(--text-muted);margin-bottom:32px;position:relative}
-.plan-selected{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.8rem;letter-spacing:0.04em;text-transform:uppercase;border:1px solid var(--accent);border-radius:4px;padding:7px 12px;margin-bottom:20px;position:relative}
+.final-cta{
+  padding:0;height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;position:relative;
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  overflow:hidden;
+}
+.final-cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 100%, rgba(212,245,60,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+.final-cta__inner{
+  position:relative;z-index:1;
+  max-width:680px;padding:0 32px;
+}
+.final-cta__trust{
+  font-family:var(--mono);font-size:0.72rem;
+  color:var(--text-muted);letter-spacing:0.1em;
+  text-transform:uppercase;margin-bottom:28px;
+}
+.final-cta__title{
+  font-size:clamp(2.4rem,5vw,4.8rem);
+  font-weight:700;letter-spacing:-0.05em;
+  line-height:1.02;margin-bottom:16px;
+  text-wrap:balance;
+}
+.final-cta__sub{
+  color:var(--text-muted);margin-bottom:36px;
+  font-size:1rem;line-height:1.65;
+}
+
+.plan-selected{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:0.78rem;letter-spacing:0.04em;
+  text-transform:uppercase;
+  border:1px solid var(--accent);border-radius:3px;
+  padding:6px 12px;margin-bottom:20px;
+}
 .plan-selected__label{color:var(--text-muted)}
 .plan-selected__name{color:var(--accent);font-weight:700}
-.plan-selected__clear{background:none;border:none;color:var(--text-muted);font-size:1rem;cursor:pointer;padding:0 0 0 4px;line-height:1;display:flex;align-items:center;min-height:44px;min-width:44px;justify-content:center}
+.plan-selected__clear{
+  background:none;border:none;color:var(--text-muted);
+  font-size:1rem;cursor:pointer;padding:0 0 0 4px;
+  line-height:1;display:flex;align-items:center;
+  min-height:40px;min-width:40px;justify-content:center;
+}
 .plan-selected__clear:hover{color:var(--text)}
-.signup-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:480px;margin:0 auto;position:relative}
-.signup-form input{flex:1;min-width:200px;padding:14px 18px;min-height:48px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:0.95rem}
+
+.signup-form{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+  max-width:480px;margin:0 auto;
+}
+.signup-form input{
+  flex:1;min-width:200px;
+  padding:13px 18px;min-height:46px;
+  border-radius:4px;
+  border:1px solid var(--border2);
+  background:var(--surface);color:var(--text);
+  font-family:var(--font);font-size:0.95rem;
+  transition:border-color 0.2s;
+}
 .signup-form input::placeholder{color:var(--text-muted)}
 .signup-form input:focus{outline:none;border-color:var(--accent)}
-.signup-form button{padding:14px 24px;min-height:48px;border-radius:6px;background:var(--accent);color:#141210;border:none;font-family:var(--font);font-size:0.95rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;white-space:nowrap}
-.signup-form button:hover{opacity:0.9}
-.signup-note{font-size:0.78rem;color:var(--text-muted);margin-top:12px;position:relative}
-.signup-note a{padding:8px 2px;display:inline-flex;align-items:center;min-height:44px;color:var(--text-muted);text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.signup-form button{
+  padding:13px 22px;min-height:46px;
+  border-radius:4px;background:var(--accent);color:#0e0d0b;
+  border:none;font-family:var(--font);font-size:0.92rem;font-weight:700;
+  cursor:pointer;transition:opacity 0.2s;white-space:nowrap;
+}
+.signup-form button:hover{opacity:0.88}
+.signup-note{
+  font-size:0.78rem;color:var(--text-muted);margin-top:14px;
+}
+.signup-note a{
+  padding:6px 2px;display:inline-flex;align-items:center;
+  color:var(--text-muted);text-decoration:underline;
+  text-underline-offset:2px;
+}
 .signup-note a:hover{color:var(--text)}
-.signup-msg{text-align:center;font-size:0.9rem;color:var(--green);margin-top:16px;display:none;position:relative;font-weight:500}
+.signup-msg{
+  text-align:center;font-size:0.9rem;color:var(--green);
+  margin-top:16px;display:none;font-weight:500;
+}
 .queue-block{margin-top:20px;display:none}
-.queue-position{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;display:block;line-height:1.1;margin-bottom:4px}
+.queue-position{
+  font-family:var(--mono);font-size:1.4rem;font-weight:700;
+  color:var(--accent);letter-spacing:-0.02em;
+  display:block;line-height:1.1;margin-bottom:4px;
+}
 .queue-label{font-size:0.82rem;color:var(--text-muted);letter-spacing:0.01em}
-.referral-hint{margin-top:16px;font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.15);border-radius:4px;padding:10px 14px;display:inline-block;line-height:1.5}
+.referral-hint{
+  margin-top:16px;font-family:var(--mono);font-size:0.78rem;
+  color:var(--text-muted);background:var(--accent-dim);
+  border:1px solid rgba(212,245,60,0.15);border-radius:3px;
+  padding:10px 14px;display:inline-block;line-height:1.5;
+}
 .referral-hint strong{color:var(--accent)}
 
 /* ─── FOOTER ─── */
-footer{padding:48px 0;text-align:center}
-footer p{font-size:0.8rem;color:var(--text-muted)}
-.footer__links{display:flex;justify-content:center;gap:24px;margin-bottom:16px;flex-wrap:wrap}
-.footer__links a{font-size:0.8rem;color:var(--text-muted);transition:color 0.2s}
+footer{
+  padding:40px 0;text-align:center;
+  background:var(--bg);border-top:1px solid var(--border);
+}
+footer p{font-size:0.78rem;color:var(--text-muted)}
+.footer__links{
+  display:flex;justify-content:center;gap:24px;
+  margin-bottom:14px;flex-wrap:wrap;
+}
+.footer__links a{
+  font-size:0.78rem;color:var(--text-muted);
+  transition:color 0.2s;
+}
 .footer__links a:hover{color:var(--text)}
 
 /* ─── MODAL ─── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.8);
+  z-index:2000;display:none;
+  align-items:center;justify-content:center;padding:24px;
+}
 .modal-overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:8px;max-width:560px;width:100%;max-height:80vh;display:flex;flex-direction:column}
-.modal__header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:6px;max-width:560px;width:100%;
+  max-height:80vh;display:flex;flex-direction:column;
+}
+.modal__header{
+  padding:20px 24px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
 .modal__title{font-size:1rem;font-weight:600}
-.modal__close{background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;line-height:1;padding:4px 8px;font-family:var(--mono);min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center}
+.modal__close{
+  background:none;border:none;color:var(--text-muted);
+  font-size:1.5rem;cursor:pointer;line-height:1;
+  padding:4px 8px;font-family:var(--mono);
+  min-height:44px;min-width:44px;
+  display:flex;align-items:center;justify-content:center;
+}
 .modal__close:hover{color:var(--text)}
-.modal__body{padding:24px;overflow-y:auto;font-size:0.85rem;color:var(--text-muted);line-height:1.8}
+.modal__body{
+  padding:24px;overflow-y:auto;
+  font-size:0.85rem;color:var(--text-muted);line-height:1.8;
+}
 .modal__body h3{font-size:0.9rem;color:var(--text);font-weight:600;margin:20px 0 6px}
 .modal__body h3:first-child{margin-top:0}
 .modal__body p{margin-bottom:12px}
 
+/* ─── REDUCED MOTION: flat layout ─── */
+@media(prefers-reduced-motion:reduce){
+  .hero-stage{height:auto}
+  .hero-sticky{position:relative;height:auto;min-height:100vh}
+  .hero__wordmark{position:relative;top:auto;left:auto;transform:none;font-size:4rem;margin-bottom:24px}
+  .hero__content{position:relative;opacity:1;pointer-events:auto;padding:60px 32px 80px}
+  .hero__phone-rise{position:relative;bottom:auto;left:auto;transform:none;margin:40px auto 0}
+  .how-stage{height:auto}
+  .how-sticky{position:relative;height:auto;padding:100px 0}
+  .how__step-bg{display:none}
+  .how__step-label,.how__step-title,.how__step-desc{opacity:1;transform:none}
+  .features-stage{height:auto}
+  .features-sticky{position:relative;height:auto;overflow:visible}
+  .features-track-wrap{position:relative;overflow:visible}
+  .features-track{flex-direction:column;width:100%;height:auto}
+  .feature-card{width:100%;height:auto;padding:60px 32px;border-left:none;border-top:1px solid var(--border)}
+  .demo__phone-wrap{opacity:1;transform:none}
+  .plan{opacity:1;transform:none}
+  .compare__row{opacity:1;transform:none}
+  .final-cta{height:auto;padding:140px 0}
+}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
-  .hero{padding:110px 0 72px}
-  .hero__split{grid-template-columns:1fr;gap:48px;margin:0 auto}
-  .hero__left{align-items:center}
-  .hero__right{justify-content:center}
-  .hero__phone-wrap{max-width:100%}
-  .hero__title{font-size:2.3rem;text-align:center}
-  .hero__stat{display:table;margin:0 auto 28px;text-align:center;max-width:100%}
-  .hero__cta-row{justify-content:center}
-  .hero__desc{max-width:100%;text-align:center}
-  .hero__trust{text-align:center;display:block}
-  .steps{grid-template-columns:1fr;gap:28px}
-  .features__grid{grid-template-columns:1fr}
-  .feature{border-right:none}
-  .feature--hero{grid-column:auto;padding:32px 24px;display:flex;flex-direction:column;gap:10px}
-  .feature--hero .feature__title{font-size:1.05rem}
-  .feature--hero .feature__desc{font-size:0.88rem}
-  .pricing__grid{grid-template-columns:1fr;gap:16px}
-  .plan--featured{order:-1;overflow:visible}
-  .plan__price{justify-content:flex-start}
-  .phone{max-width:100%;border-radius:16px}
-  .phone__messages{min-height:160px;max-height:200px}
-  .demo{padding:72px 0}
-  .demo__label{margin-bottom:28px}
-  .demo__label h2{font-size:1.6rem}
-  .proof__stats{grid-template-columns:1fr}
-  .proof__stats::before{display:none}
-  .proof__stat-block{padding:36px 20px 32px;border-bottom:1px solid var(--border)}
-  .proof__stat-block::after{display:none}
+  .container{padding:0 20px}
+  .hero__wordmark{font-size:18vw}
+  .hero-stage{height:250vh}
+  .hero__phone-rise{width:280px}
+  .how-stage{height:350vh}
+  .how__step-desc{font-size:0.95rem}
+  .features-stage{height:450vh}
+  .proof__inner{grid-template-columns:1fr}
+  .proof__stat-block{padding:60px 24px;border-right:none;border-bottom:1px solid var(--border)}
   .proof__stat-block:last-child{border-bottom:none}
-  .proof__stat-num{font-size:3.6rem}
+  .proof__stat-num{font-size:clamp(5rem,20vw,10rem)}
   .proof__stat-label{max-width:none;border-left:none;padding-left:0}
   .proof__source{padding-left:0}
-  .proof__note{text-align:center}
-  .proof__waitlist{flex-direction:column;align-items:flex-start;gap:12px;padding:24px 20px}
-  .proof__waitlist-num{font-size:2.2rem}
-  .compare__title{font-size:1.5rem;text-align:center}
+  .proof__coda{padding:40px 24px;flex-direction:column;align-items:flex-start}
+  .proof__waitlist{flex-direction:column;align-items:flex-start;gap:10px}
+  .pricing__grid{grid-template-columns:1fr;border:none;gap:12px}
+  .plan{border:1px solid var(--border);border-radius:5px;border-right:1px solid var(--border) !important}
+  .plan--featured{order:-1}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
   .compare__cta-row{flex-direction:column;align-items:stretch}
-  .compare__cta-row .btn{width:100%;text-align:center;font-size:0.88rem;padding:14px 16px;white-space:normal;line-height:1.35}
-  .compare__cta-note{text-align:center}
-  .compare{padding:80px 0}
-  .section-label{text-align:center}
-  .section-title{text-align:center;margin-bottom:36px}
-  .step__desc,.feature__desc,.plan__desc{text-align:left}
-  .feature__title,.plan__name,.step__num,.step__title{text-align:left}
-  .plan--featured::before{font-size:0.75rem}
-  .demo__label h2,.demo__label p{text-align:center}
-  .pricing__toggle{justify-content:center}
-  .final-cta__title{text-align:center}
-  .final-cta__sub{text-align:center}
-  .final-cta__trust{text-align:center}
-  .faq__list{max-width:100%}
-  .signup-note{text-align:center}
-  .signup-note a{white-space:normal}
-  .how{padding:80px 0}
-  .features{padding:80px 0}
-  .proof{padding:80px 0}
-  .pricing{padding:80px 0}
-  .faq{padding:80px 0}
-  .final-cta{padding:100px 0}
+  .compare__cta-row .btn{width:100%;text-align:center}
+  .final-cta{height:auto;padding:100px 0}
+  .final-cta__title{font-size:2.4rem}
+  .signup-form{flex-direction:column;align-items:stretch}
+  .signup-form input{min-width:0;width:100%}
+  .signup-form button{width:100%}
+  .hero__cta-row{flex-wrap:wrap;justify-content:center}
+  .how__progress{display:none}
+  .demo{padding:100px 0}
 }
 @media(max-width:480px){
-  .hero__title{font-size:1.9rem}
+  .hero__wordmark{font-size:22vw}
+  .hero__headline{font-size:1.8rem}
   .hero__cta-row{flex-direction:column;align-items:center}
-  .hero__cta-row .btn{width:100%;max-width:320px}
-  .nav__cta{padding:10px 16px;font-size:0.82rem}
-  .phone__prompts{gap:6px}
-  .prompt-btn{font-size:0.82rem;padding:10px 14px;min-height:44px}
-  .final-cta__title{font-size:1.9rem;text-align:center}
-  .section-title{font-size:1.6rem;text-align:center;margin-bottom:28px}
-  .section-label{text-align:center}
-  .signup-form{flex-direction:column;align-items:stretch}
-  .signup-form input{min-width:0;width:100%;font-size:1rem}
-  .signup-form button{width:100%;font-size:1rem}
-  .footer__links{justify-content:center}
-  .footer__links a{padding:8px 4px;display:inline-flex;align-items:center;min-height:44px}
-  .step__num,.step__title{text-align:left}
-  .faq__q{font-size:0.9rem}
-  .faq__a{text-align:left;font-size:0.88rem}
-  .pricing__toggle{flex-wrap:wrap;justify-content:center;gap:8px}
-  .hero__trust{font-size:0.78rem;padding:8px 10px;text-align:center;width:100%;max-width:360px;margin-left:auto;margin-right:auto}
-  .hero__stat{font-size:0.78rem;word-break:break-word;overflow-wrap:break-word}
-  .plan__name{text-align:left}
-  .plan__price-num{font-size:2rem}
-  .plan{padding:24px 20px}
-  .feature{padding:24px}
-  .proof__stat-num{font-size:3rem}
-  .compare__mobile-label{font-size:0.78rem;padding:10px 8px}
-  .compare__mobile-val{font-size:0.82rem;padding:10px 4px}
-  .compare__mobile-heading{font-size:0.78rem;padding:8px 6px}
-  .compare__cta-row .btn{font-size:0.85rem}
+  .hero__cta-row .btn{width:100%;max-width:300px}
+  .final-cta__title{font-size:2rem}
+  .proof__stat-num{font-size:clamp(4rem,18vw,8rem)}
+  .faq__q{font-size:0.92rem}
 }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav id="nav">
   <div class="container nav__inner">
-    <a href="#" class="nav__logo"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" style="flex-shrink:0"><rect x="1" y="1" width="16" height="12" rx="2" fill="var(--accent)" opacity="0.9"/><path d="M5 16l3-3h5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/><circle cx="5.5" cy="7" r="1" fill="white"/><circle cx="9" cy="7" r="1" fill="white"/><circle cx="12.5" cy="7" r="1" fill="white"/></svg>Side<span>kick</span></a>
+    <a href="#" class="nav__logo">
+      <span class="nav__logo-dot"></span>Sidekick
+    </a>
     <button class="nav__cta" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join waitlist</button>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="container">
-    <div class="hero__split">
-      <div class="hero__left">
-        <div class="hero__stat" id="heroStat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
-        <h1 class="hero__title" id="heroTitle">Your marketing team<br>lives in your <em class="hero__word-grad">texts</em></h1>
-        <p class="hero__desc reveal">Sidekick is an AI that runs your marketing entirely over text — social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
-        <p class="hero__trust reveal">Plans from $49/mo &middot; 14-day free trial &middot; No credit card</p>
-        <div class="hero__cta-row reveal">
-          <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
-          <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
-        </div>
-      </div>
-      <div class="hero__right">
-        <div class="hero__phone-wrap" id="heroPhoneWrap">
-          <button class="hero__replay" id="heroReplay" aria-label="Replay animation">&#x21BA; replay</button>
-          <div class="phone">
-            <div class="phone__header">
-              <div class="phone__avatar">TM</div>
-              <div>
-                <div class="phone__name">Sidekick</div>
-                <div class="phone__status" id="heroStatus">&#x25cf; Online</div>
-              </div>
-            </div>
-            <div class="phone__messages" id="heroMessages" style="min-height:280px;max-height:340px"></div>
+<!-- SECTION 1: HERO -->
+<div class="hero-stage" id="heroStage">
+  <div class="hero-sticky" id="heroSticky">
+
+    <!-- Massive wordmark that shrinks -->
+    <div class="hero__wordmark" id="heroWordmark">Sidekick</div>
+
+    <!-- Phone rising from bottom -->
+    <div class="hero__phone-rise" id="heroPhoneRise">
+      <div class="phone" style="position:relative">
+        <div class="phone__notch"><div class="phone__notch-pill"></div></div>
+        <div class="phone__header">
+          <div class="phone__avatar">TM</div>
+          <div>
+            <div class="phone__name">Sidekick</div>
+            <div class="phone__status" id="heroStatus">&#x25cf; Online</div>
           </div>
         </div>
+        <div class="phone__messages" id="heroMessages" style="min-height:260px;max-height:320px"></div>
+        <button class="hero__replay" id="heroReplay" aria-label="Replay animation">&#x21BA; replay</button>
       </div>
     </div>
-  </div>
-</section>
 
-<div class="section-divider"></div>
-
-<section class="demo" id="demo">
-  <div class="container">
-    <div class="demo__label reveal">
-      <h2>Your thumb is the only dashboard you need</h2>
-      <p>Pick a scenario and walk through a real conversation</p>
+    <!-- Hero content fades in after wordmark settles -->
+    <div class="hero__content" id="heroContent">
+      <div class="hero__eyebrow">AI marketing for small business</div>
+      <h1 class="hero__headline">Your marketing team<br>lives in your <em>texts</em></h1>
+      <p class="hero__sub">Sidekick runs your marketing entirely over text — social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
+      <div class="hero__cta-row">
+        <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
+        <button class="btn btn--ghost" onclick="document.getElementById('demo-section').scrollIntoView({behavior:'smooth'})">See how it works</button>
+      </div>
+      <p class="hero__trust">Plans from $49/mo &nbsp;&middot;&nbsp; 14-day free trial &nbsp;&middot;&nbsp; No credit card</p>
     </div>
-    <div class="reveal">
+
+  </div>
+</div>
+
+<!-- SECTION 2: HOW IT WORKS -->
+<div class="how-stage" id="howStage">
+  <div class="how-sticky" id="howSticky">
+    <div class="how__container">
+
+      <div class="how__step-bg" id="howStepBg">01</div>
+
+      <div class="how__step-content" id="howStepContent">
+        <div class="how__step-label" id="howStepLabel">How it works &nbsp;/ 01</div>
+        <h2 class="how__step-title" id="howStepTitle">Answer 5 questions over text</h2>
+        <p class="how__step-desc" id="howStepDesc">We text you within 60 seconds of signing up. Your business name, what you sell, your target customer, your tone, which platforms. That's it. Your first week of posts arrives within the hour.</p>
+      </div>
+
+      <div class="how__progress" id="howProgress">
+        <div class="how__progress-dot active" data-step="0"></div>
+        <div class="how__progress-dot" data-step="1"></div>
+        <div class="how__progress-dot" data-step="2"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: FEATURES -->
+<div class="features-stage" id="featuresStage">
+  <div class="features-sticky" id="featuresSticky">
+    <div class="features-track-wrap">
+      <div class="features-track" id="featuresTrack">
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">01 / 06</div>
+            <div class="feature-card__cmd" data-cmd='> "run an ad"'></div>
+            <h3 class="feature-card__title">A Facebook ad<br>in 30 seconds</h3>
+            <p class="feature-card__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">02 / 06</div>
+            <div class="feature-card__cmd" data-cmd='> new review detected'></div>
+            <h3 class="feature-card__title">Every Google review<br>answered</h3>
+            <p class="feature-card__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">03 / 06</div>
+            <div class="feature-card__cmd" data-cmd='> "autopilot on"'></div>
+            <h3 class="feature-card__title">Full autopilot,<br>zero babysitting</h3>
+            <p class="feature-card__desc">Switch to autopilot and we publish on your schedule. A weekly summary lands in your texts — no dashboard, no log-in.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">04 / 06</div>
+            <div class="feature-card__cmd" data-cmd='> scheduled: Mon / Wed / Fri'></div>
+            <h3 class="feature-card__title">Posts every week,<br>on every platform</h3>
+            <p class="feature-card__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">05 / 06</div>
+            <div class="feature-card__cmd" data-cmd='> Monday 8am report'></div>
+            <h3 class="feature-card__title">Your numbers,<br>every Monday</h3>
+            <p class="feature-card__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">06 / 06</div>
+            <div class="feature-card__cmd" data-cmd='> "audit my website"'></div>
+            <h3 class="feature-card__title">Website audit<br>in plain English</h3>
+            <p class="feature-card__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="features-progress" id="featuresProgress">
+      <div class="feat-dot active"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 4: INTERACTIVE DEMO -->
+<section class="demo" id="demo-section">
+  <div class="container">
+    <div class="demo__label">
+      <div class="demo__eyebrow">Try it yourself</div>
+      <h2 class="demo__title">Your thumb is the only<br><em>dashboard</em> you need</h2>
+      <p class="demo__sub">Pick a scenario and walk through a real conversation</p>
+    </div>
+    <div class="demo__phone-wrap" id="demoPhoneWrap">
       <div class="phone">
+        <div class="phone__notch"><div class="phone__notch-pill"></div></div>
         <div class="phone__header">
           <div class="phone__avatar">TM</div>
           <div>
@@ -504,80 +1324,14 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   </div>
 </section>
 
-<div class="section-divider"></div>
-
-<section class="how">
-  <div class="container">
-    <div class="section-label reveal">How it works</div>
-    <h2 class="section-title reveal">Up and running in under an hour</h2>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step__num">01</div>
-        <h3 class="step__title">Answer 5 questions over text</h3>
-        <p class="step__desc">We text you within 60 seconds of signing up. You answer 5 short questions — your business name, what you sell, your target customer, your tone, and which platforms you're on. That's it. Your first week of posts arrives within the hour.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step__num">02</div>
-        <h3 class="step__title">Content arrives in your texts</h3>
-        <p class="step__desc">We generate posts, ad copy, and review responses in your business's voice — a florist gets warm and seasonal, a plumber gets direct and local. No generic filler. Each piece lands in your texts, ready for your approval before anything goes live.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step__num">03</div>
-        <h3 class="step__title">You just approve</h3>
-        <p class="step__desc">Reply YES to post. Reply EDIT to change it. Reply SKIP to move on. Your entire marketing runs from your text messages.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<section class="features">
-  <div class="container">
-    <div class="section-label reveal">What you get</div>
-    <h2 class="section-title reveal">Everything that was on your plate, handled.</h2>
-    <div class="features__grid">
-      <div class="feature feature--hero reveal">
-        <div class="feature__cmd" data-cmd='&gt; "run an ad"'></div>
-        <h3 class="feature__title">A Facebook ad in 30 seconds</h3>
-        <p class="feature__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature__cmd" data-cmd='&gt; new review detected'></div>
-        <h3 class="feature__title">Every Google review answered</h3>
-        <p class="feature__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature__cmd" data-cmd='&gt; "autopilot on"'></div>
-        <h3 class="feature__title">Full autopilot, zero babysitting</h3>
-        <p class="feature__desc">Switch to autopilot and we publish on your schedule. A weekly summary lands in your texts — no dashboard, no log-in.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature__cmd" data-cmd='&gt; scheduled: Mon / Wed / Fri'></div>
-        <h3 class="feature__title">Posts every week, on every platform</h3>
-        <p class="feature__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature__cmd" data-cmd='&gt; Monday 8am report'></div>
-        <h3 class="feature__title">Your numbers, every Monday</h3>
-        <p class="feature__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
-      </div>
-      <div class="feature reveal">
-        <div class="feature__cmd" data-cmd='&gt; "audit my website"'></div>
-        <h3 class="feature__title">Website audit in plain English</h3>
-        <p class="feature__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants. <span style="color:var(--text-muted);font-size:0.8rem">(1/mo on Starter, 5/mo on Growth)</span></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
+<!-- SECTION 5: COMPARE -->
 <section class="compare">
   <div class="container">
-    <div class="section-label reveal">vs. Hootsuite, Podium &amp; hiring someone</div>
-    <h2 class="compare__title reveal">Every competitor still needs a dashboard. We don't.</h2>
-    <div class="compare__mobile reveal" aria-label="Competitor comparison">
+    <div class="compare__eyebrow">vs. Hootsuite, Podium &amp; hiring someone</div>
+    <h2 class="compare__title">Every competitor still needs a dashboard. We don't.</h2>
+
+    <!-- Mobile -->
+    <div class="compare__mobile" aria-label="Competitor comparison">
       <div class="compare__mobile-header">
         <div class="compare__mobile-heading" style="grid-column:1/2">Feature</div>
         <div class="compare__mobile-heading" style="grid-column:2/3">Hootsuite / Podium</div>
@@ -614,110 +1368,107 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="compare__mobile-val compare__mobile-val--us"><span class="compare__check">&#10003;</span></div>
       </div>
     </div>
-    <div class="compare__scroll-wrap reveal">
-    <div>
-    <div class="compare__table" role="table" aria-label="Competitor comparison">
-      <div class="compare__row compare__row--head" role="row">
-        <div class="compare__cell compare__cell--feature" role="columnheader"></div>
-        <div class="compare__cell" role="columnheader">Social Media Manager</div>
-        <div class="compare__cell" role="columnheader">Hootsuite Team</div>
-        <div class="compare__cell" role="columnheader">Podium</div>
-        <div class="compare__cell compare__cell--us" role="columnheader">Sidekick</div>
-      </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Monthly cost</div>
-        <div class="compare__cell compare__cell--muted" role="cell">$2,500–$4k</div>
-        <div class="compare__cell compare__cell--muted" role="cell">$249/user</div>
-        <div class="compare__cell compare__cell--muted" role="cell">$399+</div>
-        <div class="compare__cell compare__cell--us" role="cell">$49–199</div>
-      </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">No dashboard required</div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
-      </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Posts written in your voice</div>
-        <div class="compare__cell compare__cell--muted" role="cell" aria-label="Partial" style="font-size:1rem;letter-spacing:0.04em">~</div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
-      </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Setup in under 10 min</div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
-      </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Runs via text message</div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
-      </div>
-      <div class="compare__row" role="row">
-        <div class="compare__cell compare__cell--feature" role="cell">Transparent flat price</div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell compare__cell--muted" role="cell" aria-label="Partial" style="font-size:1rem;letter-spacing:0.04em">~</div>
-        <div class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></div>
-        <div class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></div>
-      </div>
+
+    <!-- Desktop -->
+    <div class="compare__scroll-wrap">
+      <table class="compare__table" role="table" aria-label="Competitor comparison">
+        <tr class="compare__row compare__row--head" role="row">
+          <td class="compare__cell compare__cell--feature" role="columnheader"></td>
+          <td class="compare__cell" role="columnheader">Social Media Manager</td>
+          <td class="compare__cell" role="columnheader">Hootsuite Team</td>
+          <td class="compare__cell" role="columnheader">Podium</td>
+          <td class="compare__cell compare__cell--us" role="columnheader">Sidekick</td>
+        </tr>
+        <tr class="compare__row" role="row">
+          <td class="compare__cell compare__cell--feature" role="cell">Monthly cost</td>
+          <td class="compare__cell compare__cell--muted" role="cell">$2,500&ndash;$4k</td>
+          <td class="compare__cell compare__cell--muted" role="cell">$249/user</td>
+          <td class="compare__cell compare__cell--muted" role="cell">$399+</td>
+          <td class="compare__cell compare__cell--us" role="cell">$49&ndash;199</td>
+        </tr>
+        <tr class="compare__row" role="row">
+          <td class="compare__cell compare__cell--feature" role="cell">No dashboard required</td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></td>
+        </tr>
+        <tr class="compare__row" role="row">
+          <td class="compare__cell compare__cell--feature" role="cell">Posts written in your voice</td>
+          <td class="compare__cell compare__cell--muted" role="cell" aria-label="Partial">~</td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></td>
+        </tr>
+        <tr class="compare__row" role="row">
+          <td class="compare__cell compare__cell--feature" role="cell">Setup in under 10 min</td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></td>
+        </tr>
+        <tr class="compare__row" role="row">
+          <td class="compare__cell compare__cell--feature" role="cell">Runs via text message</td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></td>
+        </tr>
+        <tr class="compare__row" role="row">
+          <td class="compare__cell compare__cell--feature" role="cell">Transparent flat price</td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell compare__cell--muted" role="cell" aria-label="Partial">~</td>
+          <td class="compare__cell" role="cell"><span class="compare__x" aria-label="No">&#10005;</span></td>
+          <td class="compare__cell compare__cell--us" role="cell"><span class="compare__check" aria-label="Yes">&#10003;</span></td>
+        </tr>
+      </table>
     </div>
-    </div>
-    </div>
-    <p class="compare__note reveal">Sources: Hootsuite pricing page, Podium.com, Indeed salary data &mdash; April 2026. We give credit where it's due.</p>
-    <div class="compare__cta-row reveal">
+
+    <p class="compare__note">Sources: Hootsuite pricing page, Podium.com, Indeed salary data &mdash; April 2026. We give credit where it's due.</p>
+    <div class="compare__cta-row">
       <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Replace your $2,500/mo hire for $49 &rarr;</button>
       <span class="compare__cta-note">14-day free trial &nbsp;&middot;&nbsp; No credit card</span>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
-
+<!-- SECTION 6: PROOF / STATS -->
 <section class="proof">
-  <div class="container">
-    <div class="section-label reveal">The problem we're fixing</div>
-    <h2 class="section-title reveal">Most small businesses do their own marketing. Very few do it consistently.</h2>
-    <div class="proof__stats">
-      <div class="proof__stat-block reveal">
-        <span class="proof__stat-num"><em class="count-num" data-target="52" data-suffix="%">52</em>%</span>
-        <div class="proof__stat-label">of small business owners <strong>handle all their own marketing</strong> — on top of running the business</div>
-        <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
-      </div>
-      <div class="proof__stat-block reveal">
-        <span class="proof__stat-num">1&nbsp;in&nbsp;<em class="count-num" data-target="3">3</em></span>
-        <div class="proof__stat-label">post to social media <strong>consistently</strong>. The other two thirds post sporadically or not at all</div>
-        <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
-      </div>
+  <div class="proof__inner">
+    <div class="proof__stat-block">
+      <span class="proof__stat-num"><em class="count-num" data-target="52" data-suffix="%">52</em>%</span>
+      <div class="proof__stat-label">of small business owners <strong>handle all their own marketing</strong> — on top of running the business</div>
+      <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
     </div>
-    <p class="proof__note reveal">Sidekick is built for the 52%. No dashboard to learn. No app to open. Just text.</p>
-    <div class="proof__waitlist reveal">
+    <div class="proof__stat-block">
+      <span class="proof__stat-num">1&nbsp;in&nbsp;<em class="count-num" data-target="3">3</em></span>
+      <div class="proof__stat-label">post to social media <strong>consistently</strong>. The other two thirds post sporadically or not at all</div>
+      <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
+    </div>
+  </div>
+  <div class="proof__coda container">
+    <p class="proof__note">Sidekick is built for the 52%. No dashboard to learn. No app to open. Just text.</p>
+    <div class="proof__waitlist">
       <span class="proof__waitlist-num">203+</span>
       <span class="proof__waitlist-label">businesses already on the waitlist &mdash; opening to the first 500 in May 2026</span>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
-
+<!-- SECTION 7: PRICING -->
 <section class="pricing" id="pricing">
   <div class="container">
-    <div class="section-label reveal">Pricing</div>
-    <h2 class="section-title reveal">Less than your cheapest employee</h2>
-    <div class="pricing__toggle reveal">
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-headline">Less than your cheapest employee</h2>
+    <div class="pricing__toggle">
       <div class="pricing__toggle-btn" role="group" aria-label="Billing period">
         <button class="pricing__toggle-opt active" id="toggleMonthly" onclick="setBilling('monthly')">Monthly</button>
         <button class="pricing__toggle-opt" id="toggleAnnual" onclick="setBilling('annual')">Annual</button>
       </div>
       <span class="pricing__toggle-save" id="savePill" style="display:none">Save 20%</span>
     </div>
-    <div class="pricing__grid">
-      <div class="plan reveal">
+    <div class="pricing__grid" id="pricingGrid">
+      <div class="plan" id="planStarter">
         <div class="plan__name">// starter</div>
         <div class="plan__price"><span class="plan__price-num" data-monthly="$49" data-annual="$39">$49</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You have 1&ndash;2 social accounts and want to post consistently without thinking about it</p>
@@ -730,7 +1481,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         </ul>
         <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Starter')">Reserve Starter</button>
       </div>
-      <div class="plan plan--featured reveal" id="featuredPlan">
+      <div class="plan plan--featured" id="featuredPlan">
         <div class="plan__name">// growth</div>
         <div class="plan__price"><span class="plan__price-num" data-monthly="$99" data-annual="$79">$99</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You want consistent posting, paid ads, and review management handled &mdash; with full visibility via daily texts</p>
@@ -744,10 +1495,10 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         </ul>
         <button class="plan__btn plan__btn--primary" onclick="selectPlan('Growth')">Reserve Growth</button>
       </div>
-      <div class="plan reveal">
+      <div class="plan" id="planPro">
         <div class="plan__name">// pro</div>
         <div class="plan__price"><span class="plan__price-num" data-monthly="$199" data-annual="$159">$199</span><span class="plan__price-period">/mo</span></div>
-        <p class="plan__desc">You run multiple locations or a growing business and want everything handled end-to-end — no approvals needed unless you want them</p>
+        <p class="plan__desc">You run multiple locations or a growing business and want everything handled end-to-end</p>
         <ul class="plan__features">
           <li>Up to 5 locations or brands</li>
           <li>Unlimited AI generations</li>
@@ -759,86 +1510,82 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Pro')">Reserve Pro</button>
       </div>
     </div>
-    <p class="pricing__waitlist-note reveal">Waitlist pricing — locked in when you join. Prices increase at public launch.</p>
+    <p class="pricing__waitlist-note">Waitlist pricing &mdash; locked in when you join. Prices increase at public launch.</p>
   </div>
 </section>
 
-<div class="section-divider"></div>
-
+<!-- SECTION 8: FAQ -->
 <section class="faq">
   <div class="container">
-    <div class="section-label reveal">Before you join</div>
-    <h2 class="section-title reveal">Straight answers.</h2>
+    <div class="section-eyebrow">Before you join</div>
+    <h2 class="section-headline" style="margin-bottom:48px">Straight answers.</h2>
     <div class="faq__list">
-      <div class="faq__item reveal-left">
+      <div class="faq__item">
         <div class="faq__q">Is there a free trial?</div>
-        <div class="faq__a">Yes — 14 days free, no credit card required. You get full access to the Growth plan during your trial. At the end, pick a plan or walk away. Join the waitlist below to reserve your spot.</div>
+        <div class="faq__a">Yes &mdash; 14 days free, no credit card required. You get full access to the Growth plan during your trial. At the end, pick a plan or walk away. Join the waitlist below to reserve your spot.</div>
       </div>
-      <div class="faq__item reveal-right">
+      <div class="faq__item">
         <div class="faq__q">Can I cancel anytime?</div>
-        <div class="faq__a">Yes. Text CANCEL at any time and your plan ends at the close of your billing period. No cancellation fees, no retention calls, no friction. We want you to stay because it's working — not because leaving is hard.</div>
+        <div class="faq__a">Yes. Text CANCEL at any time and your plan ends at the close of your billing period. No cancellation fees, no retention calls, no friction. We want you to stay because it's working &mdash; not because leaving is hard.</div>
       </div>
-      <div class="faq__item reveal-left">
+      <div class="faq__item">
         <div class="faq__q">What social platforms do you support?</div>
-        <div class="faq__a">Instagram, Facebook, TikTok, LinkedIn, and Google Business Profile. We post natively to each platform — right format, right length, right hashtags per platform. Twitter/X support coming in Q3 2026.</div>
+        <div class="faq__a">Instagram, Facebook, TikTok, LinkedIn, and Google Business Profile. We post natively to each platform &mdash; right format, right length, right hashtags per platform. Twitter/X support coming in Q3 2026.</div>
       </div>
-      <div class="faq__item reveal-right">
+      <div class="faq__item">
         <div class="faq__q">Is this live? When does access open?</div>
-        <div class="faq__a">We're in early access, opening to the first 500 businesses in May 2026. Join the waitlist and we'll text you directly when your spot is ready — no checking back, no logging in to see your status.</div>
+        <div class="faq__a">We're in early access, opening to the first 500 businesses in May 2026. Join the waitlist and we'll text you directly when your spot is ready &mdash; no checking back, no logging in to see your status.</div>
       </div>
-      <div class="faq__item reveal-left">
+      <div class="faq__item">
         <div class="faq__q">What happens after I sign up?</div>
-        <div class="faq__a">We text you within 60 seconds. You'll answer 5 short questions about your business — name, what you sell, your target customer, your biggest goal, and which social platforms you use. That's it. Your first week of posts lands in your phone within the hour.</div>
+        <div class="faq__a">We text you within 60 seconds. You'll answer 5 short questions about your business &mdash; name, what you sell, your target customer, your biggest goal, and which social platforms you use. That's it. Your first week of posts lands in your phone within the hour.</div>
       </div>
-      <div class="faq__item reveal-right">
+      <div class="faq__item">
         <div class="faq__q">Will I ever run out of content?</div>
-        <div class="faq__a">On the Starter plan, we create up to 100 pieces of content per month — roughly 4 posts per week plus review responses and a website audit. Growth gives you 500, which covers daily posting, ad variations, and more. Pro is unlimited. Edits on content we already sent don't count against your limit.</div>
+        <div class="faq__a">On the Starter plan, we create up to 100 pieces of content per month &mdash; roughly 4 posts per week plus review responses and a website audit. Growth gives you 500, which covers daily posting, ad variations, and more. Pro is unlimited. Edits on content we already sent don't count against your limit.</div>
       </div>
-      <div class="faq__item reveal-left">
+      <div class="faq__item">
         <div class="faq__q">Do you actually post for me, or just draft?</div>
         <div class="faq__a">Both. You choose. Reply YES to a post and we publish it automatically. Reply EDIT and we revise it. Reply SKIP and we move on. Want us to auto-post without asking? Switch to autopilot mode and we publish everything on your behalf.</div>
       </div>
-      <div class="faq__item reveal-right">
+      <div class="faq__item">
         <div class="faq__q">What if it posts something wrong or off-brand?</div>
-        <div class="faq__a">Nothing posts without your YES. Every piece of content is sent to you first. If it's off, reply EDIT and say what to change — we revise and send it back. After a few rounds, we learn your voice and get it right more often. You're always in control.</div>
+        <div class="faq__a">Nothing posts without your YES. Every piece of content is sent to you first. If it's off, reply EDIT and say what to change &mdash; we revise and send it back. After a few rounds, we learn your voice and get it right more often. You're always in control.</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
-
+<!-- SECTION 9: FINAL CTA -->
 <section class="final-cta" id="final">
-  <div class="container">
-    <div class="final-cta__inner reveal">
-      <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
-      <h2 class="final-cta__title">Your marketing shouldn't require a second job.</h2>
-      <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We text you when your spot opens — no app to check, no dashboard to log into.</p>
+  <div class="final-cta__inner">
+    <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
+    <h2 class="final-cta__title">Your marketing shouldn't require a second job.</h2>
+    <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We text you when your spot opens &mdash; no app to check, no dashboard to log into.</p>
 
-      <div class="plan-selected" id="planSelected" style="display:none">
-        <span class="plan-selected__label">Selected:</span>
-        <span class="plan-selected__name" id="planSelectedName"></span>
-        <button class="plan-selected__clear" onclick="clearPlan()" aria-label="Clear plan selection">&times;</button>
-      </div>
-      <input type="hidden" id="selectedPlan" name="plan" value="">
+    <div class="plan-selected" id="planSelected" style="display:none">
+      <span class="plan-selected__label">Selected:</span>
+      <span class="plan-selected__name" id="planSelectedName"></span>
+      <button class="plan-selected__clear" onclick="clearPlan()" aria-label="Clear plan selection">&times;</button>
+    </div>
+    <input type="hidden" id="selectedPlan" name="plan" value="">
 
-      <form class="signup-form" id="step1Form" onsubmit="handleStep1(event)">
-        <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
-        <button type="submit">Hold my spot &rarr;</button>
-      </form>
+    <form class="signup-form" id="step1Form" onsubmit="handleStep1(event)">
+      <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
+      <button type="submit">Hold my spot &rarr;</button>
+    </form>
 
-      <form class="signup-form" id="step2Form" onsubmit="handleStep2(event)" style="display:none">
-        <input type="tel" id="phoneInput" placeholder="(555) 867-5309" autocomplete="tel" required>
-        <button type="submit">Start free trial &rarr;</button>
-      </form>
+    <form class="signup-form" id="step2Form" onsubmit="handleStep2(event)" style="display:none">
+      <input type="tel" id="phoneInput" placeholder="(555) 867-5309" autocomplete="tel" required>
+      <button type="submit">Start free trial &rarr;</button>
+    </form>
 
-      <p class="signup-note">By joining you agree to our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>. We'll only contact you about your waitlist spot &mdash; never sold, never spammed.</p>
-      <p class="signup-msg" id="signupMsg"></p>
-      <div class="queue-block" id="queueBlock">
-        <span class="queue-position" id="queuePos"></span>
-        <span class="queue-label">in line for early access</span>
-        <div class="referral-hint">Refer 3 businesses &rarr; skip the queue + <strong>2 months free</strong>.<br>Your referral link lands in your confirmation text.</div>
-      </div>
+    <p class="signup-note">By joining you agree to our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>. We'll only contact you about your waitlist spot &mdash; never sold, never spammed.</p>
+    <p class="signup-msg" id="signupMsg"></p>
+    <div class="queue-block" id="queueBlock">
+      <span class="queue-position" id="queuePos"></span>
+      <span class="queue-label">in line for early access</span>
+      <div class="referral-hint">Refer 3 businesses &rarr; skip the queue + <strong>2 months free</strong>.<br>Your referral link lands in your confirmation text.</div>
     </div>
   </div>
 </section>
@@ -854,6 +1601,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   </div>
 </footer>
 
+<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal__header">
@@ -865,431 +1613,626 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 </div>
 
 <script>
-/* ─── NAV SCROLL ─── */
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20)},{passive:true});
+/* ─── PREFERSMOTION CHECK ─── */
+const prefersMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
 
-/* ─── INTERSECTION OBSERVER: scroll reveals ─── */
-const prefersMotion=window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+/* ─── NAV ─── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, {passive: true});
 
-if(prefersMotion){
-  const revealObserver=new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(!entry.isIntersecting)return;
-      const el=entry.target;
-      el.classList.add('revealed');
-      revealObserver.unobserve(el);
-    });
-  },{threshold:0.12});
+/* ─── HERO SCROLL-LINKED TRANSFORM ─── */
+(function initHero() {
+  const stage = document.getElementById('heroStage');
+  const wordmark = document.getElementById('heroWordmark');
+  const phoneRise = document.getElementById('heroPhoneRise');
+  const heroContent = document.getElementById('heroContent');
 
-  // Stagger siblings in the same parent
-  const staggerGroups=[
-    document.querySelectorAll('.steps .step'),
-    document.querySelectorAll('.features__grid .feature'),
-    document.querySelectorAll('.pricing__grid .plan'),
-    document.querySelectorAll('.proof__stats .proof__stat-block'),
+  if (!prefersMotion) {
+    wordmark.style.position = 'relative';
+    wordmark.style.top = 'auto';
+    wordmark.style.left = 'auto';
+    wordmark.style.transform = 'none';
+    wordmark.style.fontSize = '4rem';
+    wordmark.style.marginBottom = '24px';
+    heroContent.style.opacity = '1';
+    heroContent.classList.add('visible');
+    phoneRise.style.transform = 'translateX(-50%) translateY(0)';
+    phoneRise.style.opacity = '1';
+    return;
+  }
+
+  let heroAnimDone = false;
+
+  function updateHero() {
+    const stageRect = stage.getBoundingClientRect();
+    const stageH = stage.offsetHeight;
+    const vh = window.innerHeight;
+
+    // scrolled through hero: 0 at top, 1 at end of stage
+    const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
+
+    // Phase 1: 0 -> 0.35: wordmark shrinks, moves up
+    // Phase 2: 0.35 -> 0.6: phone rises, wordmark continues shrinking
+    // Phase 3: 0.6 -> 0.85: content fades in, wordmark becomes logo-sized
+    // Phase 4: 0.85+: hero stays put
+
+    // Wordmark transform
+    const wPhase = Math.min(1, scrolled / 0.85);
+    const easedW = 1 - Math.pow(1 - wPhase, 2);
+    // Start: fontSize ~20vw centered. End: ~2.2rem at top-left (nav logo position)
+    const startSize = Math.min(window.innerWidth * 0.20, 280);
+    const endSize = 18; // px, nav logo size
+    const currentSize = startSize - (startSize - endSize) * easedW;
+
+    // Position: start centered, end at nav (top:30px left:32px)
+    const startX = window.innerWidth / 2;
+    const startY = window.innerHeight / 2;
+    const endX = 48; // ~nav logo position
+    const endY = 30;
+    const currentX = startX + (endX - startX) * easedW;
+    const currentY = startY + (endY - startY) * easedW;
+
+    wordmark.style.fontSize = currentSize + 'px';
+    wordmark.style.transform = `translate(calc(${currentX}px - 50%), calc(${currentY}px - 50%))`;
+    wordmark.style.opacity = scrolled > 0.7 ? String(1 - (scrolled - 0.7) / 0.15) : '1';
+
+    // Phone rise: phase 0.3 -> 0.65
+    const pPhase = Math.max(0, Math.min(1, (scrolled - 0.3) / 0.35));
+    const easedP = 1 - Math.pow(1 - pPhase, 3);
+    // From bottom (translateY 100%) to center (translateY -35%)
+    const phoneY = 100 - (100 + 35) * easedP; // starts at 100, ends at -35
+    const phoneScale = 0.7 + 0.3 * easedP;
+    phoneRise.style.transform = `translateX(-50%) translateY(${phoneY}%) scale(${phoneScale})`;
+    phoneRise.style.opacity = String(Math.min(1, pPhase * 2));
+
+    // Content fade in: phase 0.6 -> 0.85
+    const cPhase = Math.max(0, Math.min(1, (scrolled - 0.60) / 0.25));
+    heroContent.style.opacity = String(cPhase);
+    if (cPhase > 0) {
+      heroContent.classList.add('visible');
+    } else {
+      heroContent.classList.remove('visible');
+    }
+
+    // Start hero auto-play once phone is in position
+    if (pPhase >= 0.85 && !heroAnimDone) {
+      heroAnimDone = true;
+      runHeroConvo();
+    }
+  }
+
+  window.addEventListener('scroll', () => { requestAnimationFrame(updateHero); }, {passive: true});
+  updateHero();
+})();
+
+/* ─── HERO AUTO-PLAY ─── */
+const heroConvo = [
+  {type:'in', text:`Hey! I'm your marketing assistant. What would you like to do today?`, delay:400},
+  {type:'out', text:`Write this week's posts`, delay:900},
+  {type:'typing', delay:1400},
+  {type:'in', text:`Here are 3 posts for Joe's Coffee:\n\nMon: "Monday mornings hit different."\n\nWed: "New seasonal menu dropping Friday — cold brew & oat milk."\n\nFri: "Weekend vibes start here. Open till 8pm."`, delay:500},
+  {type:'in', text:`Reply YES to schedule all, or EDIT to change one.`, delay:800},
+  {type:'out', text:`YES`, delay:1000},
+  {type:'typing', delay:800},
+  {type:'in', text:`Done. All 3 posts are scheduled. I'll text you a Monday morning summary.`, delay:2800},
+];
+let heroConvoRan = false;
+
+async function runHeroConvo() {
+  if (heroConvoRan) return;
+  heroConvoRan = true;
+  const heroMsgs = document.getElementById('heroMessages');
+  const replayBtn = document.getElementById('heroReplay');
+  if (!heroMsgs) return;
+  heroMsgs.innerHTML = '';
+  if (replayBtn) replayBtn.classList.remove('visible');
+  for (const msg of heroConvo) {
+    await new Promise(r => setTimeout(r, msg.delay));
+    if (msg.type === 'typing') {
+      const t = document.createElement('div');
+      t.className = 'msg msg--typing';
+      t.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      heroMsgs.appendChild(t);
+      heroMsgs.scrollTop = heroMsgs.scrollHeight;
+      await new Promise(r => setTimeout(r, 1100));
+      t.remove();
+    } else {
+      const d = document.createElement('div');
+      d.className = 'msg msg--' + (msg.type === 'out' ? 'out' : 'in');
+      d.textContent = msg.text;
+      d.style.whiteSpace = 'pre-wrap';
+      heroMsgs.appendChild(d);
+      heroMsgs.scrollTop = heroMsgs.scrollHeight;
+    }
+  }
+  if (replayBtn) replayBtn.classList.add('visible');
+}
+
+async function replayHeroConvo() {
+  heroConvoRan = false;
+  await runHeroConvo();
+}
+
+const heroReplayBtn = document.getElementById('heroReplay');
+if (heroReplayBtn) heroReplayBtn.addEventListener('click', replayHeroConvo);
+
+// If reduced motion, just run it immediately
+if (!prefersMotion) { runHeroConvo(); }
+
+/* ─── HOW IT WORKS: SCROLL-LOCKED ─── */
+(function initHow() {
+  const stage = document.getElementById('howStage');
+  const stepBg = document.getElementById('howStepBg');
+  const stepLabel = document.getElementById('howStepLabel');
+  const stepTitle = document.getElementById('howStepTitle');
+  const stepDesc = document.getElementById('howStepDesc');
+  const dots = document.querySelectorAll('.how__progress-dot');
+
+  const steps = [
+    {
+      num: '01',
+      label: 'How it works / 01',
+      title: 'Answer 5 questions over text',
+      desc: `We text you within 60 seconds of signing up. Your business name, what you sell, your target customer, your tone, which platforms. That's it. Your first week of posts arrives within the hour.`
+    },
+    {
+      num: '02',
+      label: 'How it works / 02',
+      title: 'Content arrives in your texts',
+      desc: `We generate posts, ad copy, and review responses in your business's voice — a florist gets warm and seasonal, a plumber gets direct and local. Each piece lands in your texts, ready for your approval before anything goes live.`
+    },
+    {
+      num: '03',
+      label: 'How it works / 03',
+      title: 'You just approve',
+      desc: `Reply YES to post. Reply EDIT to change it. Reply SKIP to move on. Your entire marketing runs from your text messages.`
+    }
   ];
 
-  staggerGroups.forEach(group=>{
-    group.forEach((el,i)=>{
-      el.style.transitionDelay=`${i*80}ms`;
-    });
-  });
+  let currentStep = -1;
 
-  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>{
-    // Skip elements that are display:none (e.g. desktop-only table on mobile)
-    if(getComputedStyle(el).display==='none'){
-      el.classList.add('revealed');
-      return;
+  function setStep(idx, animate) {
+    if (idx === currentStep) return;
+    currentStep = idx;
+    const s = steps[idx];
+
+    // Update bg number
+    stepBg.textContent = s.num;
+
+    // Animate content out then in
+    if (animate && prefersMotion) {
+      stepLabel.classList.remove('in');
+      stepTitle.classList.remove('in');
+      stepDesc.classList.remove('in');
+      setTimeout(() => {
+        stepLabel.textContent = s.label;
+        stepTitle.textContent = s.title;
+        stepDesc.textContent = s.desc;
+        requestAnimationFrame(() => {
+          stepLabel.classList.add('in');
+          stepTitle.classList.add('in');
+          stepDesc.classList.add('in');
+        });
+      }, 120);
+    } else {
+      stepLabel.textContent = s.label;
+      stepTitle.textContent = s.title;
+      stepDesc.textContent = s.desc;
+      stepLabel.classList.add('in');
+      stepTitle.classList.add('in');
+      stepDesc.classList.add('in');
     }
-    revealObserver.observe(el);
-  });
 
-  /* ─── FEATURED PLAN: one-shot glow when revealed ─── */
-  const featuredPlan=document.getElementById('featuredPlan');
-  if(featuredPlan){
-    const glowObserver=new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        if(!entry.isIntersecting)return;
-        setTimeout(()=>featuredPlan.classList.add('glow-once'),400);
-        glowObserver.unobserve(featuredPlan);
-      });
-    },{threshold:0.3});
-    glowObserver.observe(featuredPlan);
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
   }
-}
 
-/* ─── HERO: phone scale-in ─── */
-const heroPhone=document.getElementById('heroPhoneWrap');
-if(heroPhone&&prefersMotion){
-  requestAnimationFrame(()=>{
-    setTimeout(()=>heroPhone.classList.add('phone-revealed'),100);
-  });
-}
+  function updateHow() {
+    if (!prefersMotion) return;
+    const stageRect = stage.getBoundingClientRect();
+    const stageH = stage.offsetHeight;
+    const vh = window.innerHeight;
+    const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
 
-/* ─── HERO: headline word-by-word animation ─── */
-(function animateHeroTitle(){
-  if(!prefersMotion)return;
-  const titleEl=document.getElementById('heroTitle');
-  if(!titleEl)return;
+    // Determine which step: 0 = 0-0.33, 1 = 0.33-0.66, 2 = 0.66-1
+    let stepIdx = Math.min(2, Math.floor(scrolled * 3));
+    setStep(stepIdx, true);
 
-  // Get the em element (gradient word) before we mess with innerHTML
-  const gradWord=titleEl.querySelector('em');
-  const gradText=gradWord?gradWord.textContent:'';
+    // Fade bg number based on position within step
+    const stepProgress = (scrolled * 3) % 1;
+    stepBg.style.opacity = stepProgress < 0.1 ? String(stepProgress / 0.1) :
+                           stepProgress > 0.9 ? String(1 - (stepProgress - 0.9) / 0.1) : '1';
+  }
 
-  // Rebuild with spans — preserve the <br> and gradient em
-  const raw=titleEl.innerHTML;
-  // Split into lines by <br>
-  const lines=raw.split('<br>');
-  const wrappedLines=lines.map((line,li)=>{
-    // Replace the em tag first, then wrap remaining words
-    const hasGrad=line.includes('<em');
-    if(hasGrad){
-      // Split around the em tag
-      const parts=line.split(/(<em[^>]*>.*?<\/em>)/);
-      return parts.map(part=>{
-        if(part.startsWith('<em')){
-          return `<em class="hero__word-grad"><span class="hero__word">${gradText}</span></em>`;
-        }
-        return part.trim().split(' ').filter(Boolean).map(w=>`<span class="hero__word">${w}</span>`).join(' ');
-      }).join(' ');
+  // Initial state
+  setStep(0, false);
+  window.addEventListener('scroll', () => { requestAnimationFrame(updateHow); }, {passive: true});
+  updateHow();
+})();
+
+/* ─── FEATURES: HORIZONTAL SCROLL ─── */
+(function initFeatures() {
+  const stage = document.getElementById('featuresStage');
+  const track = document.getElementById('featuresTrack');
+  const dots = document.querySelectorAll('.feat-dot');
+  const cards = track.querySelectorAll('.feature-card');
+  const numCards = cards.length;
+  let cmdsDone = new Set();
+
+  function typewriterCmd(el, text) {
+    el.textContent = '';
+    let i = 0;
+    function tick() {
+      if (i < text.length) {
+        el.textContent += text[i];
+        i++;
+        setTimeout(tick, 40);
+      }
     }
-    return line.trim().split(' ').filter(Boolean).map(w=>`<span class="hero__word">${w}</span>`).join(' ');
-  });
-  titleEl.innerHTML=wrappedLines.join('<br>');
+    tick();
+  }
 
-  const words=titleEl.querySelectorAll('.hero__word');
-  words.forEach((w,i)=>{
-    setTimeout(()=>w.classList.add('word-in'),120+i*110);
-  });
+  function updateFeatures() {
+    if (!prefersMotion) return;
+    const stageRect = stage.getBoundingClientRect();
+    const stageH = stage.offsetHeight;
+    const vh = window.innerHeight;
+    const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
 
-  // Slide in stat badge after headline
-  const stat=document.getElementById('heroStat');
-  if(stat){
-    setTimeout(()=>stat.classList.add('stat-in'),120+words.length*110+200);
+    // Total offset: scroll through (numCards - 1) panels
+    const maxOffset = (numCards - 1) * window.innerWidth;
+    const offset = scrolled * maxOffset;
+    track.style.transform = `translateX(-${offset}px)`;
+
+    // Which card is active
+    const activeIdx = Math.round(offset / window.innerWidth);
+    dots.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
+
+    // Trigger typewriter for visible card cmd
+    const visibleIdx = Math.round(offset / window.innerWidth);
+    if (!cmdsDone.has(visibleIdx)) {
+      cmdsDone.add(visibleIdx);
+      const card = cards[visibleIdx];
+      if (card) {
+        const cmdEl = card.querySelector('.feature-card__cmd');
+        if (cmdEl && cmdEl.dataset.cmd) {
+          const rawCmd = cmdEl.dataset.cmd.replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&lt;/g, '<');
+          typewriterCmd(cmdEl, rawCmd);
+        }
+      }
+    }
+  }
+
+  window.addEventListener('scroll', () => { requestAnimationFrame(updateFeatures); }, {passive: true});
+  updateFeatures();
+
+  // Also trigger first card cmd immediately
+  const firstCmd = cards[0] && cards[0].querySelector('.feature-card__cmd');
+  if (firstCmd && firstCmd.dataset.cmd) {
+    const raw = firstCmd.dataset.cmd.replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&lt;/g, '<');
+    setTimeout(() => typewriterCmd(firstCmd, raw), 400);
+    cmdsDone.add(0);
   }
 })();
 
-/* ─── STATS COUNTER: count up from 0 ─── */
-function countUp(el,target,duration){
-  let start=null;
-  const suffix=el.dataset.suffix||'';
-  function step(ts){
-    if(!start)start=ts;
-    const progress=Math.min((ts-start)/duration,1);
-    // ease out cubic
-    const eased=1-Math.pow(1-progress,3);
-    el.textContent=Math.round(eased*target)+suffix;
-    if(progress<1)requestAnimationFrame(step);
+/* ─── DEMO: fade in when scrolled to ─── */
+(function initDemo() {
+  const wrap = document.getElementById('demoPhoneWrap');
+  if (!wrap) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        wrap.classList.add('in');
+        obs.unobserve(wrap);
+      }
+    });
+  }, {threshold: 0.2});
+  obs.observe(wrap);
+})();
+
+/* ─── COMPARE: rows slide in ─── */
+(function initCompare() {
+  if (!prefersMotion) return;
+  const rows = document.querySelectorAll('.compare__row:not(.compare__row--head)');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('row-in');
+        obs.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.5, rootMargin: '0px 0px -40px 0px'});
+
+  rows.forEach((row, i) => {
+    row.style.transitionDelay = `${i * 60}ms`;
+    obs.observe(row);
+  });
+})();
+
+/* ─── STATS COUNT UP ─── */
+function countUp(el, target, duration) {
+  let start = null;
+  const suffix = el.dataset.suffix || '';
+  function step(ts) {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
 
-const countObserver=new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(!entry.isIntersecting)return;
-    const el=entry.target;
-    const target=parseInt(el.dataset.target,10);
-    countUp(el,target,1500);
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseInt(el.dataset.target, 10);
+    countUp(el, target, 1800);
     countObserver.unobserve(el);
   });
-},{threshold:0.5});
+}, {threshold: 0.5});
+document.querySelectorAll('.count-num').forEach(el => countObserver.observe(el));
 
-document.querySelectorAll('.count-num').forEach(el=>countObserver.observe(el));
+/* ─── PRICING: cards float in ─── */
+(function initPricing() {
+  const plans = document.querySelectorAll('.plan');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('plan-in');
+        obs.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.15});
 
-/* ─── FEATURE COMMANDS: typewriter when revealed ─── */
-function typewriter(el,text,speed){
-  el.textContent='';
-  let i=0;
-  function tick(){
-    if(i<text.length){
-      el.textContent+=text[i];
-      i++;
-      setTimeout(tick,speed);
-    }
-  }
-  tick();
-}
-
-const cmdObserver=new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(!entry.isIntersecting)return;
-    const el=entry.target;
-    const rawCmd=el.dataset.cmd||'';
-    // Decode HTML entities for display
-    const decoded=rawCmd.replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&lt;/g,'<');
-    typewriter(el,decoded,38);
-    cmdObserver.unobserve(el);
+  plans.forEach((p, i) => {
+    p.style.transitionDelay = `${i * 100}ms`;
+    obs.observe(p);
   });
-},{threshold:0.3});
 
-document.querySelectorAll('.feature__cmd[data-cmd]').forEach(el=>cmdObserver.observe(el));
+  // Featured plan glow
+  const featured = document.getElementById('featuredPlan');
+  if (featured) {
+    const glowObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          setTimeout(() => featured.classList.add('glow-once'), 600);
+          glowObs.unobserve(featured);
+        }
+      });
+    }, {threshold: 0.3});
+    glowObs.observe(featured);
+  }
+})();
 
 /* ─── MODAL ─── */
-const modalContent={
-  privacy:{
-    title:'Privacy Policy',
-    body:`<h3>What we collect</h3><p>We collect your phone number when you sign up. We also collect basic usage data — which features you use, how often you text us, and whether your content is performing well. We do not collect payment card data (handled by Stripe).</p><h3>How we use it</h3><p>Your phone number is used to send you marketing content, performance reports, and product updates related to your Sidekick account. We do not sell your data to third parties. We do not use your data to train AI models without explicit consent.</p><h3>Data retention</h3><p>If you cancel your account, we delete your business data within 30 days. Your phone number is removed from all marketing lists immediately upon cancellation.</p><h3>Contact</h3><p>Questions? Text PRIVACY to your Sidekick number or email <a href="mailto:privacy@sidekick.app" style="color:var(--accent)">privacy@sidekick.app</a>.</p>`
+const modalContent = {
+  privacy: {
+    title: 'Privacy Policy',
+    body: `<h3>What we collect</h3><p>We collect your phone number when you sign up. We also collect basic usage data — which features you use, how often you text us, and whether your content is performing well. We do not collect payment card data (handled by Stripe).</p><h3>How we use it</h3><p>Your phone number is used to send you marketing content, performance reports, and product updates related to your Sidekick account. We do not sell your data to third parties. We do not use your data to train AI models without explicit consent.</p><h3>Data retention</h3><p>If you cancel your account, we delete your business data within 30 days. Your phone number is removed from all marketing lists immediately upon cancellation.</p><h3>Contact</h3><p>Questions? Text PRIVACY to your Sidekick number or email <a href="mailto:privacy@sidekick.app" style="color:var(--accent)">privacy@sidekick.app</a>.</p>`
   },
-  terms:{
-    title:'Terms of Service',
-    body:`<h3>The service</h3><p>Sidekick provides an AI-powered marketing assistant delivered via SMS. You approve all content before it is published. We are not responsible for the performance of published content or advertising results.</p><h3>Billing</h3><p>Plans are billed monthly. You can cancel anytime by texting CANCEL — your plan continues until the end of the billing period with no prorated refund. Free trial periods do not require a credit card.</p><h3>Acceptable use</h3><p>You may not use Sidekick to send spam, promote illegal products, or distribute content that violates platform guidelines (Facebook, Instagram, TikTok, etc.). Violations result in immediate account termination.</p><h3>Limitation of liability</h3><p>Sidekick is provided as-is. We are not liable for indirect or consequential damages arising from use of the service. Our maximum liability is limited to fees paid in the prior 3 months.</p><h3>Contact</h3><p>Questions? Email <a href="mailto:hello@sidekick.app" style="color:var(--accent)">hello@sidekick.app</a>.</p>`
+  terms: {
+    title: 'Terms of Service',
+    body: `<h3>The service</h3><p>Sidekick provides an AI-powered marketing assistant delivered via SMS. You approve all content before it is published. We are not responsible for the performance of published content or advertising results.</p><h3>Billing</h3><p>Plans are billed monthly. You can cancel anytime by texting CANCEL — your plan continues until the end of the billing period with no prorated refund. Free trial periods do not require a credit card.</p><h3>Acceptable use</h3><p>You may not use Sidekick to send spam, promote illegal products, or distribute content that violates platform guidelines (Facebook, Instagram, TikTok, etc.). Violations result in immediate account termination.</p><h3>Limitation of liability</h3><p>Sidekick is provided as-is. We are not liable for indirect or consequential damages arising from use of the service. Our maximum liability is limited to fees paid in the prior 3 months.</p><h3>Contact</h3><p>Questions? Email <a href="mailto:hello@sidekick.app" style="color:var(--accent)">hello@sidekick.app</a>.</p>`
   }
 };
 
-function openModal(type){
-  const overlay=document.getElementById('modalOverlay');
-  document.getElementById('modalTitle').textContent=modalContent[type].title;
-  document.getElementById('modalBody').innerHTML=modalContent[type].body;
+function openModal(type) {
+  const overlay = document.getElementById('modalOverlay');
+  document.getElementById('modalTitle').textContent = modalContent[type].title;
+  document.getElementById('modalBody').innerHTML = modalContent[type].body;
   overlay.classList.add('open');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
 
-function closeModal(){
+function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow='';
+  document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeModal()});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
 /* ─── PLAN SELECTION ─── */
-function selectPlan(planName){
-  document.getElementById('selectedPlan').value=planName;
-  document.getElementById('planSelectedName').textContent=planName+' plan';
-  document.getElementById('planSelected').style.display='inline-flex';
-  document.getElementById('final').scrollIntoView({behavior:'smooth'});
+function selectPlan(planName) {
+  document.getElementById('selectedPlan').value = planName;
+  document.getElementById('planSelectedName').textContent = planName + ' plan';
+  document.getElementById('planSelected').style.display = 'inline-flex';
+  document.getElementById('final').scrollIntoView({behavior: 'smooth'});
 }
 
-function clearPlan(){
-  document.getElementById('selectedPlan').value='';
-  document.getElementById('planSelected').style.display='none';
+function clearPlan() {
+  document.getElementById('selectedPlan').value = '';
+  document.getElementById('planSelected').style.display = 'none';
 }
 
 /* ─── SIGNUP FORMS ─── */
-function handleStep1(e){
+function handleStep1(e) {
   e.preventDefault();
-  const emailInput=document.getElementById('emailInput');
-  const email=emailInput.value.trim();
-  if(!email||!email.includes('@')){
-    emailInput.style.borderColor='var(--red)';
+  const emailInput = document.getElementById('emailInput');
+  const email = emailInput.value.trim();
+  if (!email || !email.includes('@')) {
+    emailInput.style.borderColor = 'var(--red)';
     emailInput.focus();
     return;
   }
-  emailInput.style.borderColor='';
-  document.getElementById('step1Form').style.display='none';
-  const title=document.querySelector('.final-cta__title');
-  if(title)title.textContent='One more thing.';
-  document.getElementById('formSub').textContent='What number should we text when your spot opens?';
-  const step2=document.getElementById('step2Form');
-  step2.style.display='flex';
+  emailInput.style.borderColor = '';
+  document.getElementById('step1Form').style.display = 'none';
+  const title = document.querySelector('.final-cta__title');
+  if (title) title.textContent = 'One more thing.';
+  document.getElementById('formSub').textContent = 'What number should we text when your spot opens?';
+  const step2 = document.getElementById('step2Form');
+  step2.style.display = 'flex';
   document.getElementById('phoneInput').focus();
 }
 
-function handleStep2(e){
+function handleStep2(e) {
   e.preventDefault();
-  const phoneInput=document.getElementById('phoneInput');
-  const phone=phoneInput.value.trim();
-  if(!phone||phone.replace(/\D/g,'').length<10){
-    phoneInput.style.borderColor='var(--red)';
+  const phoneInput = document.getElementById('phoneInput');
+  const phone = phoneInput.value.trim();
+  if (!phone || phone.replace(/\D/g, '').length < 10) {
+    phoneInput.style.borderColor = 'var(--red)';
     phoneInput.focus();
     return;
   }
-  phoneInput.style.borderColor='';
-  const btn=e.target.querySelector('button');
-  btn.textContent='Locking you in...';
-  btn.disabled=true;
-  setTimeout(()=>{
-    document.getElementById('step2Form').style.display='none';
-    document.getElementById('formSub').style.display='none';
-    const title=document.querySelector('.final-cta__title');
-    if(title)title.textContent=`You're in.`;
-    const trust=document.querySelector('.final-cta__trust');
-    if(trust)trust.style.display='none';
-    const note=document.querySelector('.signup-note');
-    if(note)note.style.display='none';
-    const planIndicator=document.getElementById('planSelected');
-    if(planIndicator)planIndicator.style.display='none';
-    const msg=document.getElementById('signupMsg');
-    const plan=document.getElementById('selectedPlan').value;
-    const planNote=plan?` Your <strong>${plan} plan</strong> price is locked in.`:'';
-    msg.innerHTML=`Spot reserved.${planNote} We open to the first 500 businesses in <strong>May 2026</strong> &mdash; we'll text you the moment you're up.`;
-    msg.style.display='block';
-    const email=document.getElementById('emailInput').value.trim();
-    let hash=0;
-    for(let ci=0;ci<email.length;ci++){hash=(hash*31+email.charCodeAt(ci))>>>0}
-    const position=180+(hash%61);
-    const queueBlock=document.getElementById('queueBlock');
-    const queuePos=document.getElementById('queuePos');
-    if(queuePos)queuePos.textContent='#'+position+' in line';
-    if(queueBlock)queueBlock.style.display='block';
-  },600);
+  phoneInput.style.borderColor = '';
+  const btn = e.target.querySelector('button');
+  btn.textContent = 'Locking you in...';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('step2Form').style.display = 'none';
+    document.getElementById('formSub').style.display = 'none';
+    const title = document.querySelector('.final-cta__title');
+    if (title) title.textContent = `You're in.`;
+    const trust = document.querySelector('.final-cta__trust');
+    if (trust) trust.style.display = 'none';
+    const note = document.querySelector('.signup-note');
+    if (note) note.style.display = 'none';
+    const planIndicator = document.getElementById('planSelected');
+    if (planIndicator) planIndicator.style.display = 'none';
+    const msg = document.getElementById('signupMsg');
+    const plan = document.getElementById('selectedPlan').value;
+    const planNote = plan ? ` Your <strong>${plan} plan</strong> price is locked in.` : '';
+    msg.innerHTML = `Spot reserved.${planNote} We open to the first 500 businesses in <strong>May 2026</strong> &mdash; we'll text you the moment you're up.`;
+    msg.style.display = 'block';
+    const email = document.getElementById('emailInput').value.trim();
+    let hash = 0;
+    for (let ci = 0; ci < email.length; ci++) { hash = (hash * 31 + email.charCodeAt(ci)) >>> 0; }
+    const position = 180 + (hash % 61);
+    const queueBlock = document.getElementById('queueBlock');
+    const queuePos = document.getElementById('queuePos');
+    if (queuePos) queuePos.textContent = '#' + position + ' in line';
+    if (queueBlock) queueBlock.style.display = 'block';
+  }, 600);
 }
 
 /* ─── BILLING TOGGLE ─── */
-function setBilling(mode){
-  document.getElementById('toggleMonthly').classList.toggle('active',mode==='monthly');
-  document.getElementById('toggleAnnual').classList.toggle('active',mode==='annual');
-  document.querySelectorAll('.plan__price-num').forEach(el=>{
-    el.textContent=mode==='annual'?el.dataset.annual:el.dataset.monthly;
+function setBilling(mode) {
+  document.getElementById('toggleMonthly').classList.toggle('active', mode === 'monthly');
+  document.getElementById('toggleAnnual').classList.toggle('active', mode === 'annual');
+  document.querySelectorAll('.plan__price-num').forEach(el => {
+    el.textContent = mode === 'annual' ? el.dataset.annual : el.dataset.monthly;
   });
-  document.querySelectorAll('.plan__price-period').forEach(el=>{
-    el.textContent=mode==='annual'?'/mo billed annually':'/mo';
+  document.querySelectorAll('.plan__price-period').forEach(el => {
+    el.textContent = mode === 'annual' ? '/mo billed annually' : '/mo';
   });
-  const pill=document.getElementById('savePill');
-  if(pill)pill.style.display=mode==='annual'?'inline-block':'none';
+  const pill = document.getElementById('savePill');
+  if (pill) pill.style.display = mode === 'annual' ? 'inline-block' : 'none';
 }
 
 /* ─── FAQ ─── */
-document.querySelectorAll('.faq__q').forEach(q=>{
-  q.addEventListener('click',()=>{
-    const item=q.parentElement;
-    const wasOpen=item.classList.contains('open');
-    document.querySelectorAll('.faq__item.open').forEach(i=>i.classList.remove('open'));
-    if(!wasOpen)item.classList.add('open');
+document.querySelectorAll('.faq__q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq__item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
   });
 });
 
 /* ─── DEMO FLOWS ─── */
-const flows={
-  posts:[
-    {type:'out',text:`Write this week's posts`},
-    {type:'typing',delay:1200},
-    {type:'in',text:`Here are 5 posts for Joe's Coffee this week:`},
-    {type:'in',text:`Mon: "Monday mornings hit different with a fresh pour-over. What's your go-to order?"\n\nWed: "New seasonal menu dropping Friday — cold brew with house-made vanilla and oat milk"\n\nFri: "Weekend vibes start here. Open till 8pm tonight"`},
-    {type:'in',text:`Reply YES to schedule all, or EDIT with the post number to change one.`},
+const flows = {
+  posts: [
+    {type:'out', text:`Write this week's posts`},
+    {type:'typing', delay:1200},
+    {type:'in', text:`Here are 5 posts for Joe's Coffee this week:`},
+    {type:'in', text:`Mon: "Monday mornings hit different with a fresh pour-over. What's your go-to order?"\n\nWed: "New seasonal menu dropping Friday — cold brew with house-made vanilla and oat milk"\n\nFri: "Weekend vibes start here. Open till 8pm tonight"`},
+    {type:'in', text:`Reply YES to schedule all, or EDIT with the post number to change one.`},
   ],
-  stats:[
-    {type:'out',text:`How am I doing?`},
-    {type:'typing',delay:1000},
-    {type:'in',text:`This week for Joe's Coffee:\n\n- 5 posts published\n- 1,247 impressions (+18%)\n- 43 new followers\n- 4.8 avg review (2 new)\n- Best post: Monday pour-over (312 likes)`},
-    {type:'in',text:`Your Wednesday posts get 2x engagement. Want me to schedule more mid-week content?`},
+  stats: [
+    {type:'out', text:`How am I doing?`},
+    {type:'typing', delay:1000},
+    {type:'in', text:`This week for Joe's Coffee:\n\n- 5 posts published\n- 1,247 impressions (+18%)\n- 43 new followers\n- 4.8 avg review (2 new)\n- Best post: Monday pour-over (312 likes)`},
+    {type:'in', text:`Your Wednesday posts get 2x engagement. Want me to schedule more mid-week content?`},
   ],
-  ad:[
-    {type:'out',text:`Create a Facebook ad`},
-    {type:'typing',delay:1500},
-    {type:'in',text:`Here are 3 ad variations for Joe's Coffee:`},
-    {type:'in',text:`Ad 1: "Skip the line, not the coffee"\nOrder ahead, pick up in 60 seconds.\n[Order Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville's favorite — now with online ordering"\nFreshly roasted, locally loved.\n[Try It] — Est. reach: 3,100 locals`},
-    {type:'in',text:`Budget: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.`},
+  ad: [
+    {type:'out', text:`Create a Facebook ad`},
+    {type:'typing', delay:1500},
+    {type:'in', text:`Here are 3 ad variations for Joe's Coffee:`},
+    {type:'in', text:`Ad 1: "Skip the line, not the coffee"\nOrder ahead, pick up in 60 seconds.\n[Order Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville's favorite — now with online ordering"\nFreshly roasted, locally loved.\n[Try It] — Est. reach: 3,100 locals`},
+    {type:'in', text:`Budget: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.`},
   ],
-  audit:[
-    {type:'out',text:`Audit my website`},
-    {type:'typing',delay:1800},
-    {type:'in',text:`Audit for joescoffee.com:\n\nScore: 6.2/10\n\n[OK] Mobile-friendly\n[OK] Fast load (1.8s)\n[WARN] No ordering CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on site\n[FAIL] Missing SEO meta tags`},
-    {type:'in',text:`I can fix the top 3 issues for you. Reply FIX to start, or DETAILS for the full report.`},
+  audit: [
+    {type:'out', text:`Audit my website`},
+    {type:'typing', delay:1800},
+    {type:'in', text:`Audit for joescoffee.com:\n\nScore: 6.2/10\n\n[OK] Mobile-friendly\n[OK] Fast load (1.8s)\n[WARN] No ordering CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on site\n[FAIL] Missing SEO meta tags`},
+    {type:'in', text:`I can fix the top 3 issues for you. Reply FIX to start, or DETAILS for the full report.`},
   ]
 };
 
-const messagesEl=document.getElementById('chatMessages');
-const promptsEl=document.getElementById('chatPrompts');
+const messagesEl = document.getElementById('chatMessages');
+const promptsEl = document.getElementById('chatPrompts');
+const flowLabels = {
+  posts: `Write this week's posts`,
+  stats: `How am I doing?`,
+  ad: `Create a Facebook ad`,
+  audit: `Audit my website`
+};
+let isRunning = false;
+let completedFlows = new Set();
 
-/* ─── HERO AUTO-PLAY: plays once, freezes ─── */
-(function heroAutoPlay(){
-  const heroMsgs=document.getElementById('heroMessages');
-  const replayBtn=document.getElementById('heroReplay');
-  if(!heroMsgs)return;
-  const heroConvo=[
-    {type:'in',text:`Hey! I'm your marketing assistant. What would you like to do today?`,delay:600},
-    {type:'out',text:`Write this week's posts`,delay:1000},
-    {type:'typing',delay:1600},
-    {type:'in',text:`Here are 3 posts for Joe's Coffee:\n\nMon: "Monday mornings hit different."\n\nWed: "New seasonal menu dropping Friday — cold brew & oat milk."\n\nFri: "Weekend vibes start here. Open till 8pm."`,delay:600},
-    {type:'in',text:`Reply YES to schedule all, or EDIT to change one.`,delay:900},
-    {type:'out',text:`YES`,delay:1200},
-    {type:'typing',delay:900},
-    {type:'in',text:`Done. All 3 posts are scheduled. I'll text you a Monday morning summary.`,delay:3200},
-  ];
-  async function runHeroConvo(){
-    heroMsgs.innerHTML='';
-    if(replayBtn)replayBtn.classList.remove('visible');
-    for(const msg of heroConvo){
-      await new Promise(r=>setTimeout(r,msg.delay));
-      if(msg.type==='typing'){
-        const t=document.createElement('div');
-        t.className='msg msg--typing';
-        t.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
-        heroMsgs.appendChild(t);
-        heroMsgs.scrollTop=heroMsgs.scrollHeight;
-        await new Promise(r=>setTimeout(r,1100));
-        t.remove();
-      }else{
-        const d=document.createElement('div');
-        d.className='msg msg--'+(msg.type==='out'?'out':'in');
-        d.textContent=msg.text;
-        d.style.whiteSpace='pre-wrap';
-        heroMsgs.appendChild(d);
-        heroMsgs.scrollTop=heroMsgs.scrollHeight;
-      }
-    }
-    if(replayBtn)replayBtn.classList.add('visible');
-  }
-  if(replayBtn)replayBtn.addEventListener('click',runHeroConvo);
-  runHeroConvo();
-})();
-
-const flowLabels={posts:`Write this week's posts`,stats:`How am I doing?`,ad:`Create a Facebook ad`,audit:`Audit my website`};
-let isRunning=false;
-let completedFlows=new Set();
-
-function resetDemo(){
+function resetDemo() {
   completedFlows.clear();
-  messagesEl.innerHTML=`<div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today?</div>`;
+  messagesEl.innerHTML = `<div class="msg msg--in">Hey! I'm your marketing assistant. What would you like to do today?</div>`;
   buildPrompts(null);
 }
 
-function buildPrompts(excludeFlow){
-  if(excludeFlow)completedFlows.add(excludeFlow);
-  promptsEl.innerHTML='';
-  const remaining=Object.keys(flowLabels).filter(k=>!completedFlows.has(k));
-  if(remaining.length===0){
-    const sep=document.createElement('div');
-    sep.style.cssText='width:100%;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono);letter-spacing:0.04em;padding:4px 0 2px;text-align:center';
-    sep.textContent=`// that's the full tour`;
+function buildPrompts(excludeFlow) {
+  if (excludeFlow) completedFlows.add(excludeFlow);
+  promptsEl.innerHTML = '';
+  const remaining = Object.keys(flowLabels).filter(k => !completedFlows.has(k));
+  if (remaining.length === 0) {
+    const sep = document.createElement('div');
+    sep.style.cssText = 'width:100%;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono);letter-spacing:0.04em;padding:4px 0 2px;text-align:center';
+    sep.textContent = `// that's the full tour`;
     promptsEl.appendChild(sep);
-    const resetBtn=document.createElement('button');
-    resetBtn.className='prompt-btn';
-    resetBtn.style.cssText='border-color:var(--accent);color:var(--accent);width:100%;justify-content:center';
-    resetBtn.textContent='Start over';
-    resetBtn.addEventListener('click',resetDemo);
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'prompt-btn';
+    resetBtn.style.cssText = 'border-color:var(--accent);color:var(--accent);width:100%;justify-content:center';
+    resetBtn.textContent = 'Start over';
+    resetBtn.addEventListener('click', resetDemo);
     promptsEl.appendChild(resetBtn);
-  }else{
-    remaining.forEach(k=>{
-      const b=document.createElement('button');
-      b.className='prompt-btn';
-      b.dataset.flow=k;
-      b.textContent=flowLabels[k];
+  } else {
+    remaining.forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'prompt-btn';
+      b.dataset.flow = k;
+      b.textContent = flowLabels[k];
       promptsEl.appendChild(b);
     });
   }
-  promptsEl.style.display='flex';
+  promptsEl.style.display = 'flex';
 }
 
-promptsEl.addEventListener('click',async(e)=>{
-  const btn=e.target.closest('.prompt-btn');
-  if(!btn||!btn.dataset.flow||isRunning)return;
-  const flowKey=btn.dataset.flow;
-  const flow=flows[flowKey];
-  if(!flow)return;
-  isRunning=true;
-  promptsEl.style.display='none';
-  for(const msg of flow){
-    if(msg.type==='typing'){
-      const typing=document.createElement('div');
-      typing.className='msg msg--typing';
-      typing.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+promptsEl.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.prompt-btn');
+  if (!btn || !btn.dataset.flow || isRunning) return;
+  const flowKey = btn.dataset.flow;
+  const flow = flows[flowKey];
+  if (!flow) return;
+  isRunning = true;
+  promptsEl.style.display = 'none';
+  for (const msg of flow) {
+    if (msg.type === 'typing') {
+      const typing = document.createElement('div');
+      typing.className = 'msg msg--typing';
+      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
       messagesEl.appendChild(typing);
-      messagesEl.scrollTop=messagesEl.scrollHeight;
-      await new Promise(r=>setTimeout(r,msg.delay||1000));
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      await new Promise(r => setTimeout(r, msg.delay || 1000));
       typing.remove();
-    }else{
-      const div=document.createElement('div');
-      div.className='msg msg--'+(msg.type==='out'?'out':'in');
-      div.textContent=msg.text;
-      div.style.whiteSpace='pre-wrap';
+    } else {
+      const div = document.createElement('div');
+      div.className = 'msg msg--' + (msg.type === 'out' ? 'out' : 'in');
+      div.textContent = msg.text;
+      div.style.whiteSpace = 'pre-wrap';
       messagesEl.appendChild(div);
-      messagesEl.scrollTop=messagesEl.scrollHeight;
-      await new Promise(r=>setTimeout(r,400));
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      await new Promise(r => setTimeout(r, 400));
     }
   }
-  isRunning=false;
+  isRunning = false;
   buildPrompts(flowKey);
 });
 </script>
