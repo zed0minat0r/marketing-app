@@ -440,7 +440,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       <div class="hero__left">
         <div class="hero__stat" id="heroStat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title" id="heroTitle">Your marketing team<br>lives in your <em class="hero__word-grad">texts</em></h1>
-        <p class="hero__desc reveal">No app. No dashboard. No login. Ever. Sidekick is an AI that handles your social posts, ads, and review replies entirely over text message.</p>
+        <p class="hero__desc reveal">Sidekick is an AI that runs your marketing entirely over text — social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
         <p class="hero__trust reveal">Plans from $49/mo &middot; 14-day free trial &middot; No credit card</p>
         <div class="hero__cta-row reveal">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
@@ -511,7 +511,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       </div>
       <div class="step reveal">
         <div class="step__num">02</div>
-        <h3 class="step__title">AI does the work</h3>
+        <h3 class="step__title">Content arrives in your texts</h3>
         <p class="step__desc">We generate posts, ad copy, and review responses in your business's voice — a florist gets warm and seasonal, a plumber gets direct and local. No generic filler. Each piece lands in your texts, ready for your approval before anything goes live.</p>
       </div>
       <div class="step reveal">
@@ -542,7 +542,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       </div>
       <div class="feature reveal">
         <div class="feature__cmd" data-cmd='&gt; "autopilot on"'></div>
-        <h3 class="feature__title">Set it and forget it</h3>
+        <h3 class="feature__title">Full autopilot, zero babysitting</h3>
         <p class="feature__desc">Switch to autopilot and we publish on your schedule. A weekly summary lands in your texts — no dashboard, no log-in.</p>
       </div>
       <div class="feature reveal">
@@ -805,8 +805,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   <div class="container">
     <div class="final-cta__inner reveal">
       <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
-      <h2 class="final-cta__title">Stop letting your marketing fall through the cracks.</h2>
-      <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We'll text you in May — no checking back, no logging in.</p>
+      <h2 class="final-cta__title">Your marketing shouldn't require a second job.</h2>
+      <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We text you when your spot opens — no app to check, no dashboard to log into.</p>
 
       <div class="plan-selected" id="planSelected" style="display:none">
         <span class="plan-selected__label">Selected:</span>
@@ -1107,7 +1107,10 @@ function handleStep2(e){
     const planNote=plan?` Your <strong>${plan} plan</strong> price is locked in.`:'';
     msg.innerHTML=`Spot reserved.${planNote} We open to the first 500 businesses in <strong>May 2026</strong> &mdash; we'll text you the moment you're up.`;
     msg.style.display='block';
-    const position=203;
+    const email=document.getElementById('emailInput').value.trim();
+    let hash=0;
+    for(let ci=0;ci<email.length;ci++){hash=(hash*31+email.charCodeAt(ci))>>>0}
+    const position=180+(hash%61);
     const queueBlock=document.getElementById('queueBlock');
     const queuePos=document.getElementById('queuePos');
     if(queuePos)queuePos.textContent='#'+position+' in line';
