@@ -215,7 +215,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .phone__messages{
   padding:16px;
   min-height:280px;
-  max-height:420px;
+  max-height:360px;
   overflow-y:auto;
   display:flex;flex-direction:column;gap:8px;
   scroll-behavior:smooth;
@@ -341,94 +341,152 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   border:1px solid rgba(240,235,224,0.2);
 }
 .btn--ghost:hover{border-color:rgba(240,235,224,0.45)}
+.btn--sm{padding:10px 20px;font-size:0.85rem;min-height:44px}
 
 /* ─── HOW IT WORKS ─── */
 .how-stage{
   position:relative;
-  height:auto;
+  height:400vh;
+}
+.how-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   background:var(--bg2);
   border-top:1px solid var(--border);
-  padding:100px 0;
 }
-.how-section-header{
-  text-align:center;
-  margin-bottom:72px;
-}
-.how-section-eyebrow{
-  font-family:var(--mono);
-  font-size:0.75rem;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  color:var(--text-muted);
-  margin-bottom:16px;
-}
-.how-section-title{
-  font-size:clamp(2rem,3.5vw,3rem);
-  font-weight:700;
-  letter-spacing:-0.04em;
-  line-height:1.1;
-}
-.how-steps{
-  max-width:1080px;
+
+.how__layout{
+  position:relative;
+  width:100%;
+  max-width:1120px;
   margin:0 auto;
   padding:0 40px;
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:0;
+  grid-template-columns:1fr 340px 1fr;
+  gap:0 48px;
+  align-items:center;
 }
-.how-step{
-  padding:0 40px;
-  border-left:1px solid var(--border);
-  position:relative;
+
+/* Left: step text */
+.how__step-col{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
-.how-step:first-child{border-left:none;padding-left:0}
-.how-step__label{
+.how__step-label{
   font-family:var(--mono);
   font-size:0.75rem;
   letter-spacing:0.18em;
   text-transform:uppercase;
   color:var(--accent);
-  margin-bottom:14px;
-  opacity:0.8;
+  margin-bottom:18px;
+  opacity:0;
+  transform:translateX(-12px);
+  transition:opacity 0.35s ease, transform 0.35s ease;
 }
-.how-step__title{
-  font-size:1.2rem;
+.how__step-label.in{opacity:1;transform:none}
+.how__step-title{
+  font-size:clamp(1.6rem,2.8vw,2.6rem);
   font-weight:700;
-  letter-spacing:-0.03em;
-  line-height:1.2;
-  margin-bottom:10px;
+  letter-spacing:-0.04em;
+  line-height:1.1;
+  margin-bottom:16px;
+  opacity:0;
+  transform:translateX(-12px);
+  transition:opacity 0.38s ease 0.06s, transform 0.38s ease 0.06s;
 }
-.how-step__desc{
-  font-size:0.88rem;
+.how__step-title.in{opacity:1;transform:none}
+.how__step-desc{
+  font-size:0.97rem;
   color:var(--text-dim);
-  line-height:1.7;
-  margin-bottom:20px;
+  line-height:1.72;
+  max-width:360px;
+  opacity:0;
+  transform:translateX(-12px);
+  transition:opacity 0.38s ease 0.12s, transform 0.38s ease 0.12s;
 }
-.how-step__msgs{
+.how__step-desc.in{opacity:1;transform:none}
+
+/* Center: phone */
+.how__phone-col{
   display:flex;
-  flex-direction:column;
-  gap:6px;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:2;
+}
+.how-phone{
+  width:100%;
+  max-width:320px;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:34px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 6px rgba(255,255,255,0.03),
+    0 24px 64px rgba(0,0,0,0.55),
+    0 8px 24px rgba(0,0,0,0.35);
+}
+.how-phone__notch{
+  height:24px;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.how-phone__notch-pill{
+  width:72px;height:6px;
+  background:var(--border2);border-radius:3px;
+}
+.how-phone__header{
+  background:var(--surface2);
+  padding:9px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.how-phone__avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:0.75rem;font-weight:700;color:#0e0d0b;
+}
+.how-phone__name{font-size:0.82rem;font-weight:600;line-height:1.2}
+.how-phone__status{font-size:0.75rem;color:var(--green)}
+.how-phone__msgs{
+  padding:14px 12px;
+  height:320px;
+  overflow:hidden;
+  display:flex;flex-direction:column;gap:7px;
+  position:relative;
 }
 .how-msg{
-  max-width:92%;
-  padding:7px 11px;
-  border-radius:12px;
-  font-size:0.78rem;
+  max-width:84%;
+  padding:9px 13px;
+  border-radius:14px;
+  font-size:0.82rem;
   line-height:1.5;
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity 0.32s ease, transform 0.32s ease;
   flex-shrink:0;
 }
+.how-msg.visible{opacity:1;transform:translateY(0)}
 .how-msg--in{
   background:var(--surface2);
   border:1px solid var(--border);
   align-self:flex-start;
-  border-bottom-left-radius:3px;
+  border-bottom-left-radius:4px;
   color:var(--text);
 }
 .how-msg--out{
   background:var(--accent);
   color:#0e0d0b;
   align-self:flex-end;
-  border-bottom-right-radius:3px;
+  border-bottom-right-radius:4px;
   font-weight:600;
 }
 .how-msg--time{
@@ -443,48 +501,103 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   max-width:100%;
 }
 
+/* Right: progress dots */
+.how__dots-col{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+  align-items:flex-start;
+}
+.how__dot-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  opacity:0.3;
+  transition:opacity 0.4s ease;
+}
+.how__dot-item.active{opacity:1}
+.how__dot-marker{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--border2);
+  transition:background 0.35s ease, transform 0.35s ease;
+  flex-shrink:0;
+}
+.how__dot-item.active .how__dot-marker{background:var(--accent);transform:scale(1.6)}
+.how__dot-label{
+  font-family:var(--mono);
+  font-size:0.75rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  transition:color 0.35s ease;
+}
+.how__dot-item.active .how__dot-label{color:var(--accent)}
+
+/* Checkmark overlay */
+.how-check{
+  position:absolute;
+  bottom:14px;right:14px;
+  width:28px;height:28px;
+  border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+  transform:scale(0.4);
+  transition:opacity 0.3s ease, transform 0.3s ease;
+}
+.how-check.visible{opacity:1;transform:scale(1)}
+.how-check svg{width:14px;height:14px}
+
 /* ─── FEATURES ─── */
-.features-section{
-  padding:100px 0;
+.features-stage{
+  position:relative;
+  height:350vh;
+}
+.features-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
   background:var(--bg);
   border-top:1px solid var(--border);
 }
-.features-section__header{
-  text-align:center;
-  margin-bottom:64px;
-}
-.features-section__eyebrow{
-  font-family:var(--mono);
-  font-size:0.75rem;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  color:var(--text-muted);
-  margin-bottom:16px;
-}
-.features-section__title{
-  font-size:clamp(2rem,3.5vw,3rem);
-  font-weight:700;
-  letter-spacing:-0.04em;
-  line-height:1.1;
-}
-.features-grid{
-  max-width:1080px;
-  margin:0 auto;
-  padding:0 40px;
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:1px;
-  background:var(--border);
-  border:1px solid var(--border);
-}
-.feature-card{
-  background:var(--bg);
-  padding:48px 40px;
-  position:relative;
+
+.features-track-wrap{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
 }
 
+.features-track{
+  display:flex;
+  will-change:transform;
+  width:max-content;
+  gap:0;
+  height:100vh;
+  align-items:center;
+}
+
+.feature-card{
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:80px 10vw;
+  flex-shrink:0;
+  border-left:1px solid var(--border);
+  position:relative;
+}
+.feature-card:first-child{border-left:none}
+
 .feature-card__inner{
-  max-width:420px;
+  max-width:640px;
+  width:100%;
+  box-sizing:border-box;
 }
 .feature-card__cmd{
   font-family:var(--mono);
@@ -504,17 +617,17 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   margin-bottom:16px;
 }
 .feature-card__title{
-  font-size:clamp(1.4rem,2.2vw,2rem);
+  font-size:clamp(2rem,4vw,3.8rem);
   font-weight:700;
-  letter-spacing:-0.03em;
-  line-height:1.1;
-  margin-bottom:16px;
+  letter-spacing:-0.04em;
+  line-height:1.05;
+  margin-bottom:20px;
 }
 .feature-card__desc{
-  font-size:0.95rem;
+  font-size:1.05rem;
   color:var(--text-dim);
   line-height:1.7;
-  max-width:420px;
+  max-width:480px;
 }
 .feature-card__sms{
   margin-top:28px;
@@ -547,6 +660,22 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   line-height:1.6;
   letter-spacing:0.01em;
 }
+
+/* Features scrollbar indicator */
+.features-progress{
+  position:absolute;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;gap:8px;
+  z-index:10;
+}
+.feat-dot{
+  width:20px;height:3px;border-radius:2px;
+  background:var(--border2);
+  transition:background 0.3s, width 0.3s;
+}
+.feat-dot.active{background:var(--accent);width:32px}
 
 /* ─── DEMO ─── */
 .demo{
@@ -736,21 +865,12 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .proof__coda{
   padding:48px 64px;
   border-top:1px solid var(--border);
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0;
 }
 .proof__quote{
   margin:0;padding:0;
   border-left:2px solid var(--accent);
   padding-left:28px;
-  padding-right:48px;
-  border-right:1px solid var(--border);
-}
-.proof__quote:last-child{
-  border-right:none;
-  padding-right:0;
-  padding-left:48px;
+  max-width:580px;
 }
 .proof__quote-text{
   font-size:1.05rem;
@@ -1040,6 +1160,20 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   text-align:center;font-size:0.9rem;color:var(--green);
   margin-top:16px;display:none;font-weight:500;
 }
+.queue-block{margin-top:20px;display:none}
+.queue-position{
+  font-family:var(--mono);font-size:1.4rem;font-weight:700;
+  color:var(--accent);letter-spacing:-0.02em;
+  display:block;line-height:1.1;margin-bottom:4px;
+}
+.queue-label{font-size:0.82rem;color:var(--text-muted);letter-spacing:0.01em}
+.referral-hint{
+  margin-top:16px;font-family:var(--mono);font-size:0.78rem;
+  color:var(--text-muted);background:var(--accent-dim);
+  border:1px solid rgba(212,245,60,0.15);border-radius:3px;
+  padding:10px 14px;display:inline-block;line-height:1.5;
+}
+.referral-hint strong{color:var(--accent)}
 
 /* ─── POST-SIGNUP CONFIRMATION ─── */
 .confirmation-block{
@@ -1150,6 +1284,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 .modal__body h3:first-child{margin-top:0}
 .modal__body p{margin-bottom:12px}
 
+
+
 /* ─── DEMO PHONE PREMIUM ─── */
 .demo__phone-glow{
   position:relative;
@@ -1162,9 +1298,19 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     0 40px 80px rgba(0,0,0,0.5);
 }
 
+
+
 /* ─── REDUCED MOTION: flat layout ─── */
 @media(prefers-reduced-motion:reduce){
-  .feature-card{padding:40px 32px}
+  .how-stage{height:auto}
+  .how-sticky{position:relative;height:auto;padding:80px 0}
+  .how__step-label,.how__step-title,.how__step-desc{opacity:1;transform:none}
+  .how-msg{opacity:1;transform:none}
+  .features-stage{height:auto}
+  .features-sticky{position:relative;height:auto;overflow:visible}
+  .features-track-wrap{position:relative;overflow:visible}
+  .features-track{flex-direction:column;width:100%;height:auto}
+  .feature-card{width:100%;height:auto;padding:60px 32px;border-left:none;border-top:1px solid var(--border)}
   .demo__phone-wrap{opacity:1;transform:none}
   .plan{opacity:1;transform:none}
   .compare__row{opacity:1;transform:none}
@@ -1174,19 +1320,23 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   .container{padding:0 20px}
-  .how-steps{grid-template-columns:1fr;padding:0 20px;gap:40px}
-  .how-step{border-left:none;padding-left:0;padding-right:0;border-top:1px solid var(--border);padding-top:32px}
-  .how-step:first-child{border-top:none;padding-top:0}
+  .how-stage{height:350vh}
+  .how__layout{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:32px 0;padding:0 20px}
+  .how__step-col{text-align:center;align-items:center}
+  .how__step-desc{max-width:100%;font-size:0.95rem;text-align:left}
+  .how__phone-col{order:-1}
+  .how-phone{max-width:260px}
+  .how-phone__msgs{height:240px}
+  .how__dots-col{flex-direction:row;justify-content:center;align-items:center;gap:20px}
+  .how__dot-label{display:none}
+  .features-stage{height:350vh}
   .proof__inner{grid-template-columns:1fr}
   .proof__stat-block{padding:60px 24px;border-right:none;border-bottom:1px solid var(--border);text-align:center}
   .proof__stat-block:last-child{border-bottom:none}
   .proof__stat-num{font-size:clamp(3.5rem,14vw,7rem)}
   .proof__stat-label{max-width:none;border-left:none;padding-left:0;text-align:left;margin:0 auto}
   .proof__source{padding-left:0}
-  .proof__coda{padding:40px 24px;grid-template-columns:1fr;gap:32px}
-  .proof__quote{padding-right:0;border-right:none;padding-left:24px}
-  /* Second quote: normalize left padding when stacked in 1 column */
-  .proof__quote:last-child{padding-left:24px}
+  .proof__coda{padding:40px 24px}
   .pricing__grid{grid-template-columns:1fr;border:none;gap:12px}
   .plan{border:1px solid var(--border);border-radius:5px;border-right:1px solid var(--border) !important}
   .plan--featured{order:-1;padding-top:56px}
@@ -1208,15 +1358,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .signup-form input{min-width:0;width:100%}
   .signup-form button{width:100%}
   .hero__cta-row{flex-wrap:wrap;justify-content:center}
-
+  .how__step-label{transform:translateX(0)}
   .demo{padding:80px 0}
   .compare{padding:80px 0}
   .pricing{padding:80px 0}
   .faq{padding:80px 0}
   .faq__list{text-align:left}
-  .features-grid{grid-template-columns:1fr;padding:0 20px}
-  .feature-card{padding:36px 20px}
-  .feature-card__inner{max-width:100%}
   /* Feature cards: center headings/labels, body text stays left */
   .feature-card__num,.feature-card__cmd,.feature-card__title{text-align:center}
   /* Compare CTA note: center under stacked buttons */
@@ -1226,8 +1373,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   /* Final CTA: heading centered, sub copy left-aligned */
   .final-cta__sub{text-align:left}
   .sms-reassurance{text-align:left}
-  /* How it works: center step headings on mobile */
-  .how-step__label,.how-step__title{text-align:center}
   /* Proof: body copy left-aligned inside centered coda */
   /* Proof stat label: ensure block display for margin:auto centering to work alongside left text */
   .proof__stat-label{display:block}
@@ -1247,22 +1392,21 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .faq__q{font-size:0.92rem}
   .prompt-btn{min-height:44px}
   .plan-selected__clear{min-height:44px;min-width:44px}
-  .feature-card{padding:32px 16px}
-  /* Demo phone messages: tall enough to show full flows, scrollable for overflow */
-  .phone__messages{min-height:200px;max-height:320px;overflow-y:auto}
+  .feature-card{padding:60px 6vw}
+  /* Shrink demo phone messages area so prompt buttons stay in viewport */
+  .phone__messages{min-height:200px;max-height:240px}
   .demo{padding:60px 0}
 
   .hero__content{
     padding:76px 20px 40px;
     gap:6px;
   }
-  .hero__eyebrow{font-size:0.75rem;margin-bottom:20px;text-align:left}
-  .hero__eyebrow::before{display:none}
-  .hero__eyebrow::after{display:none}
-  .hero__headline{margin-bottom:16px;text-align:left}
+  .hero__eyebrow{font-size:0.75rem;margin-bottom:20px}
+  .hero__eyebrow::before,.hero__eyebrow::after{width:20px}
+  .hero__headline{margin-bottom:16px}
   .hero__sub{font-size:0.9rem;margin-bottom:24px;max-width:100%;text-align:left}
-  .hero__cta-row{margin-bottom:16px;gap:10px;justify-content:flex-start}
-  .hero__trust{font-size:0.75rem;letter-spacing:0.04em;margin-top:4px;text-align:left}
+  .hero__cta-row{margin-bottom:16px;gap:10px}
+  .hero__trust{font-size:0.75rem;letter-spacing:0.04em;margin-top:4px}
 
   /* Hero SMS preview: prevent overflow on narrow screens */
   .hero__sms{max-width:100%;width:100%;display:flex}
@@ -1285,7 +1429,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   /* Feature card body text: explicit left-align on mobile */
   .feature-card__desc{text-align:left}
   /* Feature card SMS: prevent overflow on narrow screens */
-  .feature-card__sms{max-width:100%}
+  .feature-card__sms{max-width:100%;width:100%;display:flex}
   .feature-card__sms-bubble{min-width:0;word-break:break-word}
 
   /* Proof coda: keep quote text left-aligned, remove left-border on mobile */
@@ -1313,13 +1457,13 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
 <!-- SECTION 1: HERO -->
 <div class="hero-stage" id="heroStage">
-  <div class="hero-sticky">
+  <div class="hero-sticky" id="heroSticky">
 
     <!-- Hero content -->
-    <div class="hero__content">
-      <div class="hero__eyebrow">AI marketing over text &mdash; no app, no login</div>
+    <div class="hero__content" id="heroContent">
+      <div class="hero__eyebrow">Built for owners who hate dashboards</div>
       <h1 class="hero__headline">Your marketing team<br>lives in your <em>texts</em></h1>
-      <p class="hero__sub">Sidekick runs your social posts, ads, and review replies entirely over text. No app. No login. Ever.</p>
+      <p class="hero__sub">Sidekick runs your marketing entirely over text &mdash; social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
       <div class="hero__cta-row">
         <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
       </div>
@@ -1342,119 +1486,146 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 </div>
 
 <!-- SECTION 2: HOW IT WORKS -->
-<div class="how-stage">
-  <div class="container how-section-header">
-    <div class="how-section-eyebrow">How it works</div>
-    <h2 class="how-section-title">Up and running in<br>one conversation</h2>
+<div class="how-stage" id="howStage">
+  <div class="how-sticky" id="howSticky">
+    <div class="how__layout">
+
+      <!-- Left: step copy -->
+      <div class="how__step-col">
+        <div class="how__step-label" id="howStepLabel">How it works / 01</div>
+        <h2 class="how__step-title" id="howStepTitle">Answer 5 questions over text</h2>
+        <p class="how__step-desc" id="howStepDesc">We text you within 60 seconds of signing up. Name, niche, tone, platforms. Done. Your first week of posts arrives within the hour.</p>
+      </div>
+
+      <!-- Center: phone -->
+      <div class="how__phone-col">
+        <div class="how-phone">
+          <div class="how-phone__notch"><div class="how-phone__notch-pill"></div></div>
+          <div class="how-phone__header">
+            <div class="how-phone__avatar">SK</div>
+            <div>
+              <div class="how-phone__name">Sidekick</div>
+              <div class="how-phone__status">Active now</div>
+            </div>
+          </div>
+          <div class="how-phone__msgs" id="howMsgList">
+            <!-- Step 1 messages -->
+            <div class="how-msg how-msg--time" data-step="0" data-seq="0">Today 9:41 AM</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="1">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?</div>
+            <div class="how-msg how-msg--out" data-step="0" data-seq="2">Mike&rsquo;s Pizza</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="3">Great! What do you sell, and who&rsquo;s your customer?</div>
+            <div class="how-msg how-msg--out" data-step="0" data-seq="4">Wood-fired pizza. Families &amp; date nights.</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="5">Got it. Which platforms &mdash; Instagram, Facebook, or both?</div>
+            <!-- Step 2 messages -->
+            <div class="how-msg how-msg--out" data-step="1" data-seq="0">Both please</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="1">Here are 3 posts for this week:</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="2">1/ Friday night, wood-fired magic. Our Margherita never misses. Link in bio.</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="3">2/ Date night sorted. Reserve your table before the weekend fills up.</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="4">3/ Family pizza night? We&rsquo;ve got the table. Bring everyone.</div>
+            <!-- Step 3 messages -->
+            <div class="how-msg how-msg--out" data-step="2" data-seq="0">YES</div>
+            <div class="how-msg how-msg--in" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
+            <div class="how-msg how-msg--in" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
+          </div>
+          <div class="how-check" id="howCheck">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: dots -->
+      <div class="how__dots-col">
+        <div class="how__dot-item active" data-step="0">
+          <div class="how__dot-marker"></div>
+          <span class="how__dot-label">Setup</span>
+        </div>
+        <div class="how__dot-item" data-step="1">
+          <div class="how__dot-marker"></div>
+          <span class="how__dot-label">Content</span>
+        </div>
+        <div class="how__dot-item" data-step="2">
+          <div class="how__dot-marker"></div>
+          <span class="how__dot-label">Approved</span>
+        </div>
+      </div>
+
+    </div>
   </div>
-  <div class="how-steps">
+</div>
 
-    <div class="how-step">
-      <div class="how-step__label">Step 01</div>
-      <h3 class="how-step__title">Answer 5 questions over text</h3>
-      <p class="how-step__desc">We text you within 60 seconds of signing up. Name, niche, tone, platforms. Done. Your first week of posts arrives within the hour.</p>
-      <div class="how-step__msgs">
-        <div class="how-msg how-msg--time">Today 9:41 AM</div>
-        <div class="how-msg how-msg--in">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?</div>
-        <div class="how-msg how-msg--out">Mike&rsquo;s Pizza</div>
-        <div class="how-msg how-msg--in">Great! What do you sell, and who&rsquo;s your customer?</div>
-        <div class="how-msg how-msg--out">Wood-fired pizza. Families &amp; date nights.</div>
-        <div class="how-msg how-msg--in">Got it. Which platforms &mdash; Instagram, Facebook, or both?</div>
+<!-- SECTION 3: FEATURES -->
+<div class="features-stage" id="featuresStage">
+  <div class="features-sticky" id="featuresSticky">
+    <div class="features-track-wrap">
+      <div class="features-track" id="featuresTrack">
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">01 / 04</div>
+            <div class="feature-card__cmd" data-cmd='> "run an ad"'></div>
+            <h3 class="feature-card__title">A Facebook ad<br>in 30 seconds</h3>
+            <p class="feature-card__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
+            <div class="feature-card__sms">
+              <div class="feature-card__sms-avatar">SK</div>
+              <div class="feature-card__sms-bubble">Here are 3 ad variations for Mike&rsquo;s Pizza:<br><br>Ad 1: &ldquo;Wood-fired, family-run, always fresh&rdquo;<br>Est. reach: 2,400 locals &middot; Budget: $5/day<br><br>Reply <strong>1</strong>, <strong>2</strong>, or <strong>3</strong> to launch.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">02 / 04</div>
+            <div class="feature-card__cmd" data-cmd='> new review detected'></div>
+            <h3 class="feature-card__title">Every Google review<br>answered</h3>
+            <p class="feature-card__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
+            <div class="feature-card__sms">
+              <div class="feature-card__sms-avatar">SK</div>
+              <div class="feature-card__sms-bubble">New 5&#9733; review from Sarah M.:<br>&ldquo;Best pizza in town, hands down!&rdquo;<br><br>Draft response: &ldquo;Thank you Sarah! We&rsquo;re so glad you loved it &mdash; see you next time!&rdquo;<br><br>Reply <strong>YES</strong> to post &middot; <strong>EDIT</strong> to tweak</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">03 / 04</div>
+            <div class="feature-card__cmd" data-cmd='> scheduled: Mon / Wed / Fri'></div>
+            <h3 class="feature-card__title">Posts every week,<br>on every platform</h3>
+            <p class="feature-card__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
+            <div class="feature-card__sms">
+              <div class="feature-card__sms-avatar">SK</div>
+              <div class="feature-card__sms-bubble">Your 3 posts for this week are ready:<br>Mon &mdash; &ldquo;Fresh mozzarella just landed&rdquo;<br>Wed &mdash; &ldquo;Beat the lunch rush &mdash; order ahead&rdquo;<br>Fri &mdash; &ldquo;Weekend special: half-price garlic knots&rdquo;<br><br>Reply <strong>YES</strong> to publish &nbsp;&middot;&nbsp; <strong>EDIT 2</strong> to change Wed</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__inner">
+            <div class="feature-card__num">04 / 04</div>
+            <div class="feature-card__cmd" data-cmd='> Monday 8am report'></div>
+            <h3 class="feature-card__title">Your numbers,<br>every Monday</h3>
+            <p class="feature-card__desc">One text. No login screen, no guessing.</p>
+            <div class="feature-card__sms">
+              <div class="feature-card__sms-avatar">SK</div>
+              <div class="feature-card__sms-bubble">Good morning! Your week in review:<br>5 posts published &nbsp;&middot;&nbsp; 1.2K impressions<br>23 new followers &nbsp;&middot;&nbsp; 4.8&#x2605; avg rating<br><br>Top post: &ldquo;Weekend special&rdquo; &mdash; 312 reach<br>2 new Google reviews &mdash; both replied</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="how-step">
-      <div class="how-step__label">Step 02</div>
-      <h3 class="how-step__title">Content arrives in your texts</h3>
-      <p class="how-step__desc">We write posts in your voice &mdash; warm and local for a pizza shop, sharp and seasonal for a florist. Three posts per week, ready in your phone.</p>
-      <div class="how-step__msgs">
-        <div class="how-msg how-msg--out">Both please</div>
-        <div class="how-msg how-msg--in">Here are 3 posts for this week:</div>
-        <div class="how-msg how-msg--in">1/ Friday night, wood-fired magic. Our Margherita never misses. Link in bio.</div>
-        <div class="how-msg how-msg--in">2/ Date night sorted. Reserve your table before the weekend fills up.</div>
-        <div class="how-msg how-msg--in">3/ Family pizza night? We&rsquo;ve got the table. Bring everyone.</div>
-      </div>
-    </div>
-
-    <div class="how-step">
-      <div class="how-step__label">Step 03</div>
-      <h3 class="how-step__title">You just approve</h3>
-      <p class="how-step__desc">Reply YES to schedule. Reply EDIT to tweak. Reply SKIP to pass. Your entire marketing runs from your messages app.</p>
-      <div class="how-step__msgs">
-        <div class="how-msg how-msg--out">YES</div>
-        <div class="how-msg how-msg--in">Done! All 3 scheduled across Instagram and Facebook.</div>
-        <div class="how-msg how-msg--in">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
-      </div>
+    <div class="features-progress" id="featuresProgress">
+      <div class="feat-dot active"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
     </div>
 
   </div>
 </div>
 
-<!-- SECTION 3: FEATURES -->
-<section class="features-section">
-  <div class="container features-section__header">
-    <div class="features-section__eyebrow">What Sidekick does</div>
-    <h2 class="features-section__title">Everything handled.<br>Nothing to log in to.</h2>
-  </div>
-  <div class="features-grid">
-
-    <div class="feature-card">
-      <div class="feature-card__inner">
-        <div class="feature-card__num">01 / 04</div>
-        <div class="feature-card__cmd" data-cmd='> "run an ad"'></div>
-        <h3 class="feature-card__title">A Facebook ad<br>in 30 seconds</h3>
-        <p class="feature-card__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
-        <div class="feature-card__sms">
-          <div class="feature-card__sms-avatar">SK</div>
-          <div class="feature-card__sms-bubble">Here are 3 ad variations for Mike&rsquo;s Pizza:<br><br>Ad 1: &ldquo;Wood-fired, family-run, always fresh&rdquo;<br>Est. reach: 2,400 locals &middot; Budget: $5/day<br><br>Reply <strong>1</strong>, <strong>2</strong>, or <strong>3</strong> to launch.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-card__inner">
-        <div class="feature-card__num">02 / 04</div>
-        <div class="feature-card__cmd" data-cmd='> new review detected'></div>
-        <h3 class="feature-card__title">Every Google review<br>answered</h3>
-        <p class="feature-card__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
-        <div class="feature-card__sms">
-          <div class="feature-card__sms-avatar">SK</div>
-          <div class="feature-card__sms-bubble">New 5&#9733; review from Sarah M.:<br>&ldquo;Best pizza in town, hands down!&rdquo;<br><br>Draft response: &ldquo;Thank you Sarah! We&rsquo;re so glad you loved it &mdash; see you next time!&rdquo;<br><br>Reply <strong>YES</strong> to post &middot; <strong>EDIT</strong> to tweak</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-card__inner">
-        <div class="feature-card__num">03 / 04</div>
-        <div class="feature-card__cmd" data-cmd='> scheduled: Mon / Wed / Fri'></div>
-        <h3 class="feature-card__title">Posts every week,<br>on every platform</h3>
-        <p class="feature-card__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
-        <div class="feature-card__sms">
-          <div class="feature-card__sms-avatar">SK</div>
-          <div class="feature-card__sms-bubble">Your 3 posts for this week are ready:<br>Mon &mdash; &ldquo;Fresh mozzarella just landed&rdquo;<br>Wed &mdash; &ldquo;Beat the lunch rush &mdash; order ahead&rdquo;<br>Fri &mdash; &ldquo;Weekend special: half-price garlic knots&rdquo;<br><br>Reply <strong>YES</strong> to publish &nbsp;&middot;&nbsp; <strong>EDIT 2</strong> to change Wed</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-card__inner">
-        <div class="feature-card__num">04 / 04</div>
-        <div class="feature-card__cmd" data-cmd='> Monday 8am report'></div>
-        <h3 class="feature-card__title">Your numbers,<br>every Monday</h3>
-        <p class="feature-card__desc">Posts published, impressions, new followers, review score, and your top-performing post — all in one Monday morning text. No dashboard. No login. Just the numbers that matter.</p>
-        <div class="feature-card__sms">
-          <div class="feature-card__sms-avatar">SK</div>
-          <div class="feature-card__sms-bubble">Good morning! Your week in review:<br>5 posts published &nbsp;&middot;&nbsp; 1.2K impressions<br>23 new followers &nbsp;&middot;&nbsp; 4.8&#x2605; avg rating<br><br>Top post: &ldquo;Weekend special&rdquo; &mdash; 312 reach<br>2 new Google reviews &mdash; both replied</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <!-- SECTION 4: INTERACTIVE DEMO -->
-<section class="demo">
+<section class="demo" id="demo-section">
   <div class="container">
     <div class="demo__label">
       <div class="demo__eyebrow">Try it yourself</div>
@@ -1614,10 +1785,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <p class="proof__quote-text">&ldquo;First week of posts took me 10 seconds. I didn&rsquo;t have to think about it once.&rdquo;</p>
       <cite class="proof__quote-cite">Mike Russo &mdash; Mike&rsquo;s Pizza, Phoenixville PA &mdash; Early access</cite>
     </blockquote>
-    <blockquote class="proof__quote">
-      <p class="proof__quote-text">&ldquo;I used to spend Sunday nights writing posts for the week. Now I just reply YES three times on Monday morning.&rdquo;</p>
-      <cite class="proof__quote-cite">Sarah Chen &mdash; Bloom &amp; Stem Florals, Austin TX &mdash; Early access</cite>
-    </blockquote>
   </div>
 </section>
 
@@ -1634,12 +1801,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <span class="pricing__toggle-save" id="savePill" style="display:none">Save 20%</span>
     </div>
     <div class="pricing__grid" id="pricingGrid">
-      <div class="plan">
+      <div class="plan" id="planStarter">
         <div class="plan__name">Starter</div>
         <div class="plan__price"><span class="plan__price-num" data-monthly="$49" data-annual="$39">$49</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You have 1&ndash;2 social accounts and want to post consistently without thinking about it</p>
         <ul class="plan__features">
-          <li>100 AI generations/mo</li>
+          <li>100 AI generations/mo <span style="color:var(--text-muted);font-size:0.78rem">(~4 posts/wk + reviews)</span></li>
           <li>3 social accounts</li>
           <li>1 website audit/mo</li>
           <li>Weekly performance text</li>
@@ -1652,7 +1819,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         <div class="plan__price"><span class="plan__price-num" data-monthly="$99" data-annual="$79">$99</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You want consistent posting, paid ads, and review management handled &mdash; with full visibility via daily texts</p>
         <ul class="plan__features">
-          <li>500 AI generations/mo</li>
+          <li>500 AI generations/mo <span style="color:var(--text-muted);font-size:0.78rem">(enough for daily posts + ads)</span></li>
           <li>Unlimited social accounts</li>
           <li>5 website audits/mo</li>
           <li>Daily performance texts</li>
@@ -1661,14 +1828,14 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         </ul>
         <button class="plan__btn plan__btn--primary" onclick="selectPlan('Growth')">Hold my spot &rarr;</button>
       </div>
-      <div class="plan">
+      <div class="plan" id="planPro">
         <div class="plan__name">Pro</div>
         <div class="plan__price"><span class="plan__price-num" data-monthly="$199" data-annual="$159">$199</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You run multiple locations or a growing business and want everything handled end-to-end</p>
         <ul class="plan__features">
           <li>Up to 5 locations or brands</li>
           <li>Unlimited AI generations</li>
-          <li>Website copy fixes &mdash; text us a page, get rewritten copy back, approve by text</li>
+          <li>Website copy fixes &mdash; we do it, you approve</li>
           <li>Priority response (&lt;2 min)</li>
           <li>Custom brand voice per location</li>
           <li>Monthly competitor monitoring report</li>
@@ -1755,6 +1922,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <!-- POST-SIGNUP CONFIRMATION STATE -->
     <div class="confirmation-block" id="confirmationBlock">
       <p class="confirmation-next" id="confirmationNext"></p>
+      <div class="queue-block" id="queueBlock">
+        <span class="queue-position" id="queuePos"></span>
+        <span class="queue-label">in line for early access</span>
+      </div>
       <div class="referral-card" id="referralCard">
         <div class="referral-card__label">Move up the line</div>
         <div class="referral-card__heading">Refer 3 businesses &rarr; skip the queue</div>
@@ -1800,10 +1971,133 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 }, {passive: true});
 
-/* ─── FEATURES: typewriter on each card entering viewport ─── */
+/* ─── HOW IT WORKS: SCROLL-DRIVEN SMS CONVO ─── */
+(function initHow() {
+  const stage = document.getElementById('howStage');
+  if (!stage) return;
+
+  const stepLabel = document.getElementById('howStepLabel');
+  const stepTitle = document.getElementById('howStepTitle');
+  const stepDesc  = document.getElementById('howStepDesc');
+  const dotItems  = document.querySelectorAll('.how__dot-item');
+  const allMsgs   = document.querySelectorAll('#howMsgList .how-msg');
+  const checkEl   = document.getElementById('howCheck');
+
+  const steps = [
+    {
+      label: `How it works / 01`,
+      title: `Answer 5 questions over text`,
+      desc:  `We text you within 60 seconds of signing up. Name, niche, tone, platforms. Done. Your first week of posts arrives within the hour.`
+    },
+    {
+      label: `How it works / 02`,
+      title: `Content arrives in your texts`,
+      desc:  `We write posts in your voice — warm and seasonal for a florist, direct and local for a plumber. Three posts per week, ready in your inbox.`
+    },
+    {
+      label: `How it works / 03`,
+      title: `You just approve`,
+      desc:  `Reply YES to schedule. Reply EDIT to tweak. Reply SKIP to pass. Your entire marketing runs from your messages.`
+    }
+  ];
+
+  let lastStep = -1;
+
+  // Show messages for a given step (and all previous steps), with scroll-within-step seq reveal
+  function showMsgsForStep(stepIdx, seqFraction) {
+    allMsgs.forEach(function(m) {
+      const ms = parseInt(m.dataset.step, 10);
+      const mseq = parseInt(m.dataset.seq, 10);
+      if (ms < stepIdx) {
+        // previous steps: always visible
+        m.classList.add('visible');
+      } else if (ms === stepIdx) {
+        // current step: reveal based on seqFraction
+        const msgsInStep = document.querySelectorAll(`#howMsgList .how-msg[data-step="${stepIdx}"]`).length;
+        const threshold = mseq / msgsInStep;
+        if (seqFraction >= threshold) {
+          m.classList.add('visible');
+        } else {
+          m.classList.remove('visible');
+        }
+      } else {
+        // future steps: hidden
+        m.classList.remove('visible');
+      }
+    });
+
+    // Checkmark appears only in final step when most messages are visible
+    if (checkEl) {
+      checkEl.classList.toggle('visible', stepIdx === 2 && seqFraction > 0.7);
+    }
+  }
+
+  function setStep(idx, animate) {
+    if (idx === lastStep) return;
+    lastStep = idx;
+    const s = steps[idx];
+
+    if (animate && prefersMotion) {
+      stepLabel.classList.remove('in');
+      stepTitle.classList.remove('in');
+      stepDesc.classList.remove('in');
+      setTimeout(function() {
+        stepLabel.textContent = s.label;
+        stepTitle.textContent = s.title;
+        stepDesc.textContent  = s.desc;
+        requestAnimationFrame(function() {
+          stepLabel.classList.add('in');
+          stepTitle.classList.add('in');
+          stepDesc.classList.add('in');
+        });
+      }, 100);
+    } else {
+      stepLabel.textContent = s.label;
+      stepTitle.textContent = s.title;
+      stepDesc.textContent  = s.desc;
+      stepLabel.classList.add('in');
+      stepTitle.classList.add('in');
+      stepDesc.classList.add('in');
+    }
+
+    dotItems.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+  }
+
+  function updateHow() {
+    if (!prefersMotion) {
+      // reduced motion: show everything
+      allMsgs.forEach(function(m) { m.classList.add('visible'); });
+      setStep(0, false);
+      return;
+    }
+    const rect   = stage.getBoundingClientRect();
+    const stageH = stage.offsetHeight;
+    const vh     = window.innerHeight;
+    const scrolled = Math.max(0, Math.min(1, -rect.top / (stageH - vh)));
+
+    const stepRaw = scrolled * 3;
+    const stepIdx = Math.min(2, Math.floor(stepRaw));
+    const seqFraction = stepRaw - Math.floor(stepRaw);
+
+    setStep(stepIdx, true);
+    showMsgsForStep(stepIdx, seqFraction);
+  }
+
+  // Init
+  setStep(0, false);
+  showMsgsForStep(0, 0);
+  window.addEventListener('scroll', function() { requestAnimationFrame(updateHow); }, {passive: true});
+  updateHow();
+})();
+
+/* ─── FEATURES: HORIZONTAL SCROLL ─── */
 (function initFeatures() {
-  const cards = document.querySelectorAll('.feature-card');
-  const cmdsDone = new Set();
+  const stage = document.getElementById('featuresStage');
+  const track = document.getElementById('featuresTrack');
+  const dots = document.querySelectorAll('.feat-dot');
+  const cards = track.querySelectorAll('.feature-card');
+  const numCards = cards.length;
+  let cmdsDone = new Set();
 
   function typewriterCmd(el, text) {
     el.textContent = '';
@@ -1812,29 +2106,45 @@ window.addEventListener('scroll', () => {
       if (i < text.length) {
         el.textContent += text[i];
         i++;
-        setTimeout(tick, 38);
+        setTimeout(tick, 40);
       }
     }
     tick();
   }
 
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const card = e.target;
-      const idx = Array.from(cards).indexOf(card);
-      if (!cmdsDone.has(idx)) {
-        cmdsDone.add(idx);
+  function updateFeatures() {
+    if (!prefersMotion) return;
+    const stageRect = stage.getBoundingClientRect();
+    const stageH = stage.offsetHeight;
+    const vh = window.innerHeight;
+    const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
+
+    // Total offset: scroll through (numCards - 1) panels
+    const maxOffset = (numCards - 1) * window.innerWidth;
+    const offset = scrolled * maxOffset;
+    track.style.transform = `translateX(-${offset}px)`;
+
+    // Which card is active
+    const activeIdx = Math.round(offset / window.innerWidth);
+    dots.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
+
+    // Trigger typewriter for visible card cmd
+    const visibleIdx = Math.round(offset / window.innerWidth);
+    if (!cmdsDone.has(visibleIdx)) {
+      cmdsDone.add(visibleIdx);
+      const card = cards[visibleIdx];
+      if (card) {
         const cmdEl = card.querySelector('.feature-card__cmd');
         if (cmdEl && cmdEl.dataset.cmd) {
           const rawCmd = cmdEl.dataset.cmd.replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&lt;/g, '<');
           typewriterCmd(cmdEl, rawCmd);
         }
       }
-    });
-  }, {threshold: 0.3});
+    }
+  }
 
-  cards.forEach(card => obs.observe(card));
+  window.addEventListener('scroll', () => { requestAnimationFrame(updateFeatures); }, {passive: true});
+  updateFeatures();
 })();
 
 /* ─── DEMO: fade in when scrolled to ─── */
@@ -2033,9 +2343,10 @@ function handleStep2(e) {
     msg.innerHTML = `You\u2019re on the list.${planNote}`;
     msg.style.display = 'block';
 
-    // Hash email for referral slug
+    // Hash email for queue position and referral slug
     let hash = 0;
     for (let ci = 0; ci < email.length; ci++) { hash = (hash * 31 + email.charCodeAt(ci)) >>> 0; }
+    const position = 180 + (hash % 61);
     const referralSlug = (hash >>> 0).toString(36).substring(0, 8);
 
     // Show confirmation block
@@ -2047,6 +2358,12 @@ function handleStep2(e) {
     if (confirmNext) {
       confirmNext.innerHTML = `We open in waves of 50 businesses this spring. When your wave opens, <strong>we\u2019ll personally text ${phoneDisplay}</strong> \u2014 that\u2019s the product, starting with you.`;
     }
+
+    // Queue position
+    const queuePos = document.getElementById('queuePos');
+    const queueBlock = document.getElementById('queueBlock');
+    if (queuePos) queuePos.textContent = `#${position} in line`;
+    if (queueBlock) queueBlock.style.display = 'block';
 
     // Referral link
     const referralLink = `https://zed0minat0r.github.io/marketing-app/?ref=${referralSlug}`;
@@ -2109,28 +2426,28 @@ const flows = {
   posts: [
     {type:`out`, text:`Write this week's posts`},
     {type:`typing`, delay:1200},
-    {type:`in`, text:`Here are 5 posts for Mike's Pizza this week:`},
-    {type:`in`, text:`Mon: "Monday night is pizza night. Our Margherita is back on the menu — wood-fired, never rushed."\n\nWed: "Date night sorted. Reserve your table before the weekend fills up."\n\nFri: "Friday special: half-price garlic knots till 9pm. First come, first served."`},
+    {type:`in`, text:`Here are 5 posts for Joe's Coffee this week:`},
+    {type:`in`, text:`Mon: "Monday mornings hit different with a fresh pour-over. What's your go-to order?"\n\nWed: "New seasonal menu dropping Friday — cold brew with house-made vanilla and oat milk"\n\nFri: "Weekend vibes start here. Open till 8pm tonight"`},
     {type:`in`, text:`Reply YES to schedule all, or EDIT with the post number to change one.`},
   ],
   stats: [
     {type:`out`, text:`How am I doing?`},
     {type:`typing`, delay:1000},
-    {type:`in`, text:`This week for Mike's Pizza:\n\n- 5 posts published\n- 1,247 impressions (+18%)\n- 43 new followers\n- 4.8 avg review (2 new)\n- Best post: Friday garlic knots special (312 likes)`},
-    {type:`in`, text:`Your Friday posts get 2x engagement. Want me to schedule more weekend content?`},
+    {type:`in`, text:`This week for Joe's Coffee:\n\n- 5 posts published\n- 1,247 impressions (+18%)\n- 43 new followers\n- 4.8 avg review (2 new)\n- Best post: Monday pour-over (312 likes)`},
+    {type:`in`, text:`Your Wednesday posts get 2x engagement. Want me to schedule more mid-week content?`},
   ],
   ad: [
     {type:`out`, text:`Create a Facebook ad`},
     {type:`typing`, delay:1500},
-    {type:`in`, text:`Here are 3 ad variations for Mike's Pizza:`},
-    {type:`in`, text:`1: "Wood-fired, family-run, always fresh" — 2,400 local reach\n2: "Phoenixville's favorite pizza, now open for lunch" — 3,100 local reach\n3: "Friday night sorted. Book your table before 6pm" — 2,800 local reach`},
-    {type:`in`, text:`$5/day for 7 days. Reply 1, 2, or 3 to launch.`},
+    {type:`in`, text:`Here are 3 ad variations for Joe's Coffee:`},
+    {type:`in`, text:`Ad 1: "Skip the line, not the coffee"\nOrder ahead, pick up in 60 seconds.\n[Order Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville's favorite — now with online ordering"\nFreshly roasted, locally loved.\n[Try It] — Est. reach: 3,100 locals`},
+    {type:`in`, text:`Budget: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.`},
   ],
   audit: [
     {type:`out`, text:`Audit my website`},
     {type:`typing`, delay:1800},
-    {type:`in`, text:`mikespizza.com — Score: 6.2/10\n\n[OK] Mobile-friendly · Fast load 1.8s\n[WARN] No booking CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on homepage\n[FAIL] Missing SEO meta tags`},
-    {type:`in`, text:`I can fix the top 3. Reply FIX to start.`},
+    {type:`in`, text:`Audit for joescoffee.com:\n\nScore: 6.2/10\n\n[OK] Mobile-friendly\n[OK] Fast load (1.8s)\n[WARN] No ordering CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on site\n[FAIL] Missing SEO meta tags`},
+    {type:`in`, text:`I can fix the top 3 issues for you. Reply FIX to start, or DETAILS for the full report.`},
   ]
 };
 
