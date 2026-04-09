@@ -1404,9 +1404,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero__eyebrow{font-size:0.75rem;margin-bottom:20px}
   .hero__eyebrow::before,.hero__eyebrow::after{width:20px}
   .hero__headline{margin-bottom:16px}
-  .hero__sub{font-size:0.9rem;margin-bottom:24px;max-width:100%}
+  .hero__sub{font-size:0.9rem;margin-bottom:24px;max-width:100%;text-align:left}
   .hero__cta-row{margin-bottom:16px;gap:10px}
   .hero__trust{font-size:0.75rem;letter-spacing:0.04em;margin-top:4px}
+  /* Proof inline CTA: prevent button overflow on narrow screens */
+  .proof__cta-strip{padding-left:16px;padding-right:16px}
+  .proof__cta-strip .btn{max-width:100%;white-space:normal;text-align:center}
 }
 </style>
 </head>
@@ -1763,7 +1766,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <span class="proof__waitlist-label">businesses already on the waitlist &mdash; opening to the first 500 in May 2026</span>
     </div>
   </div>
-  <div style="padding:48px 0;text-align:center;border-top:1px solid var(--border)">
+  <div class="proof__cta-strip" style="padding:48px 0;text-align:center;border-top:1px solid var(--border)">
     <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join 203+ businesses on the waitlist &rarr;</button>
     <p style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono)">14-day free trial &nbsp;&middot;&nbsp; No credit card</p>
   </div>
