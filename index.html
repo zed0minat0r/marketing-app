@@ -285,7 +285,9 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   gap:8px;
   margin-top:28px;
   max-width:380px;
+  width:100%;
   text-align:left;
+  box-sizing:border-box;
 }
 .hero__sms-avatar{
   width:26px;height:26px;
@@ -593,6 +595,8 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 
 .feature-card__inner{
   max-width:640px;
+  width:100%;
+  box-sizing:border-box;
 }
 .feature-card__cmd{
   font-family:var(--mono);
@@ -630,6 +634,8 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   align-items:flex-start;
   gap:8px;
   max-width:420px;
+  width:100%;
+  box-sizing:border-box;
 }
 .feature-card__sms-avatar{
   width:28px;height:28px;
@@ -1401,6 +1407,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero__cta-row{margin-bottom:16px;gap:10px}
   .hero__trust{font-size:0.75rem;letter-spacing:0.04em;margin-top:4px}
 
+  /* Hero SMS preview: prevent overflow on narrow screens */
+  .hero__sms{max-width:100%;width:100%;display:flex}
+  .hero__sms-bubble{min-width:0;word-break:break-word}
+
   /* Final CTA: reduce padding so content isn't squeezed on 375px */
   .final-cta__inner{padding:0 20px}
 
@@ -1417,8 +1427,18 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
   /* Feature card body text: explicit left-align on mobile */
   .feature-card__desc{text-align:left}
+  /* Feature card SMS: prevent overflow on narrow screens */
+  .feature-card__sms{max-width:100%;width:100%;display:flex}
+  .feature-card__sms-bubble{min-width:0;word-break:break-word}
 
-  /* Proof waitlist: ensure it doesn't overflow container */
+  /* Proof coda: keep quote text left-aligned, remove left-border on mobile */
+  .proof__quote{border-left:none;padding-left:0;border-top:2px solid var(--accent);padding-top:20px;text-align:left}
+
+  /* Nav: ensure logo and CTA don't collide on 375px */
+  .nav__cta{font-size:0.78rem;padding:9px 14px}
+
+  /* Pricing toggle: stack if needed */
+  .pricing__toggle{flex-wrap:wrap;gap:8px}
 }
 </style>
 </head>
