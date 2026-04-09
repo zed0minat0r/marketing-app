@@ -56,8 +56,8 @@
   --font:'Geist',system-ui,sans-serif;
   --mono:'Geist Mono',monospace;
 }
-html{overflow-x:hidden;font-size:16px;scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
 a{color:var(--accent);text-decoration:none}
 .container{max-width:1120px;margin:0 auto;padding:0 32px}
 
@@ -76,6 +76,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   font-family:var(--mono);font-weight:700;font-size:1rem;
   color:var(--text);letter-spacing:-0.02em;
   display:inline-flex;align-items:center;gap:7px;
+  min-height:44px;
 }
 .nav__logo-dot{
   width:8px;height:8px;border-radius:50%;
@@ -91,6 +92,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   display:inline-flex;align-items:center;
   font-family:var(--font);
   letter-spacing:0.01em;
+  min-height:44px;
 }
 .nav__cta:hover{opacity:0.88}
 
@@ -148,6 +150,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   opacity:0;
   will-change:opacity;
   pointer-events:none;
+  z-index:2;
 }
 .hero__content.visible{pointer-events:auto}
 
@@ -203,6 +206,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   will-change:transform,opacity;
   width:340px;
   max-width:90vw;
+  z-index:1;
 }
 .hero__phone-rise.positioned{
   bottom:auto;
@@ -318,6 +322,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   color:var(--text-muted);
   font-family:var(--mono);font-size:0.72rem;letter-spacing:0.04em;
   padding:5px 10px;border-radius:4px;
+  min-height:44px;
   cursor:pointer;display:none;
   transition:all 0.15s;z-index:10;
 }
@@ -776,7 +781,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 }
 .pricing__toggle-opt{
   font-size:0.82rem;font-weight:500;
-  padding:7px 16px;min-height:40px;
+  padding:7px 16px;min-height:44px;
   border-radius:100px;cursor:pointer;
   border:none;background:transparent;
   color:var(--text-muted);font-family:var(--font);
@@ -1003,7 +1008,8 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   font-size:0.78rem;color:var(--text-muted);margin-top:14px;
 }
 .signup-note a{
-  padding:6px 2px;display:inline-flex;align-items:center;
+  padding:11px 2px;display:inline-flex;align-items:center;
+  min-height:44px;
   color:var(--text-muted);text-decoration:underline;
   text-underline-offset:2px;
 }
@@ -1040,6 +1046,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 .footer__links a{
   font-size:0.78rem;color:var(--text-muted);
   transition:color 0.2s;
+  min-height:44px;display:inline-flex;align-items:center;
 }
 .footer__links a:hover{color:var(--text)}
 
@@ -1675,14 +1682,18 @@ window.addEventListener('scroll', () => {
     const currentY = startY + (endY - startY) * easedW;
 
     wordmark.style.fontSize = currentSize + 'px';
-    wordmark.style.transform = `translate(calc(${currentX}px - 50%), calc(${currentY}px - 50%))`;
+    wordmark.style.left = currentX + 'px';
+    wordmark.style.top = currentY + 'px';
+    wordmark.style.transform = 'translate(-50%, -50%)';
     wordmark.style.opacity = scrolled > 0.7 ? String(1 - (scrolled - 0.7) / 0.15) : '1';
 
     // Phone rise: phase 0.3 -> 0.65
     const pPhase = Math.max(0, Math.min(1, (scrolled - 0.3) / 0.35));
     const easedP = 1 - Math.pow(1 - pPhase, 3);
-    // From bottom (translateY 100%) to center (translateY -35%)
-    const phoneY = 100 - (100 + 35) * easedP; // starts at 100, ends at -35
+    // From bottom (translateY 100%) to resting position
+    // On mobile: stop at 20% above bottom so phone doesn't cover CTA text
+    const phoneEndY = window.innerWidth <= 480 ? 20 : -35;
+    const phoneY = 100 - (100 - phoneEndY) * easedP;
     const phoneScale = 0.7 + 0.3 * easedP;
     phoneRise.style.transform = `translateX(-50%) translateY(${phoneY}%) scale(${phoneScale})`;
     phoneRise.style.opacity = String(Math.min(1, pPhase * 2));
@@ -1839,10 +1850,17 @@ if (!prefersMotion) { runHeroConvo(); }
     let stepIdx = Math.min(2, Math.floor(scrolled * 3));
     setStep(stepIdx, true);
 
-    // Fade bg number based on position within step
+    // Fade bg number based on position within step — clamp to avoid divide-by-zero at boundaries
     const stepProgress = (scrolled * 3) % 1;
-    stepBg.style.opacity = stepProgress < 0.1 ? String(stepProgress / 0.1) :
-                           stepProgress > 0.9 ? String(1 - (stepProgress - 0.9) / 0.1) : '1';
+    let bgOpacity;
+    if (stepProgress < 0.15) {
+      bgOpacity = stepProgress / 0.15;
+    } else if (stepProgress > 0.85) {
+      bgOpacity = 1 - (stepProgress - 0.85) / 0.15;
+    } else {
+      bgOpacity = 1;
+    }
+    stepBg.style.opacity = String(Math.max(0, Math.min(1, bgOpacity)));
   }
 
   // Initial state
@@ -1906,14 +1924,6 @@ if (!prefersMotion) { runHeroConvo(); }
 
   window.addEventListener('scroll', () => { requestAnimationFrame(updateFeatures); }, {passive: true});
   updateFeatures();
-
-  // Also trigger first card cmd immediately
-  const firstCmd = cards[0] && cards[0].querySelector('.feature-card__cmd');
-  if (firstCmd && firstCmd.dataset.cmd) {
-    const raw = firstCmd.dataset.cmd.replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&lt;/g, '<');
-    setTimeout(() => typewriterCmd(firstCmd, raw), 400);
-    cmdsDone.add(0);
-  }
 })();
 
 /* ─── DEMO: fade in when scrolled to ─── */
