@@ -1190,7 +1190,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 @media(max-width:768px){
   .container{padding:0 20px}
   .how-steps{grid-template-columns:1fr;padding:0 20px;gap:40px}
-  .how-step{border-left:none;padding-left:0;border-top:1px solid var(--border);padding-top:32px}
+  .how-step{border-left:none;padding-left:0;padding-right:0;border-top:1px solid var(--border);padding-top:32px}
   .how-step:first-child{border-top:none;padding-top:0}
   .proof__inner{grid-template-columns:1fr}
   .proof__stat-block{padding:60px 24px;border-right:none;border-bottom:1px solid var(--border);text-align:center}
@@ -1271,12 +1271,13 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     padding:76px 20px 40px;
     gap:6px;
   }
-  .hero__eyebrow{font-size:0.75rem;margin-bottom:20px}
-  .hero__eyebrow::before,.hero__eyebrow::after{width:20px}
-  .hero__headline{margin-bottom:16px}
+  .hero__eyebrow{font-size:0.75rem;margin-bottom:20px;text-align:left}
+  .hero__eyebrow::before{display:none}
+  .hero__eyebrow::after{display:none}
+  .hero__headline{margin-bottom:16px;text-align:left}
   .hero__sub{font-size:0.9rem;margin-bottom:24px;max-width:100%;text-align:left}
-  .hero__cta-row{margin-bottom:16px;gap:10px}
-  .hero__trust{font-size:0.75rem;letter-spacing:0.04em;margin-top:4px}
+  .hero__cta-row{margin-bottom:16px;gap:10px;justify-content:flex-start}
+  .hero__trust{font-size:0.75rem;letter-spacing:0.04em;margin-top:4px;text-align:left}
 
   /* Hero SMS preview: prevent overflow on narrow screens */
   .hero__sms{max-width:100%;width:100%;display:flex}
