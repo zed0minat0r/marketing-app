@@ -292,7 +292,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   border-radius:50%;
   background:var(--accent);
   color:#0e0d0b;
-  font-size:0.55rem;font-weight:800;
+  font-size:0.75rem;font-weight:800;
   font-family:var(--font);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
@@ -625,7 +625,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   border-radius:50%;
   background:var(--accent);
   color:#0e0d0b;
-  font-size:0.6rem;font-weight:800;
+  font-size:0.75rem;font-weight:800;
   font-family:var(--font);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
@@ -1070,6 +1070,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .final-cta__inner{
   position:relative;z-index:1;
   max-width:680px;padding:0 32px;
+  width:100%;box-sizing:border-box;
 }
 .final-cta__trust{
   font-family:var(--mono);font-size:0.75rem;
@@ -1161,7 +1162,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 /* ─── POST-SIGNUP CONFIRMATION ─── */
 .confirmation-block{
   display:none;text-align:center;
-  max-width:440px;margin:0 auto;
+  max-width:440px;margin:0 auto;width:100%;box-sizing:border-box;
 }
 .confirmation-block.visible{display:block}
 .confirmation-next{
@@ -1176,7 +1177,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   text-align:left;margin-top:8px;
 }
 .referral-card__label{
-  font-family:var(--mono);font-size:0.68rem;
+  font-family:var(--mono);font-size:0.75rem;
   text-transform:uppercase;letter-spacing:0.12em;
   color:var(--text-muted);margin-bottom:8px;
 }
@@ -1193,16 +1194,17 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   display:flex;gap:6px;align-items:center;
 }
 .referral-link-input{
-  flex:1;font-family:var(--mono);font-size:0.72rem;
+  flex:1;font-family:var(--mono);font-size:0.75rem;
   color:var(--text-muted);background:rgba(255,255,255,0.04);
   border:1px solid var(--border);border-radius:3px;
   padding:8px 10px;overflow:hidden;text-overflow:ellipsis;
   white-space:nowrap;cursor:pointer;
+  min-height:44px;display:flex;align-items:center;
 }
 .referral-copy-btn{
-  padding:8px 14px;background:var(--accent);color:#0e0d0b;
+  padding:8px 14px;min-height:44px;background:var(--accent);color:#0e0d0b;
   border:none;border-radius:3px;font-family:var(--mono);
-  font-size:0.72rem;font-weight:700;cursor:pointer;
+  font-size:0.75rem;font-weight:700;cursor:pointer;
   white-space:nowrap;transition:opacity 0.2s;
 }
 .referral-copy-btn:hover{opacity:0.85}
