@@ -345,7 +345,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   border:1px solid rgba(240,235,224,0.2);
 }
 .btn--ghost:hover{border-color:rgba(240,235,224,0.45)}
-.btn--sm{padding:10px 20px;font-size:0.85rem;min-height:40px}
+.btn--sm{padding:10px 20px;font-size:0.85rem;min-height:44px}
 
 /* ─── HOW IT WORKS ─── */
 .how-stage{
@@ -1117,6 +1117,9 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .signup-note{
   font-size:0.78rem;color:var(--text-muted);margin-top:14px;
 }
+.sms-reassurance{
+  font-size:0.82rem;color:var(--text-muted);margin-top:10px;text-align:center;
+}
 .signup-note a{
   padding:11px 2px;display:inline-flex;align-items:center;
   min-height:44px;
@@ -1368,6 +1371,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .pricing{padding:80px 0}
   .faq{padding:80px 0}
   .faq__list{text-align:left}
+  /* Feature cards: center headings/labels, body text stays left */
+  .feature-card__num,.feature-card__cmd,.feature-card__title{text-align:center}
+  /* Compare CTA note: center under stacked buttons */
+  .compare__cta-note{text-align:center;width:100%}
 }
 @media(max-width:480px){
   .container{padding:0 16px}
@@ -1442,7 +1449,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
       <!-- Typewriter replaces phone -->
       <div class="hero__typewriter-wrap" id="heroTypewriterWrap" style="opacity:0;transition:opacity 0.5s ease">
-        <div class="hero__typewriter-label">sidekick &rsaquo; content ready</div>
+        <div class="hero__typewriter-label">What you&rsquo;ll see in your texts:</div>
         <div class="hero__typewriter-text" id="heroTypewriterText"><span class="tw-cursor"></span></div>
       </div>
     </div>
@@ -1741,12 +1748,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <div class="proof__stat-block">
       <span class="proof__stat-num"><em class="count-num" data-target="52" data-suffix="%">52</em>%</span>
       <div class="proof__stat-label">of small business owners <strong>handle all their own marketing</strong> — on top of running the business</div>
-      <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
+      <span class="proof__source">According to industry research on small business marketing</span>
     </div>
     <div class="proof__stat-block">
       <span class="proof__stat-num">1&nbsp;in&nbsp;<em class="count-num" data-target="3">3</em></span>
       <div class="proof__stat-label">post to social media <strong>consistently</strong>. The other two thirds post sporadically or not at all</div>
-      <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
+      <span class="proof__source">According to industry research on small business marketing</span>
     </div>
   </div>
   <div class="proof__coda container">
@@ -1891,6 +1898,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <button type="submit">Start free trial &rarr;</button>
     </form>
 
+    <p class="sms-reassurance" id="smsReassurance" style="display:none">We&rsquo;ll only text you when your spot opens. No spam, ever.</p>
+
     <p class="signup-note">By joining you agree to our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>. We'll only contact you about your waitlist spot &mdash; never sold, never spammed.</p>
     <p class="signup-msg" id="signupMsg"></p>
     <div class="queue-block" id="queueBlock">
@@ -2001,7 +2010,7 @@ window.addEventListener('scroll', () => {
 })();
 
 /* ─── HERO TYPEWRITER ─── */
-const TYPEWRITER_MESSAGE = `Hey Mike, here are 3 posts for this week. Reply YES to schedule all, or EDIT to change one.`;
+const TYPEWRITER_MESSAGE = `Here are 3 posts for this week. Reply YES to schedule all, or EDIT to change one.`;
 
 let typewriterDone = false;
 
@@ -2374,6 +2383,8 @@ function handleStep1(e) {
   document.getElementById('formSub').textContent = 'What number should we text when your spot opens?';
   const step2 = document.getElementById('step2Form');
   step2.style.display = 'flex';
+  const reassurance = document.getElementById('smsReassurance');
+  if (reassurance) reassurance.style.display = 'block';
   document.getElementById('phoneInput').focus();
 }
 
@@ -2399,6 +2410,8 @@ function handleStep2(e) {
     if (trust) trust.style.display = 'none';
     const note = document.querySelector('.signup-note');
     if (note) note.style.display = 'none';
+    const smsR = document.getElementById('smsReassurance');
+    if (smsR) smsR.style.display = 'none';
     const planIndicator = document.getElementById('planSelected');
     if (planIndicator) planIndicator.style.display = 'none';
     const msg = document.getElementById('signupMsg');
