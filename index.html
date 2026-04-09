@@ -1199,30 +1199,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 .modal__body h3:first-child{margin-top:0}
 .modal__body p{margin-bottom:12px}
 
-/* ─── FILM GRAIN ─── */
-body::before{
-  content:'';
-  position:fixed;inset:0;z-index:9999;
-  pointer-events:none;
-  width:100%;height:100%;
-  opacity:0.03;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat:repeat;
-  background-size:180px 180px;
-}
-
-/* ─── SCROLL GLOW ─── */
-#scrollGlow{
-  position:fixed;
-  left:0;right:0;
-  top:0;
-  height:100vh;
-  pointer-events:none;
-  z-index:0;
-  background:radial-gradient(ellipse 60% 40% at 50% 50%, rgba(212,245,60,0.05) 0%, transparent 70%);
-  transition:background 0.1s linear;
-  will-change:background;
-}
 
 /* ─── DOT GRID HERO BACKGROUND ─── */
 .hero__dot-grid{
@@ -1289,15 +1265,6 @@ body::before{
   50%{opacity:0}
 }
 
-/* ─── HOW IT WORKS: MESSAGES ─── */
-.how-msg--in.how-msg-glass{
-  background:var(--surface2);
-  border:1px solid var(--border);
-  color:var(--text);
-}
-.how-msg--out.how-msg-glass{
-  /* uses base .how-msg--out styles — no overrides needed */
-}
 
 /* ─── DEMO PHONE PREMIUM ─── */
 .demo__phone-glow{
@@ -1347,8 +1314,6 @@ body::before{
 
 /* ─── REDUCED MOTION: flat layout ─── */
 @media(prefers-reduced-motion:reduce){
-  body::before{display:none}
-  #scrollGlow{display:none}
   .hero__dot-grid{animation:none}
   .hero__typewriter-text{animation:none}
   .hero__typewriter-text .tw-cursor{animation:none}
@@ -1374,8 +1339,6 @@ body::before{
 
 /* ─── MOBILE: disable expensive effects ─── */
 @media(max-width:480px){
-  body::before{display:none}
-  #scrollGlow{display:none}
   .hero__dot-grid{animation:none;opacity:0.04}
   .demo__phone-glow::after{display:none}
   .plan{backdrop-filter:none;-webkit-backdrop-filter:none}
@@ -1470,9 +1433,6 @@ body::before{
 </head>
 <body>
 
-<!-- SCROLL GLOW -->
-<div id="scrollGlow"></div>
-
 <!-- NAV -->
 <nav id="nav">
   <div class="container nav__inner">
@@ -1544,21 +1504,21 @@ body::before{
           <div class="how-phone__msgs" id="howMsgList">
             <!-- Step 1 messages -->
             <div class="how-msg how-msg--time" data-step="0" data-seq="0">Today 9:41 AM</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="0" data-seq="1">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?</div>
-            <div class="how-msg how-msg--out how-msg-glass" data-step="0" data-seq="2">Mike&rsquo;s Pizza</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="0" data-seq="3">Great! What do you sell, and who&rsquo;s your customer?</div>
-            <div class="how-msg how-msg--out how-msg-glass" data-step="0" data-seq="4">Wood-fired pizza. Families &amp; date nights.</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="0" data-seq="5">Got it. Which platforms &mdash; Instagram, Facebook, or both?</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="1">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?</div>
+            <div class="how-msg how-msg--out" data-step="0" data-seq="2">Mike&rsquo;s Pizza</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="3">Great! What do you sell, and who&rsquo;s your customer?</div>
+            <div class="how-msg how-msg--out" data-step="0" data-seq="4">Wood-fired pizza. Families &amp; date nights.</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="5">Got it. Which platforms &mdash; Instagram, Facebook, or both?</div>
             <!-- Step 2 messages -->
-            <div class="how-msg how-msg--out how-msg-glass" data-step="1" data-seq="0">Both please</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="1">Here are 3 posts for this week:</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="2">1/ Friday night, wood-fired magic. Our Margherita never misses. Link in bio.</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="3">2/ Date night sorted. Reserve your table before the weekend fills up.</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="1" data-seq="4">3/ Family pizza night? We&rsquo;ve got the table. Bring everyone.</div>
+            <div class="how-msg how-msg--out" data-step="1" data-seq="0">Both please</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="1">Here are 3 posts for this week:</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="2">1/ Friday night, wood-fired magic. Our Margherita never misses. Link in bio.</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="3">2/ Date night sorted. Reserve your table before the weekend fills up.</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="4">3/ Family pizza night? We&rsquo;ve got the table. Bring everyone.</div>
             <!-- Step 3 messages -->
-            <div class="how-msg how-msg--out how-msg-glass" data-step="2" data-seq="0">YES</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
-            <div class="how-msg how-msg--in how-msg-glass" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
+            <div class="how-msg how-msg--out" data-step="2" data-seq="0">YES</div>
+            <div class="how-msg how-msg--in" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
+            <div class="how-msg how-msg--in" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
           </div>
           <div class="how-check" id="howCheck">
             <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1986,25 +1946,6 @@ body::before{
 <script>
 /* ─── PREFERSMOTION CHECK ─── */
 const prefersMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-
-/* ─── SCROLL GLOW ─── */
-(function initScrollGlow() {
-  const glowEl = document.getElementById('scrollGlow');
-  if (!glowEl || !prefersMotion) return;
-  let ticking = false;
-  function updateGlow() {
-    const scrollY = window.scrollY;
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    const pct = maxScroll > 0 ? scrollY / maxScroll : 0;
-    const centerY = 20 + pct * 80;
-    glowEl.style.background = `radial-gradient(ellipse 60% 40% at 50% ${centerY}%, rgba(212,245,60,0.05) 0%, transparent 70%)`;
-    ticking = false;
-  }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { requestAnimationFrame(updateGlow); ticking = true; }
-  }, {passive: true});
-  updateGlow();
-})();
 
 /* ─── NAV ─── */
 const nav = document.getElementById('nav');
