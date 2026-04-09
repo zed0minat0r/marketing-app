@@ -692,11 +692,11 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .demo__phone-wrap{
   max-width:400px;
   margin:0 auto;
-  transform:scale(0.9) translateY(20px);
+  transform:translateY(24px);
   opacity:0;
   transition:transform 0.8s cubic-bezier(0.22,1,0.36,1), opacity 0.8s ease;
 }
-.demo__phone-wrap.in{transform:scale(1) translateY(0);opacity:1}
+.demo__phone-wrap.in{transform:translateY(0);opacity:1}
 
 /* ─── COMPARE ─── */
 .compare{
@@ -937,13 +937,13 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   padding:40px 32px;
   border-right:1px solid var(--border);
   position:relative;
-  transform:translateY(0) rotateX(0);
+  transform:translateY(0);
   transition:transform 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
   opacity:0;
 }
 @media(prefers-reduced-motion:no-preference){
-  .plan{transform:translateY(40px) rotateX(4deg);opacity:0}
-  .plan.plan-in{transform:translateY(0) rotateX(0);opacity:1}
+  .plan{transform:translateY(40px);opacity:0}
+  .plan.plan-in{transform:translateY(0);opacity:1}
 }
 @media(prefers-reduced-motion:reduce){
   .plan{opacity:1;transform:none}
