@@ -311,6 +311,17 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 }
 .hero__sms-bubble strong{color:var(--text);font-weight:600}
 
+/* ─── HERO SCROLL HINT ─── */
+.hero__scroll-hint{
+  position:absolute;
+  bottom:28px;left:50%;
+  transform:translateX(-50%);
+  color:var(--text-muted);
+  opacity:0.5;
+  pointer-events:none;
+  z-index:2;
+}
+
 /* ─── BTN ─── */
 .btn{
   padding:13px 28px;min-height:46px;
@@ -1416,7 +1427,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 <!-- NAV -->
 <nav id="nav">
   <div class="container nav__inner">
-    <a href="#" class="nav__logo">
+    <a href="#heroStage" class="nav__logo" aria-label="Sidekick - back to top">
       <span class="nav__logo-dot"></span>Sidekick
     </a>
     <button class="nav__cta" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join waitlist</button>
@@ -1441,6 +1452,13 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         <div class="hero__sms-bubble">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?<br><strong>Mike&rsquo;s Pizza.</strong><br>Got it. Your first week of posts will be ready in an hour.</div>
       </div>
 
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="hero__scroll-hint" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 3v10M3 9l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
 
   </div>
@@ -1598,7 +1616,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         <div class="phone">
           <div class="phone__notch"><div class="phone__notch-pill"></div></div>
           <div class="phone__header">
-            <div class="phone__avatar">JC</div>
+            <div class="phone__avatar">SK</div>
             <div>
               <div class="phone__name">Sidekick</div>
               <div class="phone__status">&#x25cf; Online</div>
