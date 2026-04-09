@@ -215,7 +215,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .phone__messages{
   padding:16px;
   min-height:280px;
-  max-height:360px;
+  max-height:420px;
   overflow-y:auto;
   display:flex;flex-direction:column;gap:8px;
   scroll-behavior:smooth;
@@ -1317,7 +1317,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
     <!-- Hero content -->
     <div class="hero__content">
-      <div class="hero__eyebrow">Built for owners who hate dashboards</div>
+      <div class="hero__eyebrow">AI marketing over text &mdash; no app, no login</div>
       <h1 class="hero__headline">Your marketing team<br>lives in your <em>texts</em></h1>
       <p class="hero__sub">Sidekick runs your social posts, ads, and review replies entirely over text. No app. No login. Ever.</p>
       <div class="hero__cta-row">
@@ -1345,7 +1345,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 <div class="how-stage">
   <div class="container how-section-header">
     <div class="how-section-eyebrow">How it works</div>
-    <h2 class="how-section-title">Three texts and you&rsquo;re live</h2>
+    <h2 class="how-section-title">Up and running in<br>one conversation</h2>
   </div>
   <div class="how-steps">
 
@@ -1668,7 +1668,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         <ul class="plan__features">
           <li>Up to 5 locations or brands</li>
           <li>Unlimited AI generations</li>
-          <li>Website copy fixes &mdash; we do it, you approve</li>
+          <li>Website copy fixes &mdash; text us a page, get rewritten copy back, approve by text</li>
           <li>Priority response (&lt;2 min)</li>
           <li>Custom brand voice per location</li>
           <li>Monthly competitor monitoring report</li>
@@ -2123,14 +2123,14 @@ const flows = {
     {type:`out`, text:`Create a Facebook ad`},
     {type:`typing`, delay:1500},
     {type:`in`, text:`Here are 3 ad variations for Mike's Pizza:`},
-    {type:`in`, text:`Ad 1: "Wood-fired, family-run, always fresh"\nReserve your table tonight.\n[Book Now] — Est. reach: 2,400 locals\n\nAd 2: "Phoenixville's favorite pizza — now open for lunch"\nFresh dough, daily.\n[See Menu] — Est. reach: 3,100 locals`},
-    {type:`in`, text:`Budget: $5/day for 7 days = ~3,000 local impressions. Reply 1, 2, or 3 to launch.`},
+    {type:`in`, text:`1: "Wood-fired, family-run, always fresh" — 2,400 local reach\n2: "Phoenixville's favorite pizza, now open for lunch" — 3,100 local reach\n3: "Friday night sorted. Book your table before 6pm" — 2,800 local reach`},
+    {type:`in`, text:`$5/day for 7 days. Reply 1, 2, or 3 to launch.`},
   ],
   audit: [
     {type:`out`, text:`Audit my website`},
     {type:`typing`, delay:1800},
-    {type:`in`, text:`Audit for mikespizza.com:\n\nScore: 6.2/10\n\n[OK] Mobile-friendly\n[OK] Fast load (1.8s)\n[WARN] No reservation CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on site\n[FAIL] Missing SEO meta tags`},
-    {type:`in`, text:`I can fix the top 3 issues for you. Reply FIX to start, or DETAILS for the full report.`},
+    {type:`in`, text:`mikespizza.com — Score: 6.2/10\n\n[OK] Mobile-friendly · Fast load 1.8s\n[WARN] No booking CTA above the fold\n[WARN] Google Business not linked\n[FAIL] No reviews on homepage\n[FAIL] Missing SEO meta tags`},
+    {type:`in`, text:`I can fix the top 3. Reply FIX to start.`},
   ]
 };
 
