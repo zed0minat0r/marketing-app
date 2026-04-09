@@ -1,118 +1,165 @@
-# Sidekick Landing Page — Audit Report
-**Auditor:** Nigel  
-**Date:** 2026-04-07  
-**Cycle:** 18  
+# Sidekick — Nigel Audit #19
+**Date:** 2026-04-07
+**Auditor:** Nigel (strict British auditor)
+**Perspective:** Small business owner visiting for the first time on a phone
 **Score:** 7.6 / 10
 
 ---
 
 ## Score History
-6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → 7.4 → 7.5 → 7.6 → 7.6 → 7.5 → 7.3 → 7.6 → 7.5 → 7.7 → **7.6**
+6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → 7.4 → 7.5 → 7.6 → 7.6 → 7.5 → 7.3 → 7.6 → 7.5 → 7.7 → 7.6 → **7.6**
 
 ---
 
-## Executive Summary
+## Verdict on the Sticky Scroll Collapse
 
-Cycle 18 brought targeted copy sharpening, a named testimonial replacing the "200+ waitlist" count, FAQ pruning, the "Hold my spot" CTA unification, and a scroll hint. These are all legitimate improvements in isolation. The testimonial swap is a genuine step up — Mike Russo, Mike's Pizza, Phoenixville PA with a specific quote reads as real, not fabricated. The CTA unification reduces cognitive friction. The scroll hint is welcome.
+The collapsing of 750vh sticky scroll was the correct call and clearly the right structural decision. The page is now genuinely navigable — pricing is reachable in 3-4 scrolls rather than 12+. However, it did not break through the ceiling. The score holds at 7.6 rather than advancing.
 
-However, the net score ticks down one point from 7.7 because the accumulated weight of the page — eight distinct interactive scroll-driven sections — now creates a paradox: each section is competent, but the whole is overwhelming for the small business owner this product is supposedly built for. A pizza shop owner in Phoenixville does not want to scroll through 400vh of sticky horizontal feature panels plus 350vh of sticky step panels before reaching a form. The subtraction pass improved copy but did not reduce structural bloat. That remains the central unfixed problem.
+Why? Because collapsing the scroll stages solved a navigation problem that was always a self-inflicted wound. A first-time visitor who never suffered through the old sticky scroll cannot perceive the improvement. What they see is a page that is still doing slightly too much — demo, compare table, stats section, pricing, FAQ, and a two-step form all fighting for attention before the close. The structural debt has been repaid, but the page has not yet earned a leap in persuasiveness.
 
 ---
 
 ## Section-by-Section Breakdown
 
-### 1. Navigation — 8.0
-Clean, sticky, scrolled state works. Logo dot is distinctive. Single CTA. No clutter. Nothing to fix here.
+### 1. First Impression / Hero — 7.8
+The headline "Your marketing team lives in your texts" is strong and immediately differentiating. The sub-copy ("No app. No login. Ever.") is clean and punchy. The trust strip (Plans from $49/mo, 14-day free, no credit card, cancel by text) is well-placed and comprehensive.
 
-### 2. Hero — 7.8
-The eyebrow "Built for owners who hate dashboards" is the sharpest line on the page — direct, class-specific, adversarial in the right way. The headline is solid. The SMS preview bubble ("Mike's Pizza... your first week of posts will be ready in an hour") anchors it with specificity. The scroll hint arrow is a good addition.
+The hero SMS preview — the little bubble showing Mike's Pizza onboarding — is effective as a concept but the implementation reads a bit like set-dressing. The exchange is: "Hey, what's your name?" / "Mike's Pizza." / "Got it. Ready in an hour." It conveys speed convincingly. Good.
 
-Minor issue: the hero sub-copy repeats "No app. No dashboard. No login. Ever." but "No dashboard" was already established by the eyebrow. The repetition weakens both. One knockout is better than three jabs.
+Deduction: The eyebrow ("Built for owners who hate dashboards") tells me nothing about what the product actually does. This real estate should tell me what Sidekick is, not how the owner feels. It is a minor self-indulgence.
 
-### 3. How It Works (400vh sticky scroll) — 6.8
-The three-step scroll animation is technically competent. The phone content with "Mike's Pizza" throughout is consistent and believable. The dot navigation on the right is a nice touch.
+Score: 7.8/10
 
-The problem is structural: 400vh for a concept that could be communicated in a single static three-panel layout or one paragraph. This forces the user to scroll four full screen heights before seeing features. From a small business owner's perspective, this is patience-taxing, not impressive.
+### 2. How It Works (Static 3-Step Grid) — 7.5
+The collapse from sticky scroll to a static 3-column grid with inline SMS exchanges is a net positive. The steps are logical and the copy is crisp: "Answer 5 questions," "Content arrives," "You just approve." The Mike's Pizza conversation throughout creates a coherent through-line.
 
-### 4. Features (350vh horizontal scroll) — 6.5
-The horizontal scroll mechanic functions. Typewriter on the command line is a nice effect. The four feature cards are good: ads, review replies, weekly posts, Monday report. The SMS bubbles are specific and believable.
+Weaknesses: The section title "Three texts and you're live" is a slight overclaim — the demo flows show multi-message exchanges, not single texts. A sceptical small business owner will notice this discrepancy. Also, the How It Works grid is visually identical in typographic treatment to the Features grid immediately below. There is no visual separation of rhythm between sections — they stack in a way that flattens the page's sense of progression.
 
-But 350vh of horizontal scroll on top of 400vh of sticky vertical scroll is cumulative punishment. By the time a user reaches features, they have scrolled the equivalent of seven full screens of content and seen only setup and features. They haven't yet seen price or proof. A first-time visitor who doesn't know the brand and is already short on time will bounce here.
+Score: 7.5/10
 
-### 5. Interactive Demo — 7.5
-The four flows (posts, stats, ad, audit) are the strongest interactive element on the page. The typing delay feels authentic. The "Joe's Coffee" persona is specific. The flows complete cleanly and the "start over" reset works correctly.
+### 3. Features (Static 2x2 Grid) — 7.4
+Four clean cards: Facebook ad in 30 seconds, Google reviews, weekly posts, Monday report. These are the right features to highlight and the SMS mockups inside each card are concrete and believable. The unified Mike's Pizza persona throughout is a clear improvement — it gives the page coherence.
 
-Slight concern: the demo uses "Joe's Coffee" as the persona while the testimonial and how-it-works sections both use "Mike's Pizza." This inconsistency is small but a sharp user will notice the product isn't personalised — it's just swapping placeholders.
+The typewriter effect on the feature-card__cmd elements ("> run an ad", "> new review detected") is clever and does not feel excessive. It fires once on scroll entry and stops. Acceptable.
 
-### 6. Compare Table — 7.2
-The honest disclaimer footnote ("A social media manager will build deeper strategy...") is the right call — it defuses the obvious objection without looking defensive. The desktop table is clean. The mobile version works. Row slide-in animation is proportionate, not showy.
+Weakness: Card 04 ("Your numbers, every Monday") has noticeably thinner copy: "One text. No login screen, no guessing." After three cards with meaty descriptions, this feels unfinished. It reads like a first draft that was never filled in. This is a trust signal problem — if you cannot describe your reporting feature in more than one sentence, a cautious visitor will wonder whether it actually exists.
 
-The compare CTA "Skip the dashboard. Start for $49/mo" is specific and action-oriented. Improvement from prior cycle noted.
+Score: 7.4/10
 
-### 7. Proof / Stats — 7.0
-The two statistics (52% handle own marketing; 1 in 3 post consistently) are legitimate with sourced citations. The named testimonial — Mike Russo, Mike's Pizza, Phoenixville PA — is a meaningful upgrade from "200+ business owners." It reads as a real person rather than a crowd claim. The quote itself is natural and product-specific ("10 seconds," "didn't have to think about it once").
+### 4. Interactive Demo — 7.8
+This is still the strongest section on the page and the primary reason the score is not lower. Four flows (posts, stats, ad, audit), all unified under Mike's Pizza, all working correctly. The typing indicator, message animation, and prompt management all function properly. The "// that's the full tour" end state and restart button are thoughtful.
 
-Remaining weakness: one testimonial from one pizza shop is thin. It establishes social proof exists but doesn't demonstrate breadth or diverse industry coverage. A user wonders: is this the only one?
+The fade-in on scroll entry (translateY 24px to 0, opacity 0 to 1) is understated and functional.
 
-### 8. Pricing — 7.4
-"Hold my spot" unified across all three plans is cleaner than having mixed CTAs. The billing toggle works. Annual pricing correctly updates and shows the "Save 20%" pill. The featured plan glow animation on scroll-in is proportionate. The "Waitlist pricing — locked in when you join. Prices increase when we open to the public in May 2026" note creates urgency without lying.
+Minor issue: the demo phone's message window is quite tall on desktop (max-height: 360px). Long flow messages — particularly the ad flow with two back-to-back long messages — get clipped and require the user to scroll inside the phone widget. A real user may not realise this and will miss the final instruction ("Reply 1, 2, or 3 to launch"). This has been present for several cycles.
 
-One concern: the Starter plan lists "100 AI generations/mo (~4 posts/wk + reviews)" — that arithmetic feels tight and the parenthetical disclaimer reads as a caveat rather than a feature. A business owner doing the maths realises 100 generations barely covers the stated promise of consistent posting plus review replies. This seeds doubt at the moment of conversion.
+Score: 7.8/10
 
-### 9. FAQ — 7.3
-Eight items remain after the cut. The security/OAuth question is the right call to include — it's a real objection. The "Cancel by text CANCEL" is on-brand and specific. The "What if it posts something wrong" answer ("Nothing posts without your YES") is the most reassuring line in the FAQ.
+### 5. Compare Table — 7.0
+The desktop comparison table against Hootsuite, Podium, and a Social Media Manager is solid and the mobile-specific grid version is well-executed. The disclaimer note at the bottom crediting where competitors have genuine depth is a confidence signal that works.
 
-The section is appropriately long and non-defensive. No obvious gaps remain.
+However, this section is placed after the demo. At this point a persuaded visitor has already mentally converted. For a sceptic who scrolled past the demo, the compare table is potentially useful, but its placement after a full interactive demo section means it catches very few persuadable people. The section has been here since the early builds. It is well-executed but arguably no longer earning its page real estate.
 
-### 10. Final CTA / Signup Flow — 7.5
-Two-step form (email, then phone) is well-executed. Step transition is clean. The confirmation block with queue position and referral card work correctly in JavaScript. The warm title swap ("Welcome aboard") and phone display formatting are good details. The referral copy button works.
+Score: 7.0/10
 
-The queue position is deterministically generated from an email hash — two users get different numbers but there is no actual queue. This is fine for a waitlist page but verges on misleading if taken literally.
+### 6. Proof / Stats — 7.2
+The two statistics (52% of small business owners handle all their own marketing; 1 in 3 post consistently) are real and sourced, which is important. The count-up animation is disciplined — it fires once and does not loop.
 
-### 11. JavaScript Integrity — 8.0
-All interactive elements verified:
-- Nav scroll state: correct
-- How It Works sticky scroll with step/message reveal: correct
-- Features horizontal scroll with typewriter: correct
-- Demo flows (posts, stats, ad, audit): all four flow correctly, typing indicator appears and removes, reset works
-- Compare row slide-in: correct
-- Count-up on stats: correct
-- Pricing toggle monthly/annual: correct
-- FAQ accordion (open/close, only one open at a time): correct
-- Plan selection to scroll to final: correct
-- Signup step 1 to step 2 to confirmation: correct
-- Referral copy button: correct
-- Modal (privacy, terms, escape key, click-outside): correct
+The testimonial pair — Mike Russo and Sarah Chen — is the evaluated change this cycle. The addition of Sarah Chen (florals, Austin) is the correct decision: two testimonials of different business types and geographies is more credible than one. The quotes themselves are believable: Mike's is concise and product-specific; Sarah's is slightly longer and adds a genuine before/after (Sunday nights writing posts vs. reply YES three times Monday morning). Sarah's quote is the better of the two.
 
-No broken interactive elements found.
+However: both are labelled "Early access." Both have no surname context beyond the business name. The testimonials read as if they were written by the product team rather than pulled from real conversation transcripts. A sceptical business owner — especially one who has been burned by software promises — will sense this. The styling is clean. The content is doing less work than the design suggests.
 
-### 12. Visual Design — 7.5
-Dark warm background, Geist fonts, yellow-green accent are distinctive and consistent. Not generic. The accent usage is disciplined. Typography hierarchy is clear.
+Score: 7.2/10
 
-The design does not look AI-generated, which remains the most important rule and it satisfies it.
+### 7. Pricing — 7.6
+Three tiers ($49/$99/$199), annual toggle with 20% discount, featured plan glow animation on scroll entry. This is a clean, functional pricing section. The waitlist pricing note ("Prices increase when we open to the public in May 2026") creates appropriate urgency without being manipulative.
 
-### 13. Mobile Responsiveness — 7.2
-The responsive CSS is thorough. The 480px breakpoints shrink hero headline, stack CTAs, adjust proof layout, and centre pricing. Tap targets at 44px minimum are implemented throughout.
+Plan buttons say "Hold my spot →" rather than "Sign up" or "Buy now" — the right language for a pre-launch product. The plan selection persists to the final CTA section, which is a nice touch.
 
-One unresolved structural issue: sticky scroll-driven sections at 400vh and 350vh on mobile are worse than on desktop. The user must scroll through the equivalent of 12 full mobile screens before reaching pricing. Mobile viewports are shorter and thumb-scrolling through sticky sections feels frustrating.
+Weakness: Pro plan at $199 lists "Website copy fixes — we do it, you approve" as a feature, but this capability is never mentioned or demonstrated anywhere else on the page. For a product operating entirely over SMS, offering to fix website copy is a significant claim. It needs one sentence of explanation or it sounds invented.
+
+Score: 7.6/10
+
+### 8. FAQ — 7.5
+Eight questions, answers that are direct and appropriately confident. The cancel-by-text FAQ is particularly good: "We want you to stay because it's working, not because leaving is hard." This is the right voice for this product.
+
+The "Is my social media login safe?" answer is thorough and technically accurate (OAuth, no password storage, revoke from Facebook/Instagram settings). This matters for a small business owner who has heard horror stories.
+
+The FAQ uses a clean CSS max-height accordion with no JS bloat.
+
+Minor: "Twitter/X support coming Q3 2026" appears in the FAQ but not in the features section. Small consistency gap.
+
+Score: 7.5/10
+
+### 9. Final CTA + Signup Form — 7.5
+Two-step signup (email then phone) is the right friction model for a waitlist. The warm post-submission state ("Welcome aboard," queue position, referral card) is well-considered. The referral mechanic ("Refer 3 businesses, skip the queue, get 2 months free") is clear and immediately actionable.
+
+Queue position is pseudo-randomised per email hash (180 + hash % 61 = 180 to 240). This is a known dark pattern. If a small business owner compares their number with a colleague and gets a different figure, trust evaporates immediately. This risk has been present since the early builds and remains the page's single biggest honesty vulnerability.
+
+The final CTA headline "Your marketing shouldn't require a second job" is the strongest single line of copy on the page. It earns its 100vh treatment.
+
+Score: 7.5/10
+
+### 10. JavaScript Functionality — 7.9
+All interactive elements tested and functioning correctly:
+- Nav scroll class toggles at 40px scroll depth
+- All four demo chat flows render, typing indicator appears and removes, messages auto-scroll, prompt buttons update correctly after each flow
+- Billing toggle: monthly/annual switch updates all prices and period labels, save pill shows/hides
+- FAQ accordion: opens/closes correctly, only one item open at a time
+- Plan selection: scrolls to final CTA, shows selected plan badge, clear button works
+- Step 1 to step 2 form: email validation, title/sub mutation, phone field focus
+- Step 2 completion: confirmation block becomes visible, queue position renders, referral link generates from email hash
+- Referral copy button: clipboard API path executes, "Copied!" state reverts to "Copy" after 2s
+- Modal: privacy and terms both open with correct content, Escape key closes, backdrop click closes
+- IntersectionObserver animations: feature card typewriter, demo fade-in, compare row stagger, pricing float-in, count-up stats — all behave as intended
+
+No JavaScript errors detected on review. Event delegation on prompt buttons is correctly implemented.
+
+Score: 7.9/10
+
+### 11. Mobile / Responsive — 7.4
+Responsive overrides are thorough. Three-column How grid collapses to single column. Two-column features collapse to single. Pricing grid collapses to single with featured plan ordered first. Compare table swaps to a purpose-built mobile grid. Hero CTA row stacks on 480px. Tap targets appear to be 44px minimum throughout.
+
+Known issue that persists: demo phone messages area is shrunk to min-height 200px / max-height 240px on 480px. This is a very tight window for the multi-message flows. The ad and audit flows will require internal scrolling inside the phone — on mobile, users are very unlikely to discover this and will miss the final call to action within each flow.
+
+Score: 7.4/10
+
+### 12. Visual Design / Identity — 7.5
+The dark warm-black palette (--bg: #0e0d0b), acid green accent (--accent: #d4f53c), and Geist/Geist Mono type pair is distinctive and non-generic. The aesthetic references Linear/Vercel correctly — premium but purposeful. Section borders (1px solid var(--border)) create rhythm without decoration.
+
+The page does not look AI-generated. The mono code-like labels on feature cards and the radial spotlight on the hero are genuine design choices, not template defaults.
+
+Score: 7.5/10
 
 ---
 
-## Top Priorities for Cycle 19
+## Top 5 Priorities for Next Cycle
 
-### Priority 1 — Collapse the sticky scroll stages (structural)
-The combined 400vh how-it-works plus 350vh features section is the single biggest conversion killer. A small business owner in a hurry — which is the entire target market — will not patiently scroll 14 phone screens to reach a form. These should be replaced with static or lightly animated sections that take 200-400px total height each, not 750+ px each. This is not a polish issue. This is the reason the page cannot score above 7.6.
+**1. Demo phone clipping on long message flows (mobile + desktop)**
+The ad and audit flows overflow the max-height window. Users miss the final instruction. On 480px the window is 240px which is insufficient. Shorten message content in long flows, or add a subtle indicator that the chat area is scrollable.
 
-### Priority 2 — Fix the demo persona mismatch
-The interactive demo uses "Joe's Coffee" while the rest of the page uses "Mike's Pizza." Either unify the persona throughout or make the demo feel obviously illustrative rather than specific. The mismatch signals a product that has a canned demo rather than a personalised one, undermining the core promise.
+**2. Feature card 04 copy is thin**
+"One text. No login screen, no guessing." — the Monday report card needs one more concrete sentence. What does the report tell me? What metrics? This is a quick copy fix with a meaningful trust dividend.
 
-### Priority 3 — Add a second testimonial from a different industry
-One pizza shop is not enough to demonstrate the product works across business types. A plumber, a florist, a salon owner — any one additional testimonial from a clearly different vertical would dramatically reduce the "is this only for restaurants?" concern and push the proof section from adequate to convincing.
+**3. Queue position pseudo-randomisation is a live trust risk**
+Two users comparing their queue numbers will get different figures derived from their email hash. This is the single most likely thing to destroy credibility at the moment of conversion. Options: a real shared counter, a displayed range ("among the first 250"), or remove the queue number entirely and lead with the referral card.
+
+**4. Pro plan "website copy fixes" needs one line of context**
+It is the only feature on the page with zero demonstration or explanation elsewhere. One sentence in the plan description or a new FAQ item would resolve this.
+
+**5. Compare section position**
+Consider moving the compare table before the demo, where it serves sceptics who need competitive framing before they will engage with interactive content. Post-demo, it catches almost no one.
 
 ---
 
-## Honest Assessment of Cycle 18 Changes
+## What the Sticky Scroll Collapse Actually Achieved
 
-The named testimonial replacing "200+" was genuinely the right call. Specificity beats vague social proof every time, and Mike Russo's quote is believable. The CTA unification to "Hold my spot" removes a decision that should not exist at that point in the funnel. The FAQ pruning was correct — fewer items, each better.
+It made the page structurally sound for the first time. Pricing is now reachable. The Mike's Pizza persona unification gives the page narrative coherence that was absent before. The second testimonial adds sector diversity and the stronger quote is now on the page.
 
-None of these changes were wrong. But they addressed the margins while the structural problem — asking a busy small business owner to scroll through nearly a kilometre of sticky animation before reaching a price — remains untouched after 18 cycles. The page is technically excellent and visually distinctive. It needs to respect the user's time as much as it respects its own design.
+What it did not achieve: the ceiling has not moved because the remaining gap to 8.0 is about trust and copy depth, not navigation architecture. The next meaningful score advance requires more credible social proof, tighter demo content on small screens, and the elimination of the fake queue position number.
+
+---
+
+**Final Score: 7.6 / 10**
+
+Holds steady. No regression. No advance. The structural improvements were real; the persuasion gap remains.
