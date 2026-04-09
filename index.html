@@ -100,7 +100,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 /* ─── HERO ─── */
 .hero-stage{
   position:relative;
-  height:200vh;
+  height:300vh;
 }
 .hero-sticky{
   position:sticky;top:0;
@@ -128,31 +128,56 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   font-family:var(--font);
 }
 
-/* Phone rising from bottom */
-.hero__phone-rise{
+/* Hero scroll-reveal lines */
+.hero__reveal{
   position:absolute;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%) translateY(100%) scale(0.7);
-  will-change:transform,opacity;
-  width:340px;
-  max-width:90vw;
-  z-index:1;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 32px;
+  z-index:2;
+  pointer-events:none;
+  gap:0;
+}
+.hero__reveal-line{
+  font-size:clamp(2.4rem,5.5vw,5rem);
+  font-weight:700;
+  letter-spacing:-0.04em;
+  line-height:1.1;
   opacity:0;
+  transform:translateY(40px);
+  will-change:transform,opacity;
+  transition:none;
 }
-.hero__replay{
-  position:absolute;bottom:14px;right:14px;
-  background:rgba(20,18,16,0.85);
-  border:1px solid var(--border2);
+.hero__reveal-line em{font-style:normal;color:var(--accent)}
+.hero__reveal-sub{
+  font-size:clamp(0.9rem,1.4vw,1.15rem);
   color:var(--text-dim);
-  font-family:var(--mono);font-size:0.72rem;letter-spacing:0.04em;
-  padding:5px 10px;border-radius:4px;
-  min-height:44px;
-  cursor:pointer;display:none;
-  transition:all 0.15s;z-index:10;
+  line-height:1.6;
+  max-width:520px;
+  margin-top:24px;
+  opacity:0;
+  transform:translateY(30px);
+  will-change:transform,opacity;
 }
-.hero__replay:hover{border-color:var(--accent);color:var(--accent)}
-.hero__replay.visible{display:block}
+.hero__reveal-cta{
+  margin-top:36px;
+  opacity:0;
+  transform:translateY(20px);
+  will-change:transform,opacity;
+}
+.hero__reveal-trust{
+  font-family:var(--mono);
+  font-size:0.75rem;
+  color:var(--text-muted);
+  letter-spacing:0.06em;
+  margin-top:16px;
+  opacity:0;
+  will-change:opacity;
+}
 
 /* Radial spotlight */
 .hero-sticky::before{
@@ -1352,6 +1377,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero-sticky{position:relative;height:auto;min-height:100vh}
   .hero__wordmark{position:relative;top:auto;left:auto;transform:none;font-size:4rem;margin-bottom:24px}
   .hero__content{position:relative;opacity:1;pointer-events:auto}
+  .hero__reveal{position:relative;padding:60px 32px}
+  .hero__reveal-line,.hero__reveal-sub,.hero__reveal-cta,.hero__reveal-trust{opacity:1;transform:none}
   .how-stage{height:auto}
   .how-sticky{position:relative;height:auto;padding:80px 0}
   .how__step-label,.how__step-title,.how__step-desc{opacity:1;transform:none}
@@ -1370,7 +1397,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   .container{padding:0 20px}
-  .hero-stage{height:200vh}
+  .hero-stage{height:300vh}
   .hero__wordmark{font-size:18vw}
   .how-stage{height:350vh}
   .how__layout{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:32px 0;padding:0 20px}
@@ -1434,7 +1461,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 @media(max-width:480px){
   .container{padding:0 16px}
   .hero__wordmark{font-size:22vw}
-  .hero__phone-rise{width:260px}
   .hero__headline{font-size:1.8rem}
   .hero__cta-row{flex-direction:column;align-items:center}
   .hero__cta-row .btn{width:100%;max-width:300px}
@@ -1516,35 +1542,19 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <!-- Massive wordmark that shrinks on scroll -->
     <div class="hero__wordmark" id="heroWordmark">Sidekick</div>
 
-    <!-- Phone rising from bottom -->
-    <div class="hero__phone-rise" id="heroPhoneRise">
-      <div class="phone" style="position:relative">
-        <div class="phone__notch"><div class="phone__notch-pill"></div></div>
-        <div class="phone__header">
-          <div class="phone__avatar">SK</div>
-          <div>
-            <div class="phone__name">Sidekick</div>
-            <div class="phone__status" id="heroStatus">&#x25cf; Online</div>
-          </div>
-        </div>
-        <div class="phone__messages" id="heroMessages" style="min-height:260px;max-height:320px"></div>
-        <button class="hero__replay" id="heroReplay" aria-label="Replay animation">&#x21BA; replay</button>
-      </div>
-    </div>
-
-    <!-- Hero content fades in after wordmark settles -->
-    <div class="hero__content" id="heroContent">
-      <div class="hero__eyebrow">Built for owners who hate dashboards</div>
-      <h1 class="hero__headline">Your marketing team<br>lives in your <em>texts</em></h1>
-      <p class="hero__sub">Sidekick runs your marketing entirely over text &mdash; social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
-      <div class="hero__cta-row">
+    <!-- Scroll-driven text reveal -->
+    <div class="hero__reveal" id="heroReveal">
+      <div class="hero__reveal-line" data-reveal="0">Your marketing team</div>
+      <div class="hero__reveal-line" data-reveal="1">lives in your <em>texts.</em></div>
+      <p class="hero__reveal-sub" data-reveal="2">Social posts, ad campaigns, review replies &mdash; managed entirely over text message. No app to learn. No dashboard to check. No login to forget.</p>
+      <div class="hero__reveal-cta" data-reveal="3">
         <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
       </div>
-      <p class="hero__trust">Plans from $49/mo &nbsp;&middot;&nbsp; 14-day free trial &nbsp;&middot;&nbsp; No credit card &nbsp;&middot;&nbsp; Cancel by text</p>
+      <p class="hero__reveal-trust" data-reveal="4">Plans from $49/mo &nbsp;&middot;&nbsp; 14-day free trial &nbsp;&middot;&nbsp; Cancel by text</p>
     </div>
 
     <!-- Scroll hint -->
-    <div class="hero__scroll-hint" aria-hidden="true">
+    <div class="hero__scroll-hint" id="heroScrollHint" aria-hidden="true">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 3v10M3 9l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -2039,12 +2049,12 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 }, {passive: true});
 
-/* ─── HERO: WORDMARK SHRINK + PHONE RISE ON SCROLL ─── */
+/* ─── HERO: WORDMARK SHRINK + TEXT REVEAL ON SCROLL ─── */
 (function initHero() {
   const stage = document.getElementById('heroStage');
   const wordmark = document.getElementById('heroWordmark');
-  const phoneRise = document.getElementById('heroPhoneRise');
-  const heroContent = document.getElementById('heroContent');
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  const scrollHint = document.getElementById('heroScrollHint');
   if (!stage || !wordmark) return;
 
   if (!prefersMotion) {
@@ -2054,13 +2064,9 @@ window.addEventListener('scroll', () => {
     wordmark.style.transform = 'none';
     wordmark.style.fontSize = '4rem';
     wordmark.style.marginBottom = '24px';
-    if (heroContent) { heroContent.style.opacity = '1'; heroContent.classList.add('visible'); }
-    if (phoneRise) { phoneRise.style.transform = 'translateX(-50%) translateY(0)'; phoneRise.style.opacity = '1'; }
-    runHeroConvo();
+    revealEls.forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
     return;
   }
-
-  let heroAnimDone = false;
 
   function updateHero() {
     const stageRect = stage.getBoundingClientRect();
@@ -2068,8 +2074,8 @@ window.addEventListener('scroll', () => {
     const vh = window.innerHeight;
     const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
 
-    // Wordmark: shrinks from giant to small, stays centered
-    const wPhase = Math.min(1, scrolled / 0.7);
+    // Phase 1 (0 → 0.3): Wordmark shrinks in center
+    const wPhase = Math.min(1, scrolled / 0.3);
     const easedW = 1 - Math.pow(1 - wPhase, 2);
     const startSize = Math.min(window.innerWidth * 0.20, 280);
     const endSize = 28;
@@ -2078,87 +2084,30 @@ window.addEventListener('scroll', () => {
     const cy = window.innerHeight / 2;
     wordmark.style.fontSize = currentSize + 'px';
     wordmark.style.transform = `translate(calc(${cx}px - 50%), calc(${cy}px - 50%))`;
-    wordmark.style.opacity = scrolled > 0.55 ? String(1 - (scrolled - 0.55) / 0.15) : '1';
+    wordmark.style.opacity = scrolled > 0.25 ? String(Math.max(0, 1 - (scrolled - 0.25) / 0.1)) : '1';
 
-    // Phone rise: phase 0.3 -> 0.65
-    if (phoneRise) {
-      const pPhase = Math.max(0, Math.min(1, (scrolled - 0.3) / 0.35));
-      const easedP = 1 - Math.pow(1 - pPhase, 3);
-      const phoneY = 100 - (100 + 35) * easedP;
-      const phoneScale = 0.7 + 0.3 * easedP;
-      phoneRise.style.transform = `translateX(-50%) translateY(${phoneY}%) scale(${phoneScale})`;
-      phoneRise.style.opacity = String(Math.min(1, pPhase * 2));
-    }
+    // Hide scroll hint once scrolling
+    if (scrollHint) scrollHint.style.opacity = String(Math.max(0, 1 - scrolled * 8));
 
-    // Content fades in: phase 0.6 -> 0.85
-    if (heroContent) {
-      const cPhase = Math.max(0, Math.min(1, (scrolled - 0.60) / 0.25));
-      heroContent.style.opacity = String(cPhase);
-      if (cPhase > 0) { heroContent.classList.add('visible'); }
-      else { heroContent.classList.remove('visible'); }
-    }
-
-    // Start hero auto-play once phone is in position
-    if (scrolled > 0.6 && !heroAnimDone) {
-      heroAnimDone = true;
-      runHeroConvo();
-    }
+    // Phase 2 (0.3 → 0.85): Lines reveal one by one
+    revealEls.forEach(el => {
+      const idx = parseInt(el.dataset.reveal, 10);
+      // Each element gets a 0.1 wide window, staggered by index
+      const start = 0.30 + idx * 0.10;
+      const end = start + 0.12;
+      const p = Math.max(0, Math.min(1, (scrolled - start) / (end - start)));
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.style.opacity = String(eased);
+      el.style.transform = `translateY(${40 * (1 - eased)}px)`;
+      if (el.classList.contains('hero__reveal-cta')) {
+        el.style.pointerEvents = p > 0.5 ? 'auto' : 'none';
+      }
+    });
   }
 
   window.addEventListener('scroll', () => { requestAnimationFrame(updateHero); }, {passive: true});
   updateHero();
 })();
-
-/* ─── HERO AUTO-PLAY CONVERSATION ─── */
-const heroConvo = [
-  {type:'in', text:`Hey! I'm your Sidekick. What's your business name?`, delay:400},
-  {type:'out', text:`Mike's Pizza`, delay:900},
-  {type:'typing', delay:1400},
-  {type:'in', text:`Got it. Here are 3 posts for Mike's Pizza:\n\nMon: "Monday mornings hit different with a fresh slice."\n\nWed: "New seasonal special dropping Friday — BBQ chicken with jalapeño."\n\nFri: "Weekend vibes start here. Open till midnight."`, delay:500},
-  {type:'in', text:`Reply YES to schedule all, or EDIT to change one.`, delay:800},
-  {type:'out', text:`YES`, delay:1000},
-  {type:'typing', delay:800},
-  {type:'in', text:`Done. All 3 posts are scheduled. I'll text you a Monday morning summary.`, delay:2800},
-];
-let heroConvoRan = false;
-
-async function runHeroConvo() {
-  if (heroConvoRan) return;
-  heroConvoRan = true;
-  const heroMsgs = document.getElementById('heroMessages');
-  const replayBtn = document.getElementById('heroReplay');
-  if (!heroMsgs) return;
-  heroMsgs.innerHTML = '';
-  if (replayBtn) replayBtn.classList.remove('visible');
-  for (const msg of heroConvo) {
-    await new Promise(r => setTimeout(r, msg.delay));
-    if (msg.type === 'typing') {
-      const t = document.createElement('div');
-      t.className = 'msg msg--typing';
-      t.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-      heroMsgs.appendChild(t);
-      heroMsgs.scrollTop = heroMsgs.scrollHeight;
-      await new Promise(r => setTimeout(r, 1100));
-      t.remove();
-    } else {
-      const d = document.createElement('div');
-      d.className = 'msg msg--' + (msg.type === 'out' ? 'out' : 'in');
-      d.textContent = msg.text;
-      d.style.whiteSpace = 'pre-wrap';
-      heroMsgs.appendChild(d);
-      heroMsgs.scrollTop = heroMsgs.scrollHeight;
-    }
-  }
-  if (replayBtn) replayBtn.classList.add('visible');
-}
-
-async function replayHeroConvo() {
-  heroConvoRan = false;
-  await runHeroConvo();
-}
-
-const heroReplayBtn = document.getElementById('heroReplay');
-if (heroReplayBtn) heroReplayBtn.addEventListener('click', replayHeroConvo);
 
 /* ─── HOW IT WORKS: SCROLL-DRIVEN SMS CONVO ─── */
 (function initHow() {
