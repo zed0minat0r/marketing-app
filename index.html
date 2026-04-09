@@ -2025,25 +2025,21 @@ window.addEventListener('scroll', () => {
     const vh = window.innerHeight;
     const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
 
-    // Wordmark: shrinks from giant centered to small top-left
-    const wPhase = Math.min(1, scrolled / 0.85);
+    // Wordmark: shrinks from giant to small, stays centered the whole time
+    const wPhase = Math.min(1, scrolled / 0.7);
     const easedW = 1 - Math.pow(1 - wPhase, 2);
     const startSize = Math.min(window.innerWidth * 0.20, 280);
-    const endSize = 18;
+    const endSize = 28;
     const currentSize = startSize - (startSize - endSize) * easedW;
-    const startX = window.innerWidth / 2;
-    const startY = window.innerHeight / 2;
-    const endX = 48;
-    const endY = 30;
-    const currentX = startX + (endX - startX) * easedW;
-    const currentY = startY + (endY - startY) * easedW;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
     wordmark.style.fontSize = currentSize + 'px';
-    wordmark.style.transform = `translate(calc(${currentX}px - 50%), calc(${currentY}px - 50%))`;
-    wordmark.style.opacity = scrolled > 0.7 ? String(1 - (scrolled - 0.7) / 0.15) : '1';
+    wordmark.style.transform = `translate(calc(${cx}px - 50%), calc(${cy}px - 50%))`;
+    wordmark.style.opacity = scrolled > 0.6 ? String(1 - (scrolled - 0.6) / 0.15) : '1';
 
-    // Content fades in: phase 0.5 -> 0.85
+    // Content fades in once wordmark is small and fading
     if (heroContent) {
-      const cPhase = Math.max(0, Math.min(1, (scrolled - 0.50) / 0.35));
+      const cPhase = Math.max(0, Math.min(1, (scrolled - 0.55) / 0.3));
       heroContent.style.opacity = String(cPhase);
       if (cPhase > 0) { heroContent.classList.add('visible'); }
       else { heroContent.classList.remove('visible'); }
