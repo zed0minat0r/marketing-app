@@ -359,90 +359,198 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   overflow:hidden;
   display:flex;
   align-items:center;
+  justify-content:center;
   background:var(--bg2);
   border-top:1px solid var(--border);
 }
 
-.how__container{
+.how__layout{
   position:relative;
   width:100%;
   max-width:1120px;
   margin:0 auto;
-  padding:0 32px;
+  padding:0 40px;
+  display:grid;
+  grid-template-columns:1fr 340px 1fr;
+  gap:0 48px;
+  align-items:center;
 }
 
-.how__step-bg{
-  position:absolute;
-  top:50%;left:0;
-  transform:translateY(-50%);
-  font-size:clamp(12rem,22vw,26rem);
-  font-weight:700;
-  font-family:var(--font);
-  color:transparent;
-  -webkit-text-stroke:1px rgba(240,235,224,0.04);
-  line-height:1;
-  letter-spacing:-0.08em;
-  pointer-events:none;
-  user-select:none;
-  will-change:opacity;
-  transition:opacity 0.5s ease;
-}
-
-.how__step-content{
-  position:relative;
-  max-width:580px;
-  z-index:1;
+/* Left: step text */
+.how__step-col{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 .how__step-label{
   font-family:var(--mono);
-  font-size:0.72rem;
-  letter-spacing:0.14em;
+  font-size:0.68rem;
+  letter-spacing:0.18em;
   text-transform:uppercase;
   color:var(--accent);
-  margin-bottom:20px;
+  margin-bottom:18px;
   opacity:0;
-  transform:translateY(10px);
-  transition:opacity 0.4s ease, transform 0.4s ease;
+  transform:translateX(-12px);
+  transition:opacity 0.35s ease, transform 0.35s ease;
 }
 .how__step-label.in{opacity:1;transform:none}
-
 .how__step-title{
-  font-size:clamp(2rem,4vw,3.6rem);
+  font-size:clamp(1.6rem,2.8vw,2.6rem);
   font-weight:700;
   letter-spacing:-0.04em;
-  line-height:1.05;
-  margin-bottom:20px;
+  line-height:1.1;
+  margin-bottom:16px;
   opacity:0;
-  transform:translateY(16px);
-  transition:opacity 0.45s ease 0.08s, transform 0.45s ease 0.08s;
+  transform:translateX(-12px);
+  transition:opacity 0.38s ease 0.06s, transform 0.38s ease 0.06s;
 }
 .how__step-title.in{opacity:1;transform:none}
-
 .how__step-desc{
-  font-size:1.05rem;
+  font-size:0.97rem;
   color:var(--text-dim);
-  line-height:1.7;
-  max-width:480px;
+  line-height:1.72;
+  max-width:360px;
   opacity:0;
-  transform:translateY(12px);
-  transition:opacity 0.45s ease 0.16s, transform 0.45s ease 0.16s;
+  transform:translateX(-12px);
+  transition:opacity 0.38s ease 0.12s, transform 0.38s ease 0.12s;
 }
 .how__step-desc.in{opacity:1;transform:none}
 
-.how__progress{
-  position:absolute;
-  right:32px;
-  top:50%;
-  transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:12px;
-  align-items:flex-end;
+/* Center: phone */
+.how__phone-col{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:2;
 }
-.how__progress-dot{
-  width:6px;height:6px;border-radius:50%;
+.how-phone{
+  width:100%;
+  max-width:320px;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:34px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 6px rgba(255,255,255,0.03),
+    0 24px 64px rgba(0,0,0,0.55),
+    0 8px 24px rgba(0,0,0,0.35);
+}
+.how-phone__notch{
+  height:24px;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.how-phone__notch-pill{
+  width:72px;height:6px;
+  background:var(--border2);border-radius:3px;
+}
+.how-phone__header{
+  background:var(--surface2);
+  padding:9px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.how-phone__avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:0.7rem;font-weight:700;color:#0e0d0b;
+}
+.how-phone__name{font-size:0.82rem;font-weight:600;line-height:1.2}
+.how-phone__status{font-size:0.68rem;color:var(--green)}
+.how-phone__msgs{
+  padding:14px 12px;
+  height:320px;
+  overflow:hidden;
+  display:flex;flex-direction:column;gap:7px;
+  position:relative;
+}
+.how-msg{
+  max-width:84%;
+  padding:9px 13px;
+  border-radius:14px;
+  font-size:0.82rem;
+  line-height:1.5;
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity 0.32s ease, transform 0.32s ease;
+  flex-shrink:0;
+}
+.how-msg.visible{opacity:1;transform:translateY(0)}
+.how-msg--in{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
+  color:var(--text);
+}
+.how-msg--out{
+  background:var(--accent);
+  color:#0e0d0b;
+  align-self:flex-end;
+  border-bottom-right-radius:4px;
+  font-weight:600;
+}
+.how-msg--time{
+  font-family:var(--mono);
+  font-size:0.62rem;
+  color:var(--text-muted);
+  text-align:center;
+  align-self:center;
+  background:none;
+  border:none;
+  padding:2px 0;
+  max-width:100%;
+}
+
+/* Right: progress dots */
+.how__dots-col{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+  align-items:flex-start;
+}
+.how__dot-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  opacity:0.3;
+  transition:opacity 0.4s ease;
+}
+.how__dot-item.active{opacity:1}
+.how__dot-marker{
+  width:7px;height:7px;border-radius:50%;
   background:var(--border2);
-  transition:background 0.3s ease, transform 0.3s ease;
+  transition:background 0.35s ease, transform 0.35s ease;
+  flex-shrink:0;
 }
-.how__progress-dot.active{background:var(--accent);transform:scale(1.5)}
+.how__dot-item.active .how__dot-marker{background:var(--accent);transform:scale(1.6)}
+.how__dot-label{
+  font-family:var(--mono);
+  font-size:0.65rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  transition:color 0.35s ease;
+}
+.how__dot-item.active .how__dot-label{color:var(--accent)}
+
+/* Checkmark overlay */
+.how-check{
+  position:absolute;
+  bottom:14px;right:14px;
+  width:28px;height:28px;
+  border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+  transform:scale(0.4);
+  transition:opacity 0.3s ease, transform 0.3s ease;
+}
+.how-check.visible{opacity:1;transform:scale(1)}
+.how-check svg{width:14px;height:14px}
 
 /* ─── FEATURES ─── */
 .features-stage{
@@ -1097,9 +1205,9 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero__content{position:relative;opacity:1;pointer-events:auto;padding:60px 32px 80px}
   .hero__phone-rise{position:relative;bottom:auto;left:auto;transform:none;margin:40px auto 0}
   .how-stage{height:auto}
-  .how-sticky{position:relative;height:auto;padding:100px 0}
-  .how__step-bg{display:none}
+  .how-sticky{position:relative;height:auto;padding:80px 0}
   .how__step-label,.how__step-title,.how__step-desc{opacity:1;transform:none}
+  .how-msg{opacity:1;transform:none}
   .features-stage{height:auto}
   .features-sticky{position:relative;height:auto;overflow:visible}
   .features-track-wrap{position:relative;overflow:visible}
@@ -1118,7 +1226,14 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero-stage{height:250vh}
   .hero__phone-rise{width:280px}
   .how-stage{height:350vh}
-  .how__step-desc{font-size:0.95rem}
+  .how__layout{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:32px 0;padding:0 20px}
+  .how__step-col{text-align:center;align-items:center}
+  .how__step-desc{max-width:100%;font-size:0.95rem}
+  .how__phone-col{order:-1}
+  .how-phone{max-width:260px}
+  .how-phone__msgs{height:240px}
+  .how__dots-col{flex-direction:row;justify-content:center;align-items:center;gap:20px}
+  .how__dot-label{display:none}
   .features-stage{height:450vh}
   .proof__inner{grid-template-columns:1fr}
   .proof__stat-block{padding:60px 24px;border-right:none;border-bottom:1px solid var(--border)}
@@ -1141,7 +1256,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .signup-form input{min-width:0;width:100%}
   .signup-form button{width:100%}
   .hero__cta-row{flex-wrap:wrap;justify-content:center}
-  .how__progress{display:none}
+  .how__step-label{transform:translateX(0)}
   .demo{padding:100px 0}
 }
 @media(max-width:480px){
@@ -1238,20 +1353,65 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 <!-- SECTION 2: HOW IT WORKS -->
 <div class="how-stage" id="howStage">
   <div class="how-sticky" id="howSticky">
-    <div class="how__container">
+    <div class="how__layout">
 
-      <div class="how__step-bg" id="howStepBg">01</div>
-
-      <div class="how__step-content" id="howStepContent">
-        <div class="how__step-label" id="howStepLabel">How it works &nbsp;/ 01</div>
+      <!-- Left: step copy -->
+      <div class="how__step-col">
+        <div class="how__step-label" id="howStepLabel">How it works / 01</div>
         <h2 class="how__step-title" id="howStepTitle">Answer 5 questions over text</h2>
-        <p class="how__step-desc" id="howStepDesc">We text you within 60 seconds of signing up. Your business name, what you sell, your target customer, your tone, which platforms. That's it. Your first week of posts arrives within the hour.</p>
+        <p class="how__step-desc" id="howStepDesc">We text you within 60 seconds of signing up. Name, niche, tone, platforms. Done. Your first week of posts arrives within the hour.</p>
       </div>
 
-      <div class="how__progress" id="howProgress">
-        <div class="how__progress-dot active" data-step="0"></div>
-        <div class="how__progress-dot" data-step="1"></div>
-        <div class="how__progress-dot" data-step="2"></div>
+      <!-- Center: phone -->
+      <div class="how__phone-col">
+        <div class="how-phone">
+          <div class="how-phone__notch"><div class="how-phone__notch-pill"></div></div>
+          <div class="how-phone__header">
+            <div class="how-phone__avatar">SK</div>
+            <div>
+              <div class="how-phone__name">Sidekick</div>
+              <div class="how-phone__status">Active now</div>
+            </div>
+          </div>
+          <div class="how-phone__msgs" id="howMsgList">
+            <!-- Step 1 messages -->
+            <div class="how-msg how-msg--time" data-step="0" data-seq="0">Today 9:41 AM</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="1">Hey! I'm Sidekick. What's your business name?</div>
+            <div class="how-msg how-msg--out" data-step="0" data-seq="2">Mike's Pizza</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="3">Great! What do you sell, and who's your customer?</div>
+            <div class="how-msg how-msg--out" data-step="0" data-seq="4">Wood-fired pizza. Families &amp; date nights.</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="5">Got it. Which platforms — Instagram, Facebook, or both?</div>
+            <!-- Step 2 messages -->
+            <div class="how-msg how-msg--out" data-step="1" data-seq="0">Both please</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="1">Here are 3 posts for this week:</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="2">1/ Friday night, wood-fired magic. Our Margherita never misses. Link in bio.</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="3">2/ Date night sorted. Reserve your table before the weekend fills up.</div>
+            <div class="how-msg how-msg--in" data-step="1" data-seq="4">3/ Family pizza night? We've got the table. Bring everyone.</div>
+            <!-- Step 3 messages -->
+            <div class="how-msg how-msg--out" data-step="2" data-seq="0">YES</div>
+            <div class="how-msg how-msg--in" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
+            <div class="how-msg how-msg--in" data-step="2" data-seq="2">You'll see reach stats here next Monday. That's it — go make some pizza.</div>
+          </div>
+          <div class="how-check" id="howCheck">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: dots -->
+      <div class="how__dots-col">
+        <div class="how__dot-item active" data-step="0">
+          <div class="how__dot-marker"></div>
+          <span class="how__dot-label">Setup</span>
+        </div>
+        <div class="how__dot-item" data-step="1">
+          <div class="how__dot-marker"></div>
+          <span class="how__dot-label">Content</span>
+        </div>
+        <div class="how__dot-item" data-step="2">
+          <div class="how__dot-marker"></div>
+          <span class="how__dot-label">Approved</span>
+        </div>
       </div>
 
     </div>
@@ -1806,100 +1966,122 @@ if (heroReplayBtn) heroReplayBtn.addEventListener('click', replayHeroConvo);
 // If reduced motion, just run it immediately
 if (!prefersMotion) { runHeroConvo(); }
 
-/* ─── HOW IT WORKS: SCROLL-LOCKED ─── */
+/* ─── HOW IT WORKS: SCROLL-DRIVEN SMS CONVO ─── */
 (function initHow() {
   const stage = document.getElementById('howStage');
-  const stepBg = document.getElementById('howStepBg');
+  if (!stage) return;
+
   const stepLabel = document.getElementById('howStepLabel');
   const stepTitle = document.getElementById('howStepTitle');
-  const stepDesc = document.getElementById('howStepDesc');
-  const dots = document.querySelectorAll('.how__progress-dot');
+  const stepDesc  = document.getElementById('howStepDesc');
+  const dotItems  = document.querySelectorAll('.how__dot-item');
+  const allMsgs   = document.querySelectorAll('#howMsgList .how-msg');
+  const checkEl   = document.getElementById('howCheck');
 
   const steps = [
     {
-      num: '01',
-      label: 'How it works / 01',
-      title: 'Answer 5 questions over text',
-      desc: `We text you within 60 seconds of signing up. Your business name, what you sell, your target customer, your tone, which platforms. That's it. Your first week of posts arrives within the hour.`
+      label: `How it works / 01`,
+      title: `Answer 5 questions over text`,
+      desc:  `We text you within 60 seconds of signing up. Name, niche, tone, platforms. Done. Your first week of posts arrives within the hour.`
     },
     {
-      num: '02',
-      label: 'How it works / 02',
-      title: 'Content arrives in your texts',
-      desc: `We generate posts, ad copy, and review responses in your business's voice — a florist gets warm and seasonal, a plumber gets direct and local. Each piece lands in your texts, ready for your approval before anything goes live.`
+      label: `How it works / 02`,
+      title: `Content arrives in your texts`,
+      desc:  `We write posts in your voice — warm and seasonal for a florist, direct and local for a plumber. Three posts per week, ready in your inbox.`
     },
     {
-      num: '03',
-      label: 'How it works / 03',
-      title: 'You just approve',
-      desc: `Reply YES to post. Reply EDIT to change it. Reply SKIP to move on. Your entire marketing runs from your text messages.`
+      label: `How it works / 03`,
+      title: `You just approve`,
+      desc:  `Reply YES to schedule. Reply EDIT to tweak. Reply SKIP to pass. Your entire marketing runs from your messages.`
     }
   ];
 
-  let currentStep = -1;
+  let lastStep = -1;
+
+  // Show messages for a given step (and all previous steps), with scroll-within-step seq reveal
+  function showMsgsForStep(stepIdx, seqFraction) {
+    allMsgs.forEach(function(m) {
+      const ms = parseInt(m.dataset.step, 10);
+      const mseq = parseInt(m.dataset.seq, 10);
+      if (ms < stepIdx) {
+        // previous steps: always visible
+        m.classList.add('visible');
+      } else if (ms === stepIdx) {
+        // current step: reveal based on seqFraction
+        const msgsInStep = document.querySelectorAll(`#howMsgList .how-msg[data-step="${stepIdx}"]`).length;
+        const threshold = mseq / msgsInStep;
+        if (seqFraction >= threshold) {
+          m.classList.add('visible');
+        } else {
+          m.classList.remove('visible');
+        }
+      } else {
+        // future steps: hidden
+        m.classList.remove('visible');
+      }
+    });
+
+    // Checkmark appears only in final step when most messages are visible
+    if (checkEl) {
+      checkEl.classList.toggle('visible', stepIdx === 2 && seqFraction > 0.7);
+    }
+  }
 
   function setStep(idx, animate) {
-    if (idx === currentStep) return;
-    currentStep = idx;
+    if (idx === lastStep) return;
+    lastStep = idx;
     const s = steps[idx];
 
-    // Update bg number
-    stepBg.textContent = s.num;
-
-    // Animate content out then in
     if (animate && prefersMotion) {
       stepLabel.classList.remove('in');
       stepTitle.classList.remove('in');
       stepDesc.classList.remove('in');
-      setTimeout(() => {
+      setTimeout(function() {
         stepLabel.textContent = s.label;
         stepTitle.textContent = s.title;
-        stepDesc.textContent = s.desc;
-        requestAnimationFrame(() => {
+        stepDesc.textContent  = s.desc;
+        requestAnimationFrame(function() {
           stepLabel.classList.add('in');
           stepTitle.classList.add('in');
           stepDesc.classList.add('in');
         });
-      }, 120);
+      }, 100);
     } else {
       stepLabel.textContent = s.label;
       stepTitle.textContent = s.title;
-      stepDesc.textContent = s.desc;
+      stepDesc.textContent  = s.desc;
       stepLabel.classList.add('in');
       stepTitle.classList.add('in');
       stepDesc.classList.add('in');
     }
 
-    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    dotItems.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
   }
 
   function updateHow() {
-    if (!prefersMotion) return;
-    const stageRect = stage.getBoundingClientRect();
-    const stageH = stage.offsetHeight;
-    const vh = window.innerHeight;
-    const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
-
-    // Determine which step: 0 = 0-0.33, 1 = 0.33-0.66, 2 = 0.66-1
-    let stepIdx = Math.min(2, Math.floor(scrolled * 3));
-    setStep(stepIdx, true);
-
-    // Fade bg number based on position within step — clamp to avoid divide-by-zero at boundaries
-    const stepProgress = (scrolled * 3) % 1;
-    let bgOpacity;
-    if (stepProgress < 0.15) {
-      bgOpacity = stepProgress / 0.15;
-    } else if (stepProgress > 0.85) {
-      bgOpacity = 1 - (stepProgress - 0.85) / 0.15;
-    } else {
-      bgOpacity = 1;
+    if (!prefersMotion) {
+      // reduced motion: show everything
+      allMsgs.forEach(function(m) { m.classList.add('visible'); });
+      setStep(0, false);
+      return;
     }
-    stepBg.style.opacity = String(Math.max(0, Math.min(1, bgOpacity)));
+    const rect   = stage.getBoundingClientRect();
+    const stageH = stage.offsetHeight;
+    const vh     = window.innerHeight;
+    const scrolled = Math.max(0, Math.min(1, -rect.top / (stageH - vh)));
+
+    const stepRaw = scrolled * 3;
+    const stepIdx = Math.min(2, Math.floor(stepRaw));
+    const seqFraction = stepRaw - Math.floor(stepRaw);
+
+    setStep(stepIdx, true);
+    showMsgsForStep(stepIdx, seqFraction);
   }
 
-  // Initial state
+  // Init
   setStep(0, false);
-  window.addEventListener('scroll', () => { requestAnimationFrame(updateHow); }, {passive: true});
+  showMsgsForStep(0, 0);
+  window.addEventListener('scroll', function() { requestAnimationFrame(updateHow); }, {passive: true});
   updateHow();
 })();
 
