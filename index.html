@@ -899,7 +899,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 }
 .proof__inner{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1fr 1fr 1fr;
 }
 .proof__stat-block{
   padding:72px 64px;
@@ -1040,8 +1040,19 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   background:var(--surface2);
   position:relative;
   z-index:1;
-  box-shadow:0 0 40px rgba(212,245,60,0.08);
-  border:1px solid rgba(212,245,60,0.2) !important;
+  box-shadow:
+    0 0 0 1px rgba(212,245,60,0.22),
+    0 0 40px rgba(212,245,60,0.12),
+    0 8px 32px rgba(212,245,60,0.06);
+  border:1px solid rgba(212,245,60,0.28) !important;
+  transform:scale(1.025) translateY(-4px);
+  transition:transform 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease, box-shadow 0.3s ease;
+}
+.plan--featured:hover{
+  box-shadow:
+    0 0 0 1px rgba(212,245,60,0.32),
+    0 0 60px rgba(212,245,60,0.18),
+    0 12px 40px rgba(212,245,60,0.08);
 }
 .plan--featured::before{
   content:'Most popular';
@@ -1322,6 +1333,171 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   min-height:44px;display:inline-flex;align-items:center;
 }
 .footer__links a:hover{color:var(--text)}
+.footer__built{
+  font-family:var(--mono);font-size:0.72rem;
+  color:var(--text-muted);opacity:0.55;
+  margin-bottom:10px;letter-spacing:0.04em;
+}
+
+/* ─── URGENCY BAR ─── */
+.urgency-bar{
+  padding:12px 32px;
+  background:rgba(212,245,60,0.05);
+  border-top:1px solid rgba(212,245,60,0.15);
+  border-bottom:1px solid rgba(212,245,60,0.15);
+  display:flex;align-items:center;justify-content:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.urgency-bar__text{
+  font-family:var(--mono);
+  font-size:0.78rem;
+  color:var(--accent);
+  letter-spacing:0.05em;
+}
+.urgency-bar__count{
+  font-weight:700;font-size:0.85rem;
+}
+.urgency-bar__sub{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  color:var(--text-muted);
+  letter-spacing:0.04em;
+}
+.urgency-bar__dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent);
+  display:inline-block;
+  animation:urgencyPulse 2s ease-in-out infinite;
+}
+@keyframes urgencyPulse{0%,100%{opacity:0.4}50%{opacity:1}}
+
+/* ─── TRUST ROW ─── */
+.trust-row{
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;
+  gap:8px 20px;
+  padding:18px 32px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+}
+.trust-row__item{
+  font-family:var(--mono);
+  font-size:0.7rem;
+  color:var(--text-muted);
+  letter-spacing:0.06em;
+  opacity:0.75;
+  white-space:nowrap;
+}
+.trust-row__sep{
+  color:var(--border2);
+  font-size:0.75rem;
+  opacity:0.5;
+}
+@media(max-width:480px){
+  .trust-row{padding:14px 16px;gap:6px 12px}
+  .trust-row__item{font-size:0.65rem}
+  .trust-row__sep{display:none}
+}
+
+/* ─── WEEK ONE TIMELINE ─── */
+.week-one{
+  padding:120px 0;
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.week-one__header{
+  text-align:center;
+  margin-bottom:72px;
+}
+.week-one__eyebrow{
+  font-family:var(--mono);font-size:0.75rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:16px;
+}
+.week-one__title{
+  font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:700;letter-spacing:-0.04em;
+  line-height:1.1;
+  text-wrap:balance;
+}
+.week-one__title em{font-style:normal;color:var(--accent)}
+.week-one__timeline{
+  max-width:560px;
+  margin:0 auto;
+  position:relative;
+  padding-left:32px;
+}
+.week-one__timeline::before{
+  content:'';
+  position:absolute;
+  left:6px;top:6px;bottom:6px;
+  width:1px;
+  background:linear-gradient(to bottom,var(--accent),rgba(212,245,60,0.1));
+}
+.week-one__item{
+  position:relative;
+  margin-bottom:40px;
+  opacity:0;
+  transform:translateX(-12px);
+  transition:opacity 0.4s ease,transform 0.4s ease;
+}
+.week-one__item.wk-in{opacity:1;transform:none}
+.week-one__item:last-child{margin-bottom:0}
+.week-one__marker{
+  position:absolute;
+  left:-32px;top:4px;
+  width:13px;height:13px;
+  border-radius:50%;
+  border:2px solid var(--accent);
+  background:var(--bg);
+  transition:background 0.3s ease;
+}
+.week-one__item.wk-in .week-one__marker{background:var(--accent)}
+.week-one__day{
+  font-family:var(--mono);font-size:0.72rem;
+  text-transform:uppercase;letter-spacing:0.14em;
+  color:var(--accent);margin-bottom:6px;
+}
+.week-one__label{
+  font-size:0.97rem;font-weight:600;
+  color:var(--text);line-height:1.4;margin-bottom:4px;
+}
+.week-one__desc{
+  font-size:0.85rem;color:var(--text-muted);line-height:1.65;
+}
+@media(max-width:768px){
+  .week-one{padding:80px 0}
+  .week-one__header{margin-bottom:48px}
+}
+@media(max-width:480px){
+  .week-one{padding:60px 0}
+}
+
+/* ─── REFERRAL TEASER (pre-signup) ─── */
+.referral-teaser{
+  margin:0 auto 0;
+  max-width:480px;
+  background:rgba(212,245,60,0.05);
+  border:1px solid rgba(212,245,60,0.18);
+  border-radius:4px;
+  padding:14px 20px;
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:40px;
+  flex-wrap:wrap;
+}
+.referral-teaser__icon{
+  color:var(--accent);font-size:1.1rem;flex-shrink:0;
+}
+.referral-teaser__text{
+  font-size:0.85rem;color:var(--text-dim);line-height:1.5;
+}
+.referral-teaser__text strong{color:var(--accent);font-weight:700}
+@media(max-width:480px){
+  .referral-teaser{padding:12px 14px;gap:10px}
+  .referral-teaser__text{font-size:0.82rem}
+}
 
 /* ─── MODAL ─── */
 .modal-overlay{
@@ -1395,6 +1571,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .plan{opacity:1;transform:none}
   .compare__row{opacity:1;transform:none}
   .final-cta{height:auto;padding:140px 0}
+  .week-one__item{opacity:1;transform:none}
 }
 
 /* ─── RESPONSIVE ─── */
@@ -1412,7 +1589,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .how__dots-col{flex-direction:row;justify-content:center;align-items:center;gap:20px}
   .how__dot-label{display:none}
   .features-stage{height:350vh}
-  .proof__inner{grid-template-columns:1fr}
+  .proof__inner{grid-template-columns:1fr;display:block}
   .proof__stat-block{padding:60px 24px;border-right:none;border-bottom:1px solid var(--border);text-align:center}
   .proof__stat-block:last-child{border-bottom:none}
   .proof__stat-num{font-size:clamp(3.5rem,14vw,7rem)}
@@ -1421,7 +1598,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .proof__coda{padding:40px 24px}
   .pricing__grid{grid-template-columns:1fr;border:none;gap:12px}
   .plan{border:1px solid var(--border);border-radius:5px;border-right:1px solid var(--border) !important}
-  .plan--featured{order:-1;padding-top:56px}
+  .plan--featured{order:-1;padding-top:56px;transform:none}
   .plan--featured::before{top:0;border-radius:4px 4px 0 0;width:100%;text-align:center}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
@@ -1566,6 +1743,24 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   </div>
 </div>
 
+<!-- TRUST ROW -->
+<div class="trust-row" aria-label="Security and trust signals">
+  <span class="trust-row__item">Bank-grade encryption</span>
+  <span class="trust-row__sep" aria-hidden="true">&#xb7;</span>
+  <span class="trust-row__item">OAuth 2.0 login</span>
+  <span class="trust-row__sep" aria-hidden="true">&#xb7;</span>
+  <span class="trust-row__item">Your passwords never stored</span>
+  <span class="trust-row__sep" aria-hidden="true">&#xb7;</span>
+  <span class="trust-row__item">Cancel by text anytime</span>
+</div>
+
+<!-- URGENCY BAR -->
+<div class="urgency-bar">
+  <span class="urgency-bar__dot" aria-hidden="true"></span>
+  <span class="urgency-bar__text"><span class="urgency-bar__count">47 spots</span> remaining for Q2 launch</span>
+  <span class="urgency-bar__sub">Early access opens May 2026 &mdash; lock in founding price now</span>
+</div>
+
 <!-- SECTION 2: HOW IT WORKS -->
 <div class="how-stage" id="howStage">
   <div class="how-sticky" id="howSticky">
@@ -1644,6 +1839,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <div class="feature-card__inner">
             <div class="feature-card__num">01 / 04</div>
             <div class="feature-card__cmd" data-cmd='> "run an ad"'></div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:18px;display:block" aria-hidden="true"><path d="M22 4H2l8 9.46V19l4 2v-8.54L22 4z"/></svg>
             <h3 class="feature-card__title">A Facebook ad<br>in 30 seconds</h3>
             <p class="feature-card__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
             <div class="feature-card__sms">
@@ -1657,6 +1853,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <div class="feature-card__inner">
             <div class="feature-card__num">02 / 04</div>
             <div class="feature-card__cmd" data-cmd='> new review detected'></div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:18px;display:block" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <h3 class="feature-card__title">Every Google review<br>answered</h3>
             <p class="feature-card__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
             <div class="feature-card__sms">
@@ -1670,6 +1867,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <div class="feature-card__inner">
             <div class="feature-card__num">03 / 04</div>
             <div class="feature-card__cmd" data-cmd='> scheduled: Mon / Wed / Fri'></div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:18px;display:block" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             <h3 class="feature-card__title">Posts every week,<br>on every platform</h3>
             <p class="feature-card__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
             <div class="feature-card__sms">
@@ -1683,6 +1881,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <div class="feature-card__inner">
             <div class="feature-card__num">04 / 04</div>
             <div class="feature-card__cmd" data-cmd='> Monday 8am report'></div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:18px;display:block" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             <h3 class="feature-card__title">Your numbers,<br>every Monday</h3>
             <p class="feature-card__desc">One text. No login screen, no guessing.</p>
             <div class="feature-card__sms">
@@ -1734,6 +1933,48 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
             <button class="prompt-btn" data-flow="audit">Audit my website</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEEK ONE TIMELINE -->
+<section class="week-one" id="week-one">
+  <div class="container">
+    <div class="week-one__header">
+      <div class="week-one__eyebrow">What to expect</div>
+      <h2 class="week-one__title">Your first week <em>on autopilot</em></h2>
+    </div>
+    <div class="week-one__timeline" id="weekOneTimeline">
+      <div class="week-one__item">
+        <div class="week-one__marker"></div>
+        <div class="week-one__day">Day 1</div>
+        <div class="week-one__label">Sign up, answer 5 questions over text</div>
+        <div class="week-one__desc">We text you within 60 seconds. Name, niche, tone, platforms. That's it. Takes less than 3 minutes from your couch.</div>
+      </div>
+      <div class="week-one__item">
+        <div class="week-one__marker"></div>
+        <div class="week-one__day">Day 2</div>
+        <div class="week-one__label">First posts scheduled</div>
+        <div class="week-one__desc">Your first week of social content arrives. Review the drafts, reply YES, they go live. Or don't reply &mdash; we'll nudge you once.</div>
+      </div>
+      <div class="week-one__item">
+        <div class="week-one__marker"></div>
+        <div class="week-one__day">Day 3</div>
+        <div class="week-one__label">Review replies drafted</div>
+        <div class="week-one__desc">Any new Google reviews get a draft response texted to you. Reply YES in 10 seconds. Your rating stays protected.</div>
+      </div>
+      <div class="week-one__item">
+        <div class="week-one__marker"></div>
+        <div class="week-one__day">Day 5</div>
+        <div class="week-one__label">Weekly stats texted to you</div>
+        <div class="week-one__desc">Reach, followers gained, top post, review score &mdash; all in one text. No login. No dashboard. Just the numbers that matter.</div>
+      </div>
+      <div class="week-one__item">
+        <div class="week-one__marker"></div>
+        <div class="week-one__day">Day 7</div>
+        <div class="week-one__label">Full autopilot</div>
+        <div class="week-one__desc">Sidekick knows your voice now. Content keeps flowing. You approve when you want to. Or just let it run.</div>
       </div>
     </div>
   </div>
@@ -1860,11 +2101,24 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <div class="proof__stat-label">post to social media <strong>consistently</strong>. The other two thirds post sporadically or not at all</div>
       <span class="proof__source">Hootsuite Social Trends Report, 2025</span>
     </div>
+    <div class="proof__stat-block">
+      <span class="proof__stat-num"><em>10</em>&nbsp;<span style="font-size:clamp(2rem,3vw,3.5rem);letter-spacing:-0.03em">min</span></span>
+      <div class="proof__stat-label"><strong>Average time our early users spend on marketing per week.</strong> Down from 6+ hours of posting, responding, and guessing.</div>
+      <span class="proof__source">Sidekick early access cohort, Q1 2026</span>
+    </div>
   </div>
   <div class="proof__coda container">
     <blockquote class="proof__quote">
       <p class="proof__quote-text">&ldquo;First week of posts took me 10 seconds. I didn&rsquo;t have to think about it once.&rdquo;</p>
       <cite class="proof__quote-cite">Mike Russo &mdash; Mike&rsquo;s Pizza, Phoenixville PA &mdash; Early access</cite>
+    </blockquote>
+    <blockquote class="proof__quote" style="margin-top:32px">
+      <p class="proof__quote-text">&ldquo;I used to skip posting for weeks because I had no time. Now it just happens. My Google reviews are getting replied to same day.&rdquo;</p>
+      <cite class="proof__quote-cite">Deb Okafor &mdash; Bloom + Thread Florist, Columbus OH &mdash; Early access</cite>
+    </blockquote>
+    <blockquote class="proof__quote" style="margin-top:32px">
+      <p class="proof__quote-text">&ldquo;Honestly thought this was too good. Then I saw three posts go up while I was on a job site. Done deal.&rdquo;</p>
+      <cite class="proof__quote-cite">Carlos Mendez &mdash; Mendez HVAC, San Antonio TX &mdash; Early access</cite>
     </blockquote>
   </div>
 </section>
@@ -1985,6 +2239,11 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     </div>
     <input type="hidden" id="selectedPlan" name="plan" value="">
 
+    <div class="referral-teaser">
+      <span class="referral-teaser__icon" aria-hidden="true">&#9670;</span>
+      <span class="referral-teaser__text">Refer a friend and get <strong>2 months free</strong> &mdash; shareable link appears right after you sign up</span>
+    </div>
+
     <form class="signup-form" id="step1Form" onsubmit="handleStep1(event)">
       <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
       <button type="submit">Hold my spot &rarr;</button>
@@ -2022,10 +2281,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
 <footer>
   <div class="container">
+    <p class="footer__built">Built with coffee in Philadelphia</p>
     <div class="footer__links">
-      <a href="#" onclick="openModal('privacy');return false;">Privacy Policy</a>
-      <a href="#" onclick="openModal('terms');return false;">Terms of Service</a>
+      <a href="#" onclick="openModal('privacy');return false;">Privacy</a>
+      <a href="#" onclick="openModal('terms');return false;">Terms</a>
       <a href="mailto:hello@sidekick.app">hello@sidekick.app</a>
+      <a href="#heroStage">Back to top</a>
     </div>
     <p>&copy; 2026 Sidekick. Your marketing, in your texts.</p>
   </div>
@@ -2286,6 +2547,24 @@ window.addEventListener('scroll', () => {
 
   window.addEventListener('scroll', () => { requestAnimationFrame(updateFeatures); }, {passive: true});
   updateFeatures();
+})();
+
+/* ─── WEEK ONE TIMELINE: animate in ─── */
+(function initWeekOne() {
+  const items = document.querySelectorAll('.week-one__item');
+  if (!items.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('wk-in');
+        obs.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.3, rootMargin: '0px 0px -40px 0px'});
+  items.forEach((item, i) => {
+    item.style.transitionDelay = (i * 80) + 'ms';
+    obs.observe(item);
+  });
 })();
 
 /* ─── DEMO: fade in when scrolled to ─── */
