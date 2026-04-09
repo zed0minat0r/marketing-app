@@ -198,7 +198,6 @@ nav.scrolled{border-color:var(--border)}
 
 /* ─── COMPARE ─── */
 .compare{padding:100px 0}
-.compare__scroll{width:100%}
 .compare__title{font-size:1.9rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:36px;max-width:640px;line-height:1.2;text-wrap:balance}
 .compare__table{width:100%;border:1px solid var(--border);border-collapse:collapse;display:table}
 .compare__row{display:table-row}
@@ -311,11 +310,6 @@ nav.scrolled{border-color:var(--border)}
 .queue-label{font-size:0.82rem;color:var(--text-muted);letter-spacing:0.01em}
 .referral-hint{margin-top:16px;font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.15);border-radius:4px;padding:10px 14px;display:inline-block;line-height:1.5}
 .referral-hint strong{color:var(--accent)}
-
-/* Final CTA subtle parallax scale */
-@media(prefers-reduced-motion:no-preference){
-  .final-cta__inner{transform:scale(1);transition:transform 0.5s ease}
-}
 
 /* ─── FOOTER ─── */
 footer{padding:48px 0;text-align:center}
@@ -614,7 +608,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
       </div>
     </div>
     <div class="compare__scroll-wrap reveal">
-    <div class="compare__scroll">
+    <div>
     <div class="compare__table" role="table" aria-label="Competitor comparison">
       <div class="compare__row compare__row--head" role="row">
         <div class="compare__cell compare__cell--feature" role="columnheader"></div>
@@ -809,7 +803,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
 
 <section class="final-cta" id="final">
   <div class="container">
-    <div class="final-cta__inner reveal" id="finalCtaInner">
+    <div class="final-cta__inner reveal">
       <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
       <h2 class="final-cta__title">Stop letting your marketing fall through the cracks.</h2>
       <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We'll text you in May — no checking back, no logging in.</p>
