@@ -341,7 +341,6 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   border:1px solid rgba(240,235,224,0.2);
 }
 .btn--ghost:hover{border-color:rgba(240,235,224,0.45)}
-.btn--sm{padding:10px 20px;font-size:0.85rem;min-height:44px}
 
 /* ─── HOW IT WORKS ─── */
 .how-stage{
@@ -548,9 +547,6 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   line-height:1.6;
   letter-spacing:0.01em;
 }
-
-/* Features scrollbar indicator */
-
 
 /* ─── DEMO ─── */
 .demo{
@@ -1044,13 +1040,6 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   text-align:center;font-size:0.9rem;color:var(--green);
   margin-top:16px;display:none;font-weight:500;
 }
-.referral-hint{
-  margin-top:16px;font-family:var(--mono);font-size:0.78rem;
-  color:var(--text-muted);background:var(--accent-dim);
-  border:1px solid rgba(212,245,60,0.15);border-radius:3px;
-  padding:10px 14px;display:inline-block;line-height:1.5;
-}
-.referral-hint strong{color:var(--accent)}
 
 /* ─── POST-SIGNUP CONFIRMATION ─── */
 .confirmation-block{
@@ -1161,8 +1150,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 .modal__body h3:first-child{margin-top:0}
 .modal__body p{margin-bottom:12px}
 
-
-
 /* ─── DEMO PHONE PREMIUM ─── */
 .demo__phone-glow{
   position:relative;
@@ -1174,8 +1161,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     0 0 30px rgba(212,245,60,0.08),
     0 40px 80px rgba(0,0,0,0.5);
 }
-
-
 
 /* ─── REDUCED MOTION: flat layout ─── */
 @media(prefers-reduced-motion:reduce){
@@ -1328,10 +1313,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
 <!-- SECTION 1: HERO -->
 <div class="hero-stage" id="heroStage">
-  <div class="hero-sticky" id="heroSticky">
+  <div class="hero-sticky">
 
     <!-- Hero content -->
-    <div class="hero__content" id="heroContent">
+    <div class="hero__content">
       <div class="hero__eyebrow">Built for owners who hate dashboards</div>
       <h1 class="hero__headline">Your marketing team<br>lives in your <em>texts</em></h1>
       <p class="hero__sub">Sidekick runs your social posts, ads, and review replies entirely over text. No app. No login. Ever.</p>
@@ -1357,7 +1342,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 </div>
 
 <!-- SECTION 2: HOW IT WORKS -->
-<div class="how-stage" id="howStage">
+<div class="how-stage">
   <div class="container how-section-header">
     <div class="how-section-eyebrow">How it works</div>
     <h2 class="how-section-title">Three texts and you&rsquo;re live</h2>
@@ -1406,7 +1391,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 </div>
 
 <!-- SECTION 3: FEATURES -->
-<section class="features-section" id="featuresStage">
+<section class="features-section">
   <div class="container features-section__header">
     <div class="features-section__eyebrow">What Sidekick does</div>
     <h2 class="features-section__title">Everything handled.<br>Nothing to log in to.</h2>
@@ -1469,7 +1454,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 </section>
 
 <!-- SECTION 4: INTERACTIVE DEMO -->
-<section class="demo" id="demo-section">
+<section class="demo">
   <div class="container">
     <div class="demo__label">
       <div class="demo__eyebrow">Try it yourself</div>
@@ -1649,7 +1634,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <span class="pricing__toggle-save" id="savePill" style="display:none">Save 20%</span>
     </div>
     <div class="pricing__grid" id="pricingGrid">
-      <div class="plan" id="planStarter">
+      <div class="plan">
         <div class="plan__name">Starter</div>
         <div class="plan__price"><span class="plan__price-num" data-monthly="$49" data-annual="$39">$49</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You have 1&ndash;2 social accounts and want to post consistently without thinking about it</p>
@@ -1676,7 +1661,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         </ul>
         <button class="plan__btn plan__btn--primary" onclick="selectPlan('Growth')">Hold my spot &rarr;</button>
       </div>
-      <div class="plan" id="planPro">
+      <div class="plan">
         <div class="plan__name">Pro</div>
         <div class="plan__price"><span class="plan__price-num" data-monthly="$199" data-annual="$159">$199</span><span class="plan__price-period">/mo</span></div>
         <p class="plan__desc">You run multiple locations or a growing business and want everything handled end-to-end</p>
@@ -1814,8 +1799,6 @@ const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 }, {passive: true});
-
-/* ─── HOW IT WORKS: static layout, no scroll JS needed ─── */
 
 /* ─── FEATURES: typewriter on each card entering viewport ─── */
 (function initFeatures() {
