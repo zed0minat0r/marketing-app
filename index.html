@@ -121,10 +121,6 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   pointer-events:none;
 }
 
-.hero__wordmark{
-  display:none;
-}
-
 .hero__content{
   position:relative;
   display:flex;
@@ -133,10 +129,8 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   justify-content:center;
   text-align:center;
   padding:0 32px;
-  opacity:1;
   z-index:2;
 }
-.hero__content.visible{pointer-events:auto}
 
 .hero__eyebrow{
   font-family:var(--mono);
@@ -284,20 +278,38 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 }
 .prompt-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-/* ─── HERO REPLAY ─── */
-.hero__replay{
-  position:absolute;bottom:14px;right:14px;
-  background:rgba(20,18,16,0.85);
-  border:1px solid var(--border2);
-  color:var(--text-muted);
-  font-family:var(--mono);font-size:0.75rem;letter-spacing:0.04em;
-  padding:5px 10px;border-radius:4px;
-  min-height:44px;
-  cursor:pointer;display:none;
-  transition:all 0.15s;z-index:10;
+/* ─── HERO SMS PREVIEW ─── */
+.hero__sms{
+  display:inline-flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:28px;
+  max-width:380px;
+  text-align:left;
 }
-.hero__replay:hover{border-color:var(--accent);color:var(--accent)}
-.hero__replay.visible{display:block}
+.hero__sms-avatar{
+  width:26px;height:26px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#0e0d0b;
+  font-size:0.55rem;font-weight:800;
+  font-family:var(--font);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  margin-top:2px;
+}
+.hero__sms-bubble{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:4px 14px 14px 4px;
+  padding:10px 14px;
+  font-family:var(--mono);
+  font-size:0.77rem;
+  color:var(--text-dim);
+  line-height:1.6;
+  letter-spacing:0.01em;
+}
+.hero__sms-bubble strong{color:var(--text);font-weight:600}
 
 /* ─── BTN ─── */
 .btn{
@@ -1420,9 +1432,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <p class="hero__sub">Sidekick runs your marketing entirely over text &mdash; social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
       <div class="hero__cta-row">
         <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
-        <button class="btn btn--ghost" onclick="document.getElementById('demo-section').scrollIntoView({behavior:'smooth'})">See how it works</button>
       </div>
       <p class="hero__trust">Plans from $49/mo &nbsp;&middot;&nbsp; 14-day free trial &nbsp;&middot;&nbsp; No credit card &nbsp;&middot;&nbsp; Cancel by text</p>
+      <div class="hero__sms">
+        <div class="hero__sms-avatar">SK</div>
+        <div class="hero__sms-bubble">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?<br><strong>Mike&rsquo;s Pizza.</strong><br>Got it. Your first week of posts will be ready in an hour.</div>
+      </div>
 
     </div>
 
