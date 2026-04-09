@@ -539,7 +539,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 /* ─── FEATURES ─── */
 .features-stage{
   position:relative;
-  height:500vh;
+  height:350vh;
 }
 .features-sticky{
   position:sticky;
@@ -783,22 +783,21 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   grid-template-columns:1fr 1fr;
 }
 .proof__stat-block{
-  padding:100px 64px;
+  padding:72px 64px;
   position:relative;
   border-right:1px solid var(--border);
 }
 .proof__stat-block:last-child{border-right:none}
 
 .proof__stat-num{
-  font-size:clamp(6rem,14vw,16rem);
+  font-size:clamp(4rem,8vw,9rem);
   font-weight:700;
   color:var(--text);
-  letter-spacing:-0.08em;
-  line-height:0.85;
-  margin-bottom:32px;
+  letter-spacing:-0.06em;
+  line-height:0.9;
+  margin-bottom:24px;
   display:block;
   font-variant-numeric:tabular-nums;
-  will-change:opacity;
 }
 .proof__stat-num em{color:var(--accent);font-style:normal}
 
@@ -1191,62 +1190,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   pointer-events:none;
   background-image:radial-gradient(circle, rgba(212,245,60,0.18) 1px, transparent 1px);
   background-size:28px 28px;
-  animation:dotGridPulse 4s ease-in-out infinite;
+  opacity:0.04;
   z-index:0;
 }
-@keyframes dotGridPulse{
-  0%,100%{opacity:0.03}
-  50%{opacity:0.07}
-}
 
-/* ─── HERO TYPEWRITER ─── */
-.hero__typewriter-wrap{
-  margin-top:40px;
-  max-width:600px;
-  text-align:left;
-  background:var(--surface);
-  border:1px solid var(--border2);
-  border-radius:8px;
-  padding:20px 24px;
-  position:relative;
-  z-index:2;
-}
-.hero__typewriter-label{
-  font-family:var(--mono);
-  font-size:0.75rem;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  color:var(--accent);
-  opacity:0.7;
-  margin-bottom:10px;
-}
-.hero__typewriter-text{
-  font-family:var(--mono);
-  font-size:clamp(1.1rem, 2.8vw, 1.55rem);
-  line-height:1.55;
-  color:var(--text);
-  min-height:2.5em;
-  position:relative;
-}
-.hero__typewriter-text .tw-word{
-  display:inline;
-}
-.hero__typewriter-text .tw-word.glow-word{
-  text-shadow:0 0 12px rgba(212,245,60,0.8), 0 0 24px rgba(212,245,60,0.4);
-  transition:text-shadow 0.5s ease;
-}
-.hero__typewriter-text .tw-cursor{
-  display:inline-block;
-  width:2px;height:1.1em;
-  background:var(--accent);
-  vertical-align:middle;
-  margin-left:2px;
-  animation:cursorBlink 1s step-end infinite;
-}
-@keyframes cursorBlink{
-  0%,100%{opacity:1}
-  50%{opacity:0}
-}
 
 
 /* ─── DEMO PHONE PREMIUM ─── */
@@ -1266,8 +1213,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 /* ─── REDUCED MOTION: flat layout ─── */
 @media(prefers-reduced-motion:reduce){
   .hero__dot-grid{animation:none}
-  .hero__typewriter-text{animation:none}
-  .hero__typewriter-text .tw-cursor{animation:none}
   .hero-stage{height:auto}
   .hero-sticky{position:relative;height:auto;min-height:100vh}
   .hero__wordmark{position:relative;top:auto;left:auto;transform:none;font-size:4rem;margin-bottom:24px}
@@ -1306,11 +1251,11 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .how-phone__msgs{height:240px}
   .how__dots-col{flex-direction:row;justify-content:center;align-items:center;gap:20px}
   .how__dot-label{display:none}
-  .features-stage{height:450vh}
+  .features-stage{height:350vh}
   .proof__inner{grid-template-columns:1fr}
   .proof__stat-block{padding:60px 24px;border-right:none;border-bottom:1px solid var(--border);text-align:center}
   .proof__stat-block:last-child{border-bottom:none}
-  .proof__stat-num{font-size:clamp(5rem,20vw,10rem)}
+  .proof__stat-num{font-size:clamp(3.5rem,14vw,7rem)}
   .proof__stat-label{max-width:none;border-left:none;padding-left:0;text-align:left;margin:0 auto}
   .proof__source{padding-left:0}
   .proof__coda{padding:40px 24px;flex-direction:column;align-items:center;text-align:center}
@@ -1356,7 +1301,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero__cta-row .btn{width:100%;max-width:300px}
   .final-cta{padding:80px 0}
   .final-cta__title{font-size:2rem}
-  .proof__stat-num{font-size:clamp(4rem,18vw,8rem)}
+  .proof__stat-num{font-size:clamp(3rem,14vw,6rem)}
   .proof__stat-block{padding:48px 16px}
   .proof__coda{padding:32px 16px}
   .faq__q{font-size:0.92rem}
@@ -1370,11 +1315,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .hero__content{
     padding:76px 20px 40px;
     gap:6px;
-  }
-  .hero__typewriter-wrap{
-    margin-top:24px;
-    padding:16px 18px;
-    max-width:100%;
   }
   .hero__eyebrow{font-size:0.75rem;margin-bottom:20px}
   .hero__eyebrow::before,.hero__eyebrow::after{width:20px}
@@ -1420,13 +1360,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
         <button class="btn btn--ghost" onclick="document.getElementById('demo-section').scrollIntoView({behavior:'smooth'})">See how it works</button>
       </div>
-      <p class="hero__trust">Plans from $49/mo &nbsp;&middot;&nbsp; 14-day free trial &nbsp;&middot;&nbsp; No credit card</p>
+      <p class="hero__trust">Plans from $49/mo &nbsp;&middot;&nbsp; 14-day free trial &nbsp;&middot;&nbsp; No credit card &nbsp;&middot;&nbsp; Cancel by text</p>
 
-      <!-- Typewriter replaces phone -->
-      <div class="hero__typewriter-wrap" id="heroTypewriterWrap" style="opacity:0;transition:opacity 0.5s ease">
-        <div class="hero__typewriter-label">What you&rsquo;ll see in your texts:</div>
-        <div class="hero__typewriter-text" id="heroTypewriterText"><span class="tw-cursor"></span></div>
-      </div>
     </div>
 
   </div>
@@ -1508,7 +1443,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
         <div class="feature-card">
           <div class="feature-card__inner">
-            <div class="feature-card__num">01 / 06</div>
+            <div class="feature-card__num">01 / 04</div>
             <div class="feature-card__cmd" data-cmd='> "run an ad"'></div>
             <h3 class="feature-card__title">A Facebook ad<br>in 30 seconds</h3>
             <p class="feature-card__desc">Get 3 variations with targeting and budget suggestions. Reply the number you like. Done.</p>
@@ -1517,7 +1452,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
         <div class="feature-card">
           <div class="feature-card__inner">
-            <div class="feature-card__num">02 / 06</div>
+            <div class="feature-card__num">02 / 04</div>
             <div class="feature-card__cmd" data-cmd='> new review detected'></div>
             <h3 class="feature-card__title">Every Google review<br>answered</h3>
             <p class="feature-card__desc">New review comes in, we text you a draft response. Reply YES in 10 seconds. Your reputation stays clean.</p>
@@ -1526,16 +1461,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
         <div class="feature-card">
           <div class="feature-card__inner">
-            <div class="feature-card__num">03 / 06</div>
-            <div class="feature-card__cmd" data-cmd='> "autopilot on"'></div>
-            <h3 class="feature-card__title">Full autopilot,<br>zero babysitting</h3>
-            <p class="feature-card__desc">Switch to autopilot and we publish on your schedule. A weekly summary lands in your texts — no dashboard, no log-in.</p>
-          </div>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__inner">
-            <div class="feature-card__num">04 / 06</div>
+            <div class="feature-card__num">03 / 04</div>
             <div class="feature-card__cmd" data-cmd='> scheduled: Mon / Wed / Fri'></div>
             <h3 class="feature-card__title">Posts every week,<br>on every platform</h3>
             <p class="feature-card__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
@@ -1544,19 +1470,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
         <div class="feature-card">
           <div class="feature-card__inner">
-            <div class="feature-card__num">05 / 06</div>
+            <div class="feature-card__num">04 / 04</div>
             <div class="feature-card__cmd" data-cmd='> Monday 8am report'></div>
             <h3 class="feature-card__title">Your numbers,<br>every Monday</h3>
             <p class="feature-card__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
-          </div>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__inner">
-            <div class="feature-card__num">06 / 06</div>
-            <div class="feature-card__cmd" data-cmd='> "audit my website"'></div>
-            <h3 class="feature-card__title">Website audit<br>in plain English</h3>
-            <p class="feature-card__desc">Paste your URL. Get a scored report — specific problems, specific fixes, no jargon. One text. No consultants.</p>
           </div>
         </div>
 
@@ -1565,8 +1482,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
     <div class="features-progress" id="featuresProgress">
       <div class="feat-dot active"></div>
-      <div class="feat-dot"></div>
-      <div class="feat-dot"></div>
       <div class="feat-dot"></div>
       <div class="feat-dot"></div>
       <div class="feat-dot"></div>
@@ -1711,7 +1626,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
     <p class="compare__note">Sources: Hootsuite pricing page, Podium.com, Indeed salary data &mdash; April 2026. We give credit where it's due. A social media manager will build deeper strategy and handle ad spend at scale &mdash; Sidekick is built for businesses that don't have time for either.</p>
     <div class="compare__cta-row">
-      <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Replace your $2,500/mo hire for $49 &rarr;</button>
+      <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Get the same results for $49/mo &rarr;</button>
       <span class="compare__cta-note">14-day free trial &nbsp;&middot;&nbsp; No credit card</span>
     </div>
   </div>
@@ -1734,12 +1649,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   <div class="proof__coda container">
     <p class="proof__note">Sidekick is built for the 52%. No dashboard to learn. No app to open. Just text.</p>
     <div class="proof__waitlist">
-      <span class="proof__waitlist-num">203+</span>
+      <span class="proof__waitlist-num">200+</span>
       <span class="proof__waitlist-label">businesses already on the waitlist &mdash; opening to the first 500 in May 2026</span>
     </div>
   </div>
   <div class="proof__cta-strip" style="padding:48px 0;text-align:center;border-top:1px solid var(--border)">
-    <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join 203+ businesses on the waitlist &rarr;</button>
+    <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join 200+ businesses on the waitlist &rarr;</button>
     <p style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono)">14-day free trial &nbsp;&middot;&nbsp; No credit card</p>
   </div>
 </section>
@@ -1873,7 +1788,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <button type="submit">Start free trial &rarr;</button>
     </form>
 
-    <p class="sms-reassurance" id="smsReassurance" style="display:none">We&rsquo;ll only text you when your spot opens. No spam, ever.</p>
+    <p class="sms-reassurance" id="smsReassurance" style="display:none">We&rsquo;ll only text you when your spot opens &mdash; one message. No marketing texts during your wait. No spam, ever.</p>
 
     <p class="signup-note">By joining you agree to our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>. We'll only contact you about your waitlist spot &mdash; never sold, never spammed.</p>
     <p class="signup-msg" id="signupMsg"></p>
@@ -1935,8 +1850,6 @@ window.addEventListener('scroll', () => {
     return;
   }
 
-  let typewriterTriggered = false;
-
   function updateHero() {
     const stageRect = stage.getBoundingClientRect();
     const stageH = stage.offsetHeight;
@@ -1972,67 +1885,11 @@ window.addEventListener('scroll', () => {
     } else {
       heroContent.classList.remove('visible');
     }
-
-    // Trigger typewriter once content is fading in
-    if (cPhase >= 0.5 && !typewriterTriggered) {
-      typewriterTriggered = true;
-      startTypewriter();
-    }
   }
 
   window.addEventListener('scroll', () => { requestAnimationFrame(updateHero); }, {passive: true});
   updateHero();
 })();
-
-/* ─── HERO TYPEWRITER ─── */
-const TYPEWRITER_MESSAGE = `Here are 3 posts for this week. Reply YES to schedule all, or EDIT to change one.`;
-
-let typewriterDone = false;
-
-async function startTypewriter() {
-  if (typewriterDone) return;
-  typewriterDone = true;
-
-  const wrap = document.getElementById('heroTypewriterWrap');
-  const textEl = document.getElementById('heroTypewriterText');
-  if (!wrap || !textEl) return;
-
-  wrap.style.opacity = '1';
-
-  const words = TYPEWRITER_MESSAGE.split(' ');
-  textEl.innerHTML = '<span class="tw-cursor"></span>';
-
-  const cursor = textEl.querySelector('.tw-cursor');
-
-  for (let wi = 0; wi < words.length; wi++) {
-    const word = words[wi];
-    const span = document.createElement('span');
-    span.className = 'tw-word';
-    span.textContent = (wi === 0 ? '' : ' ') + word;
-    textEl.insertBefore(span, cursor);
-
-    // Glow as it appears
-    span.classList.add('glow-word');
-    await new Promise(r => setTimeout(r, 90));
-    setTimeout(() => {
-      span.style.textShadow = 'none';
-      span.classList.remove('glow-word');
-    }, 500);
-
-    await new Promise(r => setTimeout(r, 75));
-  }
-
-}
-
-// If reduced motion, show static text immediately
-if (!prefersMotion) {
-  const wrap = document.getElementById('heroTypewriterWrap');
-  const textEl = document.getElementById('heroTypewriterText');
-  if (wrap && textEl) {
-    wrap.style.opacity = '1';
-    textEl.innerHTML = TYPEWRITER_MESSAGE + '<span class="tw-cursor"></span>';
-  }
-}
 
 /* ─── HOW IT WORKS: SCROLL-DRIVEN SMS CONVO ─── */
 (function initHow() {
