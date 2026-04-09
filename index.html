@@ -147,9 +147,9 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   justify-content:center;
   text-align:center;
   padding:0 32px;
-  opacity:0;
+  opacity:1;
   will-change:opacity;
-  pointer-events:none;
+  pointer-events:auto;
   z-index:2;
 }
 .hero__content.visible{pointer-events:auto}
@@ -614,6 +614,35 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   color:var(--text-dim);
   line-height:1.7;
   max-width:480px;
+}
+.feature-card__sms{
+  margin-top:28px;
+  display:inline-flex;
+  align-items:flex-start;
+  gap:8px;
+  max-width:420px;
+}
+.feature-card__sms-avatar{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#0e0d0b;
+  font-size:0.6rem;font-weight:800;
+  font-family:var(--font);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  margin-top:2px;
+}
+.feature-card__sms-bubble{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:4px 14px 14px 4px;
+  padding:10px 14px;
+  font-family:var(--mono);
+  font-size:0.78rem;
+  color:var(--text);
+  line-height:1.6;
+  letter-spacing:0.01em;
 }
 
 /* Features scrollbar indicator */
@@ -1245,7 +1274,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .how-stage{height:350vh}
   .how__layout{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:32px 0;padding:0 20px}
   .how__step-col{text-align:center;align-items:center}
-  .how__step-desc{max-width:100%;font-size:0.95rem}
+  .how__step-desc{max-width:100%;font-size:0.95rem;text-align:left}
   .how__phone-col{order:-1}
   .how-phone{max-width:260px}
   .how-phone__msgs{height:240px}
@@ -1292,6 +1321,15 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .feature-card__num,.feature-card__cmd,.feature-card__title{text-align:center}
   /* Compare CTA note: center under stacked buttons */
   .compare__cta-note{text-align:center;width:100%}
+  /* Demo section: heading centered, body copy left-aligned */
+  .demo__sub{text-align:left}
+  /* Final CTA: heading centered, sub copy left-aligned */
+  .final-cta__sub{text-align:left}
+  .sms-reassurance{text-align:left}
+  /* Proof: body copy left-aligned inside centered coda */
+  .proof__note{text-align:left}
+  /* Proof stat label: ensure block display for margin:auto centering to work alongside left text */
+  .proof__stat-label{display:block}
 }
 @media(max-width:480px){
   .container{padding:0 16px}
@@ -1465,6 +1503,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
             <div class="feature-card__cmd" data-cmd='> scheduled: Mon / Wed / Fri'></div>
             <h3 class="feature-card__title">Posts every week,<br>on every platform</h3>
             <p class="feature-card__desc">Written in your voice, published for you. Reply EDIT on anything that needs a tweak. That is the whole job.</p>
+            <div class="feature-card__sms">
+              <div class="feature-card__sms-avatar">SK</div>
+              <div class="feature-card__sms-bubble">Your 3 posts for this week are ready:<br>Mon &mdash; &ldquo;Fresh mozzarella just landed&rdquo;<br>Wed &mdash; &ldquo;Beat the lunch rush &mdash; order ahead&rdquo;<br>Fri &mdash; &ldquo;Weekend special: half-price garlic knots&rdquo;<br><br>Reply <strong>YES</strong> to publish &nbsp;&middot;&nbsp; <strong>EDIT 2</strong> to change Wed</div>
+            </div>
           </div>
         </div>
 
@@ -1473,7 +1515,11 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
             <div class="feature-card__num">04 / 04</div>
             <div class="feature-card__cmd" data-cmd='> Monday 8am report'></div>
             <h3 class="feature-card__title">Your numbers,<br>every Monday</h3>
-            <p class="feature-card__desc">"5 posts, 1.2K impressions, 23 new followers, 4.8 stars." One text. No log-in, no dashboard, no guessing.</p>
+            <p class="feature-card__desc">One text. No log-in, no dashboard, no guessing.</p>
+            <div class="feature-card__sms">
+              <div class="feature-card__sms-avatar">SK</div>
+              <div class="feature-card__sms-bubble">Good morning! Your week in review:<br>5 posts published &nbsp;&middot;&nbsp; 1.2K impressions<br>23 new followers &nbsp;&middot;&nbsp; 4.8&#x2605; avg rating<br><br>Top post: &ldquo;Weekend special&rdquo; &mdash; 312 reach<br>2 new Google reviews &mdash; both replied</div>
+            </div>
           </div>
         </div>
 
@@ -1638,12 +1684,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <div class="proof__stat-block">
       <span class="proof__stat-num"><em class="count-num" data-target="52">52</em>%</span>
       <div class="proof__stat-label">of small business owners <strong>handle all their own marketing</strong> — on top of running the business</div>
-      <span class="proof__source">According to industry research on small business marketing</span>
+      <span class="proof__source">NFIB Small Business Survey, 2025</span>
     </div>
     <div class="proof__stat-block">
       <span class="proof__stat-num">1&nbsp;in&nbsp;<em class="count-num" data-target="3">3</em></span>
       <div class="proof__stat-label">post to social media <strong>consistently</strong>. The other two thirds post sporadically or not at all</div>
-      <span class="proof__source">According to industry research on small business marketing</span>
+      <span class="proof__source">Hootsuite Social Trends Report, 2025</span>
     </div>
   </div>
   <div class="proof__coda container">
@@ -1877,14 +1923,10 @@ window.addEventListener('scroll', () => {
     wordmark.style.transform = 'translate(-50%, -50%)';
     wordmark.style.opacity = scrolled > 0.7 ? String(1 - (scrolled - 0.7) / 0.15) : '1';
 
-    // Content fade in: phase 0.6 -> 0.85
-    const cPhase = Math.max(0, Math.min(1, (scrolled - 0.60) / 0.25));
-    heroContent.style.opacity = String(cPhase);
-    if (cPhase > 0) {
-      heroContent.classList.add('visible');
-    } else {
-      heroContent.classList.remove('visible');
-    }
+    // Hero content is always visible; fade out only as wordmark fades (phase 0.7 -> 0.85)
+    const cFade = scrolled > 0.7 ? Math.max(0, 1 - (scrolled - 0.7) / 0.15) : 1;
+    heroContent.style.opacity = String(cFade);
+    heroContent.classList.add('visible');
   }
 
   window.addEventListener('scroll', () => { requestAnimationFrame(updateHero); }, {passive: true});
