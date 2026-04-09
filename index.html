@@ -59,6 +59,7 @@
 html{font-size:16px;scroll-behavior:smooth;overflow-x:clip}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
 a{color:var(--accent);text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
 .container{max-width:1120px;margin:0 auto;padding:0 32px}
 
 /* ─── NAV ─── */
@@ -739,12 +740,21 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .proof__coda{
   padding:48px 64px;
   border-top:1px solid var(--border);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
 }
 .proof__quote{
   margin:0;padding:0;
   border-left:2px solid var(--accent);
   padding-left:28px;
-  max-width:580px;
+  padding-right:48px;
+  border-right:1px solid var(--border);
+}
+.proof__quote:last-child{
+  border-right:none;
+  padding-right:0;
+  padding-left:48px;
 }
 .proof__quote-text{
   font-size:1.05rem;
@@ -1195,7 +1205,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .proof__stat-num{font-size:clamp(3.5rem,14vw,7rem)}
   .proof__stat-label{max-width:none;border-left:none;padding-left:0;text-align:left;margin:0 auto}
   .proof__source{padding-left:0}
-  .proof__coda{padding:40px 24px}
+  .proof__coda{padding:40px 24px;grid-template-columns:1fr;gap:32px}
+  .proof__quote{padding-right:0;border-right:none;padding-left:24px}
   .pricing__grid{grid-template-columns:1fr;border:none;gap:12px}
   .plan{border:1px solid var(--border);border-radius:5px;border-right:1px solid var(--border) !important}
   .plan--featured{order:-1;padding-top:56px}
@@ -1620,7 +1631,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <p class="proof__quote-text">&ldquo;First week of posts took me 10 seconds. I didn&rsquo;t have to think about it once.&rdquo;</p>
       <cite class="proof__quote-cite">Mike Russo &mdash; Mike&rsquo;s Pizza, Phoenixville PA &mdash; Early access</cite>
     </blockquote>
-    <blockquote class="proof__quote" style="margin-top:40px">
+    <blockquote class="proof__quote">
       <p class="proof__quote-text">&ldquo;I used to spend Sunday nights writing posts for the week. Now I just reply YES three times on Monday morning.&rdquo;</p>
       <cite class="proof__quote-cite">Sarah Chen &mdash; Bloom &amp; Stem Florals, Austin TX &mdash; Early access</cite>
     </blockquote>
