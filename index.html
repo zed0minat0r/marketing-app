@@ -1044,13 +1044,6 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   text-align:center;font-size:0.9rem;color:var(--green);
   margin-top:16px;display:none;font-weight:500;
 }
-.queue-block{margin-top:20px;display:none}
-.queue-position{
-  font-family:var(--mono);font-size:1.4rem;font-weight:700;
-  color:var(--accent);letter-spacing:-0.02em;
-  display:block;line-height:1.1;margin-bottom:4px;
-}
-.queue-label{font-size:0.82rem;color:var(--text-muted);letter-spacing:0.01em}
 .referral-hint{
   margin-top:16px;font-family:var(--mono);font-size:0.78rem;
   color:var(--text-muted);background:var(--accent-dim);
@@ -1207,6 +1200,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .proof__source{padding-left:0}
   .proof__coda{padding:40px 24px;grid-template-columns:1fr;gap:32px}
   .proof__quote{padding-right:0;border-right:none;padding-left:24px}
+  /* Second quote: normalize left padding when stacked in 1 column */
+  .proof__quote:last-child{padding-left:24px}
   .pricing__grid{grid-template-columns:1fr;border:none;gap:12px}
   .plan{border:1px solid var(--border);border-radius:5px;border-right:1px solid var(--border) !important}
   .plan--featured{order:-1;padding-top:56px}
@@ -1246,6 +1241,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   /* Final CTA: heading centered, sub copy left-aligned */
   .final-cta__sub{text-align:left}
   .sms-reassurance{text-align:left}
+  /* How it works: center step headings on mobile */
+  .how-step__label,.how-step__title{text-align:center}
   /* Proof: body copy left-aligned inside centered coda */
   /* Proof stat label: ensure block display for margin:auto centering to work alongside left text */
   .proof__stat-label{display:block}
@@ -1266,8 +1263,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .prompt-btn{min-height:44px}
   .plan-selected__clear{min-height:44px;min-width:44px}
   .feature-card{padding:32px 16px}
-  /* Shrink demo phone messages area so prompt buttons stay in viewport */
-  .phone__messages{min-height:200px;max-height:240px}
+  /* Demo phone messages: tall enough to show full flows, scrollable for overflow */
+  .phone__messages{min-height:200px;max-height:320px;overflow-y:auto}
   .demo{padding:60px 0}
 
   .hero__content{
@@ -1459,7 +1456,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         <div class="feature-card__num">04 / 04</div>
         <div class="feature-card__cmd" data-cmd='> Monday 8am report'></div>
         <h3 class="feature-card__title">Your numbers,<br>every Monday</h3>
-        <p class="feature-card__desc">One text. No login screen, no guessing.</p>
+        <p class="feature-card__desc">Posts published, impressions, new followers, review score, and your top-performing post — all in one Monday morning text. No dashboard. No login. Just the numbers that matter.</p>
         <div class="feature-card__sms">
           <div class="feature-card__sms-avatar">SK</div>
           <div class="feature-card__sms-bubble">Good morning! Your week in review:<br>5 posts published &nbsp;&middot;&nbsp; 1.2K impressions<br>23 new followers &nbsp;&middot;&nbsp; 4.8&#x2605; avg rating<br><br>Top post: &ldquo;Weekend special&rdquo; &mdash; 312 reach<br>2 new Google reviews &mdash; both replied</div>
@@ -1772,10 +1769,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <!-- POST-SIGNUP CONFIRMATION STATE -->
     <div class="confirmation-block" id="confirmationBlock">
       <p class="confirmation-next" id="confirmationNext"></p>
-      <div class="queue-block" id="queueBlock">
-        <span class="queue-position" id="queuePos"></span>
-        <span class="queue-label">in line for early access</span>
-      </div>
       <div class="referral-card" id="referralCard">
         <div class="referral-card__label">Move up the line</div>
         <div class="referral-card__heading">Refer 3 businesses &rarr; skip the queue</div>
@@ -2056,10 +2049,9 @@ function handleStep2(e) {
     msg.innerHTML = `You\u2019re on the list.${planNote}`;
     msg.style.display = 'block';
 
-    // Hash email for queue position and referral slug
+    // Hash email for referral slug
     let hash = 0;
     for (let ci = 0; ci < email.length; ci++) { hash = (hash * 31 + email.charCodeAt(ci)) >>> 0; }
-    const position = 180 + (hash % 61);
     const referralSlug = (hash >>> 0).toString(36).substring(0, 8);
 
     // Show confirmation block
@@ -2071,12 +2063,6 @@ function handleStep2(e) {
     if (confirmNext) {
       confirmNext.innerHTML = `We open in waves of 50 businesses this spring. When your wave opens, <strong>we\u2019ll personally text ${phoneDisplay}</strong> \u2014 that\u2019s the product, starting with you.`;
     }
-
-    // Queue position
-    const queuePos = document.getElementById('queuePos');
-    const queueBlock = document.getElementById('queueBlock');
-    if (queuePos) queuePos.textContent = `#${position} in line`;
-    if (queueBlock) queueBlock.style.display = 'block';
 
     // Referral link
     const referralLink = `https://zed0minat0r.github.io/marketing-app/?ref=${referralSlug}`;
