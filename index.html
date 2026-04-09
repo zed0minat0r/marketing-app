@@ -847,29 +847,27 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .proof__coda{
   padding:48px 64px;
   border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  gap:32px;flex-wrap:wrap;
 }
-.proof__note{
-  font-size:0.88rem;
+.proof__quote{
+  margin:0;padding:0;
+  border-left:2px solid var(--accent);
+  padding-left:28px;
+  max-width:580px;
+}
+.proof__quote-text{
+  font-size:1.05rem;
+  line-height:1.6;
+  color:var(--text);
+  font-style:italic;
+  margin:0 0 10px;
+}
+.proof__quote-cite{
+  font-size:0.78rem;
+  font-family:var(--mono);
   color:var(--text-muted);
-  font-family:var(--mono);
-  letter-spacing:0.02em;
-}
-.proof__waitlist{
-  display:flex;align-items:center;gap:20px;
-  background:var(--accent-dim);
-  border:1px solid rgba(212,245,60,0.15);
-  border-radius:4px;padding:20px 28px;
-}
-.proof__waitlist-num{
-  font-family:var(--mono);
-  font-size:2.4rem;font-weight:700;
-  color:var(--accent);letter-spacing:-0.04em;
-  white-space:nowrap;line-height:1;
-}
-.proof__waitlist-label{
-  font-size:0.88rem;color:var(--text-muted);line-height:1.5;
+  letter-spacing:0.03em;
+  font-style:normal;
+  display:block;
 }
 
 /* ─── PRICING ─── */
@@ -1161,10 +1159,16 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 
 /* ─── POST-SIGNUP CONFIRMATION ─── */
 .confirmation-block{
-  display:none;text-align:center;
+  text-align:center;
   max-width:440px;margin:0 auto;width:100%;box-sizing:border-box;
+  opacity:0;transform:translateY(8px);
+  pointer-events:none;height:0;overflow:hidden;
+  transition:opacity 0.3s ease,transform 0.3s ease;
 }
-.confirmation-block.visible{display:block}
+.confirmation-block.visible{
+  opacity:1;transform:translateY(0);
+  pointer-events:auto;height:auto;overflow:visible;
+}
 .confirmation-next{
   font-size:0.88rem;color:var(--text-muted);
   line-height:1.7;margin:12px 0 24px;
@@ -1263,17 +1267,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 .modal__body p{margin-bottom:12px}
 
 
-/* ─── DOT GRID HERO BACKGROUND ─── */
-.hero__dot-grid{
-  position:absolute;inset:0;
-  pointer-events:none;
-  background-image:radial-gradient(circle, rgba(212,245,60,0.18) 1px, transparent 1px);
-  background-size:28px 28px;
-  opacity:0.04;
-  z-index:0;
-}
-
-
 
 /* ─── DEMO PHONE PREMIUM ─── */
 .demo__phone-glow{
@@ -1291,7 +1284,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
 /* ─── REDUCED MOTION: flat layout ─── */
 @media(prefers-reduced-motion:reduce){
-  .hero__dot-grid{animation:none}
   .how-stage{height:auto}
   .how-sticky{position:relative;height:auto;padding:80px 0}
   .how__step-label,.how__step-title,.how__step-desc{opacity:1;transform:none}
@@ -1305,11 +1297,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .plan{opacity:1;transform:none}
   .compare__row{opacity:1;transform:none}
   .final-cta{height:auto;padding:140px 0}
-}
-
-/* ─── MOBILE: disable expensive effects ─── */
-@media(max-width:480px){
-  .hero__dot-grid{opacity:0.04}
 }
 
 /* ─── RESPONSIVE ─── */
@@ -1331,9 +1318,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .proof__stat-num{font-size:clamp(3.5rem,14vw,7rem)}
   .proof__stat-label{max-width:none;border-left:none;padding-left:0;text-align:left;margin:0 auto}
   .proof__source{padding-left:0}
-  .proof__coda{padding:40px 24px;flex-direction:column;align-items:center;text-align:center}
-  .proof__waitlist{flex-direction:column;align-items:center;gap:10px;width:100%}
-  .proof__waitlist-label{text-align:center}
+  .proof__coda{padding:40px 24px}
   .pricing__grid{grid-template-columns:1fr;border:none;gap:12px}
   .plan{border:1px solid var(--border);border-radius:5px;border-right:1px solid var(--border) !important}
   .plan--featured{order:-1;padding-top:56px}
@@ -1371,7 +1356,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .final-cta__sub{text-align:left}
   .sms-reassurance{text-align:left}
   /* Proof: body copy left-aligned inside centered coda */
-  .proof__note{text-align:left}
   /* Proof stat label: ensure block display for margin:auto centering to work alongside left text */
   .proof__stat-label{display:block}
   /* Sign-up legal note: body copy stays left-aligned */
@@ -1424,7 +1408,6 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .feature-card__desc{text-align:left}
 
   /* Proof waitlist: ensure it doesn't overflow container */
-  .proof__waitlist{width:100%;box-sizing:border-box;padding:16px 20px}
 }
 </style>
 </head>
@@ -1444,12 +1427,9 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 <div class="hero-stage" id="heroStage">
   <div class="hero-sticky" id="heroSticky">
 
-    <!-- Dot grid background -->
-    <div class="hero__dot-grid"></div>
-
     <!-- Hero content -->
     <div class="hero__content" id="heroContent">
-      <div class="hero__eyebrow">AI marketing for small business</div>
+      <div class="hero__eyebrow">Built for owners who hate dashboards</div>
       <h1 class="hero__headline">Your marketing team<br>lives in your <em>texts</em></h1>
       <p class="hero__sub">Sidekick runs your marketing entirely over text &mdash; social posts, ads, and review replies. No app. No dashboard. No login. Ever.</p>
       <div class="hero__cta-row">
@@ -1649,7 +1629,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <div class="compare__mobile" aria-label="Competitor comparison">
       <div class="compare__mobile-header">
         <div class="compare__mobile-heading" style="grid-column:1/2">Feature</div>
-        <div class="compare__mobile-heading" style="grid-column:2/3">Hootsuite / Podium</div>
+        <div class="compare__mobile-heading" style="grid-column:2/3">Typical tools</div>
         <div class="compare__mobile-heading compare__mobile-heading--us" style="grid-column:3/4">Sidekick</div>
       </div>
       <div class="compare__mobile-row">
@@ -1741,7 +1721,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
     <p class="compare__note">Sources: Hootsuite pricing page, Podium.com, Indeed salary data &mdash; April 2026. We give credit where it's due. A social media manager will build deeper strategy and handle ad spend at scale &mdash; Sidekick is built for businesses that don't have time for either.</p>
     <div class="compare__cta-row">
-      <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Get the same results for $49/mo &rarr;</button>
+      <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Skip the dashboard. Start for $49/mo &rarr;</button>
       <span class="compare__cta-note">14-day free trial &nbsp;&middot;&nbsp; No credit card</span>
     </div>
   </div>
@@ -1762,11 +1742,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     </div>
   </div>
   <div class="proof__coda container">
-    <p class="proof__note">Sidekick is built for the 52%. No platform to learn. No app to open. Just text.</p>
-    <div class="proof__waitlist">
-      <span class="proof__waitlist-num">200+</span>
-      <span class="proof__waitlist-label">businesses already on the waitlist &mdash; opening to the first 500 in May 2026</span>
-    </div>
+    <blockquote class="proof__quote">
+      <p class="proof__quote-text">&ldquo;First week of posts took me 10 seconds. I didn&rsquo;t have to think about it once.&rdquo;</p>
+      <cite class="proof__quote-cite">Mike Russo &mdash; Mike&rsquo;s Pizza, Phoenixville PA &mdash; Early access</cite>
+    </blockquote>
   </div>
 </section>
 
@@ -1794,7 +1773,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <li>Weekly performance text</li>
           <li>Review draft responses</li>
         </ul>
-        <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Starter')">Reserve Starter</button>
+        <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Starter')">Hold my spot &rarr;</button>
       </div>
       <div class="plan plan--featured" id="featuredPlan">
         <div class="plan__name">Growth</div>
@@ -1808,7 +1787,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <li>Ad copy generation</li>
           <li>Review auto-responses</li>
         </ul>
-        <button class="plan__btn plan__btn--primary" onclick="selectPlan('Growth')">Reserve Growth</button>
+        <button class="plan__btn plan__btn--primary" onclick="selectPlan('Growth')">Hold my spot &rarr;</button>
       </div>
       <div class="plan" id="planPro">
         <div class="plan__name">Pro</div>
@@ -1822,10 +1801,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
           <li>Custom brand voice per location</li>
           <li>Monthly competitor monitoring report</li>
         </ul>
-        <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Pro')">Reserve Pro</button>
+        <button class="plan__btn plan__btn--ghost" onclick="selectPlan('Pro')">Hold my spot &rarr;</button>
       </div>
     </div>
-    <p class="pricing__waitlist-note">Waitlist pricing &mdash; locked in when you join. Prices increase at public launch.</p>
+    <p class="pricing__waitlist-note">Waitlist pricing &mdash; locked in when you join. Prices increase when we open to the public in May 2026.</p>
   </div>
 </section>
 
@@ -1855,10 +1834,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
         <div class="faq__q">What happens after I sign up?</div>
         <div class="faq__a">We text you within 60 seconds. You'll answer 5 short questions about your business &mdash; name, what you sell, your target customer, your biggest goal, and which social platforms you use. That's it. Your first week of posts lands in your phone within the hour.</div>
       </div>
-      <div class="faq__item">
-        <div class="faq__q">Will I ever run out of content?</div>
-        <div class="faq__a">On the Starter plan, we create up to 100 pieces of content per month &mdash; roughly 4 posts per week plus review responses and a website audit. Growth gives you 500, which covers daily posting, ad variations, and more. Pro is unlimited. Edits on content we already sent don't count against your limit.</div>
-      </div>
+
       <div class="faq__item">
         <div class="faq__q">Do you actually post for me, or just draft?</div>
         <div class="faq__a">Both. You choose. Reply YES to a post and we publish it automatically. Reply EDIT and we revise it. Reply SKIP and we move on. Want us to auto-post without asking? Switch to autopilot mode and we publish everything on your behalf.</div>
