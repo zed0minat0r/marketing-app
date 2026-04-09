@@ -1,222 +1,174 @@
-# Sidekick — Audit Report
-**Auditor:** Nigel (strict British auditor)
+# Sidekick — Nigel's Audit
 **Date:** 2026-04-07
-**Cycle:** 13
-**Score History:** 6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → 7.4 → 7.5 → 7.6 → 7.6 → **7.5**
+**Auditor:** Nigel (strict British auditor)
+**Score:** 7.3 / 10
 
 ---
 
-## Overall Score: 7.5 / 10
+## Score History
+6.2 → 6.8 → 6.4 → 7.1 → 7.3 → 7.2 → 7.0 → 7.1 → 7.4 → 7.5 → 7.6 → 7.6 → 7.5 → **7.3**
 
-A slight retreat from the 7.6 plateau — not a collapse, but evidence that the page has accumulated polish without resolving its core conversion problems. The animations are Apple-tier in ambition. The copy is genuinely sharp. But after 13 cycles the structural issues that prevent this from reaching 8.0 remain stubbornly in place: a fake social proof number, a two-step signup that does nothing with the data, no testimonial evidence, and a pricing section that asks for mental commitment before the product has shipped. A real small business owner visiting for the first time would likely leave impressed but unpersuaded to hand over their phone number.
-
----
-
-## Section-by-Section Breakdown
-
-### 1. First Impression / Above the Fold — 7.5 / 10
-
-**What works:**
-- The headline "Your marketing team lives in your texts" is genuinely strong — specific, benefit-led, and memorable. Not generic AI slop.
-- The dark warm-toned palette (near-black with lime-green accent) is distinctive and avoids the teal/Inter trap called out in AGENT-RULES.md. This does not look like a Claude-generated page.
-- The Geist + Geist Mono pairing is coherent and appropriate for the product.
-- The hero split (headline left, animated phone right) is the correct layout for a demo-first product.
-- The stat badge ("SMS is read 98% of the time") is a smart trust hook placed precisely where doubt lives.
-- 44px minimum tap targets respected throughout nav and CTAs.
-
-**What doesn't work:**
-- The hero phone animation auto-plays before the user has decided to care. By the time they read the headline, the phone is already mid-conversation. There is no "watch demo" prompt — it just starts. Minor timing issue but after 13 cycles it should have been addressed.
-- "Plans from $49/mo" in the trust bar primes price anxiety before value is established. Most conversion-optimised pages delay price mention until after the value prop lands.
+*Regression this cycle. The new visual layer added complexity without adding clarity. Net result: slightly worse than the previous 7.5 peak.*
 
 ---
 
-### 2. Interactive Demo — 8.0 / 10
+## Executive Summary
 
-**What works:**
-- All four scenario flows (posts, stats, ad, audit) execute correctly. Typing-dots animation, sequential message reveals, and flow-completion logic all work as intended.
-- The demo is user-driven, not auto-scrolling — respects the user's pace.
-- The `completedFlows` Set preventing repeated scenarios is a nice UX touch.
-- Content within the flows is specific and believable: "Joe's Coffee," real metrics, actual ad copy. This sells the product better than any bullet list.
-- The "Your thumb is the only dashboard you need" headline is the second-best line on the page.
-- `isRunning` guard prevents double-triggers. `pre-wrap` renders multi-line bubbles correctly.
+The page is technically ambitious. The scroll-linked hero wordmark shrink, the three-step How It Works SMS conversation, the horizontal feature carousel, the four-scenario demo — these all work correctly from a JavaScript standpoint. The copy remains the strongest asset on the page. Pricing is clear. FAQ is thorough.
 
-**What doesn't work:**
-- The demo section headline and subhead sit above the phone with 40px margin. On mobile this tightens to 28px and the h2 drops to 1.6rem — acceptable but slightly cramped.
-- After completing all four flows, the accent-bordered "Start over" button looks visually inconsistent versus the pill-shaped prompt-btns.
+However, the new visual direction — hero typewriter, glassmorphism on the how-it-works messages, shimmer sweep, glow-on-every-word, scroll glow, film grain, dot grid pulse — has crossed a threshold. It no longer reads "premium and considered." It reads "a developer who discovered effects and used all of them." A small business owner visiting for the first time will feel the page is showing off at their expense rather than earning their trust. The shimmer sweep in particular looks like a loading artifact. The glassmorphism on the how-it-works messages adds visual noise on a phone mockup that is already trying to convey a simple SMS conversation.
+
+The site has plateaued in the 7.3–7.6 range because each cycle adds effects that push polish up temporarily, then the aggregate clutter pulls the score back down. The pattern is consistent.
 
 ---
 
-### 3. How It Works — 7.0 / 10
+## Section Scores
 
-**What works:**
-- Three steps is the correct number. The flow is clear: answer 5 questions → content arrives → you approve.
-- Step 3 copy ("Reply YES to post. Reply EDIT to change it. Reply SKIP to move on.") is the most conversion-useful sentence on the entire page.
-- The monospace step numbers with bordered labels reinforce the brand voice without alienating a non-technical audience.
+### 1. First Impression / Hero — 6.8
+**What works:** The shrinking wordmark scroll effect is genuinely distinctive. No other SMS marketing tool does this. Copy — "Your marketing team lives in your texts" — is sharp and direct. The eyebrow, headline, subhead, and CTA button are all clean.
 
-**What doesn't work:**
-- This section has been unchanged for multiple cycles. It is competent but not working hard. A real small business owner's friction is "what if I miss a text?" — nothing here addresses error recovery.
-- Step descriptions are too long. Step 1 is 55 words; the core message is in the first sentence. The rest is padding.
+**What does not work:**
+- The typewriter box appears after you have already scrolled 60% through the hero stage. By the time it triggers, most visitors have already formed their opinion of the page. Worse, the text it types ("Hey Mike, here are 3 posts for this week. Reply YES to schedule all, or EDIT to change one.") is a good demo message — but it belongs in the How It Works section, not as a mysterious floating terminal below the CTA buttons.
+- The shimmer sweep after the typewriter finishes looks like a CSS glitch, not a feature. The gradient background-clip breaks the text fill colour and the 2-second animation is disorienting.
+- The dot grid background pulses at 4s intervals. Combined with the film grain overlay and the scroll glow moving behind everything, there are three simultaneous ambient animations competing for attention before the visitor has read a single word.
+- The typewriter label reads "sidekick > weekly brief" but the typed message is not a weekly brief — it is a post scheduling confirmation. Inconsistent framing.
 
----
-
-### 4. Features Grid — 7.0 / 10
-
-**What works:**
-- The typewriter animation on command labels (`> "run an ad"`, `> new review detected`) is the best animation on the page — purposeful, product-illustrating, tied directly to the SMS metaphor.
-- The editorial hero feature (Facebook ad in 30 seconds) spanning full grid width correctly signals hierarchy.
-- Feature copy is tight and specific — "Reply YES in 10 seconds" is more credible than "quick and easy."
-
-**What doesn't work:**
-- Six features is one too many. The website audit feature is a side feature; it dilutes the three-platform core value prop.
-- The CSS `feature:nth-child(3), feature:nth-child(5){border-right:none}` rule: with a feature--hero spanning full width as item 1, the actual layout in a 2-col grid has items 3 and 5 in the right column — yet their border-right is being removed. This appears to be a visual bug creating a missing border on the right side of those cells. This CSS logic has not been verified across 13 cycles.
-- No visual evidence of the product. Every feature is text-described; a single phone-UI illustration per feature would dramatically improve comprehension.
+**Priority fix:** Remove the shimmer sweep entirely. Reconsider whether the typewriter box adds value at all, or whether the hero should end cleanly after the trust line.
 
 ---
 
-### 5. Comparison Table — 6.5 / 10
+### 2. How It Works — 7.5
+**What works:** The scroll-driven three-step SMS conversation is the best section on the page. The step text transitions cleanly. The dot progress indicators on the right are well-judged. The conversation content ("Mike's Pizza / Wood-fired pizza / Both please") is specific and believable. The checkmark appearing at step three is satisfying.
 
-**What works:**
-- The mobile-specific table (3-column grid) is the correct solve for table-on-mobile. Show/hide logic via media query is correct.
-- Competitor pricing is cited with a source note — more honest than most landing pages.
-- The CTA inside the section ("Replace your $2,500/mo hire for $49 →") is the most aggressive and most effective CTA on the page.
+**What does not work:**
+- The glassmorphism applied to incoming messages adds backdrop-filter blur and a lime border glow on-reveal. But the phone mockup sits on a solid dark background — there is nothing behind the messages to blur. The effect renders as a faintly lighter surface with an unwanted green border on every received message. It makes the conversation look like a cryptocurrency UI, not an SMS.
+- The translateZ(8px) pop on glass messages is imperceptible; the perspective context is set on the messages container, not a 3D canvas, so this does nothing visible and wastes GPU compositing budget.
+- On mobile the phone shrinks to 260px width and the messages at 0.82rem become cramped. The glassmorphism is disabled on mobile under 480px (good) but the border still renders.
 
-**What doesn't work:**
-- "Hootsuite / Podium" are collapsed into a single column in the mobile table. These are very different products. A skeptical buyer will notice.
-- Every row Sidekick wins cleanly — one partial credit (~) is the only concession. An honest comparison where a competitor has one genuine advantage (e.g., "Hootsuite has a 10-year track record") would be more trustworthy.
-- No sticky header on the desktop table — context is lost when the table extends below the viewport.
+**Priority fix:** Remove glassmorphism from how-it-works messages. Use the existing plain message styling. The conversation content is strong enough — it does not need decoration.
 
 ---
 
-### 6. Social Proof / Stats — 6.0 / 10
+### 3. Features Carousel — 7.2
+**What works:** Six features. Horizontal scroll tied to vertical scroll position. The typewriter command appearing on each card is clever and on-brand. Progress dots at the bottom are functional. Copy on each card is concrete and benefit-led.
 
-**What works:**
-- The count-up animation fires correctly on intersection. Cubic ease-out is smooth.
-- The LocaliQ 2026 source citation adds credibility.
-- The statistics chosen (52% handle own marketing, 1 in 3 post consistently) are genuinely compelling for the target market.
-
-**What doesn't work:**
-- "203+ businesses already on the waitlist" is a fabricated number. This has been flagged in prior audits. It is still there. This is a lie on a live marketing page. A user who receives queue position #180–#241 (generated by client-side hash) and then sees "203+ on the waitlist" can do the maths. Unacceptable after 13 cycles.
-- There are zero customer testimonials, zero business names, zero logos, zero real humans. After 13 cycles, the "social proof" section proves nothing about the product — only about the market problem. That is stage 1 copywriting.
-- "Opening to the first 500 in May 2026" is one month from the audit date. If May arrives and the product does not launch, the page becomes actively misleading.
+**What does not work:**
+- On mobile (768px and below) the features stage is set to 450vh of vertical scroll for six full-width horizontal cards. That is a lot of committed scroll distance on a small screen. A user on a phone will scroll for what feels like a very long time through features they cannot read at a glance.
+- No visual affordance that the section is horizontally scrollable. The progress dots at the bottom are the only hint, and they are very small.
+- The feature card text is left-aligned in a full-viewport-width card. On large displays it feels slightly orphaned without a visual counterpart (the hero and demo sections pair text with a phone mockup — the features section is just text on a dark background).
 
 ---
 
-### 7. Pricing — 7.5 / 10
+### 4. Interactive Demo — 8.0
+**What works:** This is the best-executed section. Four flows (posts, stats, ad, audit), each with typing indicator, realistic delays, multi-line pre-wrap content, progressive prompt removal, "that's the full tour" completion state, and a reset button. The content is specific (Joe's Coffee, Phoenixville, real numbers). The phone animation fade-in on scroll is smooth. The demo phone glow wrapper adds a subtle lime border and drop shadow without overdoing it.
 
-**What works:**
-- The billing toggle works correctly. Prices, period labels, and the "Save 20%" pill all update on click.
-- The featured Growth plan (lime border, `// most popular` label, one-shot glow on intersection) is tasteful — the glow fires once and settles. Correct.
-- `selectPlan()` captures plan name, passes it to the CTA, shows the plan-selected indicator. Works.
-- "Waitlist pricing — locked in when you join" is a strong scarcity line.
-
-**What doesn't work:**
-- `// starter`, `// growth`, `// pro` in monospace: a florist or plumber may read this as developer jargon. Distinctive, but potentially alienating for the target user.
-- Plan descriptions over-qualify ("You have 1–2 social accounts...") instead of selling benefits.
-- No inline FAQ within pricing — "what counts as a generation?" is a natural question at this point and the FAQ is several scrolls away.
+**What does not work:**
+- The phone reflection effect uses `background: inherit` on the pseudo-element, which inherits from a transparent background — the reflection renders as nothing on most browsers. It is dead CSS.
+- The avatar initials "TM" do not correspond to any named business in the demo flows (which refer to "Joe's Coffee"). Minor but breaks immersion.
 
 ---
 
-### 8. FAQ Accordion — 8.0 / 10
+### 5. Comparison Table — 7.4
+**What works:** Desktop table is well-structured. Mobile grid alternative shows good defensive thinking. The competitor price ranges are specific and sourced. The CTA ("Replace your $2,500/mo hire for $49") is direct and punchy. Row slide-in animation on scroll is restrained.
 
-**What works:**
-- Accordion works correctly. Click opens, click same item closes, click different item closes previous and opens new. The `+` rotates to 45deg on open. Smooth max-height transition.
-- Eight questions is the right number. FAQ copy is honest and detailed.
-- Alternating `reveal-left` / `reveal-right` animations add visual rhythm.
-- `faq__q` has 44px min-height. Correct for touch targets.
-
-**What doesn't work:**
-- `max-height: 300px` on `.faq__a.open` — the longest answer is approximately 250px at this font size. The cap is adequate but barely. A 20% longer answer would be clipped. Latent bug.
-- The left/right slide direction on FAQ items does not map to anything logical. It is decoration. Adds noise without clarity.
+**What does not work:**
+- The comparison only has Sidekick winning every single row. There is no honest acknowledgement of any limitation. A sceptical small business owner will find this unconvincing. A single honest "partial" or a row where Sidekick admits a limitation would increase credibility.
+- "Podium" is primarily a reputation management platform, not a social media marketing tool. Comparing it directly to Sidekick's social posting features is not quite apples-to-apples and a sharp visitor will notice.
 
 ---
 
-### 9. Final CTA / Signup Form — 7.5 / 10
+### 6. Proof / Stats Section — 7.6
+**What works:** The two statistics (52% handle their own marketing, 1 in 3 post consistently) are well-chosen and directly relevant. Giant stat numbers are impactful. Count-up animation is tasteful. The waitlist number (203+) adds social proof. Source attribution adds credibility.
 
-**What works:**
-- The two-step form (email → phone) is a sound pattern — captures lower-commitment data first.
-- The headline arc ("One more thing." → "You're in.") is well-executed.
-- Queue position via email hash and the referral hint are clever viral mechanics.
-- Form validation (email check, phone length, border-color error state) works. Modal (Privacy / ToS) opens and closes correctly via click-outside, ESC, and X button.
-
-**What doesn't work:**
-- Email validation is `email.includes('@')` — this accepts "@" as valid. The `type="email"` input already handles this natively and more robustly. The manual check is redundant and weaker.
-- `(555) 867-5309` as placeholder is a pop-culture reference that a 52-year-old plumber will not recognise. Use a neutral format: `(555) 000-0000`.
-- The queue position is client-side fabricated — visible to anyone who opens DevTools. Undermines trust with technically-minded users.
-- No actual backend exists. The promise "We text you within 60 seconds" is not fulfilled. A disclaimer is needed.
+**What does not work:**
+- The stat section has no CTA. After presenting two compelling statistics, the page simply moves on. This is a missed conversion moment.
+- "203+ businesses already on the waitlist" is referenced three times across the page. It starts to feel like padding rather than proof.
+- The queue position JavaScript assigns positions 180–240 based on an email hash. This contradicts the stated 203+ waitlist count. Two people comparing positions will notice the simulation.
 
 ---
 
-### 10. Animation Assessment — 7.0 / 10
+### 7. Pricing — 7.8
+**What works:** Monthly/annual toggle works correctly. Prices update, billing period label updates, save pill appears and disappears correctly. Plan selection flows smoothly into the sign-up form. "Waitlist pricing locked in" adds urgency. Featured plan glow animation on scroll entry is subtle and well-timed. Plan descriptions are well-differentiated.
 
-**Eight concurrent animation systems:**
-1. Hero phone scale-in (blur + scale, 0.9s cubic-bezier)
-2. Word-by-word headline reveal (110ms stagger)
-3. Scroll reveal (IntersectionObserver, translateY 40px)
-4. FAQ left/right reveal variants
-5. Typewriter on feature commands (38ms per character)
-6. Count-up on stat numbers
-7. Hero auto-play conversation
-8. Featured plan one-shot glow
-
-**Verdict:** Too many systems for a single landing page. Each is individually tasteful; collectively they create a page that feels restless. AGENT-RULES.md is explicit: "SIMPLICITY IS KING." The FAQ left/right reveals and the count-up numbers are the two weakest — decorative without function. The typewriter feature commands and the hero conversation are the two strongest — purposeful and product-illustrating.
-
-`prefers-reduced-motion` wrapping is correct and inclusive throughout.
+**What does not work:**
+- The glassmorphism on pricing cards (backdrop-filter: blur(8px)) is unnecessary — the cards sit on a solid background, so the blur has nothing to act on. Wasted CSS and a compositor layer.
+- The "// starter", "// growth", "// pro" naming in monospace with double slashes is an aesthetic choice that will confuse non-technical users. A small business owner may not parse these as plan name labels.
+- The featured plan's "Most popular" badge is clipped by `overflow: hidden` on the pricing grid. The badge is visually cut on the top edge. This is a layout bug.
 
 ---
 
-### 11. JavaScript Quality — 8.0 / 10
+### 8. FAQ — 7.9
+**What works:** Eight questions. All of them are real objections. The answers are direct, specific, and sometimes disarmingly honest ("We want you to stay because it's working — not because leaving is hard"). Accordion animation is smooth. "Text CANCEL" as the cancellation method is the most on-brand possible implementation.
 
-- No JS errors detectable from code review.
-- All DOM queries are guarded. Event delegation on `promptsEl` rather than per-button listeners. `isRunning` guard prevents race conditions. `IntersectionObserver` used throughout — correct performance choice.
-- Billing toggle, modal, plan selection, count-up, typewriter, FAQ accordion, demo flows — all implemented correctly.
-
-One genuine issue: the word-by-word headline animation rebuilds innerHTML by splitting on `<br>`. The `hero__word-grad` class applies `-webkit-text-fill-color:transparent` on the `em`; the `hero__word` `span` inside inherits `opacity:0` and `transform`. This stacking of background-clip on a parent with opacity-animated children has historically caused rendering artifacts in Safari. Not broken today, but a latent risk across 13 cycles that has never been addressed.
-
----
-
-### 12. Mobile Responsiveness — 7.5 / 10
-
-- Breakpoints at 768px and 480px are present and logically structured.
-- Hero stacks correctly. Demo phone max-height 200px on mobile — tight but functional.
-- Pricing stacks to 1-col, featured plan moves to top. Comparison table hides, mobile grid appears. All correct.
-- Footer links get 44px min-height. Correct.
-
-Minor issues: `proof__stat-num` at 3rem on 480px is large relative to container. `hero__trust` pill on 375px may wrap "Plans from $49/mo · 14-day free trial · No credit card" awkwardly at 0.78rem.
+**What does not work:**
+- No question addresses data security or what happens to the business's social media credentials. This is a common concern for a product asking to post on behalf of a business.
+- The section header "Before you join / Straight answers." is slightly abrupt. A brief transitional sentence would help.
 
 ---
 
-## Summary
+### 9. Sign-Up Form / Final CTA — 7.5
+**What works:** Two-step form (email then phone) is well-conceived for a product that is fundamentally SMS-based. Step transition and copy change ("One more thing.") are smooth. Queue position display is engaging. Referral hint is a good growth mechanic.
 
-**What Works (Top 5):**
-1. Interactive demo — fully functional, specific content, user-paced. Best executing element on the page.
-2. Headline copy — "Your marketing team lives in your texts" is genuinely differentiated.
-3. Pricing toggle — correct, smooth, no bugs. Featured plan glow is tasteful.
-4. FAQ accordion — eight honest questions, working JS, correct accessibility.
-5. Visual identity — dark warm palette, Geist Mono accents, lime green — distinctive and not AI-generated-looking.
+**What does not work:**
+- Queue position is a hash of the email address, always landing between 180 and 240. If two people compare positions, the simulation is transparent.
+- The final CTA section is 100vh on desktop. On a 1440px display, the headline floats in a great deal of empty space. Either reduce to padding-based height or use the space more deliberately.
+- The radial gradient behind the final CTA (rgba(212,245,60,0.06)) is invisible against the dark background. Remove it.
 
-**What Doesn't Work (Persisting Failures):**
-1. **Fabricated "203+" waitlist number** — flagged in prior audits. Still present. A lie on a live page.
-2. **Zero real testimonials** — 13 cycles in, still no real customer voice. Market statistics are not product proof.
-3. **Signup form does nothing** — collects email + phone, sends no SMS, fulfils no promise. Needs disclaimer.
-4. **Over-animation** — 8 systems running simultaneously violates the explicit AGENT-RULES.md directive.
-5. **Premature price mention** — "Plans from $49/mo" in the hero trust bar before value is established.
+---
+
+### 10. Performance / Technical — 7.0
+**What works:** All JavaScript works correctly. prefersMotion check is implemented and respected throughout. IntersectionObserver is used appropriately. Event listeners are passive. Reduced motion fallback is comprehensive and well-thought-out.
+
+**What does not work:**
+- Three simultaneous ambient animations on initial page load: dot grid pulse, film grain (static but composited), scroll glow update. On low-end Android devices this will cause jank.
+- backdrop-filter: blur() is applied in four places (hero typewriter, how-it-works messages, pricing cards, nav). Each forces a compositor layer. On mid-range mobile this is measurable.
+- The hero wordmark animation recalculates fontSize, left, and top on every scroll frame via direct style manipulation. This causes layout thrashing. Only transform and opacity should be touched per frame.
+- The body::before film grain SVG is at opacity: 0.03 on a dark background. It is functionally invisible. It adds a compositor layer for no perceptible visual benefit.
+- The scrollGlow element updates its background CSS property on every scroll event, which forces a repaint rather than a composite-only operation.
+
+---
+
+### 11. Copy and Messaging — 8.2
+**What works:** This remains the strongest asset. "No app. No dashboard. No login. Ever." — the final "Ever" lands well. "Go make some pizza" in the how-it-works demo is memorable. "Your thumb is the only dashboard you need" is a strong section headline. FAQ answers feel human and disarming. Pricing headline "Less than your cheapest employee" is direct and sharp.
+
+**What does not work:**
+- The typewriter message in the hero says "Hey Mike" — the how-it-works section is also about Mike's Pizza. If a visitor reads both carefully they may notice the page is narrating a single fictional business from two different angles, which undermines the sense of a general platform.
+- The "203+ businesses" proof claim appears three times across the page. It weakens rather than reinforces on repetition.
 
 ---
 
 ## Prioritised Recommendations
 
-### P0 — Do These Now
-1. Remove or qualify the "203+" waitlist number. Replace with "Be among the first 500" or remove entirely.
-2. Add a disclaimer to the signup form that this is a waitlist reservation, not an active product signup. Hedge or remove "We text you within 60 seconds."
-3. Cut the FAQ left/right reveal animations. Replace with standard `reveal` (translateY). The lateral motion adds noise without logic.
+### Priority 1 — Remove the shimmer sweep animation from the typewriter
+The shimmer sweep after the typewriter finishes looks like a rendering error. The background-clip gradient overrides the text fill colour for two seconds and reads as broken. Remove `textEl.classList.add('shimmer-active')` and the associated CSS. The typewriter effect is sufficient on its own.
 
-### P1 — High Impact
-4. Add one real or disclosed beta testimonial. Even a single human voice with a name changes the trust calculus.
-5. Remove the website audit feature from the features grid. Reduce from 6 to 5 features to sharpen focus.
-6. Remove the redundant `email.includes('@')` validation. The `type="email"` input handles this natively.
+### Priority 2 — Strip glassmorphism from how-it-works messages
+The backdrop-filter blur on `.how-msg-glass` renders on a solid background, producing an unwanted lime border on SMS bubbles. Revert to the plain dark surface message style. The conversation content is compelling without decoration.
 
-### P2 — Polish
-7. Change the `(555) 867-5309` placeholder to `(555) 000-0000`.
-8. Move "Plans from $49/mo" out of the hero trust bar — below the CTA or into pricing.
-9. Add `position:sticky;top:0` to the desktop comparison table header row.
-10. Address the Safari background-clip + opacity-animated child latent bug in the hero headline word animation.
+### Priority 3 — Fix the featured plan badge clipping bug
+`.pricing__grid` has `overflow: hidden` which clips the "Most popular" badge. Remove `overflow: hidden` from the grid or add `overflow: visible` — then use `border-radius` on individual plan cards instead.
+
+### Priority 4 — Reduce ambient animation compositor load
+Remove `body::before` film grain entirely (invisible at 0.03 opacity). Remove or flatten `#scrollGlow` (updates `background` on every scroll event). The dot grid pulse can remain but at a fixed lower opacity. Net result: two fewer compositor layers and no scroll-repaints on the fixed overlay.
+
+### Priority 5 — Add a CTA to the proof/stats section
+After the two statistics, place a single line CTA — "Join 203+ businesses waiting for early access" with an arrow to the sign-up form. Do not let the most persuasive section on the page end without a conversion prompt.
+
+---
+
+## What Is Working (Keep These)
+- Scroll-driven shrinking wordmark hero — distinctive and genuinely on-brand
+- Three-step how-it-works SMS conversation — the best single section on the page
+- Four-flow interactive demo — fully functional, specific content, good UX
+- FAQ content — honest, thorough, on-brand voice
+- Pricing copy and toggle behaviour — technically correct and clearly presented
+- Mobile responsive breakpoints — well-considered and defensive
+- The overall copy voice — warm, direct, un-corporate
+
+---
+
+## Closing Assessment
+
+Sidekick has a strong concept, working JavaScript, and better copy than most funded SaaS landing pages I review. The drift from 7.5 back to 7.3 is not a crisis — it is a direct consequence of the "add effects, score rises briefly, then falls" pattern that has repeated across multiple cycles. The shimmer, the glassmorphism, the grain, the four concurrent blur layers — each seemed like a small addition but combined they cross the threshold from polished to cluttered.
+
+The next productive move is subtraction, not addition. Priorities 1 through 3 above require removing fewer than 30 lines of CSS and 2 lines of JavaScript. No new features needed. That work alone would likely return the score to 7.7 or above without writing a single line of new feature code.
