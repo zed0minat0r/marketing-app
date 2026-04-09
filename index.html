@@ -187,18 +187,14 @@ nav.scrolled{border-color:var(--border)}
 .features__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--border);border-bottom:none}
 .feature{padding:32px 36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px;position:relative}
 .feature:nth-child(2n){border-right:none}
-.feature__cmd{font-family:var(--mono);font-size:0.72rem;font-weight:400;color:var(--accent);letter-spacing:0.04em;line-height:1;opacity:0.7;min-height:1em}
+.feature__cmd{font-family:var(--mono);font-size:0.75rem;font-weight:400;color:var(--accent);letter-spacing:0.04em;line-height:1;opacity:0.7;min-height:1em}
 .feature__title{font-size:0.95rem;font-weight:700;letter-spacing:-0.02em;line-height:1.25}
 .feature__desc{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
 
-/* ─── PROOF QUOTES ─── */
-.proof__quotes{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-top:48px}
-.proof__quote{padding:32px 36px;border-right:1px solid var(--border)}
-.proof__quote:last-child{border-right:none}
-.proof__quote-text{font-size:0.95rem;color:var(--text);line-height:1.7;margin-bottom:16px;font-style:normal}
-.proof__quote-text::before{content:'\201C';font-size:1.4rem;font-weight:700;color:var(--accent);line-height:0;vertical-align:-0.3em;margin-right:2px}
-.proof__quote-text::after{content:'\201D';font-size:1.4rem;font-weight:700;color:var(--accent);line-height:0;vertical-align:-0.3em;margin-left:2px}
-.proof__quote-cite{font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);letter-spacing:0.03em;font-style:normal}
+/* ─── PROOF WAITLIST ─── */
+.proof__waitlist{display:flex;align-items:center;gap:20px;border:1px solid var(--border);border-radius:6px;padding:28px 36px;margin-top:48px;background:rgba(255,255,255,0.02)}
+.proof__waitlist-num{font-family:var(--mono);font-size:2.8rem;font-weight:700;color:var(--accent);letter-spacing:-0.04em;white-space:nowrap;line-height:1}
+.proof__waitlist-label{font-size:0.95rem;color:var(--text-muted);line-height:1.5}
 
 /* ─── COMPARE ─── */
 .compare{padding:100px 0}
@@ -233,7 +229,7 @@ nav.scrolled{border-color:var(--border)}
 
 /* ─── PROOF / STATS ─── */
 .proof{padding:120px 0}
-.proof__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:48px;position:relative}
+.proof__stats{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-bottom:48px;position:relative}
 .proof__stats::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent) 20%,var(--accent) 80%,transparent);opacity:0.35}
 .proof__stat-block{padding:52px 40px 48px;position:relative}
 .proof__stat-block::after{content:'';position:absolute;top:20%;bottom:20%;right:0;width:1px;background:var(--border)}
@@ -371,9 +367,8 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
   .proof__stat-label{max-width:none;border-left:none;padding-left:0}
   .proof__source{padding-left:0}
   .proof__note{text-align:center}
-  .proof__quotes{grid-template-columns:1fr}
-  .proof__quote{border-right:none;border-bottom:1px solid var(--border);padding:28px 24px}
-  .proof__quote:last-child{border-bottom:none}
+  .proof__waitlist{flex-direction:column;align-items:flex-start;gap:12px;padding:24px 20px}
+  .proof__waitlist-num{font-size:2.2rem}
   .compare__title{font-size:1.5rem;text-align:center}
   .compare__scroll-wrap{display:none}
   .compare__mobile{display:block}
@@ -447,7 +442,7 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="hero__stat" id="heroStat">SMS is read <strong>98%</strong> of the time &nbsp;&middot;&nbsp; Email: <strong style="color:var(--text-muted)">22%</strong></div>
         <h1 class="hero__title" id="heroTitle">Your marketing team<br>lives in your <em class="hero__word-grad">texts</em></h1>
         <p class="hero__desc reveal">No app. No dashboard. No login. Ever. Sidekick is an AI that handles your social posts, ads, and review replies entirely over text message.</p>
-        <p class="hero__trust reveal">14-day free trial &middot; No credit card &middot; Cancel anytime by text</p>
+        <p class="hero__trust reveal">Plans from $49/mo &middot; 14-day free trial &middot; No credit card</p>
         <div class="hero__cta-row reveal">
           <button class="btn btn--primary" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join the waitlist &rarr;</button>
           <button class="btn btn--ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
@@ -693,22 +688,11 @@ footer p{font-size:0.8rem;color:var(--text-muted)}
         <div class="proof__stat-label">post to social media <strong>consistently</strong>. The other two thirds post sporadically or not at all</div>
         <span class="proof__source">LocaliQ Small Business Marketing Trends, 2026</span>
       </div>
-      <div class="proof__stat-block reveal">
-        <span class="proof__stat-num"><em class="count-num" data-target="98" data-suffix="%">98</em>%</span>
-        <div class="proof__stat-label">of SMS messages are read — versus <strong>22% for email</strong>. The channel that reaches people is already in your pocket</div>
-        <span class="proof__source">SimpleTexting SMS Marketing Statistics, 2026</span>
-      </div>
     </div>
     <p class="proof__note reveal">Sidekick is built for the 52%. No dashboard to learn. No app to open. Just text.</p>
-    <div class="proof__quotes reveal">
-      <blockquote class="proof__quote">
-        <p class="proof__quote-text">I was spending 3 hours every Sunday writing posts that maybe 40 people saw. First week with Sidekick I just texted YES a few times and my Instagram actually got comments from people I don't know.</p>
-        <cite class="proof__quote-cite">Maria T. &mdash; Floral studio owner, early access</cite>
-      </blockquote>
-      <blockquote class="proof__quote">
-        <p class="proof__quote-text">My response to Google reviews went from once a month to same-day. Three customers mentioned it when they came in. That's real.</p>
-        <cite class="proof__quote-cite">Derek L. &mdash; HVAC contractor, early access</cite>
-      </blockquote>
+    <div class="proof__waitlist reveal">
+      <span class="proof__waitlist-num">203+</span>
+      <span class="proof__waitlist-label">businesses already on the waitlist &mdash; opening to the first 500 in May 2026</span>
     </div>
   </div>
 </section>
