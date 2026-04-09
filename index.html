@@ -284,6 +284,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .phone__prompts{
   padding:10px 16px 16px;
   display:flex;flex-wrap:wrap;gap:7px;
+  align-items:flex-start;
   border-top:1px solid var(--border);
 }
 .prompt-btn{
@@ -295,6 +296,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   color:var(--text);cursor:pointer;
   transition:all 0.15s;
   display:inline-flex;align-items:center;
+  align-self:flex-start;
 }
 .prompt-btn:hover{border-color:var(--accent);color:var(--accent)}
 
@@ -1330,6 +1332,8 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .proof__note{text-align:left}
   /* Proof stat label: ensure block display for margin:auto centering to work alongside left text */
   .proof__stat-label{display:block}
+  /* Sign-up legal note: body copy stays left-aligned */
+  .signup-note{text-align:left}
 }
 @media(max-width:480px){
   .container{padding:0 16px}
