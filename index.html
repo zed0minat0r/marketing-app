@@ -56,7 +56,7 @@
   --font:'Geist',system-ui,sans-serif;
   --mono:'Geist Mono',monospace;
 }
-html{font-size:16px;scroll-behavior:smooth}
+html{font-size:16px;scroll-behavior:smooth;overflow-x:clip}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
 a{color:var(--accent);text-decoration:none}
 .container{max-width:1120px;margin:0 auto;padding:0 32px}
@@ -579,6 +579,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .compare{
   padding:140px 0;
   background:var(--bg);
+  overflow-x:hidden;
 }
 .compare__eyebrow{
   font-family:var(--mono);font-size:0.72rem;
@@ -681,6 +682,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   padding:0;
   background:var(--bg2);
   border-top:1px solid var(--border);
+  overflow-x:hidden;
   border-bottom:1px solid var(--border);
   overflow:hidden;
 }
@@ -756,6 +758,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .pricing{
   padding:140px 0;
   background:var(--bg);
+  overflow-x:hidden;
 }
 .section-eyebrow{
   font-family:var(--mono);font-size:0.72rem;
@@ -904,6 +907,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   padding:140px 0;
   background:var(--bg2);
   border-top:1px solid var(--border);
+  overflow-x:hidden;
 }
 .faq__list{
   max-width:680px;margin:0 auto;
