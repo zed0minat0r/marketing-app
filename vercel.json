@@ -3,45 +3,13 @@
   "buildCommand": "npm install",
   "outputDirectory": ".",
   "functions": {
-"api/referral/generate.js": {
-      "memory": 128,
-      "maxDuration": 10
-    },
-    "api/referral/track.js": {
-      "memory": 128,
-      "maxDuration": 5
-    },
-    "api/referral/convert.js": {
-      "memory": 256,
-      "maxDuration": 15
-    },
     "api/sms/inbound.js": {
       "memory": 256,
       "maxDuration": 30
     },
-    "api/jobs/publish.js": {
-      "memory": 256,
-      "maxDuration": 60
-    },
-    "api/jobs/collect-analytics.js": {
+    "api/jobs/[action].js": {
       "memory": 512,
       "maxDuration": 300
-    },
-    "api/jobs/weekly-summary.js": {
-      "memory": 512,
-      "maxDuration": 300
-    },
-    "api/jobs/refresh-tokens.js": {
-      "memory": 256,
-      "maxDuration": 60
-    },
-    "api/jobs/reset-generations.js": {
-      "memory": 128,
-      "maxDuration": 30
-    },
-    "api/jobs/cleanup-conversations.js": {
-      "memory": 256,
-      "maxDuration": 60
     },
     "api/stripe/webhook.js": {
       "memory": 256,
@@ -57,16 +25,8 @@
       }
     },
     {
-      "src": "/api/referral/generate",
-      "dest": "/api/referral/generate.js"
-    },
-    {
-      "src": "/api/referral/track",
-      "dest": "/api/referral/track.js"
-    },
-    {
-      "src": "/api/referral/convert",
-      "dest": "/api/referral/convert.js"
+      "src": "/api/referral/(generate|track|convert)",
+      "dest": "/api/referral/[action].js?action=$1"
     },
     {
       "src": "/api/sms/inbound",
@@ -85,68 +45,12 @@
       "dest": "/api/social/post.js"
     },
     {
-      "src": "/api/oauth/meta/start",
-      "dest": "/api/oauth/meta/start.js"
+      "src": "/api/oauth/(meta|twitter|linkedin|pinterest|google)/(start|callback)",
+      "dest": "/api/oauth/[...route].js?route=$1&route=$2"
     },
     {
-      "src": "/api/oauth/meta/callback",
-      "dest": "/api/oauth/meta/callback.js"
-    },
-    {
-      "src": "/api/oauth/twitter/start",
-      "dest": "/api/oauth/twitter/start.js"
-    },
-    {
-      "src": "/api/oauth/twitter/callback",
-      "dest": "/api/oauth/twitter/callback.js"
-    },
-    {
-      "src": "/api/oauth/linkedin/start",
-      "dest": "/api/oauth/linkedin/start.js"
-    },
-    {
-      "src": "/api/oauth/linkedin/callback",
-      "dest": "/api/oauth/linkedin/callback.js"
-    },
-    {
-      "src": "/api/oauth/pinterest/start",
-      "dest": "/api/oauth/pinterest/start.js"
-    },
-    {
-      "src": "/api/oauth/pinterest/callback",
-      "dest": "/api/oauth/pinterest/callback.js"
-    },
-    {
-      "src": "/api/oauth/google/start",
-      "dest": "/api/oauth/google/start.js"
-    },
-    {
-      "src": "/api/oauth/google/callback",
-      "dest": "/api/oauth/google/callback.js"
-    },
-    {
-      "src": "/api/jobs/publish",
-      "dest": "/api/jobs/publish.js"
-    },
-    {
-      "src": "/api/jobs/collect-analytics",
-      "dest": "/api/jobs/collect-analytics.js"
-    },
-    {
-      "src": "/api/jobs/weekly-summary",
-      "dest": "/api/jobs/weekly-summary.js"
-    },
-    {
-      "src": "/api/jobs/refresh-tokens",
-      "dest": "/api/jobs/refresh-tokens.js"
-    },
-    {
-      "src": "/api/jobs/reset-generations",
-      "dest": "/api/jobs/reset-generations.js"
-    },
-    {
-      "src": "/api/jobs/cleanup-conversations",
-      "dest": "/api/jobs/cleanup-conversations.js"
+      "src": "/api/jobs/(publish|collect-analytics|weekly-summary|refresh-tokens|reset-generations|cleanup-conversations)",
+      "dest": "/api/jobs/[action].js?action=$1"
     },
     {
       "src": "/connected",
