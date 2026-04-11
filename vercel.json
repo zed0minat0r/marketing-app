@@ -3,11 +3,7 @@
   "buildCommand": "npm install",
   "outputDirectory": ".",
   "functions": {
-    "api/og.js": {
-      "memory": 256,
-      "maxDuration": 10
-    },
-    "api/referral/generate.js": {
+"api/referral/generate.js": {
       "memory": 128,
       "maxDuration": 10
     },
@@ -58,13 +54,6 @@
       "dest": "/api/stripe/webhook.js",
       "headers": {
         "x-vercel-body-parser": "off"
-      }
-    },
-    {
-      "src": "/api/og",
-      "dest": "/api/og.js",
-      "headers": {
-        "Cache-Control": "public, max-age=86400, s-maxage=86400"
       }
     },
     {
