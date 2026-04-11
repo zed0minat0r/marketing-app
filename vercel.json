@@ -1,6 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm install",
+  "outputDirectory": ".",
   "functions": {
     "api/og.js": {
       "memory": 256,
