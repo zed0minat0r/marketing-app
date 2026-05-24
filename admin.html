@@ -1004,6 +1004,28 @@
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  function forceTop() {
+    if (document.activeElement && typeof document.activeElement.blur === 'function') {
+      document.activeElement.blur();
+    }
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+
+  function revealDashboard() {
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    forceTop();
+    requestAnimationFrame(() => {
+      forceTop();
+      setTimeout(forceTop, 50);
+      setTimeout(forceTop, 300);
+    });
+  }
+
   async function tryAuth() {
     const pw = document.getElementById('pw-input').value.trim();
     if (!pw) return;
@@ -1011,9 +1033,7 @@
     const hash = await sha256(pw);
     if (hash === ADMIN_HASH) {
       sessionStorage.setItem('admin_authed', '1');
-      document.getElementById('auth-gate').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      window.scrollTo(0, 0);
+      revealDashboard();
       loadAll();
     } else {
       document.getElementById('auth-error').textContent = 'Incorrect password.';
@@ -1027,9 +1047,7 @@
 
   // Auto-bypass if already authed this session
   if (sessionStorage.getItem('admin_authed') === '1') {
-    document.getElementById('auth-gate').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    window.scrollTo(0, 0);
+    revealDashboard();
   }
 
   // =============================================
