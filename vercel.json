@@ -1,6 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm install",
+  "outputDirectory": ".",
   "functions": {
     "api/sms/inbound.js": {
       "memory": 256,
