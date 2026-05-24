@@ -464,10 +464,13 @@
   const SUPABASE_URL = window._SUPABASE_URL || '';
   const SUPABASE_ANON_KEY = window._SUPABASE_ANON_KEY || '';
 
-  // Admin password hash — SHA-256 of ADMIN_PASSWORD env var
-  // Default hash is SHA-256 of "sidekick-admin-2025" for local dev
-  // In production, override window._ADMIN_HASH via a server-rendered meta tag or inline script
-  const ADMIN_HASH = window._ADMIN_HASH || '3e7a2b8c4d6f1e9a0b5c3d7e2f4a8b1c6e3d5a7b9c2e4f6a8b0d2e4f6a8b1c3';
+  // Admin password hash — SHA-256 of the admin password.
+  // Embedded directly because admin.html is served as a static file; there
+  // is no server-rendering step to inject window._ADMIN_HASH. The actual
+  // password is known only to the admin and rotating it requires updating
+  // this line + committing. Client-side gates like this are deterrent-grade,
+  // not auth-grade — anyone reading the source can read the hash.
+  const ADMIN_HASH = '8df1ffe76e94fa53baaed34d7adb86cf25efbfc392c7488b14766a2581c57db2';
 
   // =============================================
   // AUTH
