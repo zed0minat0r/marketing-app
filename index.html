@@ -498,21 +498,40 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:11px;
-  border-radius:52px;
+  padding:14px;
+  border-radius:54px;
   width:100%;
   max-width:340px;
-  background:linear-gradient(180deg, #1c1916 0%, #15120f 50%, #1c1916 100%);
+  background:linear-gradient(180deg, #1f1c18 0%, #161310 50%, #1f1c18 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.06),
-    inset 0 2px 0 rgba(255,255,255,0.08),
-    inset 0 -2px 0 rgba(0,0,0,0.55),
-    0 30px 70px rgba(0,0,0,0.55),
-    0 12px 30px rgba(0,0,0,0.45);
+    inset 0 0 0 1px rgba(255,255,255,0.08),
+    inset 0 3px 0 rgba(255,255,255,0.10),
+    inset 0 -3px 0 rgba(0,0,0,0.55),
+    0 32px 72px rgba(0,0,0,0.55),
+    0 14px 32px rgba(0,0,0,0.45);
   transform-origin:50% 50%;
   animation:phone-float 14s ease-in-out infinite;
   will-change:transform;
 }
+/* Metallic side rim — flat siblings peeking out from behind the body, giving the
+   illusion of thickness as the phone rocks. Safe on iOS (no preserve-3d). */
+.how-phone-shell::before,
+.how-phone-shell::after{
+  content:'';
+  position:absolute;
+  top:10px;
+  bottom:10px;
+  width:8px;
+  border-radius:6px;
+  background:linear-gradient(180deg, #38332b 0%, #100e0a 18%, #211d18 50%, #0a0907 82%, #38332b 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 rgba(0,0,0,0.65),
+    0 2px 4px rgba(0,0,0,0.5);
+  z-index:-1;
+}
+.how-phone-shell::before{ left:-3px; }
+.how-phone-shell::after{ right:-3px; }
 @keyframes phone-float{
   0%   {transform:rotateY(-9deg) rotateX(4deg) translateY(-4px)}
   25%  {transform:rotateY(0deg)  rotateX(5deg) translateY(0)}
