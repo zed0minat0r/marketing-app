@@ -514,11 +514,20 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
     -32px 40px 60px rgba(0,0,0,0.6),
     18px 36px 88px rgba(0,0,0,0.55),
     0 14px 36px rgba(0,0,0,0.5);
-  transform:rotateY(-14deg) rotateX(6deg);
   transform-origin:50% 50%;
   transform-style:preserve-3d;
-  transition:transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation:phone-float 9s ease-in-out infinite;
   will-change:transform;
+}
+@keyframes phone-float{
+  0%   {transform:rotateY(-10deg) rotateX(5deg)  translateY(-6px)}
+  25%  {transform:rotateY(-16deg) rotateX(3deg)  translateY(2px)}
+  50%  {transform:rotateY(-12deg) rotateX(7deg)  translateY(6px)}
+  75%  {transform:rotateY(-8deg)  rotateX(5deg)  translateY(2px)}
+  100% {transform:rotateY(-10deg) rotateX(5deg)  translateY(-6px)}
+}
+@media (prefers-reduced-motion: reduce){
+  .how-phone-shell{animation:none;transform:rotateY(-12deg) rotateX(5deg)}
 }
 .how-phone-shell::before{
   content:'';
@@ -2626,19 +2635,23 @@ window.addEventListener('scroll', () => {
   updateHow();
 })();
 
-/* ─── HOW IT WORKS: PHONE 3D MOUSE TILT ─── */
+/* ─── HOW IT WORKS: PHONE 3D MOUSE TILT (overrides float animation when active) ─── */
 (function initPhoneTilt() {
   const phoneCol = document.querySelector('.how__phone-col');
   const phoneShell = document.querySelector('.how-phone-shell');
   if (!phoneCol || !phoneShell) return;
-  // Skip on touch devices — there's no hover, and the gyro tilt below would be jittery during scroll.
+  // Skip on touch devices — there's no hover, the float keeps doing its thing.
   if (matchMedia('(hover: none)').matches) return;
-  const baseYaw = -14, basePitch = 6;
+  const baseYaw = -12, basePitch = 5;
   const maxYaw = 18, maxPitch = 12;
   let raf = 0;
   function setTransform(yaw, pitch) {
     phoneShell.style.transform = `rotateY(${yaw}deg) rotateX(${pitch}deg)`;
   }
+  phoneCol.addEventListener('mouseenter', function() {
+    phoneShell.style.animationPlayState = 'paused';
+    phoneShell.style.transition = 'transform 0.18s ease-out';
+  });
   phoneCol.addEventListener('mousemove', function(e) {
     const rect = phoneCol.getBoundingClientRect();
     const nx = (e.clientX - rect.left) / rect.width - 0.5;
@@ -2650,14 +2663,14 @@ window.addEventListener('scroll', () => {
   }, {passive: true});
   phoneCol.addEventListener('mouseleave', function() {
     cancelAnimationFrame(raf);
-    phoneShell.style.transition = 'transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)';
+    // Smoothly ease back to the float baseline, then hand control back to the keyframe animation.
+    phoneShell.style.transition = 'transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)';
     setTransform(baseYaw, basePitch);
     setTimeout(function() {
-      phoneShell.style.transition = 'transform 0.15s linear';
-    }, 800);
-  });
-  phoneCol.addEventListener('mouseenter', function() {
-    phoneShell.style.transition = 'transform 0.15s linear';
+      phoneShell.style.transition = '';
+      phoneShell.style.transform = '';
+      phoneShell.style.animationPlayState = 'running';
+    }, 720);
   });
 })();
 
