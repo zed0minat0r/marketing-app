@@ -1,7 +1,6 @@
 {
   "version": 2,
   "buildCommand": "npm install",
-  "outputDirectory": ".",
   "functions": {
     "api/sms/inbound.js": {
       "memory": 256,
@@ -16,53 +15,8 @@
       "maxDuration": 10
     }
   },
-  "routes": [
-    {
-      "src": "/api/stripe/webhook",
-      "dest": "/api/stripe/webhook.js",
-      "headers": {
-        "x-vercel-body-parser": "off"
-      }
-    },
-    {
-      "src": "/api/referral/(generate|track|convert)",
-      "dest": "/api/referral/[action].js?action=$1"
-    },
-    {
-      "src": "/api/sms/inbound",
-      "dest": "/api/sms/inbound.js"
-    },
-    {
-      "src": "/api/sms/outbound",
-      "dest": "/api/sms/outbound.js"
-    },
-    {
-      "src": "/api/ai/generate",
-      "dest": "/api/ai/generate.js"
-    },
-    {
-      "src": "/api/social/post",
-      "dest": "/api/social/post.js"
-    },
-    {
-      "src": "/api/oauth/(meta|twitter|linkedin|pinterest|google)/(start|callback)",
-      "dest": "/api/oauth/[...route].js?route=$1&route=$2"
-    },
-    {
-      "src": "/api/jobs/(publish|collect-analytics|weekly-summary|refresh-tokens|reset-generations|cleanup-conversations)",
-      "dest": "/api/jobs/[action].js?action=$1"
-    },
-    {
-      "src": "/connected",
-      "dest": "/connected.html"
-    },
-    {
-      "src": "/admin",
-      "dest": "/admin.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+  "rewrites": [
+    { "source": "/connected", "destination": "/connected.html" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }
