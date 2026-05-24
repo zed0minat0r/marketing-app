@@ -491,42 +491,143 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   position:relative;
   z-index:2;
 }
-.how-phone{
+.how-phone-shell{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:11px;
+  border-radius:52px;
   width:100%;
-  max-width:320px;
-  background:var(--surface);
-  border:1px solid var(--border2);
-  border-radius:34px;
-  overflow:hidden;
+  max-width:340px;
+  background:
+    linear-gradient(160deg, #322c24 0%, #151310 32%, #1a1714 50%, #151310 68%, #322c24 100%);
   box-shadow:
-    0 0 0 6px rgba(255,255,255,0.03),
-    0 24px 64px rgba(0,0,0,0.55),
-    0 8px 24px rgba(0,0,0,0.35);
+    inset 0 0 0 1px rgba(255,255,255,0.08),
+    inset 0 2px 0 rgba(255,255,255,0.1),
+    inset 0 -2px 0 rgba(0,0,0,0.55),
+    0 36px 88px rgba(0,0,0,0.7),
+    0 14px 36px rgba(0,0,0,0.5);
+  isolation:isolate;
 }
-.how-phone__notch{
-  height:24px;
+.how-phone-glow{
+  position:absolute;
+  inset:-40px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(212,245,60,0.22), transparent 55%),
+    radial-gradient(circle at 75% 80%, rgba(212,245,60,0.12), transparent 60%);
+  filter:blur(48px);
+  z-index:-1;
+  pointer-events:none;
+  animation:phone-glow 8s ease-in-out infinite alternate;
+}
+@keyframes phone-glow{
+  0%{opacity:0.7;transform:scale(0.97)}
+  100%{opacity:1;transform:scale(1.04)}
+}
+.how-phone{
+  position:relative;
+  width:100%;
   background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
+  border-radius:42px;
+  overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.04);
 }
-.how-phone__notch-pill{
-  width:72px;height:6px;
-  background:var(--border2);border-radius:3px;
+.how-phone::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:55%;
+  background:linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 22%, transparent 38%);
+  pointer-events:none;
+  z-index:6;
 }
+.how-phone__island{
+  position:absolute;
+  top:11px;
+  left:50%;
+  transform:translateX(-50%);
+  width:96px;
+  height:26px;
+  background:#000;
+  border-radius:14px;
+  z-index:5;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255,255,255,0.04),
+    0 0 0 1px rgba(0,0,0,0.6);
+}
+.how-phone__island::after{
+  content:'';
+  position:absolute;
+  top:50%;right:14px;
+  transform:translateY(-50%);
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.08);
+  box-shadow:inset 0 0 2px rgba(0,0,0,0.8);
+}
+.how-phone__statusbar{
+  padding:16px 26px 4px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:var(--text);
+  font-family:var(--font);
+  font-size:0.85rem;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  position:relative;
+  z-index:2;
+  height:46px;
+}
+.how-phone__time{padding-left:6px}
+.how-phone__statusbar-right{
+  display:flex;align-items:center;gap:5px;
+  color:var(--text);
+}
+.how-phone__statusbar-right svg{display:block}
 .how-phone__header{
-  background:var(--surface2);
-  padding:9px 16px;
+  background:transparent;
+  padding:6px 18px 12px;
   display:flex;align-items:center;gap:10px;
-  border-bottom:1px solid var(--border);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  position:relative;
+  z-index:2;
 }
 .how-phone__avatar{
-  width:30px;height:30px;border-radius:50%;
+  width:32px;height:32px;border-radius:50%;
   background:var(--accent);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
   font-size:0.75rem;font-weight:700;color:#0e0d0b;
+  box-shadow:0 0 0 1.5px rgba(212,245,60,0.25), 0 4px 12px rgba(212,245,60,0.18);
 }
-.how-phone__name{font-size:0.82rem;font-weight:600;line-height:1.2}
-.how-phone__status{font-size:0.75rem;color:var(--green)}
+.how-phone__name{font-size:0.86rem;font-weight:600;line-height:1.2;color:var(--text)}
+.how-phone__status{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:0.72rem;color:var(--green);font-weight:500;
+  margin-top:1px;
+}
+.how-phone__status-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  position:relative;
+  box-shadow:0 0 0 0 rgba(74,222,128,0.45);
+  animation:phone-pulse 2s ease-in-out infinite;
+}
+@keyframes phone-pulse{
+  0%, 100%{box-shadow:0 0 0 0 rgba(74,222,128,0.55)}
+  50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}
+}
+.how-phone__home{
+  height:5px;
+  width:38%;
+  background:var(--text);
+  opacity:0.55;
+  border-radius:4px;
+  margin:10px auto 12px;
+  position:relative;
+  z-index:2;
+}
 .how-phone__msgs{
   padding:14px 12px;
   height:400px;
@@ -1775,16 +1876,26 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
       <!-- Center: phone -->
       <div class="how__phone-col">
-        <div class="how-phone">
-          <div class="how-phone__notch"><div class="how-phone__notch-pill"></div></div>
-          <div class="how-phone__header">
-            <div class="how-phone__avatar">SK</div>
-            <div>
-              <div class="how-phone__name">Sidekick</div>
-              <div class="how-phone__status">Active now</div>
+        <div class="how-phone-shell">
+          <div class="how-phone-glow" aria-hidden="true"></div>
+          <div class="how-phone">
+            <div class="how-phone__island" aria-hidden="true"></div>
+            <div class="how-phone__statusbar" aria-hidden="true">
+              <span class="how-phone__time">9:41</span>
+              <div class="how-phone__statusbar-right">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="4" rx="0.5" fill="currentColor"/><rect x="4.5" y="5" width="3" height="6" rx="0.5" fill="currentColor"/><rect x="9" y="3" width="3" height="8" rx="0.5" fill="currentColor"/><rect x="13.5" y="0" width="3" height="11" rx="0.5" fill="currentColor"/></svg>
+                <svg width="15" height="11" viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 9.2a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" fill="currentColor"/><path d="M4.2 6.4a4.4 4.4 0 016.6 0M1.5 4a8 8 0 0112 0" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+                <svg width="26" height="11" viewBox="0 0 26 11" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="22" height="10" rx="2.5" stroke="currentColor" stroke-opacity="0.5"/><rect x="2.5" y="2.5" width="18" height="6" rx="1" fill="currentColor"/><rect x="23.5" y="3.5" width="2" height="4" rx="0.6" fill="currentColor" fill-opacity="0.6"/></svg>
+              </div>
             </div>
-          </div>
-          <div class="how-phone__msgs" id="howMsgList">
+            <div class="how-phone__header">
+              <div class="how-phone__avatar">SK</div>
+              <div>
+                <div class="how-phone__name">Sidekick</div>
+                <div class="how-phone__status"><span class="how-phone__status-dot" aria-hidden="true"></span>Active now</div>
+              </div>
+            </div>
+            <div class="how-phone__msgs" id="howMsgList">
             <!-- Step 1 messages -->
             <div class="how-msg how-msg--time" data-step="0" data-seq="0">Today 9:41 AM</div>
             <div class="how-msg how-msg--in" data-step="0" data-seq="1">Hey! I&rsquo;m Sidekick. What&rsquo;s your business name?</div>
@@ -1803,8 +1914,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
             <div class="how-msg how-msg--in" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
             <div class="how-msg how-msg--in" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
           </div>
-          <div class="how-check" id="howCheck">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <div class="how-phone__home" aria-hidden="true"></div>
+            <div class="how-check" id="howCheck">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
           </div>
         </div>
       </div>
