@@ -633,8 +633,9 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   font-weight:600;
   letter-spacing:-0.01em;
   position:relative;
-  z-index:2;
+  z-index:4;
   height:46px;
+  background:var(--bg);
 }
 .how-phone__time{padding-left:6px}
 .how-phone__statusbar-right{
@@ -643,12 +644,12 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 }
 .how-phone__statusbar-right svg{display:block}
 .how-phone__header{
-  background:transparent;
+  background:var(--bg);
   padding:6px 18px 12px;
   display:flex;align-items:center;gap:10px;
   border-bottom:1px solid rgba(255,255,255,0.06);
   position:relative;
-  z-index:2;
+  z-index:4;
 }
 .how-phone__avatar{
   width:32px;height:32px;border-radius:50%;
@@ -675,23 +676,29 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   0%, 100%{box-shadow:0 0 0 0 rgba(74,222,128,0.55)}
   50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}
 }
+.how-phone__home-area{
+  height:36px;
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:4;
+}
 .how-phone__home{
   height:5px;
   width:38%;
   background:var(--text);
   opacity:0.55;
   border-radius:4px;
-  margin:10px auto 12px;
-  position:relative;
-  z-index:2;
 }
 .how-phone__msgs{
   padding:14px 12px 0;
   height:400px;
   overflow:hidden;
   position:relative;
-  mask-image:linear-gradient(to bottom, #000 0%, #000 82%, transparent 100%);
-  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 82%, transparent 100%);
+  mask-image:linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
 }
 .how-phone__msgs-inner{
   display:flex;flex-direction:column;gap:7px;
@@ -1982,7 +1989,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
             <div class="how-msg how-msg--in" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
             </div>
           </div>
-            <div class="how-phone__home" aria-hidden="true"></div>
+            <div class="how-phone__home-area" aria-hidden="true"><div class="how-phone__home"></div></div>
             <div class="how-check" id="howCheck">
               <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
@@ -2600,7 +2607,7 @@ window.addEventListener('scroll', () => {
       checkEl.classList.toggle('visible', stepIdx === 2 && seqFraction > 0.7);
     }
 
-    // Auto-scroll the inner messages so the latest visible message stays in view
+    // Auto-scroll the inner messages so the latest visible message stays in view (above the bottom fade)
     const inner = document.getElementById('howMsgInner');
     const msgsBox = document.getElementById('howMsgList');
     if (inner && msgsBox) {
@@ -2610,8 +2617,9 @@ window.addEventListener('scroll', () => {
       } else {
         const last = vis[vis.length - 1];
         const lastBottom = last.offsetTop + last.offsetHeight;
-        const visibleH = msgsBox.clientHeight - 28; // account for top padding
-        const offset = Math.max(0, lastBottom - visibleH);
+        // Bottom fade starts at 82% of the container; keep the latest message above it.
+        const targetBottom = msgsBox.clientHeight * 0.80;
+        const offset = Math.max(0, lastBottom - targetBottom);
         inner.style.transform = `translateY(${-offset}px)`;
       }
     }
