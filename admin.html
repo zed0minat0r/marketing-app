@@ -785,6 +785,79 @@
     }
 
     /* ==========================================
+       CUSTOMER PHOTOS GRID
+    ========================================== */
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .photo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .photo-card__thumb {
+      aspect-ratio: 1;
+      background: var(--bg);
+      object-fit: cover;
+      width: 100%;
+      display: block;
+    }
+
+    .photo-card__meta {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .photo-card__user {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .photo-card__caption {
+      font-size: 0.78rem;
+      line-height: 1.4;
+      color: var(--text);
+    }
+
+    .photo-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .photo-card__tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      padding: 2px 6px;
+      background: rgba(212,245,60,0.08);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      color: var(--accent);
+    }
+
+    .photo-card__time {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+    }
+
+    .photo-card__tag--pending {
+      color: var(--text-muted);
+      background: transparent;
+    }
+
+    /* ==========================================
        LAYOUT GRID (desktop 2-col lower sections)
     ========================================== */
     @media (min-width: 960px) {
@@ -971,6 +1044,17 @@
 
     </div>
 
+    <!-- CUSTOMER PHOTOS -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Customer Photos</span>
+        <span class="section-meta" id="photos-count">—</span>
+      </div>
+      <div class="photos-grid" id="photos-grid">
+        <div class="state-block loading">Loading photos</div>
+      </div>
+    </div>
+
   </main>
 
   <footer class="admin-footer">
@@ -1108,7 +1192,7 @@
     const ts = document.getElementById('last-refresh');
     ts.textContent = 'Refreshing…';
 
-    const results = await Promise.allSettled([loadStats(), loadChart(), loadUsers(), loadErrors()]);
+    const results = await Promise.allSettled([loadStats(), loadChart(), loadUsers(), loadErrors(), loadPhotos()]);
 
     const errors = results.filter(r => r.status === 'rejected');
     if (errors.length) {
@@ -1415,6 +1499,64 @@
         ${err.user_id ? `<div class="error-entry-user">user ${err.user_id}</div>` : ''}
       </div>
     `).join('');
+  }
+
+  // =============================================
+  // CUSTOMER PHOTOS
+  // =============================================
+  async function loadPhotos() {
+    const gridEl = document.getElementById('photos-grid');
+    const countEl = document.getElementById('photos-count');
+
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      gridEl.innerHTML = '<div class="state-block">No data source connected</div>';
+      countEl.textContent = '—';
+      return;
+    }
+
+    let data = [];
+    try {
+      const res = await sbFetch('customer_photos', {
+        select: 'id,user_id,public_url,mime_type,caption,tags,tags_status,created_at',
+        order: 'created_at.desc',
+        limit: 24,
+        is_archived: 'eq.false',
+      });
+      data = res.data || [];
+    } catch (e) {
+      gridEl.innerHTML = '<div class="state-block">Photos table not yet ready</div>';
+      countEl.textContent = '—';
+      return;
+    }
+
+    countEl.textContent = `${data.length} most recent`;
+
+    if (data.length === 0) {
+      gridEl.innerHTML = '<div class="state-block">No customer photos yet — they\'ll appear here when users text in MMS attachments</div>';
+      return;
+    }
+
+    gridEl.innerHTML = data.map(p => {
+      const tags = Array.isArray(p.tags) ? p.tags : [];
+      const tagHtml = p.tags_status === 'pending'
+        ? '<span class="photo-card__tag photo-card__tag--pending">tagging…</span>'
+        : tags.slice(0, 4).map(t => `<span class="photo-card__tag">${t}</span>`).join('');
+
+      const userId = (p.user_id || '').slice(0, 8);
+      const caption = (p.caption || '').slice(0, 80);
+
+      return `
+        <div class="photo-card">
+          <img class="photo-card__thumb" src="${p.public_url}" alt="" loading="lazy" />
+          <div class="photo-card__meta">
+            <div class="photo-card__user">user ${userId}…</div>
+            ${caption ? `<div class="photo-card__caption">${caption}</div>` : ''}
+            <div class="photo-card__tags">${tagHtml}</div>
+            <div class="photo-card__time">${fmtDateShort(p.created_at)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   // =============================================

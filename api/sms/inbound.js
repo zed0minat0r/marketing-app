@@ -20,6 +20,7 @@ const { checkRateLimit } = require('../../lib/rate-limit');
 const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
 const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand } = require('../../lib/intent');
+const { processInboundMedia, extractMedia } = require('../../lib/photo-intake');
 const {
   getUserByPhone,
   createUser,
@@ -232,8 +233,11 @@ module.exports = async function handler(req, res) {
   const from = req.body?.From;
   const messageBody = (req.body?.Body || '').trim();
   const messageSid = req.body?.MessageSid;
+  const numMedia = parseInt(req.body?.NumMedia || '0', 10) || 0;
+  const hasMedia = numMedia > 0;
 
-  if (!from || !messageBody) {
+  // MMS may arrive with media-only and an empty body — that's valid.
+  if (!from || (!messageBody && !hasMedia)) {
     return res.status(400).send('Missing required fields');
   }
 
@@ -274,6 +278,95 @@ module.exports = async function handler(req, res) {
       await deleteUser(user.id);
       await sendSms(from, "Your account and all data have been permanently deleted. You can restart anytime by texting us again.");
       return res.status(200).send('OK');
+    }
+
+    // ---- MMS: photo intake flow ----
+    // Inbound MMS lands as a separate path from text: we save each attachment
+    // to the user's photo library and reply with a confirmation.
+    if (hasMedia) {
+      // Unrecognized users (still in onboarding from the createUser above):
+      // don't accept photos until they finish setup.
+      if (!user.onboarding_complete) {
+        replyText = "Got your photo, but please finish quick setup first. " +
+                    "Reply with your business name to continue.";
+        intent = INTENTS.ONBOARDING;
+      } else {
+        const result = await processInboundMedia({
+          user,
+          twilioSid: messageSid,
+          caption: messageBody,
+          body: req.body,
+          waitForTagging: !user.first_photo_received_at, // wait only on the first
+        });
+
+        if (result.savedCount === 0) {
+          replyText = result.skippedCount > 0
+            ? "I could not save that attachment. We only support image files up to 10MB (JPG, PNG, HEIC, WebP)."
+            : "Got your message but no photo was attached.";
+          intent = INTENTS.UNKNOWN;
+        } else {
+          const tag = result.primaryTagGuess;
+          const isFirstPhoto = !user.first_photo_received_at;
+
+          if (isFirstPhoto) {
+            // First-photo onboarding prompt — asks how they want photo intake
+            // to behave from now on. Persists later when they answer DRAFT/LIBRARY.
+            const tagPhrase = tag ? `that ${tag} shot` : 'your photo';
+            replyText =
+              `Saved ${tagPhrase} to your library.\n\n` +
+              `Want me to draft a post from photos you text me, or just keep them in your library for later?\n\n` +
+              `Reply DRAFT or LIBRARY.`;
+            await updateUser(user.id, {
+              first_photo_received_at: new Date().toISOString(),
+            }).catch(err => console.error('Failed to mark first_photo_received_at:', err));
+          } else if (user.confirm_photos_enabled !== false) {
+            const tagPhrase = tag ? `${tag} shot` : 'photo';
+            const countSuffix = result.savedCount > 1 ? ` (+${result.savedCount - 1} more)` : '';
+            replyText = `Got it — saved that ${tagPhrase} to your library${countSuffix}.`;
+          } else {
+            // User has confirmations off — reply 200 OK without sending anything.
+            replyText = '';
+          }
+          intent = 'photo_intake';
+        }
+      }
+
+      if (replyText) {
+        const sentMessage = await sendSms(from, replyText);
+        await logMessage({
+          userId: user.id,
+          direction: 'outbound',
+          body: replyText,
+          intent,
+          twilioSid: sentMessage.sid,
+        }).catch(console.error);
+      }
+      return res.status(200).send('OK');
+    }
+
+    // ---- Photo-intake follow-up: DRAFT / LIBRARY response ----
+    // After their very first photo, we ask how they want intake to behave.
+    // Answer is one word — match before falling into the normal flow.
+    if (user.first_photo_received_at && user.auto_draft_on_photo === null) {
+      const trimmed = messageBody.trim().toUpperCase();
+      if (trimmed === 'DRAFT' || trimmed === 'LIBRARY') {
+        const autoDraft = (trimmed === 'DRAFT');
+        await updateUser(user.id, { auto_draft_on_photo: autoDraft });
+        replyText = autoDraft
+          ? "Got it. From now on, every photo you text me, I will draft a post for you to approve."
+          : "Got it. Photos will just save to your library for later — I won't auto-draft.";
+        intent = 'photo_intake_pref';
+
+        const sentMessage = await sendSms(from, replyText);
+        await logMessage({
+          userId: user.id,
+          direction: 'outbound',
+          body: replyText,
+          intent,
+          twilioSid: sentMessage.sid,
+        }).catch(console.error);
+        return res.status(200).send('OK');
+      }
     }
 
     // If user is in onboarding, handle that flow
