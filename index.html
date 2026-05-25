@@ -755,7 +755,7 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 /* ─── FEATURES ─── */
 .features-stage{
   position:relative;
-  height:350vh;
+  height:500vh;
 }
 .features-sticky{
   position:sticky;
@@ -1918,7 +1918,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   .how-phone__msgs{height:320px}
   .how__dots-col{flex-direction:row;justify-content:center;align-items:center;gap:20px}
   .how__dot-label{display:none}
-  .features-stage{height:350vh}
+  .features-stage{height:500vh}
   .proof__inner{grid-template-columns:1fr;display:block}
   .proof__stat-block{padding:60px 24px;border-right:none;border-bottom:1px solid var(--border);text-align:center}
   .proof__stat-block:last-child{border-bottom:none}
@@ -2983,6 +2983,35 @@ window.addEventListener('scroll', () => {
     tick();
   }
 
+  // Piecewise dwell/transition: each card holds, then transitions to the next.
+  // n cards = n dwell segments + (n-1) transition segments = 2n-1 total segments.
+  // dwellWeight vs transWeight controls how long each holds vs how long it slides.
+  function cardPosFromScroll(scrolled) {
+    const n = numCards;
+    const dwellWeight = 1.0;   // dwell-segment relative length
+    const transWeight = 0.9;   // transition-segment relative length
+    const totalWeight = n * dwellWeight + (n - 1) * transWeight;
+    let acc = 0;
+    const bounds = []; // [start, end, type ('dwell'|'trans'), index]
+    for (let i = 0; i < n; i++) {
+      bounds.push({ start: acc / totalWeight, end: (acc + dwellWeight) / totalWeight, type: 'dwell', idx: i });
+      acc += dwellWeight;
+      if (i < n - 1) {
+        bounds.push({ start: acc / totalWeight, end: (acc + transWeight) / totalWeight, type: 'trans', idx: i });
+        acc += transWeight;
+      }
+    }
+    for (const b of bounds) {
+      if (scrolled <= b.end) {
+        if (b.type === 'dwell') return b.idx;
+        const local = (scrolled - b.start) / (b.end - b.start);
+        const eased = local < 0.5 ? 2 * local * local : 1 - Math.pow(-2 * local + 2, 2) / 2;
+        return b.idx + eased;
+      }
+    }
+    return n - 1;
+  }
+
   function updateFeatures() {
     if (!prefersMotion) return;
     const stageRect = stage.getBoundingClientRect();
@@ -2990,17 +3019,16 @@ window.addEventListener('scroll', () => {
     const vh = window.innerHeight;
     const scrolled = Math.max(0, Math.min(1, -stageRect.top / (stageH - vh)));
 
-    // Total offset: scroll through (numCards - 1) panels
-    const maxOffset = (numCards - 1) * window.innerWidth;
-    const offset = scrolled * maxOffset;
+    const cardPos = cardPosFromScroll(scrolled);
+    const offset = cardPos * window.innerWidth;
     track.style.transform = `translateX(-${offset}px)`;
 
-    // Which card is active
-    const activeIdx = Math.round(offset / window.innerWidth);
+    // Which card is active (snap to nearest)
+    const activeIdx = Math.round(cardPos);
     dots.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
 
     // Trigger typewriter for visible card cmd
-    const visibleIdx = Math.round(offset / window.innerWidth);
+    const visibleIdx = activeIdx;
     if (!cmdsDone.has(visibleIdx)) {
       cmdsDone.add(visibleIdx);
       const card = cards[visibleIdx];
