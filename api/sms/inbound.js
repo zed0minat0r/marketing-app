@@ -284,9 +284,10 @@ module.exports = async function handler(req, res) {
     // Inbound MMS lands as a separate path from text: we save each attachment
     // to the user's photo library and reply with a confirmation.
     if (hasMedia) {
-      // Unrecognized users (still in onboarding from the createUser above):
-      // don't accept photos until they finish setup.
-      if (!user.onboarding_complete) {
+      const inPhotoStep = !user.onboarding_complete && user.onboarding_step === 'photos';
+      // Block photo intake for users mid-onboarding EXCEPT during the photos
+      // step, where MMS is the whole point.
+      if (!user.onboarding_complete && !inPhotoStep) {
         replyText = "Got your photo, but please finish quick setup first. " +
                     "Reply with your business name to continue.";
         intent = INTENTS.ONBOARDING;
@@ -308,7 +309,17 @@ module.exports = async function handler(req, res) {
           const tag = result.primaryTagGuess;
           const isFirstPhoto = !user.first_photo_received_at;
 
-          if (isFirstPhoto) {
+          if (inPhotoStep) {
+            // MMS during the onboarding 'photos' step — reply with simple
+            // count and stay on this step until they text DONE/SKIP.
+            const { photoStepConfirmation } = require('../../lib/onboarding');
+            replyText = await photoStepConfirmation(user);
+            if (isFirstPhoto) {
+              await updateUser(user.id, {
+                first_photo_received_at: new Date().toISOString(),
+              }).catch(err => console.error('Failed to mark first_photo_received_at:', err));
+            }
+          } else if (isFirstPhoto) {
             // First-photo onboarding prompt — asks how they want photo intake
             // to behave from now on. Persists later when they answer DRAFT/LIBRARY.
             const tagPhrase = tag ? `that ${tag} shot` : 'your photo';
@@ -408,6 +419,32 @@ module.exports = async function handler(req, res) {
       else if (preClassified === INTENTS.REFERRAL) {
         replyText = await handleReferralRequest(user);
         intent = INTENTS.REFERRAL;
+      }
+
+      // Handle CONNECT <platform> intent: generate a one-time OAuth link
+      // and text it back. Falls through to Claude if no platform is identified.
+      else if (preClassified === INTENTS.CONNECT) {
+        const { createOAuthStartLink, normalizePlatform, platformLabel } =
+          require('../../lib/oauth-link');
+        const platformKey = normalizePlatform(messageBody)
+          // Also try just the platform word inside a "connect X" phrase
+          || normalizePlatform(messageBody.replace(/^(connect|link|add|attach)\s+/i, '').replace(/\s+(account|please)?$/i, ''));
+
+        if (platformKey) {
+          try {
+            const link = await createOAuthStartLink({ userId: user.id, platform: platformKey });
+            const label = platformLabel(platformKey, messageBody);
+            replyText = `Tap to connect ${label}:\n${link}\n\nLink expires in 15 minutes.`;
+            intent = INTENTS.CONNECT;
+          } catch (err) {
+            console.error('Failed to create OAuth link:', err);
+            replyText = "I could not generate a connect link right now. Please try again in a moment.";
+            intent = INTENTS.CONNECT;
+          }
+        } else {
+          replyText = "Which platform? Try: \"Connect Facebook\", \"Connect Instagram\", \"Connect Google\", \"Connect LinkedIn\", \"Connect X\", or \"Connect Pinterest\".";
+          intent = INTENTS.CONNECT;
+        }
       }
 
       // For everything else, use Claude

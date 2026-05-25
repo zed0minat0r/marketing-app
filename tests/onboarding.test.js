@@ -10,14 +10,19 @@ const Module = require('module');
 // Track updateUser calls
 let updateUserCalls = [];
 let updateUserReturnValue = null;
+// Allows tone-step / connect-step tests to control whether the user has a
+// connected social account when buildCompleteMessage runs.
+let mockSocialAccounts = [];
+let mockPhotoCount = 0;
 
 // Inject mock into require cache BEFORE loading onboarding
 const mockSupabase = {
   updateUser: async (userId, updates) => {
     updateUserCalls.push({ userId, updates });
-    // Merge updates into the return value
     return { ...updateUserReturnValue, ...updates };
   },
+  getSocialAccounts: async () => mockSocialAccounts,
+  countCustomerPhotos: async () => mockPhotoCount,
 };
 
 require.cache[require.resolve('../lib/supabase')] = {
@@ -25,6 +30,25 @@ require.cache[require.resolve('../lib/supabase')] = {
   filename: require.resolve('../lib/supabase'),
   loaded: true,
   exports: mockSupabase,
+};
+
+// Mock oauth-link to avoid needing a real DB write to oauth_links table.
+const mockOauthLink = {
+  createOAuthStartLink: async ({ userId, platform }) =>
+    `https://sidekik.com/api/oauth/${platform}/start?token=mock_${userId}_${platform}`,
+  normalizePlatform: (input) => {
+    const lower = (input || '').toLowerCase().trim();
+    const map = { facebook: 'meta', meta: 'meta', instagram: 'meta', google: 'google', linkedin: 'linkedin', twitter: 'twitter', x: 'twitter', pinterest: 'pinterest' };
+    return map[lower] || null;
+  },
+  platformLabel: (key) => ({ meta: 'Facebook + Instagram', google: 'Google Business', linkedin: 'LinkedIn', twitter: 'X', pinterest: 'Pinterest' }[key] || key),
+};
+
+require.cache[require.resolve('../lib/oauth-link')] = {
+  id: require.resolve('../lib/oauth-link'),
+  filename: require.resolve('../lib/oauth-link'),
+  loaded: true,
+  exports: mockOauthLink,
 };
 
 const { processOnboarding } = require('../lib/onboarding');
@@ -199,10 +223,9 @@ describe('processOnboarding — type step', () => {
 describe('processOnboarding — tone step', () => {
   beforeEach(() => {
     updateUserCalls = [];
-    updateUserReturnValue = makeUser('done', {
+    updateUserReturnValue = makeUser('connect', {
       business_name: 'Test Biz',
       tone: 'casual',
-      onboarding_complete: true,
     });
   });
 
@@ -215,15 +238,16 @@ describe('processOnboarding — tone step', () => {
 
   for (const [input, expected] of toneInputs) {
     test(`exact match: "${input}"`, async () => {
-      updateUserReturnValue = makeUser('done', {
+      updateUserReturnValue = makeUser('connect', {
         business_name: 'Test Biz',
         tone: expected,
-        onboarding_complete: true,
       });
       const user = makeUser('tone', { business_name: 'Test Biz' });
       const result = await processOnboarding(user, input);
-      assert.equal(result.done, true);
+      assert.equal(result.done, false);
       assert.equal(updateUserCalls[0].updates.tone, expected);
+      // After tone, next step is 'connect' (not 'done')
+      assert.equal(updateUserCalls[0].updates.onboarding_step, 'connect');
     });
   }
 
@@ -239,52 +263,124 @@ describe('processOnboarding — tone step', () => {
   });
 
   test('synonym: formal -> professional', async () => {
-    updateUserReturnValue = makeUser('done', { tone: 'professional', business_name: 'T', onboarding_complete: true });
+    updateUserReturnValue = makeUser('connect', { tone: 'professional', business_name: 'T' });
     await processOnboarding(makeUser('tone'), 'formal');
     assert.equal(updateUserCalls[0].updates.tone, 'professional');
   });
 
   test('synonym: corporate -> professional', async () => {
-    updateUserReturnValue = makeUser('done', { tone: 'professional', business_name: 'T', onboarding_complete: true });
+    updateUserReturnValue = makeUser('connect', { tone: 'professional', business_name: 'T' });
     await processOnboarding(makeUser('tone'), 'corporate');
     assert.equal(updateUserCalls[0].updates.tone, 'professional');
   });
 
   test('synonym: energetic -> bold', async () => {
-    updateUserReturnValue = makeUser('done', { tone: 'bold', business_name: 'T', onboarding_complete: true });
+    updateUserReturnValue = makeUser('connect', { tone: 'bold', business_name: 'T' });
     await processOnboarding(makeUser('tone'), 'energetic');
     assert.equal(updateUserCalls[0].updates.tone, 'bold');
   });
 
   test('synonym: warm -> friendly', async () => {
-    updateUserReturnValue = makeUser('done', { tone: 'friendly', business_name: 'T', onboarding_complete: true });
+    updateUserReturnValue = makeUser('connect', { tone: 'friendly', business_name: 'T' });
     await processOnboarding(makeUser('tone'), 'warm');
     assert.equal(updateUserCalls[0].updates.tone, 'friendly');
   });
 
   test('unknown tone defaults to professional', async () => {
-    updateUserReturnValue = makeUser('done', { tone: 'professional', business_name: 'T', onboarding_complete: true });
+    updateUserReturnValue = makeUser('connect', { tone: 'professional', business_name: 'T' });
     await processOnboarding(makeUser('tone'), 'something weird');
     assert.equal(updateUserCalls[0].updates.tone, 'professional');
   });
 
-  test('onboarding_complete set to true', async () => {
-    const user = makeUser('tone', { business_name: 'Test Biz' });
-    await processOnboarding(user, 'casual');
-    assert.equal(updateUserCalls[0].updates.onboarding_complete, true);
-    assert.equal(updateUserCalls[0].updates.onboarding_step, 'done');
-  });
-
-  test('done flag is true', async () => {
+  test('done flag is false (continues to connect step)', async () => {
     const user = makeUser('tone', { business_name: 'Test Biz' });
     const result = await processOnboarding(user, 'casual');
+    assert.equal(result.done, false);
+  });
+
+  test('reply contains an OAuth connect link', async () => {
+    const user = makeUser('tone', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'casual');
+    assert.ok(/api\/oauth\/meta\/start/.test(result.replyText));
+  });
+});
+
+describe('processOnboarding — connect step', () => {
+  beforeEach(() => {
+    updateUserCalls = [];
+    updateUserReturnValue = makeUser('photos', { business_name: 'Test Biz', tone: 'casual' });
+  });
+
+  test('SKIP advances to photos step with photos prompt', async () => {
+    const user = makeUser('connect', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'SKIP');
+    assert.equal(result.done, false);
+    assert.equal(updateUserCalls[0].updates.onboarding_step, 'photos');
+    assert.ok(/photos|library/i.test(result.replyText));
+  });
+
+  test('lowercase skip advances to photos step', async () => {
+    const user = makeUser('connect', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'skip');
+    assert.equal(updateUserCalls[0].updates.onboarding_step, 'photos');
+  });
+
+  test('valid platform returns new OAuth link without advancing step', async () => {
+    const user = makeUser('connect', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'LinkedIn');
+    // No step change yet — they advance on OAuth callback
+    assert.equal(updateUserCalls.length, 0);
+    assert.ok(/api\/oauth\/linkedin\/start/.test(result.replyText));
+  });
+
+  test('invalid platform returns "did not recognize" hint', async () => {
+    const user = makeUser('connect', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'MyBlog');
+    assert.equal(updateUserCalls.length, 0);
+    assert.ok(/did not recognize|try:/i.test(result.replyText));
+  });
+});
+
+describe('processOnboarding — photos step', () => {
+  beforeEach(() => {
+    updateUserCalls = [];
+    mockSocialAccounts = [{ platform: 'facebook' }]; // has connection
+    updateUserReturnValue = makeUser('done', {
+      business_name: 'Test Biz',
+      onboarding_complete: true,
+    });
+  });
+
+  test('DONE finalizes onboarding', async () => {
+    const user = makeUser('photos', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'DONE');
+    assert.equal(result.done, true);
+    assert.equal(updateUserCalls[0].updates.onboarding_step, 'done');
+    assert.equal(updateUserCalls[0].updates.onboarding_complete, true);
+    assert.ok(result.replyText.includes('Test Biz'));
+  });
+
+  test('SKIP also finalizes onboarding', async () => {
+    const user = makeUser('photos', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'SKIP');
     assert.equal(result.done, true);
   });
 
-  test('completion message includes business name', async () => {
-    const user = makeUser('tone', { business_name: 'Test Biz' });
-    const result = await processOnboarding(user, 'casual');
-    assert.ok(result.replyText.includes('Test Biz'));
+  test('completion mentions no-connection path when no social accounts', async () => {
+    mockSocialAccounts = [];
+    const user = makeUser('photos', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'DONE');
+    assert.equal(result.done, true);
+    // No-connection variant calls out that they haven't connected yet
+    assert.ok(/haven't connected|connect/i.test(result.replyText));
+  });
+
+  test('text other than DONE/SKIP nudges them to send photos', async () => {
+    const user = makeUser('photos', { business_name: 'Test Biz' });
+    const result = await processOnboarding(user, 'wait what');
+    assert.equal(result.done, false);
+    assert.equal(updateUserCalls.length, 0);
+    assert.ok(/photo|done|skip/i.test(result.replyText));
   });
 });
 
