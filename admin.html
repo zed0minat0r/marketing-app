@@ -1172,6 +1172,9 @@
     const hash = await sha256(pw);
     if (hash === ADMIN_HASH) {
       sessionStorage.setItem('admin_authed', '1');
+      // Stash the password (not the hash) so server-backed admin endpoints
+      // can validate via Bearer auth. Lives only in this session.
+      sessionStorage.setItem('admin_pw', pw);
       revealDashboard();
       loadAll();
     } else {
@@ -1571,15 +1574,22 @@
 
     let data = [];
     try {
-      const res = await sbFetch('customer_photos', {
-        select: 'id,user_id,public_url,enhanced_url,enhancement_status,mime_type,caption,tags,tags_status,created_at',
-        order: 'created_at.desc',
-        limit: 24,
-        is_archived: 'eq.false',
+      // Service-role endpoint — bypasses RLS so the admin can actually see
+      // photos across all users. Bearer = admin password.
+      const pw = sessionStorage.getItem('admin_pw') || '';
+      const res = await fetch('/api/admin/photos?limit=24', {
+        headers: { Authorization: 'Bearer ' + pw },
       });
-      data = res.data || [];
+      if (res.status === 401 || res.status === 403) {
+        gridEl.innerHTML = '<div class="state-block">Admin auth failed — ADMIN_PASSWORD_HASH may not be set in Vercel. See setup notes.</div>';
+        countEl.textContent = '—';
+        return;
+      }
+      if (!res.ok) throw new Error('admin/photos ' + res.status);
+      const j = await res.json();
+      data = j.photos || [];
     } catch (e) {
-      gridEl.innerHTML = '<div class="state-block">Photos table not yet ready</div>';
+      gridEl.innerHTML = '<div class="state-block">Photos endpoint not reachable yet — deploy may be in progress</div>';
       countEl.textContent = '—';
       return;
     }
