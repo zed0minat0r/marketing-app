@@ -50,7 +50,7 @@ Fill in each variable. See the sections below for where to find each value.
 | `QSTASH_NEXT_SIGNING_KEY` | Same page |
 | `UPSTASH_REDIS_REST_URL` | Upstash Console — Redis |
 | `UPSTASH_REDIS_REST_TOKEN` | Same page |
-| `APP_URL` | Your production URL, e.g. `https://sidekick.app` |
+| `APP_URL` | Your production URL, e.g. `https://sidekik.com` |
 | `ENCRYPTION_KEY` | Generate locally (see below) |
 
 ### Generate ENCRYPTION_KEY

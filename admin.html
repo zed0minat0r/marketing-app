@@ -785,6 +785,47 @@
     }
 
     /* ==========================================
+       CONFIG HEALTH SECTION
+    ========================================== */
+    .config-section {
+      border-left: 3px solid var(--yellow, var(--accent));
+    }
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    .config-key {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+    }
+    .config-key__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .config-key__dot.set     { background: var(--green); }
+    .config-key__dot.missing { background: var(--red); }
+    .config-key__dot.opt-set { background: var(--text-muted); }
+    .config-key__dot.opt-missing { background: transparent; border: 1px solid var(--border2); }
+    .config-key__name {
+      flex: 1;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .config-key.missing .config-key__name { color: var(--red); }
+
+    /* ==========================================
        CUSTOMER PHOTOS GRID
     ========================================== */
     .photos-grid {
@@ -1003,6 +1044,15 @@
 
   <main class="admin-main">
 
+    <!-- CONFIG HEALTH BANNER -->
+    <div class="section config-section" id="config-section" hidden>
+      <div class="section-header">
+        <span class="section-title" id="config-title">Configuration</span>
+        <span class="section-meta" id="config-meta">—</span>
+      </div>
+      <div class="config-grid" id="config-grid"></div>
+    </div>
+
     <!-- STATS -->
     <div class="stats-grid">
       <div class="stat-card">
@@ -1120,13 +1170,6 @@
 </div>
 
 <script>
-  // =============================================
-  // CONFIG — injected at build or set via env
-  // Read from window._env (set by server) or fall back to embedded values
-  // =============================================
-  const SUPABASE_URL = window._SUPABASE_URL || '';
-  const SUPABASE_ANON_KEY = window._SUPABASE_ANON_KEY || '';
-
   // Admin password hash — SHA-256 of the admin password.
   // Embedded directly because admin.html is served as a static file; there
   // is no server-rendering step to inject window._ADMIN_HASH. The actual
@@ -1193,39 +1236,6 @@
   }
 
   // =============================================
-  // SUPABASE FETCH HELPER
-  // =============================================
-  async function sbFetch(path, params = {}) {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      throw new Error('Supabase not configured');
-    }
-
-    const qs = new URLSearchParams(params).toString();
-    const url = `${SUPABASE_URL}/rest/v1/${path}${qs ? '?' + qs : ''}`;
-
-    const res = await fetch(url, {
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'count=exact',
-      },
-    });
-
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`Supabase ${res.status}: ${err}`);
-    }
-
-    const count = res.headers.get('content-range')
-      ? parseInt(res.headers.get('content-range').split('/')[1], 10)
-      : null;
-
-    const data = await res.json();
-    return { data, count };
-  }
-
-  // =============================================
   // HELPERS
   // =============================================
   function fmtDate(iso) {
@@ -1250,103 +1260,77 @@
     const ts = document.getElementById('last-refresh');
     ts.textContent = 'Refreshing…';
 
-    const results = await Promise.allSettled([loadStats(), loadChart(), loadUsers(), loadErrors(), loadPhotos()]);
+    const results = await Promise.allSettled([loadSnapshot(), loadPhotos(), loadConfigCheck()]);
 
     const errors = results.filter(r => r.status === 'rejected');
     if (errors.length) {
-      const noConfig = errors.every(r => r.reason.message === 'Supabase not configured');
-      if (noConfig) {
-        ts.textContent = 'No data source connected';
-      } else {
-        ts.textContent = 'Partial load error';
-      }
+      ts.textContent = 'Partial load error';
     } else {
       ts.textContent = 'Refreshed ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     }
   }
 
-  // =============================================
-  // STATS
-  // =============================================
-  async function loadStats() {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      document.getElementById('stat-total').textContent = '0';
-      document.getElementById('stat-active').textContent = '0';
-      document.getElementById('stat-today').textContent = '0';
-      document.getElementById('stat-week').textContent = '0';
-      return;
+  // Shared fetch helper for /api/admin/* endpoints — adds Bearer auth, returns
+  // parsed JSON or throws.
+  async function adminFetch(path) {
+    const pw = sessionStorage.getItem('admin_pw') || '';
+    const res = await fetch(path, { headers: { Authorization: 'Bearer ' + pw } });
+    if (res.status === 401 || res.status === 403) {
+      const err = new Error('admin_auth_failed');
+      err.status = res.status;
+      throw err;
     }
-
-    const { count: totalCount } = await sbFetch('users', { select: 'id', head: 'true' });
-    document.getElementById('stat-total').textContent = totalCount ?? '0';
-
-    const { count: activeCount } = await sbFetch('users', {
-      select: 'id',
-      onboarding_complete: 'eq.true',
-      head: 'true',
-    });
-    document.getElementById('stat-active').textContent = activeCount ?? '0';
-
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const { count: todayCount } = await sbFetch('conversations', {
-      select: 'id',
-      created_at: `gte.${todayStart.toISOString()}`,
-      head: 'true',
-    });
-    document.getElementById('stat-today').textContent = todayCount ?? '0';
-
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
-    const { count: weekCount } = await sbFetch('conversations', {
-      select: 'id',
-      created_at: `gte.${weekStart.toISOString()}`,
-      head: 'true',
-    });
-    document.getElementById('stat-week').textContent = weekCount ?? '0';
+    if (!res.ok) {
+      const err = new Error(`${path} ${res.status}`);
+      err.status = res.status;
+      throw err;
+    }
+    return res.json();
   }
 
   // =============================================
-  // CHART
+  // SNAPSHOT — stats + chart + users + errors in one call
   // =============================================
-  async function loadChart() {
-    const container = document.getElementById('chart-bars');
-
-    const days = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      d.setHours(0, 0, 0, 0);
-      days.push({
-        label: d.toLocaleDateString('en-US', { weekday: 'short' }),
-        date: d.toISOString().split('T')[0],
-        start: d.toISOString(),
-        end: new Date(d.getTime() + 86400000).toISOString(),
-        count: 0,
-        isToday: i === 0,
-      });
+  async function loadSnapshot() {
+    let payload;
+    try {
+      payload = await adminFetch('/api/admin/snapshot');
+    } catch (e) {
+      if (e.status === 401 || e.status === 403) {
+        // Surface a one-time clear message and bail out of all sections.
+        showSnapshotError('Admin auth failed — ADMIN_PASSWORD_HASH may not be set in Vercel.');
+      } else {
+        showSnapshotError('Dashboard endpoint not reachable — deploy may be in progress.');
+      }
+      throw e;
     }
+    renderStats(payload.stats || {});
+    renderChart(document.getElementById('chart-bars'), payload.chart || []);
+    renderUsers(payload.users || []);
+    renderErrors(payload.errors || []);
+  }
 
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      renderChart(container, days);
-      return;
-    }
+  function showSnapshotError(msg) {
+    document.getElementById('stat-total').textContent = '—';
+    document.getElementById('stat-active').textContent = '—';
+    document.getElementById('stat-today').textContent = '—';
+    document.getElementById('stat-week').textContent = '—';
+    document.getElementById('chart-bars').innerHTML = `<span style="font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);padding:12px 0;">${msg}</span>`;
+    document.getElementById('user-cards').innerHTML = `<div class="state-block">${msg}</div>`;
+    document.getElementById('user-table-body').innerHTML = `<tr><td colspan="8" class="state-cell">${msg}</td></tr>`;
+    document.getElementById('user-count').textContent = '—';
+    document.getElementById('error-list').innerHTML = `<div class="state-block">${msg}</div>`;
+    document.getElementById('error-count').textContent = '—';
+  }
 
-    const weekStart = days[0].start;
-    const { data: msgs } = await sbFetch('conversations', {
-      select: 'created_at',
-      created_at: `gte.${weekStart}`,
-      order: 'created_at.asc',
-      limit: 10000,
-    });
-
-    for (const msg of (msgs || [])) {
-      const d = msg.created_at.split('T')[0];
-      const bucket = days.find(b => b.date === d);
-      if (bucket) bucket.count++;
-    }
-
-    renderChart(container, days);
+  // =============================================
+  // STATS / CHART RENDERERS
+  // =============================================
+  function renderStats(s) {
+    document.getElementById('stat-total').textContent  = s.total_users ?? '0';
+    document.getElementById('stat-active').textContent = s.active_users ?? '0';
+    document.getElementById('stat-today').textContent  = s.messages_today ?? '0';
+    document.getElementById('stat-week').textContent   = s.messages_week ?? '0';
   }
 
   function renderChart(container, days) {
@@ -1371,25 +1355,11 @@
   }
 
   // =============================================
-  // USERS
+  // USERS RENDERER (data comes from snapshot endpoint with message_count + last_message_at attached)
   // =============================================
-  async function loadUsers() {
+  function renderUsers(users) {
     const cardsEl = document.getElementById('user-cards');
     const tbody = document.getElementById('user-table-body');
-
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      cardsEl.innerHTML = '<div class="state-block">No data source — connect Supabase to see users</div>';
-      tbody.innerHTML = '<tr><td colspan="8" class="state-cell">No data source connected</td></tr>';
-      document.getElementById('user-count').textContent = '0 users';
-      loadPlanBreakdown([]);
-      return;
-    }
-
-    const { data: users } = await sbFetch('users', {
-      select: 'id,phone,business_name,business_type,plan,onboarding_complete,onboarding_step,created_at',
-      order: 'created_at.desc',
-      limit: 200,
-    });
 
     if (!users || users.length === 0) {
       cardsEl.innerHTML = '<div class="state-block">No users yet</div>';
@@ -1401,32 +1371,8 @@
 
     document.getElementById('user-count').textContent = `${users.length} users`;
 
-    const userIds = users.map(u => u.id);
-    let convos = [];
-    try {
-      const { data } = await sbFetch('conversations', {
-        select: 'user_id,created_at',
-        user_id: `in.(${userIds.join(',')})`,
-        order: 'created_at.desc',
-        limit: 10000,
-      });
-      convos = data || [];
-    } catch (e) { /* non-fatal */ }
-
-    const userStats = {};
-    for (const c of convos) {
-      if (!userStats[c.user_id]) {
-        userStats[c.user_id] = { lastMsg: c.created_at, count: 0 };
-      }
-      userStats[c.user_id].count++;
-      if (c.created_at > userStats[c.user_id].lastMsg) {
-        userStats[c.user_id].lastMsg = c.created_at;
-      }
-    }
-
     // Mobile cards
     cardsEl.innerHTML = users.map(u => {
-      const stats = userStats[u.id] || { lastMsg: null, count: 0 };
       const onboardText = u.onboarding_complete ? 'Done' : (u.onboarding_step || 'pending');
       const onboardClass = u.onboarding_complete ? 'onboard-done' : 'onboard-pending';
       const dotClass = u.onboarding_complete ? 'done' : 'pending';
@@ -1453,7 +1399,7 @@
             </div>
             <div class="user-meta-item">
               <span class="user-meta-label">Msgs</span>
-              <span class="user-meta-value">${stats.count}</span>
+              <span class="user-meta-value">${u.message_count || 0}</span>
             </div>
           </div>
         </div>
@@ -1462,7 +1408,6 @@
 
     // Desktop table
     tbody.innerHTML = users.map(u => {
-      const stats = userStats[u.id] || { lastMsg: null, count: 0 };
       const onboardText = u.onboarding_complete ? 'Done' : (u.onboarding_step || 'pending');
       const onboardClass = u.onboarding_complete ? 'onboard-done' : 'onboard-pending';
       const dotClass = u.onboarding_complete ? 'done' : 'pending';
@@ -1474,8 +1419,8 @@
           <td><span class="plan-badge ${planClass(u.plan)}">${u.plan || 'starter'}</span></td>
           <td class="${onboardClass}"><span class="status-dot ${dotClass}"></span>${onboardText}</td>
           <td>${fmtDate(u.created_at)}</td>
-          <td>${fmtDateShort(stats.lastMsg)}</td>
-          <td class="td-msgs">${stats.count}</td>
+          <td>${fmtDateShort(u.last_message_at)}</td>
+          <td class="td-msgs">${u.message_count || 0}</td>
         </tr>
       `;
     }).join('');
@@ -1514,41 +1459,20 @@
   }
 
   // =============================================
-  // ERRORS
+  // ERRORS RENDERER
   // =============================================
-  async function loadErrors() {
+  function renderErrors(errors) {
     const listEl = document.getElementById('error-list');
     const countEl = document.getElementById('error-count');
 
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      listEl.innerHTML = '<div class="state-block">No data source connected</div>';
-      countEl.textContent = '—';
-      return;
-    }
+    countEl.textContent = `${errors.length} recent`;
 
-    let data = [];
-    try {
-      const res = await sbFetch('errors', {
-        select: 'id,message,user_id,created_at',
-        order: 'created_at.desc',
-        limit: 20,
-      });
-      data = res.data || [];
-    } catch (e) {
-      // Table may not exist yet
-      listEl.innerHTML = '<div class="state-block">No errors table yet</div>';
-      countEl.textContent = '—';
-      return;
-    }
-
-    countEl.textContent = `${data.length} recent`;
-
-    if (data.length === 0) {
+    if (errors.length === 0) {
       listEl.innerHTML = '<div class="state-block">No errors logged</div>';
       return;
     }
 
-    listEl.innerHTML = data.map(err => `
+    listEl.innerHTML = errors.map(err => `
       <div class="error-entry">
         <div class="error-entry-top">
           <span class="error-entry-msg">${err.message || 'Unknown error'}</span>
@@ -1566,30 +1490,16 @@
     const gridEl = document.getElementById('photos-grid');
     const countEl = document.getElementById('photos-count');
 
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      gridEl.innerHTML = '<div class="state-block">No data source connected</div>';
-      countEl.textContent = '—';
-      return;
-    }
-
     let data = [];
     try {
-      // Service-role endpoint — bypasses RLS so the admin can actually see
-      // photos across all users. Bearer = admin password.
-      const pw = sessionStorage.getItem('admin_pw') || '';
-      const res = await fetch('/api/admin/photos?limit=24', {
-        headers: { Authorization: 'Bearer ' + pw },
-      });
-      if (res.status === 401 || res.status === 403) {
-        gridEl.innerHTML = '<div class="state-block">Admin auth failed — ADMIN_PASSWORD_HASH may not be set in Vercel. See setup notes.</div>';
-        countEl.textContent = '—';
-        return;
-      }
-      if (!res.ok) throw new Error('admin/photos ' + res.status);
-      const j = await res.json();
+      const j = await adminFetch('/api/admin/photos?limit=24');
       data = j.photos || [];
     } catch (e) {
-      gridEl.innerHTML = '<div class="state-block">Photos endpoint not reachable yet — deploy may be in progress</div>';
+      if (e.status === 401 || e.status === 403) {
+        gridEl.innerHTML = '<div class="state-block">Admin auth failed — ADMIN_PASSWORD_HASH may not be set in Vercel. See setup notes.</div>';
+      } else {
+        gridEl.innerHTML = '<div class="state-block">Photos endpoint not reachable yet — deploy may be in progress</div>';
+      }
       countEl.textContent = '—';
       return;
     }
@@ -1646,6 +1556,81 @@
         </div>
       `;
     }).join('');
+  }
+
+  // =============================================
+  // CONFIG HEALTH
+  // =============================================
+  async function loadConfigCheck() {
+    const section = document.getElementById('config-section');
+    const grid = document.getElementById('config-grid');
+    const title = document.getElementById('config-title');
+    const meta = document.getElementById('config-meta');
+
+    let payload;
+    try {
+      // Auth optional — endpoint allows unauth fetch only when
+      // ADMIN_PASSWORD_HASH is missing (so the section can flag that case).
+      payload = await adminFetch('/api/admin/config-check');
+    } catch (e) {
+      if (e.status === 401 || e.status === 403) {
+        // Auth IS configured but password wrong — uncommon (snapshot would've
+        // already 401'd). Hide section silently.
+        section.hidden = true;
+        return;
+      }
+      // Network / deploy issue — show error
+      section.hidden = false;
+      title.textContent = 'Configuration';
+      meta.textContent = 'unreachable';
+      grid.innerHTML = '<div class="state-block">Config-check endpoint not reachable yet — deploy may be in progress</div>';
+      return;
+    }
+
+    const summary = payload.summary || {};
+    const missing = summary.missing_required || [];
+    const required = payload.required || {};
+    const optional = payload.optional || {};
+
+    // Only surface the whole section if something is missing or admin auth
+    // isn't fully wired. Otherwise stay collapsed (less noise on a healthy
+    // dashboard).
+    const fullyHealthy = missing.length === 0 && summary.admin_auth_enabled;
+    if (fullyHealthy) {
+      section.hidden = true;
+      return;
+    }
+
+    section.hidden = false;
+    if (!summary.admin_auth_enabled) {
+      title.textContent = 'Configuration — ADMIN_PASSWORD_HASH not set';
+      meta.textContent = 'admin endpoints unauthenticated';
+    } else {
+      title.textContent = `Configuration — ${missing.length} required key${missing.length === 1 ? '' : 's'} missing`;
+      meta.textContent = `${summary.required_set}/${summary.required_total} set`;
+    }
+
+    // Required first, then optional, missing-required highlighted in red.
+    const requiredTiles = Object.entries(required).map(([key, isSet]) => {
+      const cls = isSet ? 'set' : 'missing';
+      return `
+        <div class="config-key ${cls}">
+          <span class="config-key__dot ${cls}"></span>
+          <span class="config-key__name" title="${key}">${key}</span>
+        </div>
+      `;
+    });
+    const optionalTiles = Object.entries(optional).map(([key, isSet]) => {
+      const cls = isSet ? 'opt-set' : 'opt-missing';
+      return `
+        <div class="config-key">
+          <span class="config-key__dot ${cls}"></span>
+          <span class="config-key__name" title="${key}" style="color:var(--text-muted);">${key}</span>
+        </div>
+      `;
+    });
+
+    grid.innerHTML = requiredTiles.join('') + optionalTiles.join('');
   }
 
   // Toggle photo between enhanced and original (used by photo card compare btn)

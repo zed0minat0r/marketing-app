@@ -1,6 +1,6 @@
 # Sidekick API Reference
 
-All endpoints are deployed as Vercel serverless functions. Production base URL: `https://sidekick.app`
+All endpoints are deployed as Vercel serverless functions. Production base URL: `https://sidekik.com`
 
 **Internal endpoints** are marked with `[INTERNAL]`. They require the `x-internal-secret` header matching `INTERNAL_API_SECRET`.
 
@@ -31,7 +31,7 @@ Twilio webhook. Receives incoming SMS from users, routes through the AI pipeline
 
 **Example curl (dev, no signature):**
 ```bash
-curl -X POST https://sidekick.app/api/sms/inbound \
+curl -X POST https://sidekik.com/api/sms/inbound \
   -d "From=%2B15555550100&Body=Write+a+post+about+our+lunch+special&MessageSid=SM123&To=%2B18005551234"
 ```
 
@@ -88,7 +88,7 @@ Initiates the Meta (Facebook + Instagram) OAuth 2.0 flow. The `token` parameter 
 
 **Example curl:**
 ```bash
-curl -L "https://sidekick.app/api/oauth/meta/start?token=abc123def456"
+curl -L "https://sidekik.com/api/oauth/meta/start?token=abc123def456"
 ```
 
 ---
@@ -192,7 +192,7 @@ Twitter OAuth callback. Exchanges code for tokens using PKCE, stores tokens encr
 
 **Example curl:**
 ```bash
-curl -X POST https://sidekick.app/api/social/post \
+curl -X POST https://sidekik.com/api/social/post \
   -H "Content-Type: application/json" \
   -H "x-internal-secret: $INTERNAL_API_SECRET" \
   -d '{"post_id": "uuid-here"}'
@@ -228,7 +228,7 @@ curl -X POST https://sidekick.app/api/social/post \
 
 **Example curl:**
 ```bash
-curl -X POST https://sidekick.app/api/ai/generate \
+curl -X POST https://sidekik.com/api/ai/generate \
   -H "Content-Type: application/json" \
   -H "x-internal-secret: $INTERNAL_API_SECRET" \
   -d '{"user_id": "uuid-here", "message": "Write a post about our new menu"}'
@@ -378,5 +378,5 @@ Handles Stripe subscription lifecycle events. Raw body is passed through for Str
 **Example curl (test mode):**
 ```bash
 stripe trigger customer.subscription.created \
-  --webhook-url https://sidekick.app/api/stripe/webhook
+  --webhook-url https://sidekik.com/api/stripe/webhook
 ```

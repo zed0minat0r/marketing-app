@@ -193,7 +193,7 @@ Users connect their social accounts via a one-time OAuth flow (sent as a link in
 ```
 User:   Connect my Instagram
 System: Tap this link to connect your Instagram account:
-        https://sidekick.app/connect/instagram?token=abc123
+        https://sidekik.com/connect/instagram?token=abc123
         (Link expires in 15 minutes)
      |
      v
@@ -300,7 +300,7 @@ User:   YES
 Server:
   1. Insert into scheduled_posts with status='queued'
   2. Create QStash scheduled message:
-     POST https://sidekick.app/api/jobs/publish
+     POST https://sidekik.com/api/jobs/publish
      Deliver-At: 2026-04-10T20:00:00Z (Friday 4pm ET -> UTC)
      Body: { post_id: "uuid-here" }
      |
@@ -771,7 +771,7 @@ BOT   <-  "Happy hour post canceled. 2 posts remaining."
 ```
 USER  ->  "Connect my Instagram"
 BOT   <-  "Tap this link to connect Instagram:
-           https://sidekick.app/api/oauth/meta/start?token=abc123
+           https://sidekik.com/api/oauth/meta/start?token=abc123
 
            (Expires in 15 minutes)"
 
@@ -1084,6 +1084,6 @@ UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 
 # App
-APP_URL=https://sidekick.app
+APP_URL=https://sidekik.com
 ENCRYPTION_KEY=  # for pgcrypto token encryption
 ```

@@ -198,7 +198,7 @@ async function handleReferralRequest(user) {
   const stats = await getReferralStats(user.id);
   const count = stats.referralCount || 0;
   const pos = stats.queuePosition || queuePosition;
-  const appUrl = (process.env.APP_URL || 'https://trysidekick.com').replace(/\/$/, '');
+  const appUrl = (process.env.APP_URL || 'https://sidekik.com').replace(/\/$/, '');
   const link = `${appUrl}/?ref=${referralCode}`;
 
   const more = REFERRALS_TO_REWARD - count;

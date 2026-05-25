@@ -157,7 +157,7 @@ module.exports = async function handler(req, res) {
         if (!user || !user.phone) break;
 
         await sendSms(user.phone,
-          `Payment failed for your Sidekick subscription. Please update your payment method at sidekick.app/billing to keep your account active.`
+          `Payment failed for your Sidekick subscription. Please update your payment method at sidekik.com/billing to keep your account active.`
         ).catch(console.error);
         break;
       }

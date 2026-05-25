@@ -69,7 +69,7 @@ function generateBrandedSvg(text) {
   <rect width="400" height="400" fill="url(#bg)" rx="12"/>
   <text x="200" y="48" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="13" font-family="Arial, sans-serif" letter-spacing="3">SIDEKICK</text>
   ${textElements}
-  <text x="200" y="376" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="11" font-family="Arial, sans-serif">sidekick.app</text>
+  <text x="200" y="376" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="11" font-family="Arial, sans-serif">sidekik.com</text>
 </svg>`;
 }
 

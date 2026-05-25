@@ -112,7 +112,7 @@ You:      Connect Instagram
 Sidekick: Here is your secure Instagram connection link (expires in
           15 minutes):
 
-          https://sidekick.app/api/oauth/meta/start?token=abc123
+          https://sidekik.com/api/oauth/meta/start?token=abc123
 
           Open this link to connect your account.
 
