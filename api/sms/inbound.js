@@ -21,6 +21,7 @@ const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
 const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand } = require('../../lib/intent');
 const { processInboundMedia, extractMedia } = require('../../lib/photo-intake');
+const { resolveComplianceAction, COMPLIANCE_REPLIES } = require('../../lib/sms-compliance');
 const {
   getUserByPhone,
   createUser,
@@ -271,6 +272,40 @@ module.exports = async function handler(req, res) {
       intent: null, // will be updated after classification
       twilioSid: messageSid,
     });
+
+    // ---- Carrier compliance: STOP / HELP / START ----
+    // These keywords are legally required to be honored on toll-free numbers.
+    // Match the BARE keyword only (so "CANCEL 1" still cancels a post, etc.)
+    // and force-send the compliance ack even if the user is opted out — these
+    // messages ARE the opt-in/opt-out acknowledgments.
+    const complianceAction = resolveComplianceAction(messageBody);
+    if (complianceAction === 'stop') {
+      await updateUser(user.id, { opted_out_at: new Date().toISOString() }).catch(err =>
+        console.error('Failed to mark user opted out:', err)
+      );
+      await sendSms(from, COMPLIANCE_REPLIES.stop, { force: true }).catch(console.error);
+      await logMessage({
+        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.stop, intent: 'compliance_stop',
+      }).catch(console.error);
+      return res.status(200).send('OK');
+    }
+    if (complianceAction === 'start') {
+      await updateUser(user.id, { opted_out_at: null }).catch(err =>
+        console.error('Failed to clear opt-out:', err)
+      );
+      await sendSms(from, COMPLIANCE_REPLIES.start, { force: true }).catch(console.error);
+      await logMessage({
+        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.start, intent: 'compliance_start',
+      }).catch(console.error);
+      return res.status(200).send('OK');
+    }
+    if (complianceAction === 'help') {
+      await sendSms(from, COMPLIANCE_REPLIES.help, { force: true }).catch(console.error);
+      await logMessage({
+        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.help, intent: 'compliance_help',
+      }).catch(console.error);
+      return res.status(200).send('OK');
+    }
 
     // Handle data deletion request first
     if (/^delete\s+(my\s+)?data\s*$/i.test(messageBody)) {
