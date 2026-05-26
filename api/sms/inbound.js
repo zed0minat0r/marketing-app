@@ -196,14 +196,10 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
     }
 
     case 'edit': {
-      // Check if this is a structured EDIT N <instruction> command
-      const editCmd = parseEditCommand(trimmed);
-      if (editCmd) {
-        // Structured edit: user said "EDIT 1 make it shorter" etc.
-        // Let Claude handle it with the parsed instruction injected as context
-        return { handled: false, editInstruction: editCmd.instruction };
-      }
-      // Plain "EDIT" or "change it" — let Claude handle with full context
+      // Fall through to Claude with the full message body — Claude sees the
+      // previous draft in conversation history and produces a new version.
+      // No special parsing needed: "EDIT" / "EDIT 1 make it shorter" /
+      // "change it" / etc. all just go to Claude as-is.
       return { handled: false };
     }
   }
@@ -546,14 +542,27 @@ module.exports = async function handler(req, res) {
             claudeModel = aiResult.model;
             tokensUsed = aiResult.tokensUsed;
 
-            // If Claude returned a post action, save the draft
+            // If Claude returned a post action, save the draft. Resolve the
+            // target platforms against what the user actually has connected
+            // — Claude may suggest a platform that isn't connected, in
+            // which case we fall back to connected platforms rather than
+            // saving a row that will fail at publish time.
+            const resolvePlatforms = (requested) => {
+              if (requested === 'all') {
+                return platforms.length > 0 ? platforms : ['instagram'];
+              }
+              if (requested && platforms.includes(requested)) {
+                return [requested];
+              }
+              // Requested platform not connected — use whatever is connected
+              return platforms.length > 0 ? platforms : ['instagram'];
+            };
+
             if (aiResult.action) {
               if (aiResult.action.type === 'draft_post' && aiResult.action.content) {
                 await createScheduledPost({
                   userId: user.id,
-                  platforms: aiResult.action.platform === 'all'
-                    ? platforms.length > 0 ? platforms : ['instagram']
-                    : [aiResult.action.platform || 'instagram'],
+                  platforms: resolvePlatforms(aiResult.action.platform),
                   content: aiResult.action.content,
                   status: 'draft',
                   scheduledFor: null,
@@ -563,9 +572,7 @@ module.exports = async function handler(req, res) {
                 // scheduled time so the publish handler actually fires.
                 const scheduledPost = await createScheduledPost({
                   userId: user.id,
-                  platforms: aiResult.action.platform === 'all'
-                    ? platforms.length > 0 ? platforms : ['instagram']
-                    : [aiResult.action.platform || 'instagram'],
+                  platforms: resolvePlatforms(aiResult.action.platform),
                   content: aiResult.action.content,
                   status: 'queued',
                   scheduledFor: aiResult.action.scheduled_for || null,
