@@ -20,16 +20,17 @@
  */
 
 const handlers = {
-  'meta/start':       require('../../lib/oauth-handlers/meta-start'),
-  'meta/callback':    require('../../lib/oauth-handlers/meta-callback'),
-  'twitter/start':    require('../../lib/oauth-handlers/twitter-start'),
-  'twitter/callback': require('../../lib/oauth-handlers/twitter-callback'),
-  'linkedin/start':   require('../../lib/oauth-handlers/linkedin-start'),
-  'linkedin/callback':require('../../lib/oauth-handlers/linkedin-callback'),
-  'pinterest/start':  require('../../lib/oauth-handlers/pinterest-start'),
-  'pinterest/callback':require('../../lib/oauth-handlers/pinterest-callback'),
-  'google/start':     require('../../lib/oauth-handlers/google-start'),
-  'google/callback':  require('../../lib/oauth-handlers/google-callback'),
+  'meta/start':         require('../../lib/oauth-handlers/meta-start'),
+  'meta/callback':      require('../../lib/oauth-handlers/meta-callback'),
+  'meta/data-deletion': require('../../lib/oauth-handlers/meta-data-deletion'),
+  'twitter/start':      require('../../lib/oauth-handlers/twitter-start'),
+  'twitter/callback':   require('../../lib/oauth-handlers/twitter-callback'),
+  'linkedin/start':     require('../../lib/oauth-handlers/linkedin-start'),
+  'linkedin/callback':  require('../../lib/oauth-handlers/linkedin-callback'),
+  'pinterest/start':    require('../../lib/oauth-handlers/pinterest-start'),
+  'pinterest/callback': require('../../lib/oauth-handlers/pinterest-callback'),
+  'google/start':       require('../../lib/oauth-handlers/google-start'),
+  'google/callback':    require('../../lib/oauth-handlers/google-callback'),
 };
 
 module.exports = async function handler(req, res) {

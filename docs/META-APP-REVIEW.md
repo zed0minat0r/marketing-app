@@ -238,6 +238,27 @@ permission being used clearly, and narrate what's happening.
 
 ---
 
+## Required Meta App Dashboard URLs
+
+In addition to the OAuth redirect URI, Meta App Review requires these two
+URLs in **Settings → Basic**:
+
+| Field | Value |
+|-------|-------|
+| Data Deletion Request URL | `https://sidekik.com/api/oauth/meta/data-deletion` |
+| Privacy Policy URL | `https://sidekik.com/#privacy` |
+| Terms of Service URL | `https://sidekik.com/#terms` |
+| App Domains | `sidekik.com` |
+
+The data-deletion endpoint is wired up in
+`lib/oauth-handlers/meta-data-deletion.js`. It verifies Meta's signed_request
+against `META_APP_SECRET`, marks any Facebook/Instagram social_accounts rows
+for the matched FB user_id as inactive, and returns the
+`{ url, confirmation_code }` JSON that Meta expects. Without this URL in the
+dashboard, App Review will be rejected.
+
+---
+
 ## Submission tips
 
 1. **Submit all permissions in one batch.** Each one points to a different
