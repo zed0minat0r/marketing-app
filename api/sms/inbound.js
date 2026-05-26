@@ -374,11 +374,17 @@ module.exports = async function handler(req, res) {
       return res.status(200).send('OK');
     }
 
-    // Handle data deletion request first
+    // Handle data deletion request first. The confirmation SMS uses
+    // force:true so opted-out users still get the final acknowledgment —
+    // this is the legally-meaningful "we deleted your data" ack, parallel
+    // to the STOP/HELP compliance acks.
     if (/^delete\s+(my\s+)?data\s*$/i.test(messageBody)) {
       const { deleteUser } = require('../../lib/supabase');
       await deleteUser(user.id);
-      await sendSms(from, "Your account and all data have been permanently deleted. You can restart anytime by texting us again.");
+      await sendSms(from,
+        "Your account and all data have been permanently deleted. You can restart anytime by texting us again.",
+        { force: true }
+      );
       return res.status(200).send('OK');
     }
 

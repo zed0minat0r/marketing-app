@@ -18,6 +18,29 @@ const { getClient, updateUser } = require('../../lib/supabase');
 const { sendSms } = require('../sms/outbound');
 const { PLAN_LIMITS } = require('../../lib/constants');
 
+/**
+ * Stripe signs the EXACT raw bytes of the webhook request. Vercel's default
+ * body parser would re-serialize the JSON before we see it, producing
+ * different bytes (whitespace, key order) — signature verification would
+ * always fail. Read the raw request stream ourselves and disable the parser
+ * below via module.exports.config.
+ */
+async function readRawBody(req) {
+  // If Vercel already parsed (shouldn't, with bodyParser:false), fall back
+  // to re-serializing. This path WILL fail signature checks but at least
+  // doesn't crash.
+  if (req.body instanceof Buffer) return req.body;
+  if (req.rawBody instanceof Buffer) return req.rawBody;
+  if (typeof req.rawBody === 'string') return Buffer.from(req.rawBody);
+
+  // Read the underlying stream.
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
 // Validate Stripe price env vars on startup — log clear warnings if missing
 const STRIPE_PRICE_VARS = {
   STRIPE_PRICE_STARTER: process.env.STRIPE_PRICE_STARTER,
@@ -79,12 +102,7 @@ module.exports = async function handler(req, res) {
   let event;
   try {
     const stripeClient = stripe(process.env.STRIPE_SECRET_KEY);
-    // For Vercel, we need to read the raw body
-    // The body is a Buffer when using bodyParser: false in vercel.json
-    const rawBody = req.body instanceof Buffer
-      ? req.body
-      : JSON.stringify(req.body);
-
+    const rawBody = await readRawBody(req);
     event = stripeClient.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err) {
     console.error('Stripe signature verification failed:', err.message);
@@ -174,3 +192,8 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: err.message });
   }
 };
+
+// Disable Vercel's automatic body parsing — Stripe needs the raw bytes for
+// signature verification. Without this the parser eats the body before our
+// handler runs and signature checks always fail.
+module.exports.config = { api: { bodyParser: false } };
