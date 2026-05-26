@@ -25,6 +25,7 @@ let dbCalls = { logMessage: [], createUser: [], updateUser: [], createScheduledP
 let mockClaudeResponse = null;
 let mockSocialAccounts = [];
 let mockUpcomingPosts = [];
+let mockWeeklyMetrics = { posts: [], snapshots: [], totals: { reach: 0, impressions: 0, engagement: 0 } };
 let mockRecentMessages = [];
 let mockDraftPost = null;
 let rateLimitAllowed = true;
@@ -145,6 +146,7 @@ require.cache[supabasePath] = {
     },
     incrementGenerationsUsed: async () => {},
     deleteUser: async () => {},
+    getWeeklyMetrics: async () => mockWeeklyMetrics,
   },
 };
 
@@ -710,6 +712,58 @@ describe('CANCEL command', () => {
       'Should say post not found'
     );
     assert.equal(dbCalls.cancelPost.length, 0);
+  });
+});
+
+describe('Analytics — on-demand metrics', () => {
+  beforeEach(() => {
+    smsSent = [];
+    dbCalls = { logMessage: [], createUser: [], updateUser: [], createScheduledPost: [], cancelPost: [], updateScheduledPost: [], qstashEnqueued: [], qstashCanceled: [] };
+    rateLimitAllowed = true;
+    mockUser = makeOnboardedUser();
+    mockClaudeResponse = null;
+  });
+
+  test('analytics question with no posts replies "no posts yet" without calling Claude', async () => {
+    mockWeeklyMetrics = { posts: [], snapshots: [], totals: { reach: 0, impressions: 0, engagement: 0 } };
+    let claudeCalled = false;
+    claudeMockModule.generateResponse = async () => {
+      claudeCalled = true;
+      return { reply_text: 'fake', intent: 'analytics', action: null };
+    };
+    const req = makeReq({ Body: 'how did my posts do this week' });
+    const res = makeRes();
+    await handler(req, res);
+    assert.equal(claudeCalled, false, 'should NOT call Claude');
+    const text = smsSent[0]?.body || '';
+    assert.match(text, /no published posts|once you start/i);
+  });
+
+  test('analytics with real metrics returns actual numbers (never hallucinated)', async () => {
+    mockWeeklyMetrics = {
+      posts: [{ id: 'p1', content: 'Friday slice special is back', platforms: ['facebook'] }],
+      snapshots: [{ post_id: 'p1', reach: 1247, impressions: 1500, likes: 42, comments: 3, shares: 7 }],
+      totals: { reach: 1247, impressions: 1500, engagement: 52 },
+    };
+    const req = makeReq({ Body: 'how did my posts do' });
+    const res = makeRes();
+    await handler(req, res);
+    const text = smsSent[0]?.body || '';
+    assert.ok(text.includes('1,247'), 'should include the real reach number');
+    assert.ok(text.includes('Friday slice'), 'should reference the actual top post');
+  });
+
+  test('analytics with posts but no snapshots yet says "metrics land overnight"', async () => {
+    mockWeeklyMetrics = {
+      posts: [{ id: 'p1', content: 'test', platforms: ['facebook'] }],
+      snapshots: [],
+      totals: { reach: 0, impressions: 0, engagement: 0 },
+    };
+    const req = makeReq({ Body: 'analytics' });
+    const res = makeRes();
+    await handler(req, res);
+    const text = smsSent[0]?.body || '';
+    assert.match(text, /metrics haven't been collected|overnight|tomorrow/i);
   });
 });
 

@@ -74,9 +74,11 @@ describe('classifyIntent — analytics', () => {
     assert.equal(classifyIntent('show me stats'), INTENTS.ANALYTICS);
   });
 
-  test('how did my post do — matches list_schedule via "my posts" pattern', () => {
-    // "my post" matches the list_schedule pattern /my\s+posts?/ before analytics is checked
-    assert.equal(classifyIntent('how did my post do'), INTENTS.LIST_SCHEDULE);
+  test('how did my post do — routes to analytics (analytics checked before list_schedule)', () => {
+    // Previously routed to LIST_SCHEDULE because /my\s+posts?/ in the
+    // list_schedule regex won. Analytics is now checked first so the
+    // natural "how did my post do" lands where the user expects.
+    assert.equal(classifyIntent('how did my post do'), INTENTS.ANALYTICS);
   });
 
   test('engagement report', () => {

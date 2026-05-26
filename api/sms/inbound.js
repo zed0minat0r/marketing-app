@@ -39,6 +39,7 @@ const {
   ensureReferralCode,
   ensureQueuePosition,
   getReferralStats,
+  getWeeklyMetrics,
 } = require('../../lib/supabase');
 const {
   ONBOARDING_MESSAGES,
@@ -81,6 +82,48 @@ function hasGenerationQuota(user) {
   if (user.plan === 'pro') return true;
   const limit = user.generations_limit || PLAN_LIMITS[user.plan] || 50;
   return (user.generations_used || 0) < limit;
+}
+
+/**
+ * Format the user's recent-week analytics as SMS text. Pulls from the
+ * `analytics_snapshots` table populated by the nightly collect-analytics
+ * job — never invents numbers (RULE 7 in CLAUDE.md). If we have no data
+ * yet, say so honestly.
+ */
+function formatAnalyticsSummary(metrics) {
+  if (!metrics?.posts || metrics.posts.length === 0) {
+    return "No published posts in the last 7 days. Once you start posting, ask me \"how did my posts do?\" anytime.";
+  }
+  if (!metrics.snapshots || metrics.snapshots.length === 0) {
+    return `You have ${metrics.posts.length} post${metrics.posts.length === 1 ? '' : 's'} from the last 7 days, but metrics haven't been collected yet. Engagement data lands overnight — try tomorrow.`;
+  }
+
+  const { totals, posts, snapshots } = metrics;
+
+  // Find top post by engagement
+  let topPost = null;
+  let topEngagement = 0;
+  for (const post of posts) {
+    const eng = snapshots
+      .filter(s => s.post_id === post.id)
+      .reduce((sum, s) => sum + (s.likes || 0) + (s.comments || 0) + (s.shares || 0), 0);
+    if (eng > topEngagement) {
+      topEngagement = eng;
+      topPost = post;
+    }
+  }
+
+  const lines = [
+    `Last 7 days — ${posts.length} post${posts.length === 1 ? '' : 's'}:`,
+    `Reach: ${totals.reach.toLocaleString()}`,
+    `Impressions: ${totals.impressions.toLocaleString()}`,
+    `Engagement: ${totals.engagement.toLocaleString()}`,
+  ];
+  if (topPost) {
+    const preview = (topPost.content || '').slice(0, 40).replace(/\s+$/, '');
+    lines.push(`Top post (${topEngagement} reactions): "${preview}${topPost.content.length > 40 ? '…' : ''}"`);
+  }
+  return lines.join('\n');
 }
 
 /**
@@ -481,6 +524,21 @@ module.exports = async function handler(req, res) {
         const posts = await getUpcomingPosts(user.id);
         replyText = formatPostsList(posts);
         intent = INTENTS.LIST_SCHEDULE;
+      }
+
+      // Handle ANALYTICS — read real numbers from analytics_snapshots so
+      // Claude doesn't have to (it would hallucinate metrics otherwise).
+      else if (preClassified === INTENTS.ANALYTICS) {
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          .toISOString().split('T')[0];
+        try {
+          const metrics = await getWeeklyMetrics(user.id, sevenDaysAgo);
+          replyText = formatAnalyticsSummary(metrics);
+        } catch (err) {
+          console.error('Analytics fetch failed:', err.message);
+          replyText = "I could not pull your analytics right now. Try again in a minute.";
+        }
+        intent = INTENTS.ANALYTICS;
       }
 
       // Handle REFERRAL link request
