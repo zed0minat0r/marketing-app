@@ -953,6 +953,36 @@
       color: #fff;
     }
 
+    .photo-card__delete {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: rgba(14,13,11,0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      padding: 0;
+    }
+    .photo-card__delete:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .photo-card.is-deleting {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
     /* ==========================================
        LAYOUT GRID (desktop 2-col lower sections)
     ========================================== */
@@ -1541,9 +1571,12 @@
         : '';
 
       return `
-        <div class="photo-card">
+        <div class="photo-card" data-photo-id="${p.id}">
           <div class="photo-card__thumb-wrap">
             ${enhBadge}
+            <button class="photo-card__delete"
+              title="Delete photo"
+              onclick="deletePhoto('${p.id}', this)">×</button>
             <img class="photo-card__thumb" src="${initialUrl}" alt="" loading="lazy" />
             ${compareBtn}
           </div>
@@ -1557,6 +1590,31 @@
       `;
     }).join('');
   }
+
+  // Delete a photo via the admin endpoint. Confirms before destroying.
+  window.deletePhoto = async function(photoId, btn) {
+    if (!confirm('Delete this photo? This cannot be undone.')) return;
+    const card = btn.closest('.photo-card');
+    card.classList.add('is-deleting');
+
+    const pw = sessionStorage.getItem('admin_pw') || '';
+    try {
+      const res = await fetch(`/api/admin/photo-delete?id=${encodeURIComponent(photoId)}`, {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + pw },
+      });
+      if (!res.ok) throw new Error('delete failed ' + res.status);
+      // Fade the card out, then remove from the DOM.
+      card.style.transition = 'opacity 0.3s, transform 0.3s';
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.9)';
+      setTimeout(() => card.remove(), 320);
+    } catch (e) {
+      card.classList.remove('is-deleting');
+      alert('Delete failed. Check console.');
+      console.error(e);
+    }
+  };
 
   // =============================================
   // CONFIG HEALTH
