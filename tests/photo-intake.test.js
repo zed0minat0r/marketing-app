@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert');
 
-const { extractMedia, ALLOWED_MIME, MAX_FILE_BYTES } = require('../lib/photo-intake');
+const { extractMedia, fetchTwilioMedia, ALLOWED_MIME, MAX_FILE_BYTES } = require('../lib/photo-intake');
 
 test('extractMedia — empty / no media', () => {
   assert.deepStrictEqual(extractMedia({}), []);
@@ -65,4 +65,93 @@ test('ALLOWED_MIME — rejects non-image formats', () => {
 
 test('MAX_FILE_BYTES — 10MB cap', () => {
   assert.strictEqual(MAX_FILE_BYTES, 10 * 1024 * 1024);
+});
+
+// Mock global fetch for fetchTwilioMedia tests
+const realFetch = globalThis.fetch;
+function withMockFetch(impl, fn) {
+  globalThis.fetch = impl;
+  return fn().finally(() => { globalThis.fetch = realFetch; });
+}
+
+test('fetchTwilioMedia — rejects OVERSIZED via Content-Length', async () => {
+  await withMockFetch(
+    async () => ({
+      ok: true,
+      headers: { get: (k) => k === 'content-length' ? String(MAX_FILE_BYTES + 1) : null },
+      arrayBuffer: async () => { throw new Error('should not reach arrayBuffer'); },
+    }),
+    async () => {
+      await assert.rejects(
+        fetchTwilioMedia('https://twilio.test/oversized.jpg', 'image/jpeg'),
+        err => err.code === 'OVERSIZED'
+      );
+    }
+  );
+});
+
+test('fetchTwilioMedia — rejects EMPTY (0-byte body)', async () => {
+  await withMockFetch(
+    async () => ({
+      ok: true,
+      headers: { get: (k) => k === 'content-length' ? '0' : 'image/jpeg' },
+      arrayBuffer: async () => new ArrayBuffer(0),
+    }),
+    async () => {
+      await assert.rejects(
+        fetchTwilioMedia('https://twilio.test/empty.jpg', 'image/jpeg'),
+        err => err.code === 'EMPTY'
+      );
+    }
+  );
+});
+
+test('fetchTwilioMedia — rejects oversized even when Content-Length lies', async () => {
+  // Content-Length says 100 bytes but body is actually 11MB
+  const fakeBig = new ArrayBuffer(MAX_FILE_BYTES + 1);
+  await withMockFetch(
+    async () => ({
+      ok: true,
+      headers: { get: (k) => k === 'content-length' ? '100' : 'image/jpeg' },
+      arrayBuffer: async () => fakeBig,
+    }),
+    async () => {
+      await assert.rejects(
+        fetchTwilioMedia('https://twilio.test/lies.jpg', 'image/jpeg'),
+        err => err.code === 'OVERSIZED'
+      );
+    }
+  );
+});
+
+test('fetchTwilioMedia — happy path returns buffer + mime', async () => {
+  const bytes = Buffer.from('FAKEJPEG');
+  await withMockFetch(
+    async () => ({
+      ok: true,
+      headers: {
+        get: (k) => k === 'content-length' ? String(bytes.length)
+                  : k === 'content-type' ? 'image/jpeg'
+                  : null,
+      },
+      arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
+    }),
+    async () => {
+      const out = await fetchTwilioMedia('https://twilio.test/ok.jpg', 'image/jpeg');
+      assert.strictEqual(out.buffer.length, bytes.length);
+      assert.strictEqual(out.mimeType, 'image/jpeg');
+    }
+  );
+});
+
+test('fetchTwilioMedia — throws on non-2xx', async () => {
+  await withMockFetch(
+    async () => ({ ok: false, status: 502, headers: { get: () => null }, arrayBuffer: async () => new ArrayBuffer(0) }),
+    async () => {
+      await assert.rejects(
+        fetchTwilioMedia('https://twilio.test/bad.jpg', 'image/jpeg'),
+        /Twilio media fetch failed: 502/
+      );
+    }
+  );
 });
