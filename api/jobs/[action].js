@@ -21,6 +21,7 @@ const handlers = {
   'refresh-tokens':        require('../../lib/job-handlers/refresh-tokens'),
   'reset-generations':     require('../../lib/job-handlers/reset-generations'),
   'cleanup-conversations': require('../../lib/job-handlers/cleanup-conversations'),
+  'enhance-photo':         require('../../lib/job-handlers/enhance-photo'),
 };
 
 module.exports = async function handler(req, res) {
