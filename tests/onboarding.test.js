@@ -85,6 +85,37 @@ describe('processOnboarding — name step', () => {
     assert.ok(result.replyText.includes("Joe's Pizza"));
   });
 
+  // Greeting detection — a user texting "hi" / "hello" / etc. as their
+  // FIRST message should get the welcome prompt, not have their greeting
+  // saved as their business name.
+  test('greeting "hi" sends welcome message instead of capturing as name', async () => {
+    const user = makeUser('name');
+    const result = await processOnboarding(user, 'hi');
+    assert.equal(result.done, false);
+    assert.equal(updateUserCalls.length, 0, 'should NOT call updateUser');
+    assert.ok(result.replyText.includes('Welcome'), 'should send welcome message');
+  });
+
+  test('greeting "hello" sends welcome', async () => {
+    const user = makeUser('name');
+    const result = await processOnboarding(user, 'hello');
+    assert.equal(updateUserCalls.length, 0);
+    assert.ok(result.replyText.includes('Welcome'));
+  });
+
+  test('greeting "good morning" sends welcome', async () => {
+    const user = makeUser('name');
+    const result = await processOnboarding(user, 'good morning');
+    assert.equal(updateUserCalls.length, 0);
+    assert.ok(result.replyText.includes('Welcome'));
+  });
+
+  test('actual business name that contains "hi" still works (Hibachi)', async () => {
+    const user = makeUser('name');
+    const result = await processOnboarding(user, 'Hibachi Express');
+    assert.equal(result.updatedUser.business_name, 'Hibachi Express');
+  });
+
   test('single character name returns error', async () => {
     const user = makeUser('name');
     const result = await processOnboarding(user, 'A');

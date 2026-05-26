@@ -21,11 +21,12 @@ const assert = require('node:assert/strict');
 
 let mockUser = null;
 let smsSent = [];
-let dbCalls = { logMessage: [], createUser: [], updateUser: [], createScheduledPost: [], cancelPost: [] };
+let dbCalls = { logMessage: [], createUser: [], updateUser: [], createScheduledPost: [], cancelPost: [], updateScheduledPost: [], qstashEnqueued: [], qstashCanceled: [] };
 let mockClaudeResponse = null;
 let mockSocialAccounts = [];
 let mockUpcomingPosts = [];
 let mockRecentMessages = [];
+let mockDraftPost = null;
 let rateLimitAllowed = true;
 
 // =============================================
@@ -133,13 +134,34 @@ require.cache[supabasePath] = {
       dbCalls.createScheduledPost.push(data);
       return { id: 'post-' + Date.now(), ...data };
     },
-    updateScheduledPost: async () => ({}),
+    getMostRecentDraftPost: async () => mockDraftPost,
+    updateScheduledPost: async (id, updates) => {
+      dbCalls.updateScheduledPost.push({ id, updates });
+      return { id, ...updates };
+    },
     getUpcomingPosts: async () => mockUpcomingPosts,
     cancelPost: async (postId, userId) => {
       dbCalls.cancelPost.push({ postId, userId });
     },
     incrementGenerationsUsed: async () => {},
     deleteUser: async () => {},
+  },
+};
+
+// Mock the QStash publisher (don't hit real Upstash from tests).
+const qstashPath = require.resolve('../lib/qstash-publisher');
+require.cache[qstashPath] = {
+  id: qstashPath,
+  filename: qstashPath,
+  loaded: true,
+  exports: {
+    scheduleSocialPublish: async ({ postId, scheduledFor }) => {
+      dbCalls.qstashEnqueued.push({ postId, scheduledFor });
+      return { messageId: 'qstash_' + postId };
+    },
+    cancelScheduledPublish: async (messageId) => {
+      dbCalls.qstashCanceled.push(messageId);
+    },
   },
 };
 
@@ -460,11 +482,12 @@ describe('Existing user — YES/EDIT/SKIP responses', () => {
 
   beforeEach(() => {
     smsSent = [];
-    dbCalls = { logMessage: [], createUser: [], updateUser: [], createScheduledPost: [], cancelPost: [] };
+    dbCalls = { logMessage: [], createUser: [], updateUser: [], createScheduledPost: [], cancelPost: [], updateScheduledPost: [], qstashEnqueued: [], qstashCanceled: [] };
     rateLimitAllowed = true;
     mockUser = makeOnboardedUser();
     mockRecentMessages = [draftPost];
     mockClaudeResponse = null;
+    mockDraftPost = null;
   });
 
   test('YES with no connected accounts prompts user to connect', async () => {
@@ -479,17 +502,52 @@ describe('Existing user — YES/EDIT/SKIP responses', () => {
     );
   });
 
-  test('YES with connected account queues post', async () => {
+  test('YES with connected account flips existing draft to queued + enqueues QStash', async () => {
     mockSocialAccounts = [{ platform: 'instagram' }];
+    mockDraftPost = {
+      id: 'draft-123',
+      user_id: 'user-abc',
+      content: 'Check out our special!',
+      status: 'draft',
+      platforms: ['instagram'],
+    };
     const req = makeReq({ Body: 'yes' });
     const res = makeRes();
     await handler(req, res);
-    assert.equal(dbCalls.createScheduledPost.length, 1);
-    assert.equal(dbCalls.createScheduledPost[0].status, 'queued');
+    // No duplicate createScheduledPost — we flip the existing draft.
+    assert.equal(dbCalls.createScheduledPost.length, 0);
+    // The existing draft is updated to queued.
+    const update = dbCalls.updateScheduledPost.find(u => u.id === 'draft-123');
+    assert.ok(update, 'should update the draft post');
+    assert.equal(update.updates.status, 'queued');
+    // QStash publish job was enqueued for the draft.
+    assert.equal(dbCalls.qstashEnqueued.length, 1);
+    assert.equal(dbCalls.qstashEnqueued[0].postId, 'draft-123');
+  });
+
+  test('YES with no existing draft tells user to start a new one', async () => {
+    mockSocialAccounts = [{ platform: 'instagram' }];
+    mockDraftPost = null;
+    const req = makeReq({ Body: 'yes' });
+    const res = makeRes();
+    await handler(req, res);
+    const text = smsSent[0]?.body || '';
+    assert.ok(
+      text.toLowerCase().includes('could not find a draft') || text.toLowerCase().includes('new'),
+      'should hint that there is no draft to approve'
+    );
+    assert.equal(dbCalls.qstashEnqueued.length, 0);
   });
 
   test('YES with connected account sends confirmation SMS', async () => {
     mockSocialAccounts = [{ platform: 'instagram' }];
+    mockDraftPost = {
+      id: 'draft-456',
+      user_id: 'user-abc',
+      content: 'Yet another draft',
+      status: 'draft',
+      platforms: ['instagram'],
+    };
     const req = makeReq({ Body: 'YES' });
     const res = makeRes();
     await handler(req, res);

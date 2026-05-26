@@ -22,6 +22,7 @@ const { generateResponse } = require('../../lib/claude');
 const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand } = require('../../lib/intent');
 const { processInboundMedia, extractMedia } = require('../../lib/photo-intake');
 const { resolveComplianceAction, COMPLIANCE_REPLIES } = require('../../lib/sms-compliance');
+const { scheduleSocialPublish, cancelScheduledPublish } = require('../../lib/qstash-publisher');
 const {
   getUserByPhone,
   createUser,
@@ -30,6 +31,7 @@ const {
   getRecentMessages,
   getSocialAccounts,
   createScheduledPost,
+  getMostRecentDraftPost,
   updateScheduledPost,
   getUpcomingPosts,
   cancelPost,
@@ -133,21 +135,47 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
         };
       }
 
-      // Store as queued post for immediate publishing
+      // Flip the existing draft row to 'queued' — DO NOT create a new row
+      // from the AI's reply text, which contains the "Reply YES to post"
+      // wrapper that would otherwise end up in the actual post body.
+      const draft = await getMostRecentDraftPost(user.id);
+      if (!draft) {
+        return {
+          handled: true,
+          replyText: "I could not find a draft to approve. Try \"Write a post about [topic]\" to start a new one.",
+          intent: INTENTS.APPROVE,
+        };
+      }
+
       const platforms = accounts.map(a => a.platform);
-      const post = await createScheduledPost({
-        userId: user.id,
+
+      // Schedule with QStash so the publish job actually fires. delay=null
+      // = "as soon as possible" (1s in the publisher).
+      let qstashMessageId = null;
+      try {
+        const { messageId } = await scheduleSocialPublish({
+          postId: draft.id,
+          scheduledFor: null,
+        });
+        qstashMessageId = messageId;
+      } catch (err) {
+        console.error('QStash enqueue failed for immediate publish:', err.message);
+        // Don't fail the user-facing flow — leave the row as queued, the user
+        // can retry. Worth surfacing the error in admin logs.
+      }
+
+      await updateScheduledPost(draft.id, {
         platforms,
-        content: lastBotMessage.body,
         status: 'queued',
-        scheduledFor: null,
+        qstash_message_id: qstashMessageId,
+        scheduled_for: null,
       });
 
       return {
         handled: true,
         replyText: `Got it! Your post is queued for publishing to ${platforms.join(' & ')}.\n\nI will let you know when it is live.`,
         intent: INTENTS.APPROVE,
-        postId: post.id,
+        postId: draft.id,
       };
     }
 
@@ -436,6 +464,11 @@ module.exports = async function handler(req, res) {
           const posts = await getUpcomingPosts(user.id);
           const targetPost = posts[cancelIndex - 1];
           if (targetPost) {
+            // Cancel the pending QStash job (best-effort — may already have
+            // fired or never been enqueued). Then mark the row canceled.
+            if (targetPost.qstash_message_id) {
+              await cancelScheduledPublish(targetPost.qstash_message_id);
+            }
             await cancelPost(targetPost.id, user.id);
             const remaining = posts.length - 1;
             replyText = `Post canceled. ${remaining} post${remaining !== 1 ? 's' : ''} remaining.`;
@@ -526,7 +559,9 @@ module.exports = async function handler(req, res) {
                   scheduledFor: null,
                 });
               } else if (aiResult.action.type === 'schedule_post' && aiResult.action.content) {
-                await createScheduledPost({
+                // Persist the queued post AND enqueue a QStash job at the
+                // scheduled time so the publish handler actually fires.
+                const scheduledPost = await createScheduledPost({
                   userId: user.id,
                   platforms: aiResult.action.platform === 'all'
                     ? platforms.length > 0 ? platforms : ['instagram']
@@ -535,6 +570,23 @@ module.exports = async function handler(req, res) {
                   status: 'queued',
                   scheduledFor: aiResult.action.scheduled_for || null,
                 });
+
+                try {
+                  const { messageId } = await scheduleSocialPublish({
+                    postId: scheduledPost.id,
+                    scheduledFor: aiResult.action.scheduled_for || null,
+                  });
+                  await updateScheduledPost(scheduledPost.id, {
+                    qstash_message_id: messageId,
+                  });
+                } catch (err) {
+                  console.error('QStash enqueue failed for scheduled post:', err.message);
+                  // Mark as failed-to-schedule so admin can see / retry
+                  await updateScheduledPost(scheduledPost.id, {
+                    status: 'failed',
+                    error_message: `QStash enqueue failed: ${err.message}`,
+                  }).catch(() => {});
+                }
               }
             }
 
