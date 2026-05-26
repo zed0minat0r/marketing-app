@@ -419,6 +419,123 @@ Nightly batch job (Upstash QStash cron, runs at 2am UTC):
 
 ---
 
+## Phase 6 — MMS Photo Intake + Auto-Enhancement
+
+### Overview
+
+Small business owners take phone photos all day. Asking them to upload via a
+web dashboard is friction; MMS-to-the-same-SMS-thread is zero-friction. Phase 6
+turns the Sidekick number into a photo library: text in pictures of work,
+storefront, products, and Sidekick saves, tags, and polishes them
+automatically. They become the visual source for future posts.
+
+### Data Flow
+
+```
+1. User MMS → Twilio
+2. Twilio webhook → /api/sms/inbound (same handler as text)
+3. inbound.js detects NumMedia>0, routes to lib/photo-intake.js
+4. For each attachment:
+   - Check per-user daily cap (lib/cost-guardrails.js)
+   - Fetch from Twilio CDN (basic auth via TWILIO_ACCOUNT_SID/AUTH_TOKEN)
+   - Validate MIME + size (10MB cap; jpg/png/heic/webp/gif only)
+   - Upload to Cloudflare R2 via lib/storage.js (aws4fetch S3-API)
+   - Insert customer_photos row (status: tags_status=pending, enhancement_status=pending)
+   - Fire-and-forget: tagPhotoAsync (Claude Haiku 4.5 vision)
+   - Fire-and-forget: enhancePhotoAsync (Replicate Real-ESRGAN, gated by user.auto_enhance_enabled)
+5. Reply via SMS:
+   - First photo ever → "Saved that X. Want DRAFT or LIBRARY mode?"
+   - Onboarding 'photos' step → running count
+   - Otherwise → "Got it — saved that X shot to your library."
+```
+
+### Key files
+
+| File | Role |
+|------|------|
+| `lib/photo-intake.js` | Orchestration — extractMedia → fetch → upload → DB → async tag/enhance |
+| `lib/storage.js` | R2 client (aws4fetch). Avoids 2MB @aws-sdk dep for cold-start sanity |
+| `lib/photo-tagger.js` | Claude Haiku 4.5 vision → JSON tag array, 4-8 short lowercase tags |
+| `lib/photo-enhancer.js` | Replicate Real-ESRGAN upscale + sharpen + face_enhance. Saves to R2 under user_<id>/enhanced/ |
+| `lib/cost-guardrails.js` | Per-user/per-UTC-day caps on mms_intake, vision_tag, enhancement |
+| `supabase/migrations/002_customer_photos.sql` | customer_photos table + user pref columns |
+| `supabase/migrations/003_photo_enhancement.sql` | enhanced_url + enhancement_status |
+
+### Honesty rule (RULE 7 from CLAUDE.md)
+
+The enhancer is **strictly safe-only**: upscale, sharpen, color-correct,
+crop. It never regenerates subject matter (no fake toppings, fake interiors,
+fake faces). "Enhance how it was captured, never change what was captured."
+If we ever add the "polish my pizza" tier, it goes behind explicit per-image
+owner approval — never auto.
+
+### Cost ceiling
+
+Default caps per user per UTC day, all overridable via env:
+
+- `MAX_MMS_PER_USER_PER_DAY` = 50
+- `MAX_TAGS_PER_USER_PER_DAY` = 50
+- `MAX_ENHANCEMENTS_PER_USER_PER_DAY` = 50
+
+Hits surface as friendly SMS replies ("hit your daily photo limit") and
+mark related photo rows as `tags_status='failed'` / `enhancement_status='skipped'`
+so the rest of the pipeline degrades gracefully.
+
+---
+
+## Phase 7 — Admin Operator Dashboard (server-backed)
+
+Previously the static admin dashboard tried to hit Supabase REST with the
+anon key — but RLS only grants `service_role` access, so the dashboard was
+blind in production. Phase 7 moved every dashboard data source behind
+service-role-backed API endpoints with bearer-password auth.
+
+### Endpoints
+
+| Endpoint | Returns |
+|----------|---------|
+| `GET /api/admin/snapshot` | stats + 7-day chart + users + errors (one shot) |
+| `GET /api/admin/photos` | 24 most recent customer_photos |
+| `GET /api/admin/config-check` | per-env-var set/missing map (never values) |
+| `POST /api/admin/photo-delete?id=...` | drops R2 objects + DB row |
+
+### Auth
+
+`lib/admin-auth.js` validates `Authorization: Bearer <password>` against
+`ADMIN_PASSWORD_HASH` (SHA-256, constant-time compare). The same password is
+checked client-side against the hash baked into admin.html — both checks
+must pass. Endpoints return 503 if `ADMIN_PASSWORD_HASH` isn't set, except
+`config-check` which intentionally allows unauth in that one case so it can
+flag the missing config itself.
+
+### Admin UI sections (admin.html)
+
+- **Configuration** — only renders when something's missing. Per-env-var grid
+  pulled from `/api/admin/config-check`.
+- **Stats** — totals + today + this-week messages.
+- **7-day message chart**.
+- **Users table** — with message_count + last_message_at attached server-side.
+- **Plan breakdown**.
+- **Recent errors**.
+- **Customer photos** — grid with enhanced + original toggle + delete button.
+
+---
+
+## Phase 8 — SMS Carrier Compliance (STOP/HELP)
+
+Toll-free numbers do not auto-handle STOP/HELP at the carrier — we own it.
+`lib/sms-compliance.js` matches BARE compliance keywords (so "CANCEL 1" still
+cancels a scheduled post; only standalone "CANCEL" opts out). On STOP the
+user's `opted_out_at` is set and **every future `sendSms()` call skips
+silently** unless explicitly invoked with `{ force: true }` (used only for
+the legally-required STOP/HELP/START acknowledgments themselves). START
+clears the flag and re-subscribes. HELP replies with brand + support contact
++ "Msg & data rates may apply" — every CTIA-required disclosure.
+
+Migration 004 adds the `opted_out_at` column + partial index.
+
+---
+
 ## Database Schema
 
 All tables live in Supabase (PostgreSQL). UUIDs as primary keys. Timestamps in UTC.
