@@ -10,8 +10,16 @@
  * Response: { success: true, urls: {...} }
  */
 
-const { getScheduledPost, updateScheduledPost, getSocialAccount, upsertSocialAccount, getClient } = require('../../lib/supabase');
+const {
+  getScheduledPost,
+  updateScheduledPost,
+  getSocialAccount,
+  upsertSocialAccount,
+  getMostRecentPhotoForPost,
+  getClient,
+} = require('../../lib/supabase');
 const { sendSms } = require('../sms/outbound');
+const { requireInternalAuth } = require('../../lib/internal-auth');
 
 // =============================================
 // BRANDED TEXT-AS-IMAGE FOR INSTAGRAM
@@ -533,8 +541,35 @@ async function publishPost(postId) {
   if (post.status === 'posted') return { success: true, alreadyPosted: true };
   if (post.status === 'canceled') throw new Error('Post has been canceled');
 
+  // Concurrency guard: another worker may have already flipped this post to
+  // 'publishing' very recently. publish.js (the QStash entry point) checks
+  // for staleness; do the same inner check here to harden the race when
+  // publishPost is called directly.
+  if (post.status === 'publishing') {
+    const updatedAt = new Date(post.updated_at || 0);
+    const staleCutoff = new Date(Date.now() - 5 * 60 * 1000);
+    if (updatedAt > staleCutoff) {
+      console.log(`publishPost idempotency: post ${postId} already publishing — skipping`);
+      return { success: true, alreadyPublishing: true };
+    }
+  }
+
   // Mark as publishing
   await updateScheduledPost(postId, { status: 'publishing' });
+
+  // If the post has no media_url set (typical when drafted from a text-only
+  // SMS), fall back to the user's most recent photo from their library.
+  // Critical for Instagram + Pinterest + GBP which require an image.
+  if (!post.media_url) {
+    try {
+      const libraryUrl = await getMostRecentPhotoForPost(post.user_id);
+      if (libraryUrl) {
+        post.media_url = libraryUrl;
+      }
+    } catch (err) {
+      console.error('Failed to fetch fallback library photo:', err.message);
+    }
+  }
 
   const urls = {};
   const errors = {};
@@ -638,9 +673,8 @@ async function publishPost(postId) {
       console.error(`Error posting to ${platform}:`, err.message);
 
       if (err.message === 'INSTAGRAM_NEEDS_IMAGE') {
-        errors[platform] = 'Instagram requires an image for feed posts. Share an image URL with your post, or I can post text-only to Facebook and Twitter instead.';
+        errors[platform] = 'Instagram requires an image for feed posts, and your photo library is empty.';
 
-        // Notify the user via SMS if we can look up their phone
         try {
           const { data: userData } = await getClient()
             .from('users')
@@ -651,16 +685,16 @@ async function publishPost(postId) {
             const otherPlatforms = post.platforms.filter(p => p !== 'instagram');
             const altText = otherPlatforms.length > 0
               ? ` I posted it to ${otherPlatforms.join(' & ')} for you.`
-              : ' Reply with an image URL to post to Instagram.';
+              : '';
             await sendSms(userData.phone,
-              `Instagram needs an image for feed posts.${altText}`
+              `Instagram needs an image and your photo library is empty. Text me a few photos and try again.${altText}`
             ).catch(console.error);
           }
         } catch (notifyErr) {
           console.error('Failed to notify user about Instagram image requirement:', notifyErr.message);
         }
       } else if (err.message === 'PINTEREST_NEEDS_IMAGE') {
-        errors[platform] = 'Pinterest requires an image URL to create a pin. Reply with your post text and an image URL.';
+        errors[platform] = 'Pinterest requires an image, and your photo library is empty.';
 
         try {
           const { data: userData } = await getClient()
@@ -670,7 +704,7 @@ async function publishPost(postId) {
             .single();
           if (userData?.phone) {
             await sendSms(userData.phone,
-              'Pinterest requires an image to create a pin. Reply with an image URL along with your post text.'
+              'Pinterest needs an image and your photo library is empty. Text me a few photos and try again.'
             ).catch(console.error);
           }
         } catch (notifyErr) {
@@ -755,6 +789,10 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Internal-only endpoint: prevents anonymous callers from publishing
+  // arbitrary post_ids by guessing UUIDs.
+  if (!requireInternalAuth(req, res)) return;
 
   const { post_id } = req.body || {};
 
