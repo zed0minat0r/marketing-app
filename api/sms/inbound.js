@@ -285,7 +285,7 @@ module.exports = async function handler(req, res) {
       );
       await sendSms(from, COMPLIANCE_REPLIES.stop, { force: true }).catch(console.error);
       await logMessage({
-        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.stop, intent: 'compliance_stop',
+        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.stop, intent: INTENTS.COMPLIANCE_STOP,
       }).catch(console.error);
       return res.status(200).send('OK');
     }
@@ -295,14 +295,14 @@ module.exports = async function handler(req, res) {
       );
       await sendSms(from, COMPLIANCE_REPLIES.start, { force: true }).catch(console.error);
       await logMessage({
-        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.start, intent: 'compliance_start',
+        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.start, intent: INTENTS.COMPLIANCE_START,
       }).catch(console.error);
       return res.status(200).send('OK');
     }
     if (complianceAction === 'help') {
       await sendSms(from, COMPLIANCE_REPLIES.help, { force: true }).catch(console.error);
       await logMessage({
-        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.help, intent: 'compliance_help',
+        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.help, intent: INTENTS.COMPLIANCE_HELP,
       }).catch(console.error);
       return res.status(200).send('OK');
     }
@@ -377,7 +377,7 @@ module.exports = async function handler(req, res) {
             // User has confirmations off — reply 200 OK without sending anything.
             replyText = '';
           }
-          intent = 'photo_intake';
+          intent = INTENTS.PHOTO_INTAKE;
         }
       }
 
@@ -405,7 +405,7 @@ module.exports = async function handler(req, res) {
         replyText = autoDraft
           ? "Got it. From now on, every photo you text me, I will draft a post for you to approve."
           : "Got it. Photos will just save to your library for later — I won't auto-draft.";
-        intent = 'photo_intake_pref';
+        intent = INTENTS.PHOTO_INTAKE_PREF;
 
         const sentMessage = await sendSms(from, replyText);
         await logMessage({
