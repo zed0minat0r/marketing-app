@@ -301,9 +301,13 @@ module.exports = async function handler(req, res) {
         });
 
         if (result.savedCount === 0) {
-          replyText = result.skippedCount > 0
-            ? "I could not save that attachment. We only support image files up to 10MB (JPG, PNG, HEIC, WebP)."
-            : "Got your message but no photo was attached.";
+          if (result.capHit) {
+            replyText = "You've hit your daily photo limit. Send more tomorrow — your existing library is still good.";
+          } else {
+            replyText = result.skippedCount > 0
+              ? "I could not save that attachment. We only support image files up to 10MB (JPG, PNG, HEIC, WebP)."
+              : "Got your message but no photo was attached.";
+          }
           intent = INTENTS.UNKNOWN;
         } else {
           const tag = result.primaryTagGuess;
