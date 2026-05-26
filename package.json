@@ -9,8 +9,7 @@
     "deploy": "vercel --prod",
     "dev:seed": "node dev/seed.js",
     "dev:mock-twilio": "node dev/mock-twilio.js",
-    "dev:mock-mms": "node dev/mock-mms.js",
-    "setup:qstash": "node dev/setup-qstash-schedules.js"
+    "dev:mock-mms": "node dev/mock-mms.js"
   },
   "repository": {
     "type": "git",

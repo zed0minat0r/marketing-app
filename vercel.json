@@ -16,6 +16,28 @@
       "maxDuration": 10
     }
   },
+  "crons": [
+    {
+      "path": "/api/jobs/collect-analytics",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/jobs/weekly-summary",
+      "schedule": "0 14 * * 1"
+    },
+    {
+      "path": "/api/jobs/refresh-tokens",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/jobs/reset-generations",
+      "schedule": "5 0 1 * *"
+    },
+    {
+      "path": "/api/jobs/cleanup-conversations",
+      "schedule": "0 5 * * 0"
+    }
+  ],
   "rewrites": [
     { "source": "/connected", "destination": "/connected.html" },
     { "source": "/admin", "destination": "/admin.html" }
