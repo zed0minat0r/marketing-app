@@ -8,7 +8,8 @@
     "dev": "vercel dev",
     "deploy": "vercel --prod",
     "dev:seed": "node dev/seed.js",
-    "dev:mock-twilio": "node dev/mock-twilio.js"
+    "dev:mock-twilio": "node dev/mock-twilio.js",
+    "dev:mock-mms": "node dev/mock-mms.js"
   },
   "repository": {
     "type": "git",
