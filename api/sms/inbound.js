@@ -19,7 +19,8 @@ const { sendSms } = require('./outbound');
 const { checkRateLimit } = require('../../lib/rate-limit');
 const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
-const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand } = require('../../lib/intent');
+const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand, parseNameCommand, parseVoiceCommand, parseToneCommand } = require('../../lib/intent');
+const { normalizeTone } = require('../../lib/onboarding');
 const { processInboundMedia, extractMedia } = require('../../lib/photo-intake');
 const { resolveComplianceAction, COMPLIANCE_REPLIES } = require('../../lib/sms-compliance');
 const { scheduleSocialPublish, cancelScheduledPublish } = require('../../lib/qstash-publisher');
@@ -523,6 +524,46 @@ module.exports = async function handler(req, res) {
             intent = INTENTS.CANCEL;
           }
         }
+      }
+
+      // Name the assistant (personalization). Falls back to "Sidekick" if cleared.
+      else if (preClassified === INTENTS.SET_NAME) {
+        const name = parseNameCommand(messageBody).slice(0, 40);
+        if (name) {
+          await updateUser(user.id, { assistant_name: name });
+          user.assistant_name = name;
+          replyText = `Done — call me ${name} from now on. What can I help you with?`;
+        } else {
+          replyText = 'What would you like to name me? Try: "Call yourself Max".';
+        }
+        intent = INTENTS.SET_NAME;
+      }
+
+      // Set a free-text voice/style (takes precedence over the preset tone).
+      else if (preClassified === INTENTS.SET_VOICE) {
+        const voice = parseVoiceCommand(messageBody).slice(0, 280);
+        if (voice) {
+          await updateUser(user.id, { voice_notes: voice });
+          user.voice_notes = voice;
+          replyText = `Got it — I'll write in that voice: "${voice}". Try "write a post about our weekend special" to hear it.`;
+        } else {
+          replyText = 'Describe the voice you want in your own words. Try: "Voice: fun, lots of emojis, a little cheeky, never salesy".';
+        }
+        intent = INTENTS.SET_VOICE;
+      }
+
+      // Change the preset tone (casual / professional / bold / friendly).
+      else if (preClassified === INTENTS.SET_TONE) {
+        const phrase = parseToneCommand(messageBody);
+        if (phrase) {
+          const tone = normalizeTone(phrase);
+          await updateUser(user.id, { tone });
+          user.tone = tone;
+          replyText = `Tone set to ${tone}. Want a fully custom voice instead? Text "Voice: " and describe it in your own words.`;
+        } else {
+          replyText = 'Which tone? Pick casual, professional, bold, or friendly — e.g. "Tone bold". Or describe your own with "Voice: ...".';
+        }
+        intent = INTENTS.SET_TONE;
       }
 
       // Handle LIST_SCHEDULE command

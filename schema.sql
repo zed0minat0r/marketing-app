@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS users (
   business_name           TEXT,
   business_type           TEXT,                          -- restaurant, retail, service, ecommerce, other
   tone                    TEXT DEFAULT 'professional',   -- casual, professional, bold, friendly
+  voice_notes             TEXT,                          -- free-text voice/style the user describes (e.g. "cheeky, emoji-heavy, never salesy")
+  assistant_name          TEXT,                          -- what the user names their AI assistant; NULL falls back to "Sidekick"
   timezone                TEXT DEFAULT 'America/New_York',
   plan                    TEXT DEFAULT 'starter',        -- starter, growth, pro
   stripe_customer_id      TEXT,
@@ -32,6 +34,11 @@ CREATE TABLE IF NOT EXISTS users (
   created_at              TIMESTAMPTZ DEFAULT NOW(),
   updated_at              TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Idempotent migrations for existing databases (CREATE TABLE IF NOT EXISTS
+-- won't add columns to a table that already exists).
+ALTER TABLE users ADD COLUMN IF NOT EXISTS voice_notes    TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS assistant_name TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);
 CREATE INDEX IF NOT EXISTS idx_users_stripe_customer ON users(stripe_customer_id);
