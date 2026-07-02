@@ -493,6 +493,10 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   transition:opacity 0.38s ease 0.12s, transform 0.38s ease 0.12s;
 }
 .how__step-desc.in{opacity:1;transform:none}
+/* Step-change reveal that never hits full transparency — so rapid step changes
+   on fast scroll pulse gently instead of blinking the heading in and out. */
+@keyframes how-step-in{from{opacity:0.4;transform:translateX(-8px)}to{opacity:1;transform:none}}
+.how__step-anim{animation:how-step-in 0.38s ease both}
 
 /* Center: phone */
 .how__phone-col{
@@ -2927,28 +2931,20 @@ window.addEventListener('scroll', () => {
     lastStep = idx;
     const s = steps[idx];
 
-    if (animate && prefersMotion) {
-      stepLabel.classList.remove('in');
-      stepTitle.classList.remove('in');
-      stepDesc.classList.remove('in');
-      setTimeout(function() {
-        stepLabel.textContent = s.label;
-        stepTitle.textContent = s.title;
-        stepDesc.textContent  = s.desc;
-        requestAnimationFrame(function() {
-          stepLabel.classList.add('in');
-          stepTitle.classList.add('in');
-          stepDesc.classList.add('in');
-        });
-      }, 100);
-    } else {
-      stepLabel.textContent = s.label;
-      stepTitle.textContent = s.title;
-      stepDesc.textContent  = s.desc;
-      stepLabel.classList.add('in');
-      stepTitle.classList.add('in');
-      stepDesc.classList.add('in');
-    }
+    // Swap text instantly and keep the heading visible ('in'). No fade-out gap,
+    // so scrolling through steps (fast or slow) can never blink it to invisible.
+    stepLabel.textContent = s.label;
+    stepTitle.textContent = s.title;
+    stepDesc.textContent  = s.desc;
+    [stepLabel, stepTitle, stepDesc].forEach(function(el) {
+      el.classList.add('in');
+      // Replay a subtle slide-in (pulses from 0.4 opacity, never 0) on step change.
+      if (animate && prefersMotion) {
+        el.classList.remove('how__step-anim');
+        void el.offsetWidth; // reflow to restart the animation
+        el.classList.add('how__step-anim');
+      }
+    });
 
     dotItems.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
   }
