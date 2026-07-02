@@ -86,6 +86,15 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   background:var(--accent);
   display:inline-block;
 }
+.nav__brand{display:flex;align-items:center;gap:11px}
+.nav__byline{
+  font-size:0.72rem;color:var(--text-muted);text-decoration:none;
+  padding-left:11px;border-left:1px solid var(--border2);
+  white-space:nowrap;transition:color 0.2s;
+}
+.nav__byline strong{color:var(--text-muted);font-weight:600;transition:color 0.2s}
+.nav__byline:hover,.nav__byline:hover strong{color:var(--accent)}
+@media (max-width:600px){.nav__byline{display:none}}
 .nav__cta{
   background:var(--accent);color:#0e0d0b;
   padding:9px 20px;border-radius:4px;
@@ -1680,6 +1689,22 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
   color:var(--text-muted);opacity:0.55;
   margin-bottom:10px;letter-spacing:0.04em;
 }
+.footer__parent{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.85rem;color:var(--text-muted);text-decoration:none;
+  margin-bottom:16px;transition:color 0.2s;
+}
+.footer__parent strong{color:var(--text);font-weight:600}
+.footer__parent:hover,.footer__parent:hover strong{color:var(--accent)}
+footer p a{color:var(--text-muted);text-decoration:underline;text-underline-offset:2px;transition:color 0.2s}
+footer p a:hover{color:var(--accent)}
+/* Final-CTA parent-brand eyebrow */
+.final-cta__parent{
+  font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:14px;
+}
+.final-cta__parent a{color:var(--accent);text-decoration:none;font-weight:600}
+.final-cta__parent a:hover{text-decoration:underline}
 
 /* ─── URGENCY BAR ─── */
 .urgency-bar{
@@ -2050,9 +2075,12 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 <!-- NAV -->
 <nav id="nav">
   <div class="container nav__inner">
-    <a href="#heroStage" class="nav__logo" aria-label="Sidekick - back to top">
-      <span class="nav__logo-dot"></span>Sidekick
-    </a>
+    <div class="nav__brand">
+      <a href="#heroStage" class="nav__logo" aria-label="Sidekick - back to top">
+        <span class="nav__logo-dot"></span>Sidekick
+      </a>
+      <a class="nav__byline" href="https://penntechsolutions.com" target="_blank" rel="noopener" aria-label="A Penn Tech Solutions product">by <strong>Penn&nbsp;Tech&nbsp;Solutions</strong></a>
+    </div>
     <button class="nav__cta" onclick="document.getElementById('final').scrollIntoView({behavior:'smooth'})">Join waitlist</button>
   </div>
 </nav>
@@ -2653,6 +2681,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 <!-- SECTION 9: FINAL CTA -->
 <section class="final-cta" id="final">
   <div class="final-cta__inner">
+    <p class="final-cta__parent">A product of <a href="https://penntechsolutions.com" target="_blank" rel="noopener">Penn&nbsp;Tech&nbsp;Solutions</a></p>
     <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
     <h2 class="final-cta__title">Your marketing shouldn't require a second job.</h2>
     <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We text you when your spot opens &mdash; no app to check, no login ever.</p>
@@ -2710,14 +2739,16 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
 
 <footer>
   <div class="container">
+    <a class="footer__parent" href="https://penntechsolutions.com" target="_blank" rel="noopener">A <strong>Penn Tech Solutions</strong> product</a>
     <p class="footer__built">Built with coffee in Philadelphia</p>
     <div class="footer__links">
+      <a href="https://penntechsolutions.com" target="_blank" rel="noopener">Penn Tech Solutions</a>
       <a href="#" onclick="openModal('privacy');return false;">Privacy</a>
       <a href="#" onclick="openModal('terms');return false;">Terms</a>
       <a href="mailto:hello@sidekik.com">hello@sidekik.com</a>
       <a href="#heroStage">Back to top</a>
     </div>
-    <p>&copy; 2026 Sidekick &mdash; a product of Pennsylvania Technology Solutions LLC. Your marketing, in your texts.</p>
+    <p>&copy; 2026 Sidekick &mdash; a product of <a href="https://penntechsolutions.com" target="_blank" rel="noopener">Pennsylvania Technology Solutions LLC</a>. Your marketing, in your texts.</p>
   </div>
 </footer>
 
