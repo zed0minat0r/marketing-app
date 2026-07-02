@@ -2834,27 +2834,40 @@ window.addEventListener('scroll', () => {
 
   let lastStep = -1;
 
+  // Cache static layout metrics so the scroll hot-path never forces a reflow.
+  // Messages hide via opacity (not display), so they always occupy space and their
+  // offsets are stable — only recompute on resize / font load.
+  const msgMetrics = { bottoms: [], target: 0, countInStep: {} };
+  function computeMetrics() {
+    const msgsBox = document.getElementById('howMsgList');
+    if (!msgsBox) return;
+    msgMetrics.bottoms = Array.from(allMsgs).map(function(m) { return m.offsetTop + m.offsetHeight; });
+    msgMetrics.target = msgsBox.clientHeight * 0.80;
+    msgMetrics.countInStep = {};
+    allMsgs.forEach(function(m) {
+      const s = m.dataset.step;
+      msgMetrics.countInStep[s] = (msgMetrics.countInStep[s] || 0) + 1;
+    });
+  }
+
   // Show messages for a given step (and all previous steps), with scroll-within-step seq reveal
   function showMsgsForStep(stepIdx, seqFraction) {
-    allMsgs.forEach(function(m) {
+    let lastVisibleIdx = -1;
+    allMsgs.forEach(function(m, idx) {
       const ms = parseInt(m.dataset.step, 10);
       const mseq = parseInt(m.dataset.seq, 10);
+      let show;
       if (ms < stepIdx) {
-        // previous steps: always visible
-        m.classList.add('visible');
+        show = true; // previous steps: always visible
       } else if (ms === stepIdx) {
-        // current step: reveal based on seqFraction
-        const msgsInStep = document.querySelectorAll(`#howMsgList .how-msg[data-step="${stepIdx}"]`).length;
-        const threshold = mseq / msgsInStep;
-        if (seqFraction >= threshold) {
-          m.classList.add('visible');
-        } else {
-          m.classList.remove('visible');
-        }
+        // current step: reveal based on seqFraction (uses cached per-step count)
+        const msgsInStep = msgMetrics.countInStep[m.dataset.step] || 1;
+        show = seqFraction >= (mseq / msgsInStep);
       } else {
-        // future steps: hidden
-        m.classList.remove('visible');
+        show = false; // future steps: hidden
       }
+      m.classList.toggle('visible', show);
+      if (show) lastVisibleIdx = idx;
     });
 
     // Checkmark appears only in final step when most messages are visible
@@ -2862,23 +2875,21 @@ window.addEventListener('scroll', () => {
       checkEl.classList.toggle('visible', stepIdx === 2 && seqFraction > 0.7);
     }
 
-    // Auto-scroll the inner messages so the latest visible message stays in view (above the bottom fade)
+    // Auto-scroll the inner messages so the latest visible message stays above the
+    // bottom fade — using CACHED metrics (no per-frame reflow). Only touch the DOM
+    // when the target actually changes, so we never restart the CSS transition mid-scroll.
     const inner = document.getElementById('howMsgInner');
-    const msgsBox = document.getElementById('howMsgList');
-    if (inner && msgsBox) {
-      const vis = inner.querySelectorAll('.how-msg.visible');
-      if (vis.length === 0) {
-        inner.style.transform = 'translateY(0)';
-      } else {
-        const last = vis[vis.length - 1];
-        const lastBottom = last.offsetTop + last.offsetHeight;
-        // Bottom fade starts at 82% of the container; keep the latest message above it.
-        const targetBottom = msgsBox.clientHeight * 0.80;
-        const offset = Math.max(0, lastBottom - targetBottom);
+    if (inner && msgMetrics.bottoms.length) {
+      const offset = lastVisibleIdx < 0
+        ? 0
+        : Math.max(0, msgMetrics.bottoms[lastVisibleIdx] - msgMetrics.target);
+      if (offset !== lastOffset) {
+        lastOffset = offset;
         inner.style.transform = `translateY(${-offset}px)`;
       }
     }
   }
+  let lastOffset = -1;
 
   function setStep(idx, animate) {
     if (idx === lastStep) return;
@@ -2932,9 +2943,23 @@ window.addEventListener('scroll', () => {
   }
 
   // Init
+  computeMetrics();
   setStep(0, false);
   showMsgsForStep(0, 0);
-  window.addEventListener('scroll', function() { requestAnimationFrame(updateHow); }, {passive: true});
+  // Dedupe rAF: at most one updateHow per frame, no matter how many scroll events fire.
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) { ticking = true; requestAnimationFrame(function() { updateHow(); ticking = false; }); }
+  }, {passive: true});
+  // Recompute cached metrics only when layout can actually change.
+  let resizeRaf;
+  window.addEventListener('resize', function() {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(function() { computeMetrics(); lastOffset = -1; updateHow(); });
+  }, {passive: true});
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() { computeMetrics(); lastOffset = -1; updateHow(); });
+  }
   updateHow();
 })();
 
