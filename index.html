@@ -2877,7 +2877,9 @@ window.addEventListener('scroll', () => {
     const msgsBox = document.getElementById('howMsgList');
     if (!msgsBox) return;
     msgMetrics.bottoms = Array.from(allMsgs).map(function(m) { return m.offsetTop + m.offsetHeight; });
-    msgMetrics.target = msgsBox.clientHeight * 0.80;
+    // Land the latest message's bottom at ~70% of the container so it clears the
+    // bottom fade mask (which starts at 82%) and stays fully legible.
+    msgMetrics.target = msgsBox.clientHeight * 0.70;
     msgMetrics.countInStep = {};
     allMsgs.forEach(function(m) {
       const s = m.dataset.step;
@@ -2961,9 +2963,12 @@ window.addEventListener('scroll', () => {
     const vh     = window.innerHeight;
     const scrolled = Math.max(0, Math.min(1, -rect.top / (stageH - vh)));
 
-    const stepRaw = scrolled * 3;
-    const stepIdx = Math.min(2, Math.floor(stepRaw));
-    const seqFraction = stepRaw - Math.floor(stepRaw);
+    // Cap just below 3 so at the very bottom (scrolled=1) we land at step 2 with
+    // seqFraction ~1 (all messages shown) instead of seqFraction=0, which used to
+    // collapse the final step back to just the "YES" bubble.
+    const stepRaw = Math.min(scrolled * 3, 2.9999);
+    const stepIdx = Math.floor(stepRaw);
+    const seqFraction = stepRaw - stepIdx;
 
     setStep(stepIdx, true);
     showMsgsForStep(stepIdx, seqFraction);
