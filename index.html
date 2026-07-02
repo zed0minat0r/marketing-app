@@ -31,7 +31,9 @@
     {"@type":"Offer","name":"Pro","price":"199","priceCurrency":"USD","priceSpecification":{"@type":"UnitPriceSpecification","price":"199","priceCurrency":"USD","unitText":"MONTH"}}
   ],
   "featureList": ["Social media post generation via SMS","Facebook ad creation via text message","Google review response drafting","Weekly performance reports via text","Website audit in plain English","No app or dashboard required"],
-  "audience": {"@type":"Audience","audienceType":"Small Business Owners"}
+  "audience": {"@type":"Audience","audienceType":"Small Business Owners"},
+  "publisher": {"@type":"Organization","name":"Pennsylvania Technology Solutions LLC","url":"https://zed0minat0r.github.io/marketing-app/"},
+  "provider": {"@type":"Organization","name":"Pennsylvania Technology Solutions LLC"}
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1561,6 +1563,16 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .signup-note{
   font-size:0.78rem;color:var(--text-muted);margin-top:14px;
 }
+.sms-consent{
+  flex-basis:100%;display:flex;gap:9px;align-items:flex-start;
+  text-align:left;font-size:0.78rem;color:var(--text-muted);
+  line-height:1.45;margin-top:6px;cursor:pointer;
+  transition:color 0.2s;
+}
+.sms-consent input[type="checkbox"]{
+  flex:none;min-width:0;width:17px;height:17px;min-height:17px;
+  margin:1px 0 0;padding:0;accent-color:var(--accent);cursor:pointer;
+}
 .sms-reassurance{
   font-size:0.82rem;color:var(--text-muted);margin-top:10px;text-align:center;
 }
@@ -2665,6 +2677,10 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
     <form class="signup-form" id="step2Form" onsubmit="handleStep2(event)" style="display:none">
       <input type="tel" id="phoneInput" placeholder="(555) 867-5309" autocomplete="tel" required>
       <button type="submit">Start free trial &rarr;</button>
+      <label class="sms-consent" for="smsConsent">
+        <input type="checkbox" id="smsConsent" name="smsConsent">
+        <span>I agree to receive recurring SMS messages from Sidekick about my account, onboarding, and waitlist updates. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span>
+      </label>
     </form>
 
     <p class="sms-reassurance" id="smsReassurance" style="display:none">We&rsquo;ll only text you when your spot opens &mdash; one message. No marketing texts during your wait. No spam, ever.</p>
@@ -2701,7 +2717,7 @@ footer p{font-size:0.78rem;color:var(--text-muted)}
       <a href="mailto:hello@sidekik.com">hello@sidekik.com</a>
       <a href="#heroStage">Back to top</a>
     </div>
-    <p>&copy; 2026 Sidekick. Your marketing, in your texts.</p>
+    <p>&copy; 2026 Sidekick &mdash; a product of Pennsylvania Technology Solutions LLC. Your marketing, in your texts.</p>
   </div>
 </footer>
 
@@ -3159,7 +3175,8 @@ document.querySelectorAll('.count-num').forEach(el => countObserver.observe(el))
 const modalContent = {
   privacy: {
     title: 'Privacy Policy',
-    body: `<p style="opacity:0.7;font-size:0.85em">Last updated: May 2026</p>
+    body: `<p style="opacity:0.7;font-size:0.85em">Last updated: July 2026</p>
+<p>Sidekick is a product operated by <strong>Pennsylvania Technology Solutions LLC</strong> ("Penn Tech Solutions," "we," "us," "our"). This policy explains what we collect, how we use it, and the choices you have.</p>
 <h3>What we collect</h3><p>When you sign up, we collect your phone number, name, business name, and business category. As you use Sidekick, we collect the content of your text messages with the service, the content we generate on your behalf, the social and business platform accounts you connect (Facebook, Instagram, Google Business Profile, TikTok, LinkedIn, Pinterest), basic usage analytics (which features you use, how often you text us, how content performs), and IP address / device user-agent metadata at the network layer. We do not collect or store payment card numbers — those are tokenized by our payment processor.</p>
 <h3>How we use it</h3><p>Your phone number is used to send you the SMS service itself, generated content, performance reports, billing notifications, and product updates. Your business info and message content are used to generate, schedule, and publish marketing content on the platforms you connect. We do not sell your data to third parties. We do not use your data to train AI models. We do not share your data with advertisers.</p>
 <h3>Subprocessors we use</h3><p>To deliver the service we share specific data with the following categories of third-party providers, each acting under our instructions: an SMS carrier and aggregator for sending and receiving texts; a managed database and authentication provider for storing your account; a payment processing provider for billing; a generative AI provider for content generation; an OAuth and API integration for each social and business platform you connect (Facebook/Instagram via Meta, Google Business Profile via Google, TikTok, LinkedIn, Pinterest); and standard hosting / serverless infrastructure providers. We require each provider to handle your data only for the purpose of running Sidekick and to comply with applicable privacy law.</p>
@@ -3167,11 +3184,11 @@ const modalContent = {
 <h3>Data retention</h3><p>While your account is active we retain your account data, message history, and generated content. If you cancel, we delete your business data, generated content, and connected-platform tokens within 30 days. Your phone number is removed from all marketing lists immediately on cancellation. Tax, billing, and abuse-prevention records are retained as required by law.</p>
 <h3>Your rights</h3><p>You can request a copy of your data, correction of inaccurate data, or deletion of your account at any time. California, Virginia, Colorado, Connecticut, and Utah residents have additional rights under their state privacy laws including the right to opt out of any sale (we do not sell) and the right to non-discrimination for exercising privacy rights. EU/UK residents have rights under GDPR including data portability and the right to object to processing.</p>
 <h3>Security</h3><p>We use TLS in transit and encryption at rest for stored credentials. OAuth tokens for connected platforms are stored encrypted. We never see or store your platform passwords. We follow industry-standard practices but no online service is 100% secure.</p>
-<h3>Contact</h3><p>Privacy questions, data requests, or to delete your account: text PRIVACY to your Sidekick number, or email <a href="mailto:privacy@sidekik.com" style="color:var(--accent)">privacy@sidekik.com</a>. We respond within 7 business days.</p>`
+<h3>Contact</h3><p>Privacy questions, data requests, or to delete your account: text PRIVACY to your Sidekick number, or email <a href="mailto:privacy@sidekik.com" style="color:var(--accent)">privacy@sidekik.com</a>. Data controller: Pennsylvania Technology Solutions LLC. We respond within 7 business days.</p>`
   },
   terms: {
     title: 'Terms of Service',
-    body: `<h3>The service</h3><p>Sidekick provides an AI-powered marketing assistant delivered via SMS. You approve all content before it is published. We are not responsible for the performance of published content or advertising results.</p><h3>Billing</h3><p>Plans are billed monthly. You can cancel anytime by texting CANCEL — your plan continues until the end of the billing period with no prorated refund. Free trial periods do not require a credit card.</p><h3>Acceptable use</h3><p>You may not use Sidekick to send spam, promote illegal products, or distribute content that violates platform guidelines (Facebook, Instagram, TikTok, etc.). Violations result in immediate account termination.</p><h3>Limitation of liability</h3><p>Sidekick is provided as-is. We are not liable for indirect or consequential damages arising from use of the service. Our maximum liability is limited to fees paid in the prior 3 months.</p><h3>Contact</h3><p>Questions? Email <a href="mailto:hello@sidekik.com" style="color:var(--accent)">hello@sidekik.com</a>.</p>`
+    body: `<h3>The service</h3><p>Sidekick is a product of <strong>Pennsylvania Technology Solutions LLC</strong> and provides an AI-powered marketing assistant delivered via SMS. You approve all content before it is published. We are not responsible for the performance of published content or advertising results.</p><h3>Billing</h3><p>Plans are billed monthly. You can cancel anytime by texting CANCEL — your plan continues until the end of the billing period with no prorated refund. Free trial periods do not require a credit card.</p><h3>Acceptable use</h3><p>You may not use Sidekick to send spam, promote illegal products, or distribute content that violates platform guidelines (Facebook, Instagram, TikTok, etc.). Violations result in immediate account termination.</p><h3>Limitation of liability</h3><p>Sidekick is provided as-is. We are not liable for indirect or consequential damages arising from use of the service. Our maximum liability is limited to fees paid in the prior 3 months.</p><h3>Governing law</h3><p>These terms are governed by the laws of the Commonwealth of Pennsylvania, without regard to conflict-of-law principles. Sidekick is operated by Pennsylvania Technology Solutions LLC.</p><h3>Contact</h3><p>Questions? Email <a href="mailto:hello@sidekik.com" style="color:var(--accent)">hello@sidekik.com</a>.</p>`
   }
 };
 
@@ -3235,6 +3252,14 @@ function handleStep2(e) {
     return;
   }
   phoneInput.style.borderColor = '';
+  const consent = document.getElementById('smsConsent');
+  const consentLabel = document.querySelector('.sms-consent');
+  if (consent && !consent.checked) {
+    if (consentLabel) consentLabel.style.color = 'var(--red)';
+    consent.focus();
+    return;
+  }
+  if (consentLabel) consentLabel.style.color = '';
   const btn = e.target.querySelector('button');
   btn.textContent = 'Locking you in...';
   btn.disabled = true;
