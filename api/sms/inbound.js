@@ -19,7 +19,7 @@ const { sendSms } = require('./outbound');
 const { checkRateLimit } = require('../../lib/rate-limit');
 const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
-const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand, parseNameCommand, parseVoiceCommand, parseToneCommand } = require('../../lib/intent');
+const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand, parseNameCommand, parseVoiceCommand, parseToneCommand, parseEmojiLevel, parseSignature, parseBanned, parseHashtags, parseCta } = require('../../lib/intent');
 const { normalizeTone } = require('../../lib/onboarding');
 const { processInboundMedia, extractMedia } = require('../../lib/photo-intake');
 const { resolveComplianceAction, COMPLIANCE_REPLIES } = require('../../lib/sms-compliance');
@@ -564,6 +564,87 @@ module.exports = async function handler(req, res) {
           replyText = 'Which tone? Pick casual, professional, bold, or friendly — e.g. "Tone bold". Or describe your own with "Voice: ...".';
         }
         intent = INTENTS.SET_TONE;
+      }
+
+      // Emoji level (none / light / lots)
+      else if (preClassified === INTENTS.SET_EMOJI) {
+        const level = parseEmojiLevel(messageBody);
+        if (level) {
+          await updateUser(user.id, { emoji_level: level });
+          user.emoji_level = level;
+          const desc = { none: 'no emojis', light: 'a light touch of emojis', lots: 'lots of emojis' }[level];
+          replyText = `Done — I'll use ${desc} from now on.`;
+        } else {
+          replyText = 'How many emojis? Say "no emojis", "light emojis", or "lots of emojis".';
+        }
+        intent = INTENTS.SET_EMOJI;
+      }
+
+      // Signature sign-off appended to posts
+      else if (preClassified === INTENTS.SET_SIGNATURE) {
+        const sig = parseSignature(messageBody).slice(0, 120);
+        if (sig) {
+          await updateUser(user.id, { signature: sig });
+          user.signature = sig;
+          replyText = `Got it — I'll sign off every post with: ${sig}`;
+        } else {
+          replyText = 'What sign-off should I add? Try: "Signature: — The Mike\'s Pizza Team".';
+        }
+        intent = INTENTS.SET_SIGNATURE;
+      }
+
+      // Banned words/phrases
+      else if (preClassified === INTENTS.SET_BANNED) {
+        const banned = parseBanned(messageBody).slice(0, 280);
+        if (banned) {
+          await updateUser(user.id, { banned_words: banned });
+          user.banned_words = banned;
+          replyText = `Understood — I'll never use: ${banned}`;
+        } else {
+          replyText = 'Which words should I avoid? Try: "Never say: cheap, discount, hurry".';
+        }
+        intent = INTENTS.SET_BANNED;
+      }
+
+      // Default hashtags to always include
+      else if (preClassified === INTENTS.SET_HASHTAGS) {
+        const tags = parseHashtags(messageBody).slice(0, 200);
+        if (tags) {
+          await updateUser(user.id, { hashtags: tags });
+          user.hashtags = tags;
+          replyText = `Done — I'll always include: ${tags}`;
+        } else {
+          replyText = 'Which hashtags? Try: "Hashtags: #woodfired #pizza #datenight".';
+        }
+        intent = INTENTS.SET_HASHTAGS;
+      }
+
+      // Default call-to-action + link
+      else if (preClassified === INTENTS.SET_CTA) {
+        const { text: ctaText, link: ctaLink } = parseCta(messageBody);
+        if (ctaText || ctaLink) {
+          await updateUser(user.id, { cta_text: ctaText || null, cta_link: ctaLink || null });
+          user.cta_text = ctaText; user.cta_link = ctaLink;
+          replyText = `Set — I'll work in "${[ctaText, ctaLink].filter(Boolean).join(' ')}" as your call-to-action.`;
+        } else {
+          replyText = 'What\'s your call-to-action? Try: "CTA: Book now — https://yourbiz.com/book".';
+        }
+        intent = INTENTS.SET_CTA;
+      }
+
+      // Recap all customization settings
+      else if (preClassified === INTENTS.SHOW_SETTINGS) {
+        const lines = [
+          `• Name: ${user.assistant_name || 'Sidekick'}`,
+          user.voice_notes ? `• Voice: ${user.voice_notes}` : `• Tone: ${user.tone || 'professional'}`,
+          user.emoji_level ? `• Emoji: ${user.emoji_level}` : null,
+          user.signature ? `• Sign-off: ${user.signature}` : null,
+          user.hashtags ? `• Hashtags: ${user.hashtags}` : null,
+          (user.cta_text || user.cta_link) ? `• CTA: ${[user.cta_text, user.cta_link].filter(Boolean).join(' ')}` : null,
+          user.banned_words ? `• Never say: ${user.banned_words}` : null,
+        ].filter(Boolean);
+        replyText = `Your Sidekick settings:\n${lines.join('\n')}\n\nChange any: "Tone bold", "Voice: ...", "Call yourself Max", "Emoji none", "Signature: ...", "Hashtags: #x", "CTA: Book now <link>", "Never say ...".`;
+        intent = INTENTS.SHOW_SETTINGS;
       }
 
       // Handle LIST_SCHEDULE command

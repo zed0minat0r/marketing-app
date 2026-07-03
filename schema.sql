@@ -19,6 +19,12 @@ CREATE TABLE IF NOT EXISTS users (
   tone                    TEXT DEFAULT 'professional',   -- casual, professional, bold, friendly
   voice_notes             TEXT,                          -- free-text voice/style the user describes (e.g. "cheeky, emoji-heavy, never salesy")
   assistant_name          TEXT,                          -- what the user names their AI assistant; NULL falls back to "Sidekick"
+  emoji_level             TEXT,                          -- none | light | lots (NULL = model default)
+  signature               TEXT,                          -- sign-off auto-appended to posts (e.g. "— The Mike's Pizza Team")
+  banned_words            TEXT,                          -- words/phrases the AI must never use
+  hashtags                TEXT,                          -- default hashtags to always include
+  cta_text                TEXT,                          -- default call-to-action (e.g. "Book now")
+  cta_link                TEXT,                          -- default link appended to posts
   timezone                TEXT DEFAULT 'America/New_York',
   plan                    TEXT DEFAULT 'starter',        -- starter, growth, pro
   stripe_customer_id      TEXT,
@@ -39,6 +45,12 @@ CREATE TABLE IF NOT EXISTS users (
 -- won't add columns to a table that already exists).
 ALTER TABLE users ADD COLUMN IF NOT EXISTS voice_notes    TEXT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS assistant_name TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS emoji_level    TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS signature      TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS banned_words   TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS hashtags       TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS cta_text       TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS cta_link       TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);
 CREATE INDEX IF NOT EXISTS idx_users_stripe_customer ON users(stripe_customer_id);
