@@ -827,3 +827,91 @@ describe('Error handling', () => {
     assert.ok(errorSms, `Should send error SMS to user. SMS sent: ${JSON.stringify(smsSent)}`);
   });
 });
+
+describe('Existing user — customization commands (end-to-end via handler)', () => {
+  beforeEach(() => {
+    smsSent = [];
+    dbCalls = { logMessage: [], createUser: [], updateUser: [], createScheduledPost: [], cancelPost: [], updateScheduledPost: [], qstashEnqueued: [], qstashCanceled: [] };
+    rateLimitAllowed = true;
+    mockUser = makeOnboardedUser();
+    mockSocialAccounts = [];
+    mockRecentMessages = [];
+    // If Claude were mistakenly invoked, this would show up in the reply —
+    // customization commands must NOT reach Claude.
+    mockClaudeResponse = { reply_text: 'CLAUDE_WAS_CALLED', intent: 'unknown', model: 'x', tokensUsed: 1 };
+  });
+
+  const lastUpdate = () => dbCalls.updateUser[dbCalls.updateUser.length - 1]?.updates || {};
+  const reply = () => (smsSent[0]?.body || '');
+
+  async function run(body) {
+    await handler(makeReq({ Body: body }), makeRes());
+  }
+
+  test('"change my tone to bold" persists tone + confirms, no Claude call', async () => {
+    await run('change my tone to bold');
+    assert.equal(lastUpdate().tone, 'bold');
+    assert.ok(/bold/i.test(reply()));
+    assert.ok(!reply().includes('CLAUDE_WAS_CALLED'));
+  });
+
+  test('"Voice: cheeky, emoji-heavy, never salesy" persists voice_notes verbatim', async () => {
+    await run('Voice: cheeky, emoji-heavy, never salesy');
+    assert.equal(lastUpdate().voice_notes, 'cheeky, emoji-heavy, never salesy');
+    assert.ok(reply().includes('cheeky, emoji-heavy, never salesy'));
+  });
+
+  test('"Call yourself Max" persists assistant_name', async () => {
+    await run('call yourself Max');
+    assert.equal(lastUpdate().assistant_name, 'Max');
+    assert.ok(/Max/.test(reply()));
+  });
+
+  test('"no emojis" persists emoji_level none', async () => {
+    await run('no emojis');
+    assert.equal(lastUpdate().emoji_level, 'none');
+  });
+
+  test('"lots of emojis" persists emoji_level lots', async () => {
+    await run('lots of emojis');
+    assert.equal(lastUpdate().emoji_level, 'lots');
+  });
+
+  test('"Signature: — The Team" persists signature', async () => {
+    await run('Signature: — The Team');
+    assert.equal(lastUpdate().signature, '— The Team');
+  });
+
+  test('"never say cheap, discount" persists banned_words', async () => {
+    await run('never say cheap, discount');
+    assert.equal(lastUpdate().banned_words, 'cheap, discount');
+  });
+
+  test('"Hashtags: #woodfired #pizza" persists hashtags', async () => {
+    await run('Hashtags: #woodfired #pizza');
+    assert.equal(lastUpdate().hashtags, '#woodfired #pizza');
+  });
+
+  test('"CTA: Book now https://mikes.com/book" persists cta_text + cta_link', async () => {
+    await run('CTA: Book now https://mikes.com/book');
+    assert.equal(lastUpdate().cta_text, 'Book now');
+    assert.equal(lastUpdate().cta_link, 'https://mikes.com/book');
+  });
+
+  test('"settings" recaps without a DB write or Claude call', async () => {
+    mockUser = makeOnboardedUser({ assistant_name: 'Max', voice_notes: 'cheeky', hashtags: '#pizza' });
+    await run('settings');
+    assert.equal(dbCalls.updateUser.length, 0);
+    assert.ok(reply().includes('Max'));
+    assert.ok(reply().includes('#pizza'));
+    assert.ok(!reply().includes('CLAUDE_WAS_CALLED'));
+  });
+
+  test('a normal "edit make it shorter" still is NOT captured as a customization command', async () => {
+    // Should fall through to Claude (draft-edit path), not the tone/voice handlers.
+    await run('edit make it shorter');
+    // No customization column should have been written.
+    const u = lastUpdate();
+    assert.ok(!('tone' in u) && !('voice_notes' in u) && !('assistant_name' in u));
+  });
+});
