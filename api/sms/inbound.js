@@ -676,6 +676,24 @@ module.exports = async function handler(req, res) {
       }
 
       // Handle LIST_SCHEDULE command
+      // Handle WEBSITE_AUDIT - fetch their site and text back the top fixes.
+      // A URL in the message updates their stored website first.
+      else if (preClassified === INTENTS.WEBSITE_AUDIT) {
+        const { extractUrl, normalizeUrl, runWebsiteAudit } = require('../../lib/website-audit');
+        const urlInMessage = extractUrl(messageBody);
+        let auditUrl = urlInMessage || normalizeUrl(user.website || '');
+        if (urlInMessage && urlInMessage !== user.website) {
+          await updateUser(user.id, { website: urlInMessage }).catch(console.error);
+        }
+        if (!auditUrl) {
+          replyText = 'Happy to check your website. Text me the address like this: "audit mysite.com" - I will save it for next time.';
+        } else {
+          const { sms } = await runWebsiteAudit(auditUrl);
+          replyText = sms;
+        }
+        intent = INTENTS.WEBSITE_AUDIT;
+      }
+
       else if (preClassified === INTENTS.LIST_SCHEDULE) {
         const posts = await getUpcomingPosts(user.id);
         replyText = formatPostsList(posts);

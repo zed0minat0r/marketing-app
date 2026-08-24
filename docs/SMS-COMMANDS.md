@@ -20,6 +20,7 @@ Text Sidekick at your Twilio number to manage your social media marketing. No ap
 | Get help | "Help" |
 
 ---
+| `audit mysite.com` | Website health check - top fixes texted back |
 
 ## Commands in Detail
 
@@ -187,6 +188,24 @@ Sidekick: This week: 4 posts, 1,240 total reach, 87 engagements.
 ```
 
 ---
+
+### Audit Your Website
+
+**Text:** `audit mysite.com` (first time) or `audit my website` (once saved)
+
+Sidekick loads your homepage and checks the fundamentals a customer or Google
+would notice: HTTPS, load speed, mobile setup, page title and search
+description, a visible phone number, and image descriptions. You get the top
+fixes back as a text, worst first. The address you send is saved, so after the
+first time "audit my website" is enough.
+
+Example reply:
+
+> Checked mikespizza.com - top fixes:
+> 1. not mobile-ready (no viewport tag) - most local customers are on phones
+> 2. no phone number visible on the homepage
+> Good news: HTTPS is set up.
+> Want me to draft a post while you fix those?
 
 ### Delete Your Data
 
