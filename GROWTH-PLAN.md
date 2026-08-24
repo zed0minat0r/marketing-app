@@ -80,6 +80,37 @@ file it long before public launch.
   (TCPA line we do not cross).
 - Onboarding gains the city question (fills `users.city`).
 
+## Competitive research verdict (2026-08-24)
+
+Full sweep of Hootsuite/Buffer/Later, Podium/Birdeye/NiceJob, Constant Contact, and the
+AI-first tools (Predis, Ocoya). Key conclusions:
+
+- **Add: review REQUESTS by text (the missing money feature).** Podium ($399-999/mo),
+  Birdeye ($299-399/mo), NiceJob ($75-125/mo) sell review GENERATION, not just replies.
+  SMS review requests convert 3-5x email (12-15% vs 3-4%). Sidekick's version: owner texts a
+  customer's number after a job, Sidekick sends one review invite. COMPLIANCE: this texts
+  third parties - needs a consent attestation flow (owner confirms the customer agreed),
+  STOP honored, single-message policy, and eventually a Twilio use-case update (current
+  toll-free verification declares owner-only traffic). Design consent first, then build.
+- **Review replies validated** but AI drafting is not the moat (Podium/Birdeye have it;
+  Google is rolling out free AI replies inside Business Profile). The moat is
+  approve-from-your-truck-in-one-text.
+- **The adaptive loop is the pitch lead**: only 18% of SMBs feel confident their marketing
+  works (Constant Contact 2025); "tells you every week what actually worked" attacks the #1
+  documented pain. Lead marketing with it.
+- **Website audit is commoditized** (HubSpot Grader free forever) - repurpose as the free
+  acquisition hook ("text AUDIT to this number"), not a paid capability.
+- **Ads descope confirmed.** Future middle path: "this post is your winner - boost it for
+  $20?" (reuses the adaptive loop's data, avoids the Marketing API).
+- **Positioning that holds up**: "Marketing that runs itself over text - no app, no
+  dashboard, no login - and it tells you every week what actually worked." The
+  operator-texts interaction model has no direct competitor; the $49-199 band is empty for
+  the combined social+reviews+engagement job.
+
+**Revised build order:** (1) Google review monitoring + text-approved replies →
+(2) review requests by text (consent design first) → (3) FB/IG comment replies →
+(4) website audit becomes the free funnel.
+
 ## Sequencing
 
 1. Phase 1 now (this session): migration, tagging, growth lib + tests, weekly job, prompt.
