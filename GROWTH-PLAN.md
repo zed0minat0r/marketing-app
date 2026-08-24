@@ -52,13 +52,25 @@ enhancement, and auto-drafting are BUILT — they need `R2_*` (Cloudflare R2) an
 `REPLICATE_API_TOKEN` in Vercel env. When Matt provides keys: enable, then make the product
 push photos ("text us a photo" nudges in onboarding + weekly texts when the library is thin).
 
-## Phase 3 — Engagement Speed (research first; Meta-gated)
+## Phase 3 — Engagement Speed (spike done 2026-08-24; Meta-gated)
 
-Fast comment/DM replies are a bigger reach lever than more posts, but reading/writing
-comments needs Meta permissions likely gated on App Review (see docs/META-APP-REVIEW.md).
-Step 1 is a spike: what do our current scopes allow on owned pages? v1 shape when unblocked:
-collect-analytics also pulls new comments → drafts replies → owner approves by text → posted.
-Do NOT promise this on the site until the spike lands.
+**Findings:** the OAuth flow currently requests `pages_show_list`, `pages_read_engagement`,
+`pages_manage_posts`, `instagram_basic`, `instagram_content_publish` (meta-callback.js).
+Reading comments rides `pages_read_engagement` (already requested). REPLYING needs
+`pages_manage_engagement` (FB) + `instagram_manage_comments` (IG) — not requested anywhere,
+and both are Advanced-tier App Review permissions. DMs need `pages_messaging` (bigger lift —
+skip for now).
+
+**The Development Mode loophole that makes beta possible:** while the Meta app is in Dev
+Mode, ALL permissions work for users with a role on the app (admin/tester). Matt's own
+accounts — beta user #1 — can run the full comment-reply loop with zero approvals.
+
+**Path:** (1) add the two reply scopes to the OAuth URL + token storage; (2) extend
+collect-analytics to pull new comments and text the owner a drafted reply for YES-approval;
+(3) submit Meta App Review — materials for the current 5 permissions are already written in
+docs/META-APP-REVIEW.md (submission status unknown — ASK MATT whether it was ever filed);
+write statements for the 2 new scopes and submit all together. Review turnaround is weeks, so
+file it long before public launch.
 
 ## Phase 4 — Local Mechanics
 

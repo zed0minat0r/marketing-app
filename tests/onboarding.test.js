@@ -179,7 +179,7 @@ describe('processOnboarding — type step', () => {
       const result = await processOnboarding(user, input);
       assert.equal(result.done, false);
       assert.equal(updateUserCalls[0].updates.business_type, expected);
-      assert.equal(updateUserCalls[0].updates.onboarding_step, 'tone');
+      assert.equal(updateUserCalls[0].updates.onboarding_step, 'city');
     });
   }
 
@@ -244,10 +244,10 @@ describe('processOnboarding — type step', () => {
     assert.equal(updateUserCalls[0].updates.business_type, 'other');
   });
 
-  test('reply is the ask_tone message', async () => {
+  test('reply is the ask_city message', async () => {
     const user = makeUser('type');
     const result = await processOnboarding(user, 'restaurant');
-    assert.equal(result.replyText, ONBOARDING_MESSAGES.ask_tone);
+    assert.equal(result.replyText, ONBOARDING_MESSAGES.ask_city);
   });
 });
 

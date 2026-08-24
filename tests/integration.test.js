@@ -401,10 +401,10 @@ describe('Onboarding state machine via inbound handler', () => {
     const res = makeRes();
     await handler(req, res);
     const text = smsSent[0]?.body || '';
-    // After type, should ask for tone
+    // After type, should ask for city (skippable local-flavor question)
     assert.ok(
-      text.toLowerCase().includes('tone') || text.toLowerCase().includes('casual') || text.toLowerCase().includes('professional'),
-      'Should ask for tone'
+      text.toLowerCase().includes('city') && text.toLowerCase().includes('skip'),
+      'Should ask for city'
     );
   });
 

@@ -167,28 +167,24 @@ After deploying, point Twilio to your inbound endpoint:
 
 Test it by texting your Twilio number from any phone.
 
-## 7. Setting Up QStash Cron Jobs
+## 7. Scheduled Jobs (Vercel Cron - do NOT create QStash schedules)
 
-QStash delivers scheduled HTTP requests to your Vercel functions. Set these up in the [Upstash QStash console](https://console.upstash.com/qstash).
+Periodic jobs run on ONE Vercel Cron declared in `vercel.json`:
 
-| Job | Endpoint | Schedule (cron) | Notes |
-|-----|----------|-----------------|-------|
-| Collect analytics | `/api/jobs/collect-analytics` | `0 2 * * *` | Nightly at 2am UTC |
-| Weekly summary | `/api/jobs/weekly-summary` | `0 9 * * 1` | Monday 9am UTC |
-| Refresh tokens | `/api/jobs/refresh-tokens` | `0 0 */50 * *` | Every 50 days |
-| Reset generations | `/api/jobs/reset-generations` | `0 0 1 * *` | 1st of month, midnight UTC |
-| Cleanup conversations | `/api/jobs/cleanup-conversations` | `0 3 * * 0` | Sunday 3am UTC |
+| Cron | Schedule | What it does |
+|------|----------|--------------|
+| `/api/jobs/dispatch` | `0 14 * * *` (daily, 14:00 UTC) | Fans out to: collect-analytics + refresh-tokens (daily), weekly-summary (Mondays), cleanup-conversations (Sundays), reset-generations (1st of month) |
 
-For each job:
-1. In QStash, create a new schedule.
-2. **URL**: `https://your-app.vercel.app/api/jobs/<job-name>`
-3. **Method**: POST
-4. **Body**: `{}`
-5. **Schedule**: paste the cron expression above.
+This replaced both the original per-job QStash schedules AND the five separate Vercel
+crons - Vercel Hobby allows at most 2 daily crons. **Creating QStash schedules for these
+jobs would double-fire them (including duplicate weekly-summary SMS to every user).**
 
-QStash will sign each request with `QSTASH_CURRENT_SIGNING_KEY` automatically. The functions verify this signature before executing.
+Auth: Vercel invokes the cron with `Authorization: Bearer ${CRON_SECRET}` - set `CRON_SECRET`
+in the Vercel project env. The dispatcher passes the header through to each sub-job.
 
-The publish job (`/api/jobs/publish`) is not a cron — it is called by QStash on-demand when a post is scheduled. Sidekick enqueues it via the QStash SDK with a `delay` matching the scheduled post time.
+The publish job (`/api/jobs/publish`) is unchanged: not a cron - QStash calls it on-demand
+when a post is scheduled (enqueued via the QStash SDK with a `delay`). The enhancement job
+(`/api/jobs/enhance-photo`) works the same way.
 
 ## 8. Configuring Stripe Webhooks
 
