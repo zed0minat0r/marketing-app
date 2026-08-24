@@ -13,7 +13,7 @@ Original submission REJECTED 2026-06-04 — reasons **30445** (business could no
 | Business type | Limited Liability Company (LLC) |
 | Business industry | Professional / Technology services (marketing software) |
 | Business registration ID type | USA: Employer Identification Number (EIN) |
-| EIN | ⏳ **PENDING — Matt retrieving from IRS CP-575 tonight** |
+| EIN | on file (do not publish - this repo is public) |
 | Business registration state | Pennsylvania (Entity/File # 0015198406, filed 2026-02-08) |
 | Business website | https://zed0minat0r.github.io/marketing-app/ |
 | Business address | 576 Bridge St, Phoenixville, PA 19460-3343, USA |
@@ -86,8 +86,17 @@ Original submission REJECTED 2026-06-04 — reasons **30445** (business could no
 ---
 
 ## Remaining before submit
-1. ⏳ **EIN** (Matt — tonight)
-2. ❓ Confirm business contact email + phone
-3. ❓ Confirm estimated monthly volume tier
-4. Push corrected site live so the reviewer sees the entity name + opt-in checkbox at the live URL
-5. Attach `optin-proof.png` as opt-in evidence
+1. ✅ EIN on file (2026-08-24)
+2. ✅ Business contact email + phone confirmed
+3. ✅ Volume tier confirmed (1,000/mo)
+4. ✅ Live site verified 2026-08-24: entity name + opt-in checkbox present at the opt-in URL
+5. ✅ `optin-proof.png` regenerated 2026-08-24 from the live site (in docs/)
+
+**SUBMITTED 2026-08-24 via API** (verification SID HH782bef18c1f78a90f72916ed6c6cf58a,
+status back to PENDING_REVIEW). What was fixed vs the June submission: business name was
+"Matthew Modica" as SOLE_PROPRIETOR → now Pennsylvania Technology Solutions LLC as
+PRIVATE_PROFIT with the EIN in the dedicated registration fields (US/EIN); the
+"opt-in image" was just the homepage URL → now a real screenshot of the consent step at
+https://zed0minat0r.github.io/marketing-app/docs/optin-proof.png; contact phone corrected to
+(267) 416-5810; entity/EIN details and the full opt-in workflow are also in
+AdditionalInformation. Status notifications go to mmodica3@gmail.com.

@@ -30,11 +30,21 @@ test('resolveComplianceAction — YES is ambiguous, returns null', () => {
   assert.strictEqual(resolveComplianceAction('yes'), null);
 });
 
-test('resolveComplianceAction — keyword with extra args does NOT match', () => {
+test('resolveComplianceAction — keyword with extra args: commands stay commands', () => {
   // "CANCEL 1" must NOT trigger opt-out — that's our scheduled-post cancel.
   assert.strictEqual(resolveComplianceAction('CANCEL 1'), null);
-  assert.strictEqual(resolveComplianceAction('STOP it now'), null);
+  // "help me ..." is a product request, not a compliance query.
   assert.strictEqual(resolveComplianceAction('help me with my account'), null);
+  // "end of week post" style sentences must not opt anyone out.
+  assert.strictEqual(resolveComplianceAction('end of week post idea'), null);
+});
+
+test('resolveComplianceAction — STOP-family as first word IS an opt-out (CTIA)', () => {
+  assert.strictEqual(resolveComplianceAction('STOP it now'), 'stop');
+  assert.strictEqual(resolveComplianceAction('stop please'), 'stop');
+  assert.strictEqual(resolveComplianceAction('Stop texting me'), 'stop');
+  assert.strictEqual(resolveComplianceAction('unsubscribe me from this'), 'stop');
+  assert.strictEqual(resolveComplianceAction('quit sending these'), 'stop');
 });
 
 test('resolveComplianceAction — trailing punctuation accepted', () => {

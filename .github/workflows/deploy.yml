@@ -16,8 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v4
+      # Publish ONLY the public site files. The repo root also holds
+      # admin.html, schema.sql, .env.example, and internal docs - none of
+      # which belong on a public site.
+      - name: Stage public site files
+        run: |
+          mkdir -p _site/docs
+          cp index.html connected.html robots.txt sitemap.xml _site/
+          cp docs/optin-proof.png _site/docs/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
       - id: deployment
         uses: actions/deploy-pages@v4

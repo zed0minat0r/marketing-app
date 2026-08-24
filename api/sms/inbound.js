@@ -58,7 +58,7 @@ const REFERRALS_TO_REWARD = 3;
 function validateTwilioSignature(req) {
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   if (!authToken) {
-    console.warn('TWILIO_AUTH_TOKEN not set — skipping signature validation');
+    console.warn('TWILIO_AUTH_TOKEN not set - skipping signature validation');
     return true; // In dev without token, skip validation
   }
 
@@ -96,7 +96,7 @@ function formatAnalyticsSummary(metrics) {
     return "No published posts in the last 7 days. Once you start posting, ask me \"how did my posts do?\" anytime.";
   }
   if (!metrics.snapshots || metrics.snapshots.length === 0) {
-    return `You have ${metrics.posts.length} post${metrics.posts.length === 1 ? '' : 's'} from the last 7 days, but metrics haven't been collected yet. Engagement data lands overnight — try tomorrow.`;
+    return `You have ${metrics.posts.length} post${metrics.posts.length === 1 ? '' : 's'} from the last 7 days, but metrics haven't been collected yet. Engagement data lands overnight - try tomorrow.`;
   }
 
   const { totals, posts, snapshots } = metrics;
@@ -115,7 +115,7 @@ function formatAnalyticsSummary(metrics) {
   }
 
   const lines = [
-    `Last 7 days — ${posts.length} post${posts.length === 1 ? '' : 's'}:`,
+    `Last 7 days - ${posts.length} post${posts.length === 1 ? '' : 's'}:`,
     `Reach: ${totals.reach.toLocaleString()}`,
     `Impressions: ${totals.impressions.toLocaleString()}`,
     `Engagement: ${totals.engagement.toLocaleString()}`,
@@ -319,6 +319,44 @@ module.exports = async function handler(req, res) {
     return res.status(200).send('OK');
   }
 
+  // ---- Carrier compliance: STOP / HELP / START ----
+  // These keywords are legally required to be honored on toll-free numbers.
+  // This runs BEFORE any database work so a Supabase outage can never stop us
+  // honoring an opt-out: the ack is force-sent first (these messages ARE the
+  // opt-in/opt-out acknowledgments), then recording is best-effort.
+  const complianceAction = resolveComplianceAction(messageBody);
+  if (complianceAction) {
+    const complianceReply = COMPLIANCE_REPLIES[complianceAction];
+    await sendSms(from, complianceReply, { force: true }).catch(console.error);
+    try {
+      let cUser = await getUserByPhone(from);
+      if (!cUser && complianceAction !== 'help') {
+        cUser = await createUser(from);
+      }
+      if (cUser) {
+        if (complianceAction === 'stop') {
+          await updateUser(cUser.id, { opted_out_at: new Date().toISOString() });
+        } else if (complianceAction === 'start') {
+          await updateUser(cUser.id, { opted_out_at: null });
+        }
+        const complianceIntent = {
+          stop: INTENTS.COMPLIANCE_STOP,
+          start: INTENTS.COMPLIANCE_START,
+          help: INTENTS.COMPLIANCE_HELP,
+        }[complianceAction];
+        await logMessage({
+          userId: cUser.id, direction: 'inbound', body: messageBody, intent: complianceIntent, twilioSid: messageSid,
+        }).catch(console.error);
+        await logMessage({
+          userId: cUser.id, direction: 'outbound', body: complianceReply, intent: complianceIntent,
+        }).catch(console.error);
+      }
+    } catch (err) {
+      console.error(`Compliance ${complianceAction}: ack sent but DB recording failed:`, err);
+    }
+    return res.status(200).send('OK');
+  }
+
   let user = null;
   let replyText = '';
   let intent = INTENTS.UNKNOWN;
@@ -341,51 +379,36 @@ module.exports = async function handler(req, res) {
       twilioSid: messageSid,
     });
 
-    // ---- Carrier compliance: STOP / HELP / START ----
-    // These keywords are legally required to be honored on toll-free numbers.
-    // Match the BARE keyword only (so "CANCEL 1" still cancels a post, etc.)
-    // and force-send the compliance ack even if the user is opted out — these
-    // messages ARE the opt-in/opt-out acknowledgments.
-    const complianceAction = resolveComplianceAction(messageBody);
-    if (complianceAction === 'stop') {
-      await updateUser(user.id, { opted_out_at: new Date().toISOString() }).catch(err =>
-        console.error('Failed to mark user opted out:', err)
-      );
-      await sendSms(from, COMPLIANCE_REPLIES.stop, { force: true }).catch(console.error);
-      await logMessage({
-        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.stop, intent: INTENTS.COMPLIANCE_STOP,
-      }).catch(console.error);
-      return res.status(200).send('OK');
-    }
-    if (complianceAction === 'start') {
-      await updateUser(user.id, { opted_out_at: null }).catch(err =>
-        console.error('Failed to clear opt-out:', err)
-      );
-      await sendSms(from, COMPLIANCE_REPLIES.start, { force: true }).catch(console.error);
-      await logMessage({
-        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.start, intent: INTENTS.COMPLIANCE_START,
-      }).catch(console.error);
-      return res.status(200).send('OK');
-    }
-    if (complianceAction === 'help') {
-      await sendSms(from, COMPLIANCE_REPLIES.help, { force: true }).catch(console.error);
-      await logMessage({
-        userId: user.id, direction: 'outbound', body: COMPLIANCE_REPLIES.help, intent: INTENTS.COMPLIANCE_HELP,
-      }).catch(console.error);
-      return res.status(200).send('OK');
-    }
-
-    // Handle data deletion request first. The confirmation SMS uses
-    // force:true so opted-out users still get the final acknowledgment —
-    // this is the legally-meaningful "we deleted your data" ack, parallel
-    // to the STOP/HELP compliance acks.
+    // Handle data deletion request. Deletion is irreversible, so it requires
+    // an explicit confirmation phrase — a fat-fingered "delete my data" must
+    // not wipe an account. The confirmation SMS uses force:true so opted-out
+    // users still get the final acknowledgment — this is the legally-meaningful
+    // "we deleted your data" ack, parallel to the STOP/HELP compliance acks.
     if (/^delete\s+(my\s+)?data\s*$/i.test(messageBody)) {
+      await sendSms(from,
+        'This permanently deletes your account, photos, and scheduled posts, and cannot be undone. To confirm, reply exactly: DELETE MY DATA CONFIRM',
+        { force: true }
+      );
+      return res.status(200).send('OK');
+    }
+    if (/^delete\s+(my\s+)?data\s+confirm\s*$/i.test(messageBody)) {
       const { deleteUser } = require('../../lib/supabase');
       await deleteUser(user.id);
       await sendSms(from,
         "Your account and all data have been permanently deleted. You can restart anytime by texting us again.",
         { force: true }
       );
+      return res.status(200).send('OK');
+    }
+
+    // UPGRADE has no billing flow yet (there is no checkout endpoint) - answer
+    // honestly instead of letting the model improvise a fake upgrade.
+    if (/^upgrade\s*$/i.test(messageBody)) {
+      const honest = `Paid upgrades are not live yet during early access - you are on the ${user.plan || 'starter'} plan. We will text you the moment upgrades open.`;
+      await sendSms(from, honest);
+      await logMessage({
+        userId: user.id, direction: 'outbound', body: honest, intent: INTENTS.UNKNOWN,
+      }).catch(console.error);
       return res.status(200).send('OK');
     }
 
@@ -411,7 +434,7 @@ module.exports = async function handler(req, res) {
 
         if (result.savedCount === 0) {
           if (result.capHit) {
-            replyText = "You've hit your daily photo limit. Send more tomorrow — your existing library is still good.";
+            replyText = "You've hit your daily photo limit. Send more tomorrow - your existing library is still good.";
           } else {
             replyText = result.skippedCount > 0
               ? "I could not save that attachment. We only support image files up to 10MB (JPG, PNG, HEIC, WebP)."
@@ -446,7 +469,7 @@ module.exports = async function handler(req, res) {
           } else if (user.confirm_photos_enabled !== false) {
             const tagPhrase = tag ? `${tag} shot` : 'photo';
             const countSuffix = result.savedCount > 1 ? ` (+${result.savedCount - 1} more)` : '';
-            replyText = `Got it — saved that ${tagPhrase} to your library${countSuffix}.`;
+            replyText = `Got it - saved that ${tagPhrase} to your library${countSuffix}.`;
           } else {
             // User has confirmations off — reply 200 OK without sending anything.
             replyText = '';
@@ -478,7 +501,7 @@ module.exports = async function handler(req, res) {
         await updateUser(user.id, { auto_draft_on_photo: autoDraft });
         replyText = autoDraft
           ? "Got it. From now on, every photo you text me, I will draft a post for you to approve."
-          : "Got it. Photos will just save to your library for later — I won't auto-draft.";
+          : "Got it. Photos will just save to your library for later - I won't auto-draft.";
         intent = INTENTS.PHOTO_INTAKE_PREF;
 
         const sentMessage = await sendSms(from, replyText);
@@ -523,6 +546,11 @@ module.exports = async function handler(req, res) {
             replyText = `No post found at position ${cancelIndex}. Reply "What do I have coming up?" to see your schedule.`;
             intent = INTENTS.CANCEL;
           }
+        } else {
+          // "cancel post" / "cancel scheduled" with no number — tell them how,
+          // instead of falling through to an empty reply (which used to throw).
+          replyText = `To cancel a scheduled post, reply CANCEL plus its number, like "CANCEL 1". Reply "What do I have coming up?" to see the numbered list.`;
+          intent = INTENTS.CANCEL;
         }
       }
 
@@ -532,7 +560,7 @@ module.exports = async function handler(req, res) {
         if (name) {
           await updateUser(user.id, { assistant_name: name });
           user.assistant_name = name;
-          replyText = `Done — call me ${name} from now on. What can I help you with?`;
+          replyText = `Done - call me ${name} from now on. What can I help you with?`;
         } else {
           replyText = 'What would you like to name me? Try: "Call yourself Max".';
         }
@@ -545,7 +573,7 @@ module.exports = async function handler(req, res) {
         if (voice) {
           await updateUser(user.id, { voice_notes: voice });
           user.voice_notes = voice;
-          replyText = `Got it — I'll write in that voice: "${voice}". Try "write a post about our weekend special" to hear it.`;
+          replyText = `Got it - I'll write in that voice: "${voice}". Try "write a post about our weekend special" to hear it.`;
         } else {
           replyText = 'Describe the voice you want in your own words. Try: "Voice: fun, lots of emojis, a little cheeky, never salesy".';
         }
@@ -561,7 +589,7 @@ module.exports = async function handler(req, res) {
           user.tone = tone;
           replyText = `Tone set to ${tone}. Want a fully custom voice instead? Text "Voice: " and describe it in your own words.`;
         } else {
-          replyText = 'Which tone? Pick casual, professional, bold, or friendly — e.g. "Tone bold". Or describe your own with "Voice: ...".';
+          replyText = 'Which tone? Pick casual, professional, bold, or friendly - e.g. "Tone bold". Or describe your own with "Voice: ...".';
         }
         intent = INTENTS.SET_TONE;
       }
@@ -573,7 +601,7 @@ module.exports = async function handler(req, res) {
           await updateUser(user.id, { emoji_level: level });
           user.emoji_level = level;
           const desc = { none: 'no emojis', light: 'a light touch of emojis', lots: 'lots of emojis' }[level];
-          replyText = `Done — I'll use ${desc} from now on.`;
+          replyText = `Done - I'll use ${desc} from now on.`;
         } else {
           replyText = 'How many emojis? Say "no emojis", "light emojis", or "lots of emojis".';
         }
@@ -586,9 +614,9 @@ module.exports = async function handler(req, res) {
         if (sig) {
           await updateUser(user.id, { signature: sig });
           user.signature = sig;
-          replyText = `Got it — I'll sign off every post with: ${sig}`;
+          replyText = `Got it - I'll sign off every post with: ${sig}`;
         } else {
-          replyText = 'What sign-off should I add? Try: "Signature: — The Mike\'s Pizza Team".';
+          replyText = 'What sign-off should I add? Try: "Signature: - The Mike\'s Pizza Team".';
         }
         intent = INTENTS.SET_SIGNATURE;
       }
@@ -599,7 +627,7 @@ module.exports = async function handler(req, res) {
         if (banned) {
           await updateUser(user.id, { banned_words: banned });
           user.banned_words = banned;
-          replyText = `Understood — I'll never use: ${banned}`;
+          replyText = `Understood - I'll never use: ${banned}`;
         } else {
           replyText = 'Which words should I avoid? Try: "Never say: cheap, discount, hurry".';
         }
@@ -612,7 +640,7 @@ module.exports = async function handler(req, res) {
         if (tags) {
           await updateUser(user.id, { hashtags: tags });
           user.hashtags = tags;
-          replyText = `Done — I'll always include: ${tags}`;
+          replyText = `Done - I'll always include: ${tags}`;
         } else {
           replyText = 'Which hashtags? Try: "Hashtags: #woodfired #pizza #datenight".';
         }
@@ -625,9 +653,9 @@ module.exports = async function handler(req, res) {
         if (ctaText || ctaLink) {
           await updateUser(user.id, { cta_text: ctaText || null, cta_link: ctaLink || null });
           user.cta_text = ctaText; user.cta_link = ctaLink;
-          replyText = `Set — I'll work in "${[ctaText, ctaLink].filter(Boolean).join(' ')}" as your call-to-action.`;
+          replyText = `Set - I'll work in "${[ctaText, ctaLink].filter(Boolean).join(' ')}" as your call-to-action.`;
         } else {
-          replyText = 'What\'s your call-to-action? Try: "CTA: Book now — https://yourbiz.com/book".';
+          replyText = 'What\'s your call-to-action? Try: "CTA: Book now - https://yourbiz.com/book".';
         }
         intent = INTENTS.SET_CTA;
       }
@@ -635,13 +663,13 @@ module.exports = async function handler(req, res) {
       // Recap all customization settings
       else if (preClassified === INTENTS.SHOW_SETTINGS) {
         const lines = [
-          `• Name: ${user.assistant_name || 'Sidekick'}`,
-          user.voice_notes ? `• Voice: ${user.voice_notes}` : `• Tone: ${user.tone || 'professional'}`,
-          user.emoji_level ? `• Emoji: ${user.emoji_level}` : null,
-          user.signature ? `• Sign-off: ${user.signature}` : null,
-          user.hashtags ? `• Hashtags: ${user.hashtags}` : null,
-          (user.cta_text || user.cta_link) ? `• CTA: ${[user.cta_text, user.cta_link].filter(Boolean).join(' ')}` : null,
-          user.banned_words ? `• Never say: ${user.banned_words}` : null,
+          `- Name: ${user.assistant_name || 'Sidekick'}`,
+          user.voice_notes ? `- Voice: ${user.voice_notes}` : `- Tone: ${user.tone || 'professional'}`,
+          user.emoji_level ? `- Emoji: ${user.emoji_level}` : null,
+          user.signature ? `- Sign-off: ${user.signature}` : null,
+          user.hashtags ? `- Hashtags: ${user.hashtags}` : null,
+          (user.cta_text || user.cta_link) ? `- CTA: ${[user.cta_text, user.cta_link].filter(Boolean).join(' ')}` : null,
+          user.banned_words ? `- Never say: ${user.banned_words}` : null,
         ].filter(Boolean);
         replyText = `Your Sidekick settings:\n${lines.join('\n')}\n\nChange any: "Tone bold", "Voice: ...", "Call yourself Max", "Emoji none", "Signature: ...", "Hashtags: #x", "CTA: Book now <link>", "Never say ...".`;
         intent = INTENTS.SHOW_SETTINGS;

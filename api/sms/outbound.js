@@ -29,8 +29,9 @@ function getTwilioClient() {
 
 /**
  * Check if a recipient is currently opted out. Reads `opted_out_at` on the
- * `users` row matching the phone. Returns false on miss / DB error so we
- * never block sending due to a transient lookup issue.
+ * `users` row matching the phone. A user with no row is not opted out; but on
+ * a DB ERROR we fail CLOSED (treat as opted out) - if we cannot verify consent
+ * we must not send. Compliance acks bypass this via force:true regardless.
  *
  * Bypassed entirely for compliance-required messages (STOP / HELP / START
  * replies) by passing { force: true } to sendSms.
@@ -42,10 +43,11 @@ async function isOptedOut(toPhone) {
       .select('opted_out_at')
       .eq('phone', toPhone)
       .single();
-    if (error || !data) return false;
+    if (error && error.code === 'PGRST116') return false; // no row = never opted out
+    if (error || !data) return true; // fail closed: can't verify consent, don't send
     return Boolean(data.opted_out_at);
   } catch {
-    return false;
+    return true; // fail closed
   }
 }
 

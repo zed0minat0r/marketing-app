@@ -3320,64 +3320,94 @@ function handleStep2(e) {
   const btn = e.target.querySelector('button');
   btn.textContent = 'Locking you in...';
   btn.disabled = true;
-  setTimeout(() => {
-    document.getElementById('step2Form').style.display = 'none';
-    document.getElementById('formSub').style.display = 'none';
-    const trust = document.querySelector('.final-cta__trust');
-    if (trust) trust.style.display = 'none';
-    const note = document.querySelector('.signup-note');
-    if (note) note.style.display = 'none';
-    const smsR = document.getElementById('smsReassurance');
-    if (smsR) smsR.style.display = 'none';
-    const planIndicator = document.getElementById('planSelected');
-    if (planIndicator) planIndicator.style.display = 'none';
 
-    const email = document.getElementById('emailInput').value.trim();
-    const plan = document.getElementById('selectedPlan').value;
-    const rawPhone = document.getElementById('phoneInput').value.trim();
-    const digits = rawPhone.replace(/\D/g, '');
-    const phoneDisplay = digits.length === 10
-      ? `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`
-      : rawPhone;
+  const email = document.getElementById('emailInput').value.trim();
+  const plan = document.getElementById('selectedPlan').value;
+  const rawPhone = document.getElementById('phoneInput').value.trim();
 
-    // Warm title
-    const title = document.querySelector('.final-cta__title');
-    if (title) title.textContent = `Welcome aboard.`;
+  // Slug for this signup's shareable link (also stored server-side)
+  let hash = 0;
+  for (let ci = 0; ci < email.length; ci++) { hash = (hash * 31 + email.charCodeAt(ci)) >>> 0; }
+  const referralSlug = (hash >>> 0).toString(36).substring(0, 8);
+  const refParam = new URLSearchParams(window.location.search).get('ref') || '';
 
-    // Warm signup message
-    const msg = document.getElementById('signupMsg');
-    const planNote = plan ? ` Your <strong>${plan} plan</strong> price is locked in from today.` : '';
-    msg.innerHTML = `You\u2019re on the list.${planNote}`;
-    msg.style.display = 'block';
+  fetch('https://marketing-app-navy.vercel.app/api/waitlist', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, phone: rawPhone, consent: true, plan, ref: refParam, referralCode: referralSlug })
+  })
+    .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
+    .then(({ ok, d }) => {
+      if (!ok) throw new Error((d && d.error) || 'SAVE_FAILED');
+      showSignupConfirmation(plan, referralSlug, d.position);
+    })
+    .catch((err) => {
+      btn.textContent = 'Try again \u2192';
+      btn.disabled = false;
+      const note = document.querySelector('.signup-note');
+      if (note) {
+        const msg = err && err.message;
+        note.textContent = (msg && msg !== 'SAVE_FAILED' && !/fetch|network|load/i.test(msg))
+          ? msg
+          : 'Something went wrong saving your spot - please try again.';
+        note.style.color = 'var(--red)';
+      }
+    });
+}
 
-    // Hash email for queue position and referral slug
-    let hash = 0;
-    for (let ci = 0; ci < email.length; ci++) { hash = (hash * 31 + email.charCodeAt(ci)) >>> 0; }
-    const position = 180 + (hash % 61);
-    const referralSlug = (hash >>> 0).toString(36).substring(0, 8);
+function showSignupConfirmation(plan, referralSlug, position) {
+  document.getElementById('step2Form').style.display = 'none';
+  document.getElementById('formSub').style.display = 'none';
+  const trust = document.querySelector('.final-cta__trust');
+  if (trust) trust.style.display = 'none';
+  const note = document.querySelector('.signup-note');
+  if (note) note.style.display = 'none';
+  const smsR = document.getElementById('smsReassurance');
+  if (smsR) smsR.style.display = 'none';
+  const planIndicator = document.getElementById('planSelected');
+  if (planIndicator) planIndicator.style.display = 'none';
 
-    // Show confirmation block
-    const confirmBlock = document.getElementById('confirmationBlock');
-    if (confirmBlock) confirmBlock.classList.add('visible');
+  const rawPhone = document.getElementById('phoneInput').value.trim();
+  const digits = rawPhone.replace(/\D/g, '');
+  const phoneDisplay = digits.length === 10
+    ? `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`
+    : rawPhone;
 
-    // What happens next - the product promise
-    const confirmNext = document.getElementById('confirmationNext');
-    if (confirmNext) {
-      confirmNext.innerHTML = `We open in waves of 50 businesses this spring. When your wave opens, <strong>we\u2019ll personally text ${phoneDisplay}</strong> \u2014 that\u2019s the product, starting with you.`;
-    }
+  // Warm title
+  const title = document.querySelector('.final-cta__title');
+  if (title) title.textContent = `Welcome aboard.`;
 
-    // Queue position
-    const queuePos = document.getElementById('queuePos');
-    const queueBlock = document.getElementById('queueBlock');
-    if (queuePos) queuePos.textContent = `#${position} in line`;
+  // Warm signup message
+  const msg = document.getElementById('signupMsg');
+  const planNote = plan ? ` Your <strong>${plan} plan</strong> price is locked in from today.` : '';
+  msg.innerHTML = `You\u2019re on the list.${planNote}`;
+  msg.style.display = 'block';
+
+  // Show confirmation block
+  const confirmBlock = document.getElementById('confirmationBlock');
+  if (confirmBlock) confirmBlock.classList.add('visible');
+
+  // What happens next - the product promise
+  const confirmNext = document.getElementById('confirmationNext');
+  if (confirmNext) {
+    confirmNext.innerHTML = `We open in waves of 50 businesses. When your wave opens, <strong>we\u2019ll personally text ${phoneDisplay}</strong> - that\u2019s the product, starting with you.`;
+  }
+
+  // Real queue position from the server
+  const queuePos = document.getElementById('queuePos');
+  const queueBlock = document.getElementById('queueBlock');
+  if (queuePos && Number.isFinite(position)) {
+    queuePos.textContent = `#${position} in line`;
     if (queueBlock) queueBlock.style.display = 'block';
+  } else if (queueBlock) {
+    queueBlock.style.display = 'none';
+  }
 
-    // Referral link
-    const referralLink = `https://zed0minat0r.github.io/marketing-app/?ref=${referralSlug}`;
-    const referralDisplay = document.getElementById('referralLinkDisplay');
-    if (referralDisplay) referralDisplay.textContent = referralLink;
-    window._referralLink = referralLink;
-  }, 600);
+  // Referral link
+  const referralLink = `https://zed0minat0r.github.io/marketing-app/?ref=${referralSlug}`;
+  const referralDisplay = document.getElementById('referralLinkDisplay');
+  if (referralDisplay) referralDisplay.textContent = referralLink;
+  window._referralLink = referralLink;
 }
 
 /* ─── REFERRAL COPY ─── */
