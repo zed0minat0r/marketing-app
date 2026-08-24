@@ -36,6 +36,7 @@
     "@upstash/qstash": "^2.10.1",
     "@vercel/og": "^0.6.3",
     "aws4fetch": "^1.0.20",
+    "nodemailer": "^9.0.5",
     "stripe": "^17.7.0",
     "twilio": "^5.13.1"
   },
