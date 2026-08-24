@@ -768,13 +768,10 @@ module.exports = async function handler(req, res) {
 
       // For everything else, use Claude
       else {
-        // Check generation quota before calling Claude
-        if (!hasGenerationQuota(user)) {
-          replyText = ERROR_MESSAGES.generation_limit(user.plan);
-          intent = INTENTS.UNKNOWN;
-        } else {
-          // Load conversation history
-          const history = await getRecentMessages(user.id, 20);
+        // Load conversation history (needed for the approval flows below,
+        // which must work even when the user is over their generation quota -
+        // approving an already-drafted reply costs no generation).
+        const history = await getRecentMessages(user.id, 20);
 
           // Comment-reply approval takes precedence when the last thing we
           // sent was a drafted comment reply (YES posts it, SKIP ignores it,
@@ -792,7 +789,13 @@ module.exports = async function handler(req, res) {
             const customReply = messageBody.trim().match(/^reply:\s*(.+)/is);
             if (pending && (commentResponse || customReply)) {
               if (customReply) {
-                pending.draft_reply = customReply[1].trim().slice(0, 300);
+                const maxLen = isReview ? 500 : 300;
+                pending.draft_reply = customReply[1].trim().slice(0, maxLen);
+                // Persist the wording so the DB records what was actually posted
+                const { getClient: getDb } = require('../../lib/supabase');
+                await getDb().from(isReview ? 'review_replies' : 'comment_replies')
+                  .update({ draft_reply: pending.draft_reply, updated_at: new Date().toISOString() })
+                  .eq('id', pending.id);
                 const r = await postCommentReply(pending, user);
                 replyText = r.ok
                   ? 'Your reply is posted.'
@@ -817,6 +820,11 @@ module.exports = async function handler(req, res) {
             }
           }
 
+        // Check generation quota before any path that calls Claude
+        if (!hasGenerationQuota(user)) {
+          replyText = ERROR_MESSAGES.generation_limit(user.plan);
+          intent = INTENTS.UNKNOWN;
+        } else {
           // Check if this is a response to a pending draft
           const draftResult = await handleDraftResponse(user, messageBody, history);
 

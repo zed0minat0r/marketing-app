@@ -89,12 +89,25 @@ module.exports = async function handler(req, res) {
   };
 
   let position;
+  let isNewSignup = false;
   try {
     const db = getClient();
-    const { error: upsertError } = await db
-      .from('waitlist')
-      .upsert(row, { onConflict: 'phone' });
-    if (upsertError) throw upsertError;
+    const { data: existing } = await db
+      .from('waitlist').select('id').eq('phone', phone).maybeSingle();
+    if (existing) {
+      // Repeat signup for a known phone: refresh contact fields only. The
+      // original consent evidence (consent_at / consent_language) is
+      // append-only - a later request must never rewrite it.
+      const { error: updateError } = await db
+        .from('waitlist')
+        .update({ email: row.email, plan: row.plan, referral_code: row.referral_code })
+        .eq('id', existing.id);
+      if (updateError) throw updateError;
+    } else {
+      const { error: insertError } = await db.from('waitlist').insert(row);
+      if (insertError) throw insertError;
+      isNewSignup = true;
+    }
 
     const { count, error: countError } = await db
       .from('waitlist')
@@ -103,11 +116,16 @@ module.exports = async function handler(req, res) {
     position = count;
   } catch (err) {
     console.error('[waitlist] storage failed:', err.message);
-    return res.status(500).json({ error: 'Could not save your signup — please try again' });
+    return res.status(500).json({ error: 'Could not save your signup - please try again' });
   }
 
+  // Notify the owner only for genuinely new signups - repeat submissions
+  // must not become an email-flood or Gmail-quota-exhaustion vector.
   let emailSent = false;
   try {
+    if (!isNewSignup) {
+      return res.status(200).json({ ok: true, position, emailSent: false });
+    }
     const note = buildNotificationEmail(row, position);
     const result = await sendEmail(note.to, note.subject, note.html);
     emailSent = !!result.ok;

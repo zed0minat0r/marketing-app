@@ -18,9 +18,9 @@ Text Sidekick at your Twilio number to manage your social media marketing. No ap
 | Check your stats | "How did my posts do this week?" |
 | Delete all your data | "Delete my data" |
 | Get help | "Help" |
+| `audit mysite.com` | Website health check - top fixes texted back |
 
 ---
-| `audit mysite.com` | Website health check - top fixes texted back |
 
 ## Commands in Detail
 

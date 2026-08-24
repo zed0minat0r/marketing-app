@@ -21,6 +21,7 @@
  */
 
 const { extractCommentHints, processCommentEvent } = require('../../lib/comment-replies');
+const { checkRateLimit } = require('../../lib/rate-limit');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'GET') {
@@ -39,15 +40,23 @@ module.exports = async function handler(req, res) {
   }
 
   const hints = extractCommentHints(req.body);
-  const results = [];
   for (const hint of hints) {
     try {
-      results.push({ ...hint, result: await processCommentEvent(hint) });
+      // Flood guard: forged hints are cheap to send and each costs Graph +
+      // Claude + SMS work downstream. Cap processing per page id.
+      const { allowed } = await checkRateLimit(`metahook:${hint.pageId}`, 10, 60 * 1000);
+      if (!allowed) {
+        console.warn('[meta-webhook] rate limited page', hint.pageId);
+        continue;
+      }
+      const result = await processCommentEvent(hint);
+      console.log('[meta-webhook]', hint.platform, hint.commentId, '->', result);
     } catch (err) {
       console.error('[meta-webhook] processing failed:', err.message);
-      results.push({ ...hint, result: 'error' });
     }
   }
-  // Always 200 so Meta doesn't disable the subscription over transient errors
-  return res.status(200).json({ received: hints.length, results });
+  // Always a bare 200: no per-hint results to the unauthenticated caller
+  // (that would be an oracle for tuning a flood), and no non-200s that would
+  // make Meta disable the subscription over transient errors.
+  return res.status(200).send('OK');
 };
