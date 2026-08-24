@@ -186,7 +186,21 @@ The publish job (`/api/jobs/publish`) is unchanged: not a cron - QStash calls it
 when a post is scheduled (enqueued via the QStash SDK with a `delay`). The enhancement job
 (`/api/jobs/enhance-photo`) works the same way.
 
-## 8. Configuring Stripe Webhooks
+## 8. Configuring the Meta Comment Webhook (one-time, dashboard)
+
+Comment replies need Meta to push comment events to us:
+
+1. developers.facebook.com -> Sidekick app -> **Webhooks** (add the product if absent)
+2. Subscription object **Page**: callback URL `https://marketing-app-navy.vercel.app/api/meta/webhook`,
+   verify token = the `META_WEBHOOK_VERIFY_TOKEN` value from Vercel env, subscribe to the
+   **feed** field.
+3. Subscription object **Instagram**: same callback + token, subscribe to **comments**.
+
+Page-level subscriptions (`/{page-id}/subscribed_apps`) happen automatically when a user
+connects Facebook. The webhook treats every payload as an untrusted hint and re-fetches the
+comment from the Graph API with our stored page token before acting.
+
+## 9. Configuring Stripe Webhooks
 
 1. Open [Stripe Dashboard](https://dashboard.stripe.com/webhooks) — Webhooks — Add endpoint.
 2. **Endpoint URL**: `https://your-app.vercel.app/api/stripe/webhook`

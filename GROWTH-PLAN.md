@@ -111,6 +111,29 @@ AI-first tools (Predis, Ocoya). Key conclusions:
 (2) review requests by text (consent design first) → (3) FB/IG comment replies →
 (4) website audit becomes the free funnel.
 
+## Phase 5 — Customer Messaging (promos, appointment reminders, review requests)
+
+Matt's direction 2026-08-24: Sidekick should text the BUSINESS'S CUSTOMERS (promos,
+appointment reminders), and beta runs on the ONE existing toll-free number - no per-business
+numbers for now (cost preference; ~$1.15/mo/business local numbers were offered and declined).
+
+Design constraints locked in:
+- The "from" number is a DATA FIELD (per business, defaulting to the shared toll-free), so
+  flipping to per-business numbers later is config, not a rebuild.
+- Shared-number reality, stated honestly: a customer's STOP opts them out of every business
+  on the number (carrier-level); reply routing uses "which business messaged this customer"
+  (collisions unlikely at beta scale, real at growth). Revisit per-business numbers when
+  either bites.
+- Consent: the OWNER attests their customer agreed to receive texts (attestation stored,
+  like the waitlist consent snapshot); every customer message carries the business name and
+  opt-out language; STOP honored instantly and logged.
+- Twilio use case must be updated before this ships to real customers (current verification
+  declares owner-only traffic).
+
+v1 surface: "remind [name] [number] [when] about [what]" (appointment reminder),
+"text my customers [promo]" (to the consented list), review requests after a job. All
+approval-by-text, all logged per business.
+
 ## Sequencing
 
 1. Phase 1 now (this session): migration, tagging, growth lib + tests, weekly job, prompt.

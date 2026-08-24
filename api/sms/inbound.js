@@ -757,6 +757,42 @@ module.exports = async function handler(req, res) {
           // Load conversation history
           const history = await getRecentMessages(user.id, 20);
 
+          // Comment-reply approval takes precedence when the last thing we
+          // sent was a drafted comment reply (YES posts it, SKIP ignores it,
+          // "reply: ..." posts custom wording instead).
+          const lastOutbound = history.slice().reverse().find(m => m.direction === 'outbound');
+          if (lastOutbound && lastOutbound.intent === 'comment_reply') {
+            const { getPendingCommentReply, postCommentReply, markCommentReply } = require('../../lib/comment-replies');
+            const pending = await getPendingCommentReply(user.id);
+            const commentResponse = getDraftResponse(messageBody.trim());
+            const customReply = messageBody.trim().match(/^reply:\s*(.+)/is);
+            if (pending && (commentResponse || customReply)) {
+              if (customReply) {
+                pending.draft_reply = customReply[1].trim().slice(0, 300);
+                const r = await postCommentReply(pending, user);
+                replyText = r.ok
+                  ? 'Your reply is posted.'
+                  : `Couldn't post the reply (${r.error}). It's saved - try again in a bit.`;
+              } else if (commentResponse === 'approve') {
+                const r = await postCommentReply(pending, user);
+                replyText = r.ok
+                  ? `Reply posted to ${pending.platform}. Fast responses help your reach.`
+                  : `Couldn't post the reply (${r.error}). It's saved - try YES again in a bit.`;
+              } else if (commentResponse === 'skip') {
+                await markCommentReply(pending.id, 'skipped');
+                replyText = 'Skipped - no reply posted.';
+              } else {
+                replyText = 'For comment replies: YES posts my draft, SKIP ignores it, or text reply: followed by your own wording.';
+              }
+              intent = 'comment_reply';
+              await sendSms(from, replyText);
+              await logMessage({
+                userId: user.id, direction: 'outbound', body: replyText, intent,
+              }).catch(console.error);
+              return res.status(200).send('OK');
+            }
+          }
+
           // Check if this is a response to a pending draft
           const draftResult = await handleDraftResponse(user, messageBody, history);
 
