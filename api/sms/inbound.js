@@ -780,6 +780,8 @@ module.exports = async function handler(req, res) {
                   content: aiResult.action.content,
                   status: 'draft',
                   scheduledFor: null,
+                  topic: aiResult.action.topic || null,
+                  format: aiResult.action.format || null,
                 });
               } else if (aiResult.action.type === 'schedule_post' && aiResult.action.content) {
                 // Persist the queued post AND enqueue a QStash job at the
@@ -790,6 +792,8 @@ module.exports = async function handler(req, res) {
                   content: aiResult.action.content,
                   status: 'queued',
                   scheduledFor: aiResult.action.scheduled_for || null,
+                  topic: aiResult.action.topic || null,
+                  format: aiResult.action.format || null,
                 });
 
                 try {
