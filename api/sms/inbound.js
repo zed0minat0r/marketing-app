@@ -676,6 +676,25 @@ module.exports = async function handler(req, res) {
       }
 
       // Handle LIST_SCHEDULE command
+      // Handle CHECK_REVIEWS - on-demand Google review sweep
+      else if (preClassified === INTENTS.CHECK_REVIEWS) {
+        const { sweepReviewsForUser } = require('../../lib/review-replies');
+        const result = await sweepReviewsForUser(user);
+        if (result.error === 'no google account') {
+          replyText = 'Connect Google Business first - text "Connect Google" and I will send the link.';
+        } else if (result.error) {
+          replyText = 'I could not reach your Google reviews right now. Try again in a few minutes.';
+        } else if (result.notified > 0) {
+          replyText = ''; // the drafted-reply texts themselves are the response
+        } else {
+          replyText = 'No unanswered Google reviews right now - you are all caught up.';
+        }
+        intent = INTENTS.CHECK_REVIEWS;
+        if (!replyText) {
+          return res.status(200).send('OK');
+        }
+      }
+
       // Handle WEBSITE_AUDIT - fetch their site and text back the top fixes.
       // A URL in the message updates their stored website first.
       else if (preClassified === INTENTS.WEBSITE_AUDIT) {
@@ -761,8 +780,13 @@ module.exports = async function handler(req, res) {
           // sent was a drafted comment reply (YES posts it, SKIP ignores it,
           // "reply: ..." posts custom wording instead).
           const lastOutbound = history.slice().reverse().find(m => m.direction === 'outbound');
-          if (lastOutbound && lastOutbound.intent === 'comment_reply') {
-            const { getPendingCommentReply, postCommentReply, markCommentReply } = require('../../lib/comment-replies');
+          if (lastOutbound && (lastOutbound.intent === 'comment_reply' || lastOutbound.intent === 'review_reply')) {
+            const isReview = lastOutbound.intent === 'review_reply';
+            const commentLib = require('../../lib/comment-replies');
+            const reviewLib = require('../../lib/review-replies');
+            const getPendingCommentReply = isReview ? reviewLib.getPendingReviewReply : commentLib.getPendingCommentReply;
+            const postCommentReply = isReview ? reviewLib.postReviewReply : commentLib.postCommentReply;
+            const markCommentReply = isReview ? reviewLib.markReviewReply : commentLib.markCommentReply;
             const pending = await getPendingCommentReply(user.id);
             const commentResponse = getDraftResponse(messageBody.trim());
             const customReply = messageBody.trim().match(/^reply:\s*(.+)/is);
@@ -776,7 +800,7 @@ module.exports = async function handler(req, res) {
               } else if (commentResponse === 'approve') {
                 const r = await postCommentReply(pending, user);
                 replyText = r.ok
-                  ? `Reply posted to ${pending.platform}. Fast responses help your reach.`
+                  ? `Reply posted to ${isReview ? 'your Google review' : pending.platform}. Fast responses help your reputation and reach.`
                   : `Couldn't post the reply (${r.error}). It's saved - try YES again in a bit.`;
               } else if (commentResponse === 'skip') {
                 await markCommentReply(pending.id, 'skipped');
@@ -784,7 +808,7 @@ module.exports = async function handler(req, res) {
               } else {
                 replyText = 'For comment replies: YES posts my draft, SKIP ignores it, or text reply: followed by your own wording.';
               }
-              intent = 'comment_reply';
+              intent = isReview ? 'review_reply' : 'comment_reply';
               await sendSms(from, replyText);
               await logMessage({
                 userId: user.id, direction: 'outbound', body: replyText, intent,

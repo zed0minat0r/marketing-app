@@ -17,6 +17,7 @@
 const handlers = {
   'publish':               require('../../lib/job-handlers/publish'),
   'dispatch':              require('../../lib/job-handlers/dispatch'),
+  'sweep-reviews':         require('../../lib/job-handlers/sweep-reviews'),
   'collect-analytics':     require('../../lib/job-handlers/collect-analytics'),
   'weekly-summary':        require('../../lib/job-handlers/weekly-summary'),
   'refresh-tokens':        require('../../lib/job-handlers/refresh-tokens'),
