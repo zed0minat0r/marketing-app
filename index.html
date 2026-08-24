@@ -3514,6 +3514,16 @@ function buildPrompts(excludeFlow) {
     sep.style.cssText = 'width:100%;font-size:0.78rem;color:var(--text-muted);font-family:var(--mono);letter-spacing:0.04em;padding:4px 0 2px;text-align:center';
     sep.textContent = `// that\u2019s the full tour`;
     promptsEl.appendChild(sep);
+    // Peak-interest conversion moment: the visitor has now seen everything
+    // Sidekick does. Offer the waitlist before "Start over".
+    const ctaBtn = document.createElement('button');
+    ctaBtn.className = 'btn btn--primary';
+    ctaBtn.style.cssText = 'width:100%;justify-content:center';
+    ctaBtn.textContent = 'Seen enough? Hold your spot \u2192';
+    ctaBtn.addEventListener('click', () => {
+      document.getElementById('final').scrollIntoView({ behavior: 'smooth' });
+    });
+    promptsEl.appendChild(ctaBtn);
     const resetBtn = document.createElement('button');
     resetBtn.className = 'prompt-btn';
     resetBtn.style.cssText = 'border-color:var(--accent);color:var(--accent);width:100%;justify-content:center';
