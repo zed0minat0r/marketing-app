@@ -544,117 +544,131 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
   0%{opacity:0.7;transform:scale(0.97)}
   100%{opacity:1;transform:scale(1.04)}
 }
+/* ---- Photorealistic iPhone ---- */
+.how-phone-frame{
+  position:relative;
+  width:100%;
+  border-radius:56px;
+  padding:3px;
+  background:
+    linear-gradient(160deg,#9c9a98 0%,#67655f 8%,#413f3c 22%,#2e2c29 40%,#262421 55%,#383633 72%,#6b6966 90%,#a7a5a3 100%);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.5),
+    inset 0 -1px 1px rgba(0,0,0,0.6),
+    0 30px 60px -12px rgba(0,0,0,0.75),
+    0 60px 120px -20px rgba(0,0,0,0.5),
+    25px 45px 80px rgba(0,0,0,0.35);
+}
+.iph-btn{
+  position:absolute;
+  width:3.5px;
+  border-radius:2px;
+  background:linear-gradient(180deg,#787672 0%,#4a4845 15%,#2f2d2a 50%,#4a4845 85%,#787672 100%);
+  box-shadow:inset 0 0 1px rgba(255,255,255,0.3), -1px 0 2px rgba(0,0,0,0.5);
+}
+.iph-btn--action{left:-3px;top:96px;height:22px}
+.iph-btn--volup{left:-3px;top:138px;height:42px}
+.iph-btn--voldn{left:-3px;top:188px;height:42px}
+.iph-btn--power{right:-3px;left:auto;top:158px;height:66px;box-shadow:inset 0 0 1px rgba(255,255,255,0.3), 1px 0 2px rgba(0,0,0,0.5)}
 .how-phone{
   position:relative;
   width:100%;
-  background:var(--bg);
-  border-radius:42px;
+  background:#000;
+  border-radius:53px;
   overflow:hidden;
-  /* Stacked shadows fake the metallic edge frame AND the device depth in one element */
+  /* black display bezel between titanium rail and the OLED panel */
   box-shadow:
-    /* Inner screen rim highlight */
-    inset 0 0 0 1px rgba(255,255,255,0.06),
-    /* Thick metallic frame ring — the visible bezel/side bezel of the device */
-    0 0 0 6px #1f1c18,
-    0 0 0 7px rgba(255,255,255,0.08),
-    /* Stacked depth — offset shadows create the side+back thickness illusion */
-    2px 4px 0 4px #161310,
-    4px 7px 0 4px #100e0b,
-    6px 10px 0 4px #0a0807,
-    /* Ambient drop shadow — heavy ground shadow */
-    0 28px 30px -6px rgba(0,0,0,0.65),
-    20px 40px 70px rgba(0,0,0,0.55),
-    40px 70px 120px rgba(0,0,0,0.35);
+    inset 0 0 0 4px #000,
+    inset 0 0 0 4.5px rgba(255,255,255,0.05);
 }
 .how-phone::before{
   content:'';
   position:absolute;
-  top:0;left:0;right:0;
-  height:55%;
-  background:linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 22%, transparent 38%);
+  top:0;left:0;right:0;bottom:0;
+  background:
+    linear-gradient(118deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 18%, transparent 32%),
+    radial-gradient(120% 60% at 85% -10%, rgba(255,255,255,0.045), transparent 55%);
   pointer-events:none;
   z-index:6;
+  border-radius:53px;
 }
 .how-phone__island{
   position:absolute;
-  top:11px;
+  top:13px;
   left:50%;
   transform:translateX(-50%);
-  width:96px;
-  height:26px;
+  width:92px;
+  height:27px;
   background:#000;
-  border-radius:14px;
+  border-radius:16px;
   z-index:5;
   box-shadow:
-    inset 0 0 0 0.5px rgba(255,255,255,0.04),
-    0 0 0 1px rgba(0,0,0,0.6);
+    inset 0 0 0 0.5px rgba(255,255,255,0.06),
+    0 0 6px 1px rgba(0,0,0,0.9);
 }
 .how-phone__island::after{
   content:'';
   position:absolute;
-  top:50%;right:14px;
+  top:50%;right:13px;
   transform:translateY(-50%);
-  width:6px;height:6px;border-radius:50%;
-  background:rgba(255,255,255,0.08);
-  box-shadow:inset 0 0 2px rgba(0,0,0,0.8);
+  width:7px;height:7px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #17243a 0%, #060a12 55%, #000 100%);
+  box-shadow:inset 0 0 1.5px rgba(90,130,255,0.35);
 }
 .how-phone__statusbar{
-  padding:16px 26px 4px;
+  padding:17px 30px 2px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  color:var(--text);
-  font-family:var(--font);
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;
   font-size:0.85rem;
   font-weight:600;
-  letter-spacing:-0.01em;
+  letter-spacing:0;
   position:relative;
   z-index:4;
-  height:46px;
-  background:var(--bg);
+  height:48px;
+  background:transparent;
 }
-.how-phone__time{padding-left:6px}
+.how-phone__time{padding-left:4px;font-variant-numeric:tabular-nums}
 .how-phone__statusbar-right{
   display:flex;align-items:center;gap:5px;
-  color:var(--text);
+  color:#fff;
 }
 .how-phone__statusbar-right svg{display:block}
+/* iOS Messages header: centered contact stack, translucent bar */
 .how-phone__header{
-  background:var(--bg);
-  padding:6px 18px 12px;
-  display:flex;align-items:center;gap:10px;
-  border-bottom:1px solid rgba(255,255,255,0.06);
+  background:rgba(18,18,20,0.86);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  padding:4px 14px 8px;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  border-bottom:0.5px solid rgba(255,255,255,0.12);
   position:relative;
   z-index:4;
 }
+.how-phone__back{margin-top:14px;flex-shrink:0}
+.how-phone__header-spacer{width:11px;flex-shrink:0}
+.how-phone__contact{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
 .how-phone__avatar{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--accent);
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(180deg,#9fa4ac 0%,#7d828b 100%);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
-  font-size:0.75rem;font-weight:700;color:#0e0d0b;
-  box-shadow:0 0 0 1.5px rgba(212,245,60,0.25), 0 4px 12px rgba(212,245,60,0.18);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;
+  font-size:0.95rem;font-weight:600;color:#fff;
+  text-shadow:0 1px 1px rgba(0,0,0,0.15);
 }
-.how-phone__name{font-size:0.86rem;font-weight:600;line-height:1.2;color:var(--text)}
-.how-phone__status{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:0.72rem;color:var(--green);font-weight:500;
-  margin-top:1px;
-}
-.how-phone__status-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--green);
-  position:relative;
-  box-shadow:0 0 0 0 rgba(74,222,128,0.45);
-  animation:phone-pulse 2s ease-in-out infinite;
-}
-@keyframes phone-pulse{
-  0%, 100%{box-shadow:0 0 0 0 rgba(74,222,128,0.55)}
-  50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}
+.how-phone__name{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;
+  font-size:0.68rem;font-weight:400;line-height:1.1;color:#fff;
 }
 .how-phone__home-area{
-  height:36px;
-  background:var(--bg);
+  height:30px;
+  background:transparent;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -664,30 +678,59 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .how-phone__home{
   height:5px;
   width:38%;
-  background:var(--text);
-  opacity:0.55;
+  background:#fff;
+  opacity:0.4;
   border-radius:4px;
 }
+/* SMS input bar */
+.how-phone__inputbar{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 14px 2px;
+  position:relative;z-index:4;
+  background:transparent;
+}
+.how-phone__plus{
+  width:30px;height:30px;border-radius:50%;
+  background:#1c1c1e;
+  color:#8E8E93;
+  display:flex;align-items:center;justify-content:center;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:1.15rem;font-weight:400;line-height:1;
+  flex-shrink:0;
+}
+.how-phone__input{
+  flex:1;
+  display:flex;align-items:center;justify-content:space-between;
+  border:1px solid #3a3a3e;
+  border-radius:17px;
+  padding:6px 12px;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;
+  font-size:0.8rem;color:#8E8E93;
+}
 .how-phone__msgs{
-  padding:14px 12px 0;
-  height:400px;
+  padding:14px 14px 0;
+  height:388px;
   overflow:hidden;
   position:relative;
-  mask-image:linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
-  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
+  background:transparent;
+  mask-image:linear-gradient(to bottom, transparent 0%, #000 10%, #000 84%, transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 10%, #000 84%, transparent 100%);
 }
 .how-phone__msgs-inner{
-  display:flex;flex-direction:column;gap:7px;
+  display:flex;flex-direction:column;gap:6px;
   transform:translateY(0);
   transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1);
   will-change:transform;
 }
+/* iOS dark-mode message bubbles */
 .how-msg{
-  max-width:84%;
-  padding:9px 13px;
-  border-radius:14px;
+  max-width:78%;
+  padding:8px 13px;
+  border-radius:18px;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;
   font-size:0.82rem;
-  line-height:1.5;
+  line-height:1.42;
+  letter-spacing:-0.005em;
   opacity:0;
   transform:translateY(8px);
   transition:opacity 0.32s ease, transform 0.32s ease;
@@ -695,28 +738,28 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 }
 .how-msg.visible{opacity:1;transform:translateY(0)}
 .how-msg--in{
-  background:var(--surface2);
-  border:1px solid var(--border);
+  background:#26262b;
   align-self:flex-start;
-  border-bottom-left-radius:4px;
-  color:var(--text);
+  border-bottom-left-radius:5px;
+  color:#fff;
 }
 .how-msg--out{
-  background:var(--accent);
-  color:#0e0d0b;
+  background:linear-gradient(180deg,#3bd158 0%,#2fbf4b 100%);
+  color:#fff;
   align-self:flex-end;
-  border-bottom-right-radius:4px;
-  font-weight:600;
+  border-bottom-right-radius:5px;
+  font-weight:400;
 }
 .how-msg--time{
-  font-family:var(--mono);
-  font-size:0.75rem;
-  color:var(--text-muted);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;
+  font-size:0.66rem;
+  font-weight:500;
+  color:#8E8E93;
   text-align:center;
   align-self:center;
   background:none;
   border:none;
-  padding:2px 0;
+  padding:3px 0 1px;
   max-width:100%;
 }
 
@@ -1955,7 +1998,7 @@ footer p a:hover{color:var(--accent)}
   .how__step-col{text-align:center;align-items:center}
   .how__step-desc{max-width:100%;font-size:0.95rem;text-align:left}
   .how__phone-col{order:-1}
-  .how-phone{max-width:260px}
+  .how-phone-frame{max-width:266px;margin:0 auto}
   .how-phone__msgs{height:320px}
   .how__dots-col{flex-direction:row;justify-content:center;align-items:center;gap:20px}
   .how__dot-label{display:none}
@@ -2151,6 +2194,11 @@ footer p a:hover{color:var(--accent)}
       <div class="how__phone-col">
         <div class="how-phone-shell">
           <div class="how-phone-glow" aria-hidden="true"></div>
+          <div class="how-phone-frame">
+          <span class="iph-btn iph-btn--action" aria-hidden="true"></span>
+          <span class="iph-btn iph-btn--volup" aria-hidden="true"></span>
+          <span class="iph-btn iph-btn--voldn" aria-hidden="true"></span>
+          <span class="iph-btn iph-btn--power" aria-hidden="true"></span>
           <div class="how-phone">
             <div class="how-phone__island" aria-hidden="true"></div>
             <div class="how-phone__statusbar" aria-hidden="true">
@@ -2162,11 +2210,12 @@ footer p a:hover{color:var(--accent)}
               </div>
             </div>
             <div class="how-phone__header">
-              <div class="how-phone__avatar">SK</div>
-              <div>
-                <div class="how-phone__name">Sidekick</div>
-                <div class="how-phone__status"><span class="how-phone__status-dot" aria-hidden="true"></span>Active now</div>
+              <svg class="how-phone__back" width="11" height="19" viewBox="0 0 11 19" fill="none" aria-hidden="true"><path d="M9.5 1.5L2 9.5l7.5 8" stroke="#0A84FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="how-phone__contact">
+                <div class="how-phone__avatar">SK</div>
+                <div class="how-phone__name">Sidekick <svg width="6" height="10" viewBox="0 0 6 10" fill="none" aria-hidden="true"><path d="M1 1l4 4-4 4" stroke="#8E8E93" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               </div>
+              <span class="how-phone__header-spacer" aria-hidden="true"></span>
             </div>
             <div class="how-phone__msgs" id="howMsgList">
             <div class="how-phone__msgs-inner" id="howMsgInner">
@@ -2176,7 +2225,7 @@ footer p a:hover{color:var(--accent)}
             <div class="how-msg how-msg--out" data-step="0" data-seq="2">Mike&rsquo;s Pizza</div>
             <div class="how-msg how-msg--in" data-step="0" data-seq="3">Great! What do you sell, and who&rsquo;s your customer?</div>
             <div class="how-msg how-msg--out" data-step="0" data-seq="4">Wood-fired pizza. Families &amp; date nights.</div>
-            <div class="how-msg how-msg--in" data-step="0" data-seq="5">Got it. Which platforms &mdash; Instagram, Facebook, or both?</div>
+            <div class="how-msg how-msg--in" data-step="0" data-seq="5">Got it. Which platforms: Instagram, Facebook, or both?</div>
             <!-- Step 2 messages -->
             <div class="how-msg how-msg--out" data-step="1" data-seq="0">Both please</div>
             <div class="how-msg how-msg--in" data-step="1" data-seq="1">Here are 3 posts for this week:</div>
@@ -2186,13 +2235,20 @@ footer p a:hover{color:var(--accent)}
             <!-- Step 3 messages -->
             <div class="how-msg how-msg--out" data-step="2" data-seq="0">YES</div>
             <div class="how-msg how-msg--in" data-step="2" data-seq="1">Done! All 3 scheduled across Instagram and Facebook.</div>
-            <div class="how-msg how-msg--in" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it &mdash; go make some pizza.</div>
+            <div class="how-msg how-msg--in" data-step="2" data-seq="2">You&rsquo;ll see reach stats here next Monday. That&rsquo;s it - go make some pizza.</div>
             </div>
           </div>
+            <div class="how-phone__inputbar" aria-hidden="true">
+              <span class="how-phone__plus">+</span>
+              <span class="how-phone__input">Text Message &middot; SMS
+                <svg width="11" height="16" viewBox="0 0 11 16" fill="none" aria-hidden="true"><rect x="3" y="1" width="5" height="9" rx="2.5" stroke="#8E8E93" stroke-width="1.3"/><path d="M1 8a4.5 4.5 0 009 0M5.5 12.5V15" stroke="#8E8E93" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </span>
+            </div>
             <div class="how-phone__home-area" aria-hidden="true"><div class="how-phone__home"></div></div>
             <div class="how-check" id="howCheck">
               <svg viewBox="0 0 24 24" fill="none" stroke="#0e0d0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
+          </div>
           </div>
         </div>
       </div>
