@@ -116,7 +116,8 @@ module.exports = async function handler(req, res) {
     if (countError) throw countError;
     position = count;
   } catch (err) {
-    console.error('[waitlist] storage failed:', err.message);
+    const { reportError } = require('../lib/monitor');
+    await reportError('waitlist-storage', err, { critical: true }).catch(() => {});
     return res.status(500).json({ error: 'Could not save your signup - please try again' });
   }
 
@@ -132,7 +133,9 @@ module.exports = async function handler(req, res) {
     emailSent = !!result.ok;
     if (!result.ok) console.error('[waitlist] notification email failed:', result.error);
   } catch (err) {
-    console.error('[waitlist] notification email threw:', err.message);
+    // A missed signup email means Matt never learns about the signup - alert.
+    const { reportError } = require('../lib/monitor');
+    await reportError('waitlist-email', err, {}).catch(() => {});
   }
 
   return res.status(200).json({ ok: true, position, emailSent });

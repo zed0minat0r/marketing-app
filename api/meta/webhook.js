@@ -52,7 +52,8 @@ module.exports = async function handler(req, res) {
       const result = await processCommentEvent(hint);
       console.log('[meta-webhook]', hint.platform, hint.commentId, '->', result);
     } catch (err) {
-      console.error('[meta-webhook] processing failed:', err.message);
+      const { reportError } = require('../../lib/monitor');
+      await reportError('meta-webhook', err, { commentId: hint.commentId }).catch(() => {});
     }
   }
   // Always a bare 200: no per-hint results to the unauthenticated caller

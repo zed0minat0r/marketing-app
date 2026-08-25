@@ -24,6 +24,7 @@ const handlers = {
   'reset-generations':     require('../../lib/job-handlers/reset-generations'),
   'cleanup-conversations': require('../../lib/job-handlers/cleanup-conversations'),
   'enhance-photo':         require('../../lib/job-handlers/enhance-photo'),
+  'health-check':          require('../../lib/job-handlers/health-check'),
 };
 
 /**
@@ -60,7 +61,14 @@ module.exports = async function handler(req, res) {
     req.body = req.body && !(req.body instanceof Buffer) ? req.body : {};
   }
 
-  return routeHandler(req, res);
+  try {
+    return await routeHandler(req, res);
+  } catch (err) {
+    const { reportError } = require('../../lib/monitor');
+    await reportError(`job:${action}`, err, { critical: action === 'publish' }).catch(() => {});
+    // 500 lets QStash retry the delivery.
+    if (!res.headersSent) return res.status(500).json({ error: 'Job failed' });
+  }
 };
 
 module.exports.config = { api: { bodyParser: false } };

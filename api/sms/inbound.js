@@ -959,7 +959,8 @@ module.exports = async function handler(req, res) {
     return res.status(200).send('OK');
 
   } catch (err) {
-    console.error('Inbound SMS handler error:', err);
+    const { reportError } = require('../../lib/monitor');
+    await reportError('sms-inbound', err, { critical: true, userId: user?.id, from }).catch(() => {});
 
     // Try to send a user-friendly error message
     if (from) {
