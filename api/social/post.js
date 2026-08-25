@@ -145,6 +145,7 @@ async function postToFacebook(pageId, pageToken, content) {
 
   const data = await response.json();
   if (data.error) throw new Error(`Facebook: ${data.error.message}`);
+  if (!data.id) throw new Error('Facebook: publish returned no post id');
 
   return `https://facebook.com/${data.id.replace('_', '/posts/')}`;
 }
