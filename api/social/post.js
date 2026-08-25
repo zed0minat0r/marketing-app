@@ -556,16 +556,30 @@ async function publishPost(postId) {
   // publishPost is called directly.
   // Atomically CLAIM the post: only one invocation may flip it to
   // 'publishing'. A plain read-then-write let a QStash retry and a direct
-  // call both pass the check and double-post. The claim succeeds for
-  // queued/draft/failed posts, or for a 'publishing' row stale >5 min.
+  // call both pass the check and double-post. Two plain-filter conditional
+  // updates (no PostgREST .or() string syntax - ISO timestamps contain
+  // colons, which its filter grammar can choke on): first claim
+  // queued/draft/failed; if none, claim a stale 'publishing' row (>5 min).
   const staleIso = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-  const { data: claimed, error: claimError } = await getClient()
+  const nowIso = new Date().toISOString();
+  let { data: claimed, error: claimError } = await getClient()
     .from('scheduled_posts')
-    .update({ status: 'publishing', updated_at: new Date().toISOString() })
+    .update({ status: 'publishing', updated_at: nowIso })
     .eq('id', postId)
-    .or(`status.in.(queued,draft,failed),and(status.eq.publishing,updated_at.lt.${staleIso})`)
+    .in('status', ['queued', 'draft', 'failed'])
     .select('id');
   if (claimError) throw claimError;
+  if (!claimed || claimed.length === 0) {
+    const retryStale = await getClient()
+      .from('scheduled_posts')
+      .update({ status: 'publishing', updated_at: nowIso })
+      .eq('id', postId)
+      .eq('status', 'publishing')
+      .lt('updated_at', staleIso)
+      .select('id');
+    if (retryStale.error) throw retryStale.error;
+    claimed = retryStale.data;
+  }
   if (!claimed || claimed.length === 0) {
     console.log(`publishPost idempotency: post ${postId} already claimed - skipping`);
     return { success: true, alreadyPublishing: true };

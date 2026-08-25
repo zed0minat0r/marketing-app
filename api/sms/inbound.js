@@ -21,7 +21,7 @@ const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
 const { classifyIntent, getDraftResponse, parseCancelCommand, parseNameCommand, parseVoiceCommand, parseToneCommand, parseEmojiLevel, parseSignature, parseBanned, parseHashtags, parseCta } = require('../../lib/intent');
 const { normalizeTone } = require('../../lib/onboarding');
-const { processInboundMedia, extractMedia } = require('../../lib/photo-intake');
+const { processInboundMedia } = require('../../lib/photo-intake');
 const { resolveComplianceAction, COMPLIANCE_REPLIES } = require('../../lib/sms-compliance');
 const { scheduleSocialPublish, cancelScheduledPublish } = require('../../lib/qstash-publisher');
 const {
@@ -199,8 +199,15 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
         : connected;
       const platforms = targeted.length ? targeted : connected;
 
-      // Schedule with QStash so the publish job actually fires. delay=null
-      // = "as soon as possible" (1s in the publisher).
+      // Write status FIRST, enqueue second: the publish job fires ~1s after
+      // enqueue, and enqueue-before-write could let it claim and post the
+      // draft, then have this write stomp 'posted' back to 'queued'.
+      await updateScheduledPost(draft.id, {
+        platforms,
+        status: 'queued',
+        scheduled_for: null,
+      });
+
       let qstashMessageId = null;
       try {
         const { messageId } = await scheduleSocialPublish({
@@ -208,18 +215,19 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
           scheduledFor: null,
         });
         qstashMessageId = messageId;
+        await updateScheduledPost(draft.id, { qstash_message_id: qstashMessageId }).catch(console.error);
       } catch (err) {
         console.error('QStash enqueue failed for immediate publish:', err.message);
-        // Don't fail the user-facing flow — leave the row as queued, the user
-        // can retry. Worth surfacing the error in admin logs.
+        // Revert so YES can retry - a 'queued' row with no job would be
+        // stranded forever with the user told it's on the way.
+        await updateScheduledPost(draft.id, { status: 'draft' }).catch(console.error);
+        return {
+          handled: true,
+          replyText: 'I hit a snag queueing that post. Nothing was published - reply YES to try again.',
+          intent: INTENTS.APPROVE,
+          postId: draft.id,
+        };
       }
-
-      await updateScheduledPost(draft.id, {
-        platforms,
-        status: 'queued',
-        qstash_message_id: qstashMessageId,
-        scheduled_for: null,
-      });
 
       return {
         handled: true,
@@ -230,6 +238,12 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
     }
 
     case 'skip': {
+      // Actually cancel the draft row - otherwise a later stray YES could
+      // publish a post the user believes is gone.
+      const skippedDraft = await getMostRecentDraftPost(user.id);
+      if (skippedDraft && skippedDraft.status === 'draft') {
+        await updateScheduledPost(skippedDraft.id, { status: 'canceled' }).catch(console.error);
+      }
       return {
         handled: true,
         replyText: "Post canceled. What else can I help you with?",
@@ -398,7 +412,19 @@ module.exports = async function handler(req, res) {
       return res.status(200).send('OK');
     }
     if (/^delete\s+(my\s+)?data\s+confirm\s*$/i.test(messageBody)) {
-      const { deleteUser } = require('../../lib/supabase');
+      const { deleteUser, getClient: getDb } = require('../../lib/supabase');
+      // The ack promises photos are permanently deleted - remove the storage
+      // objects too, not just the DB rows (best effort, before the cascade).
+      try {
+        const { deleteObject } = require('../../lib/storage');
+        const { data: photos } = await getDb()
+          .from('customer_photos').select('r2_key').eq('user_id', user.id).limit(500);
+        for (const p of (photos || [])) {
+          if (p.r2_key) await deleteObject(p.r2_key).catch(() => {});
+        }
+      } catch (err) {
+        console.error('Photo object cleanup during account deletion failed:', err.message);
+      }
       await deleteUser(user.id);
       await sendSms(from,
         "Your account and all data have been permanently deleted. You can restart anytime by texting us again.",
@@ -810,7 +836,7 @@ module.exports = async function handler(req, res) {
                 const r = await postCommentReply(pending, user);
                 replyText = r.ok
                   ? `Reply posted to ${isReview ? 'your Google review' : pending.platform}. Fast responses help your reputation and reach.`
-                  : `Couldn't post the reply (${r.error}). It's saved - try YES again in a bit.`;
+                  : `Couldn't post the reply (${r.error}). Try YES again in a bit, or SKIP to drop it.`;
               } else if (commentResponse === 'skip') {
                 await markCommentReply(pending.id, 'skipped');
                 replyText = 'Skipped - no reply posted.';

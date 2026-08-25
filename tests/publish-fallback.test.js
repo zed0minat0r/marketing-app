@@ -37,24 +37,33 @@ function installSupabaseStub() {
         // Atomic publishing claim: update(...).eq('id', id).or(cond).select()
         // Mirrors the real semantics: claim succeeds for queued/draft/failed,
         // or for a 'publishing' row whose updated_at is stale (>5 min).
-        update: (vals) => ({
-          eq: (_col, id) => ({
-            or: (cond) => ({
-              select: async () => {
-                const row = supabaseStub.posts.get(id);
-                if (!row) return { data: [], error: null };
-                const staleMatch = cond.match(/updated_at\.lt\.([^)]+)/);
-                const staleIso = staleMatch ? staleMatch[1] : null;
-                const claimable =
-                  ['queued', 'draft', 'failed'].includes(row.status) ||
-                  (row.status === 'publishing' && staleIso && new Date(row.updated_at) < new Date(staleIso));
-                if (!claimable) return { data: [], error: null };
-                supabaseStub.posts.set(id, { ...row, ...vals });
-                return { data: [{ id }], error: null };
-              },
-            }),
-          }),
-        }),
+        update: (vals) => {
+          const state = { id: null, statuses: null, eqStatus: null, ltUpdated: null };
+          const finish = async () => {
+            const row = supabaseStub.posts.get(state.id);
+            if (!row) return { data: [], error: null };
+            let match = false;
+            if (state.statuses) match = state.statuses.includes(row.status);
+            if (state.eqStatus) {
+              match = row.status === state.eqStatus &&
+                (!state.ltUpdated || new Date(row.updated_at) < new Date(state.ltUpdated));
+            }
+            if (!match) return { data: [], error: null };
+            supabaseStub.posts.set(state.id, { ...row, ...vals });
+            return { data: [{ id: state.id }], error: null };
+          };
+          const chain = {
+            eq: (col, val) => {
+              if (col === 'id') state.id = val;
+              if (col === 'status') state.eqStatus = val;
+              return chain;
+            },
+            in: (_col, statuses) => { state.statuses = statuses; return chain; },
+            lt: (_col, iso) => { state.ltUpdated = iso; return chain; },
+            select: finish,
+          };
+          return chain;
+        },
       }),
     }),
   };

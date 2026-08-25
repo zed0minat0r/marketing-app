@@ -44,7 +44,7 @@ async function readRawBody(req) {
 module.exports = async function handler(req, res) {
   const action = req.query.action;
 
-  const routeHandler = handlers[action];
+  const routeHandler = Object.hasOwn(handlers, action) ? handlers[action] : null;
   if (!routeHandler) {
     return res.status(404).json({ error: `Unknown job action: ${action}` });
   }
