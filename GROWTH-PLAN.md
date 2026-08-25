@@ -114,16 +114,19 @@ AI-first tools (Predis, Ocoya). Key conclusions:
 ## Phase 5 — Customer Messaging (promos, appointment reminders, review requests)
 
 Matt's direction 2026-08-24: Sidekick should text the BUSINESS'S CUSTOMERS (promos,
-appointment reminders), and beta runs on the ONE existing toll-free number - no per-business
-numbers for now (cost preference; ~$1.15/mo/business local numbers were offered and declined).
+appointment reminders). Original call was to run beta on the ONE existing toll-free number
+(~$1.15/mo/business local numbers offered and declined on cost).
+REVISED 2026-08-25 (Matt): the STOP collision is not acceptable - "we definitely need
+multiple twilio lines." Every business that buys the customer-messaging add-on gets its OWN
+number, funded by the add-on fee. The shared toll-free remains for owner-facing traffic only.
 
 Design constraints locked in:
 - The "from" number is a DATA FIELD (per business, defaulting to the shared toll-free), so
-  flipping to per-business numbers later is config, not a rebuild.
-- Shared-number reality, stated honestly: a customer's STOP opts them out of every business
-  on the number (carrier-level); reply routing uses "which business messaged this customer"
-  (collisions unlikely at beta scale, real at growth). Revisit per-business numbers when
-  either bites.
+  provisioning a per-business number is config + a Twilio purchase, not a rebuild.
+- Per-business numbers eliminate the STOP collision entirely: a customer's STOP only ever
+  silences the one business they stopped. Cost: ~$1.15/mo local (needs A2P 10DLC campaign
+  registration - we have the EIN) or ~$2.15/mo toll-free (needs per-number verification);
+  either is covered many times over by the add-on price.
 - Consent: the OWNER attests their customer agreed to receive texts (attestation stored,
   like the waitlist consent snapshot); every customer message carries the business name and
   opt-out language; STOP honored instantly and logged.
