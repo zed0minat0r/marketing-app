@@ -22,7 +22,7 @@ jobs:
       - name: Stage public site files
         run: |
           mkdir -p _site/docs
-          cp index.html connected.html robots.txt sitemap.xml _site/
+          cp index.html connected.html robots.txt sitemap.xml og.png _site/
           cp docs/optin-proof.png _site/docs/
       - uses: actions/upload-pages-artifact@v3
         with:

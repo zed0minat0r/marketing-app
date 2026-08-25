@@ -34,7 +34,6 @@
     "@anthropic-ai/sdk": "^0.39.0",
     "@supabase/supabase-js": "^2.102.1",
     "@upstash/qstash": "^2.10.1",
-    "@vercel/og": "^0.6.3",
     "aws4fetch": "^1.0.20",
     "nodemailer": "^9.0.5",
     "stripe": "^17.7.0",

@@ -19,7 +19,7 @@ const { sendSms } = require('./outbound');
 const { checkRateLimit } = require('../../lib/rate-limit');
 const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
-const { classifyIntent, getDraftResponse, parseCancelCommand, parseEditCommand, parseNameCommand, parseVoiceCommand, parseToneCommand, parseEmojiLevel, parseSignature, parseBanned, parseHashtags, parseCta } = require('../../lib/intent');
+const { classifyIntent, getDraftResponse, parseCancelCommand, parseNameCommand, parseVoiceCommand, parseToneCommand, parseEmojiLevel, parseSignature, parseBanned, parseHashtags, parseCta } = require('../../lib/intent');
 const { normalizeTone } = require('../../lib/onboarding');
 const { processInboundMedia, extractMedia } = require('../../lib/photo-intake');
 const { resolveComplianceAction, COMPLIANCE_REPLIES } = require('../../lib/sms-compliance');
@@ -191,7 +191,13 @@ async function handleDraftResponse(user, messageBody, recentMessages) {
         };
       }
 
-      const platforms = accounts.map(a => a.platform);
+      // Publish to the platforms this DRAFT targeted (deduped, intersected
+      // with what's actually connected) - never blanket-post to everything.
+      const connected = [...new Set(accounts.map(a => a.platform))];
+      const targeted = Array.isArray(draft.platforms) && draft.platforms.length
+        ? [...new Set(draft.platforms)].filter(p => connected.includes(p))
+        : connected;
+      const platforms = targeted.length ? targeted : connected;
 
       // Schedule with QStash so the publish job actually fires. delay=null
       // = "as soon as possible" (1s in the publisher).
@@ -820,18 +826,20 @@ module.exports = async function handler(req, res) {
             }
           }
 
+        // Post-draft approval (YES/EDIT/SKIP/LATER) costs no generation -
+        // it must work even when the user is over quota.
+        const draftResult = await handleDraftResponse(user, messageBody, history);
+
+        if (draftResult.handled) {
+          replyText = draftResult.replyText;
+          intent = draftResult.intent || INTENTS.APPROVE;
+        }
         // Check generation quota before any path that calls Claude
-        if (!hasGenerationQuota(user)) {
+        else if (!hasGenerationQuota(user)) {
           replyText = ERROR_MESSAGES.generation_limit(user.plan);
           intent = INTENTS.UNKNOWN;
         } else {
-          // Check if this is a response to a pending draft
-          const draftResult = await handleDraftResponse(user, messageBody, history);
-
-          if (draftResult.handled) {
-            replyText = draftResult.replyText;
-            intent = draftResult.intent || INTENTS.APPROVE;
-          } else {
+          {
             // Call Claude with full context
             const accounts = await getSocialAccounts(user.id);
             const platforms = accounts.map(a => a.platform);

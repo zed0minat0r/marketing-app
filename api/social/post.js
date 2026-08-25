@@ -134,7 +134,7 @@ async function generateInstagramImageUrl(content) {
 // =============================================
 
 async function postToFacebook(pageId, pageToken, content) {
-  const response = await fetch(`https://graph.facebook.com/v19.0/${pageId}/feed`, {
+  const response = await fetch(`https://graph.facebook.com/v22.0/${pageId}/feed`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -168,7 +168,7 @@ async function postToInstagram(igUserId, accessToken, content, mediaUrl) {
     containerBody.image_url = generatedUrl;
   }
 
-  const containerRes = await fetch(`https://graph.facebook.com/v19.0/${igUserId}/media`, {
+  const containerRes = await fetch(`https://graph.facebook.com/v22.0/${igUserId}/media`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(containerBody),
@@ -180,7 +180,7 @@ async function postToInstagram(igUserId, accessToken, content, mediaUrl) {
   const containerId = containerData.id;
 
   // Step 2: Publish the container
-  const publishRes = await fetch(`https://graph.facebook.com/v19.0/${igUserId}/media_publish`, {
+  const publishRes = await fetch(`https://graph.facebook.com/v22.0/${igUserId}/media_publish`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -192,7 +192,16 @@ async function postToInstagram(igUserId, accessToken, content, mediaUrl) {
   const publishData = await publishRes.json();
   if (publishData.error) throw new Error(`Instagram publish: ${publishData.error.message}`);
 
-  return `https://instagram.com/p/${publishData.id}`;
+  // The publish response id is a numeric media ID, not a shortcode - a
+  // constructed instagram.com/p/<id> link 404s. Fetch the real permalink;
+  // return the media id too (analytics needs it).
+  let permalink = null;
+  try {
+    const permRes = await fetch(`https://graph.facebook.com/v22.0/${publishData.id}?fields=permalink&access_token=${accessToken}`);
+    const permData = await permRes.json();
+    permalink = permData.permalink || null;
+  } catch { /* fall through to null */ }
+  return { url: permalink || 'https://www.instagram.com/', mediaId: publishData.id };
 }
 
 // =============================================
@@ -545,17 +554,22 @@ async function publishPost(postId) {
   // 'publishing' very recently. publish.js (the QStash entry point) checks
   // for staleness; do the same inner check here to harden the race when
   // publishPost is called directly.
-  if (post.status === 'publishing') {
-    const updatedAt = new Date(post.updated_at || 0);
-    const staleCutoff = new Date(Date.now() - 5 * 60 * 1000);
-    if (updatedAt > staleCutoff) {
-      console.log(`publishPost idempotency: post ${postId} already publishing — skipping`);
-      return { success: true, alreadyPublishing: true };
-    }
+  // Atomically CLAIM the post: only one invocation may flip it to
+  // 'publishing'. A plain read-then-write let a QStash retry and a direct
+  // call both pass the check and double-post. The claim succeeds for
+  // queued/draft/failed posts, or for a 'publishing' row stale >5 min.
+  const staleIso = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+  const { data: claimed, error: claimError } = await getClient()
+    .from('scheduled_posts')
+    .update({ status: 'publishing', updated_at: new Date().toISOString() })
+    .eq('id', postId)
+    .or(`status.in.(queued,draft,failed),and(status.eq.publishing,updated_at.lt.${staleIso})`)
+    .select('id');
+  if (claimError) throw claimError;
+  if (!claimed || claimed.length === 0) {
+    console.log(`publishPost idempotency: post ${postId} already claimed - skipping`);
+    return { success: true, alreadyPublishing: true };
   }
-
-  // Mark as publishing
-  await updateScheduledPost(postId, { status: 'publishing' });
 
   // If the post has no media_url set (typical when drafted from a text-only
   // SMS), fall back to the user's most recent photo from their library.
@@ -590,7 +604,10 @@ async function publishPost(postId) {
 
       } else if (platform === 'instagram') {
         // media_url may be null — postToInstagram handles text-only via branded image generation
-        url = await postToInstagram(account.platform_user_id, account.access_token, post.content, post.media_url || null);
+        const igResult = await postToInstagram(account.platform_user_id, account.access_token, post.content, post.media_url || null);
+        url = igResult.url;
+        // Persist the media id alongside the permalink - analytics reads it.
+        if (igResult.mediaId) urls.instagram_media_id = String(igResult.mediaId);
 
       } else if (platform === 'twitter') {
         let accessToken = account.access_token;
