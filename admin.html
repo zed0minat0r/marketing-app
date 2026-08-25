@@ -1200,21 +1200,12 @@
 </div>
 
 <script>
-  // Admin password hash — SHA-256 of the admin password.
-  // Embedded directly because admin.html is served as a static file; there
-  // is no server-rendering step to inject window._ADMIN_HASH. The actual
-  // password is known only to the admin and rotating it requires updating
-  // this line + committing. Client-side gates like this are deterrent-grade,
-  // not auth-grade — anyone reading the source can read the hash.
-  const ADMIN_HASH = '3155d7e381bdc2ce4c0868ef90e6d23b1ac6954ca1a9cdafb136296244871fc0';
-
   // =============================================
-  // AUTH
+  // AUTH — verified server-side. The page ships no hash and no secret:
+  // the entered password is sent as a Bearer token to an admin endpoint,
+  // and the server's constant-time check against ADMIN_PASSWORD_HASH
+  // decides. Nothing here is crackable offline.
   // =============================================
-  async function sha256(str) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
 
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
@@ -1242,11 +1233,15 @@
     const pw = document.getElementById('pw-input').value.trim();
     if (!pw) return;
 
-    const hash = await sha256(pw);
-    if (hash === ADMIN_HASH) {
-      sessionStorage.setItem('admin_authed', '1');
-      // Stash the password (not the hash) so server-backed admin endpoints
-      // can validate via Bearer auth. Lives only in this session.
+    document.getElementById('auth-error').textContent = '';
+    let res;
+    try {
+      res = await fetch('/api/admin/config-check', { headers: { Authorization: 'Bearer ' + pw } });
+    } catch {
+      document.getElementById('auth-error').textContent = 'Could not reach the server - try again.';
+      return;
+    }
+    if (res.ok) {
       sessionStorage.setItem('admin_pw', pw);
       revealDashboard();
       loadAll();
@@ -1260,8 +1255,9 @@
     if (e.key === 'Enter') tryAuth();
   });
 
-  // Auto-bypass if already authed this session
-  if (sessionStorage.getItem('admin_authed') === '1') {
+  // Auto-bypass if already authed this session (the stored password is
+  // still validated by the server on every data fetch).
+  if (sessionStorage.getItem('admin_pw')) {
     revealDashboard();
   }
 
@@ -1710,7 +1706,7 @@
   // =============================================
   // AUTO-LOAD IF ALREADY AUTHENTICATED
   // =============================================
-  if (sessionStorage.getItem('admin_authed') === '1') {
+  if (sessionStorage.getItem('admin_pw')) {
     loadAll();
   }
 </script>
