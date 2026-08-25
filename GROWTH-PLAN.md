@@ -137,6 +137,13 @@ v1 surface: "remind [name] [number] [when] about [what]" (appointment reminder),
 "text my customers [promo]" (to the consented list), review requests after a job. All
 approval-by-text, all logged per business.
 
+## Parked: Twitter/X posting
+
+Matt's call 2026-08-25: skip. X's API has no free tier (pay-per-use since Feb 2026,
+~$0.015/post, $0.20 with a link) and our users' customers are on IG/FB/Google. If demand
+appears, ship it as a PAID ADD-ON whose fee covers the per-post cost - same model as
+customer messaging. ~1 day build (OAuth 2.0 PKCE connect + publish handler).
+
 ## Sequencing
 
 1. Phase 1 now (this session): migration, tagging, growth lib + tests, weekly job, prompt.
