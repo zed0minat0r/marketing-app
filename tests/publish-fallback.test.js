@@ -28,10 +28,31 @@ function installSupabaseStub() {
     upsertSocialAccount: async () => {},
     getMostRecentPhotoForPost: async () => supabaseStub.libraryPhotoUrl,
     getClient: () => ({
-      from: () => ({
+      from: (table) => ({
         select: () => ({
           eq: () => ({
             single: async () => ({ data: { phone: '+15555550100' } }),
+          }),
+        }),
+        // Atomic publishing claim: update(...).eq('id', id).or(cond).select()
+        // Mirrors the real semantics: claim succeeds for queued/draft/failed,
+        // or for a 'publishing' row whose updated_at is stale (>5 min).
+        update: (vals) => ({
+          eq: (_col, id) => ({
+            or: (cond) => ({
+              select: async () => {
+                const row = supabaseStub.posts.get(id);
+                if (!row) return { data: [], error: null };
+                const staleMatch = cond.match(/updated_at\.lt\.([^)]+)/);
+                const staleIso = staleMatch ? staleMatch[1] : null;
+                const claimable =
+                  ['queued', 'draft', 'failed'].includes(row.status) ||
+                  (row.status === 'publishing' && staleIso && new Date(row.updated_at) < new Date(staleIso));
+                if (!claimable) return { data: [], error: null };
+                supabaseStub.posts.set(id, { ...row, ...vals });
+                return { data: [{ id }], error: null };
+              },
+            }),
           }),
         }),
       }),
