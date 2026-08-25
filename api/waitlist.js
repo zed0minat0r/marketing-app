@@ -32,6 +32,7 @@ const {
 const ALLOWED_ORIGINS = [
   'https://zed0minat0r.github.io',
   'https://marketing-app-navy.vercel.app',
+  'https://sidekick.penntechsolutions.com',
 ];
 
 function setCors(req, res) {
