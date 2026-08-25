@@ -81,9 +81,9 @@ function installOutboundStub() {
     sent: [],
     sendSms: async (to, body, opts) => { outboundStub.sent.push({ to, body, opts }); return { sid: 'SM_test' }; },
   };
-  require.cache[require.resolve('../api/sms/outbound')] = {
-    id: require.resolve('../api/sms/outbound'),
-    filename: require.resolve('../api/sms/outbound'),
+  require.cache[require.resolve('../lib/sms-outbound')] = {
+    id: require.resolve('../lib/sms-outbound'),
+    filename: require.resolve('../lib/sms-outbound'),
     loaded: true,
     exports: outboundStub,
   };
@@ -113,7 +113,7 @@ globalThis.fetch = async (url) => {
   return { ok: false, status: 500, json: async () => ({ error: { message: 'unmocked' } }) };
 };
 
-const { publishPost } = require('../api/social/post');
+const { publishPost } = require('../lib/social-post');
 
 test('publishPost — uses library photo when post.media_url is null (Instagram)', async () => {
   supabaseStub.posts.set('post-1', {

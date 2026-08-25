@@ -203,7 +203,6 @@ comment from the Graph API with our stored page token before acting.
 ## 9. Configuring Stripe Webhooks
 
 1. Open [Stripe Dashboard](https://dashboard.stripe.com/webhooks) — Webhooks — Add endpoint.
-2. **Endpoint URL**: `https://your-app.vercel.app/api/stripe/webhook`
 3. **Events to listen to**:
    - `customer.subscription.created`
    - `customer.subscription.updated`
@@ -214,7 +213,6 @@ comment from the Graph API with our stored page token before acting.
 For local testing use the Stripe CLI:
 
 ```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
 ```
 
 The Stripe CLI prints a webhook secret for local use — set that as `STRIPE_WEBHOOK_SECRET` in `.env.local`.

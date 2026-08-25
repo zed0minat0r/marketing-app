@@ -58,7 +58,7 @@ function installStubs() {
   require.cache[require.resolve('../lib/supabase')] = {
     id: require.resolve('../lib/supabase'), filename: require.resolve('../lib/supabase'), loaded: true, exports: supabaseStub,
   };
-  const outboundPath = require.resolve('../api/sms/outbound');
+  const outboundPath = require.resolve('../lib/sms-outbound');
   const outboundMock = async function handler(req, res) { res.status(200).json({}); };
   outboundMock.sendSms = async (to, body) => { smsSent.push({ to, body }); return { sid: 'SM' }; };
   require.cache[outboundPath] = { id: outboundPath, filename: outboundPath, loaded: true, exports: outboundMock };
@@ -87,7 +87,7 @@ globalThis.fetch = async (url, opts) => {
   return { ok: false, status: 500, json: async () => ({ error: { message: 'unmocked ' + u.slice(0, 60) } }) };
 };
 
-const { publishPost } = require('../api/social/post');
+const { publishPost } = require('../lib/social-post');
 
 function seedPost(overrides = {}) {
   postsDb.set('p1', {

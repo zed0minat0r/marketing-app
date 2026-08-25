@@ -18,7 +18,7 @@ let smsSent = [];
 let weeklyUpserts = [];
 
 // ---- outbound ----
-const outboundPath = require.resolve('../api/sms/outbound');
+const outboundPath = require.resolve('../lib/sms-outbound');
 const outboundMock = async function handler(req, res) { res.status(200).json({}); };
 outboundMock.sendSms = async (to, body) => { smsSent.push({ to, body }); return { sid: 'SM_x' }; };
 require.cache[outboundPath] = { id: outboundPath, filename: outboundPath, loaded: true, exports: outboundMock };

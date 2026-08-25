@@ -8,9 +8,6 @@
     },
     "api/jobs/[action].js": {
       "maxDuration": 300
-    },
-    "api/stripe/webhook.js": {
-      "maxDuration": 10
     }
   },
   "crons": [

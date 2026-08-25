@@ -37,7 +37,7 @@ curl -X POST https://sidekik.com/api/sms/inbound \
 
 ---
 
-### POST /api/sms/outbound
+### POST lib/sms-outbound.js (internal)
 
 Sends an SMS to a phone number using Twilio. Called internally by other handlers.
 
@@ -162,7 +162,7 @@ Twitter OAuth callback. Exchanges code for tokens using PKCE, stores tokens encr
 
 ## Social
 
-### POST /api/social/post
+### POST lib/social-post.js (internal)
 
 `[INTERNAL]` Publish a scheduled post to its target social platforms.
 
@@ -192,7 +192,7 @@ Twitter OAuth callback. Exchanges code for tokens using PKCE, stores tokens encr
 
 **Example curl:**
 ```bash
-curl -X POST https://sidekik.com/api/social/post \
+curl -X (internal module lib/social-post.js - invoked via QStash jobs, no public endpoint) \
   -H "Content-Type: application/json" \
   -H "x-internal-secret: $INTERNAL_API_SECRET" \
   -d '{"post_id": "uuid-here"}'
@@ -202,7 +202,7 @@ curl -X POST https://sidekik.com/api/social/post \
 
 ## AI
 
-### POST /api/ai/generate
+### POST lib/claude.js (internal)
 
 `[INTERNAL]` Call Claude directly with user context and conversation history. Returns structured JSON (intent + optional action).
 
@@ -228,7 +228,7 @@ curl -X POST https://sidekik.com/api/social/post \
 
 **Example curl:**
 ```bash
-curl -X POST https://sidekik.com/api/ai/generate \
+curl -X (removed - AI generation happens inside the SMS pipeline, no public endpoint) \
   -H "Content-Type: application/json" \
   -H "x-internal-secret: $INTERNAL_API_SECRET" \
   -d '{"user_id": "uuid-here", "message": "Write a post about our new menu"}'
@@ -353,7 +353,6 @@ Deletes conversation records older than 90 days per data retention policy. Notif
 
 ## Stripe
 
-### POST /api/stripe/webhook
 
 Handles Stripe subscription lifecycle events. Raw body is passed through for Stripe signature verification (body parsing is disabled in `vercel.json` for this route).
 
@@ -378,5 +377,4 @@ Handles Stripe subscription lifecycle events. Raw body is passed through for Str
 **Example curl (test mode):**
 ```bash
 stripe trigger customer.subscription.created \
-  --webhook-url https://sidekik.com/api/stripe/webhook
 ```

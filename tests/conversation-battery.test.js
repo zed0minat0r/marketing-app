@@ -26,7 +26,7 @@ require.cache[require.resolve('twilio')] = {
 };
 
 // ---- outbound ----
-const outboundPath = require.resolve('../api/sms/outbound');
+const outboundPath = require.resolve('../lib/sms-outbound');
 const outboundMock = async function handler(req, res) { res.status(200).json({}); };
 outboundMock.sendSms = async (to, body, opts) => { smsSent.push({ to, body, opts }); return { sid: 'SM_x', status: 'sent' }; };
 require.cache[outboundPath] = { id: outboundPath, filename: outboundPath, loaded: true, exports: outboundMock };

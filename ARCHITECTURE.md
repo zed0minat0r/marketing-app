@@ -174,7 +174,7 @@ Never post without explicit user approval.
 
 - Twilio number provisioned and configured
 - POST /api/sms/inbound webhook
-- POST /api/sms/outbound internal sender
+- POST lib/sms-outbound.js (internal) internal sender
 - Claude API integration with conversation context
 - User onboarding state machine
 - Message logging to Supabase
@@ -258,7 +258,7 @@ System: Posted to Instagram! View it: https://instagram.com/p/xxxxx
 
 - OAuth link generation endpoints for Meta and X
 - OAuth callback handlers with token storage
-- POST /api/social/post -- platform-agnostic posting
+- POST lib/social-post.js (internal) -- platform-agnostic posting
 - Token refresh background jobs via Upstash QStash
 - Draft -> Approve -> Post conversation flow
 - Multi-platform support ("Post this to Facebook and Instagram")
@@ -740,7 +740,6 @@ POST /api/jobs/weekly-summary
   Auth: QStash signature verification
   Action: Aggregate snapshots, Claude generates summary, send via Twilio
 
-POST /api/stripe/webhook
   Description: Stripe webhook for subscription events
   Auth: Stripe webhook signature verification
   Events: customer.subscription.created, updated, deleted
@@ -755,13 +754,13 @@ POST /api/sms/send
   Auth: Internal only (Vercel function-to-function, no public access)
   Body: { to: "+1...", body: "..." }
 
-POST /api/ai/generate
+POST lib/claude.js (internal)
   Description: Call Claude API with conversation context
   Auth: Internal only
   Body: { user_id: "uuid", message: "...", conversation_history: [...] }
   Response: { reply: "...", intent: "...", action: {...} }
 
-POST /api/social/post
+POST lib/social-post.js (internal)
   Description: Publish content to a social platform
   Auth: Internal only
   Body: { user_id: "uuid", platform: "instagram", content: "...", media_url: "..." }
@@ -953,11 +952,10 @@ BOT   <-  "Your lunch deal post (Apr 3, Instagram):
               |                              |
               |  /api/sms/inbound            |
               |  /api/sms/send               |
-              |  /api/ai/generate            |
-              |  /api/social/post            |
+              |  lib/claude.js (internal)            |
+              |  lib/social-post.js (internal)            |
               |  /api/oauth/*                |
               |  /api/jobs/*                 |
-              |  /api/stripe/webhook         |
               +-+-----+-----+-----+---------+
                 |     |     |     |
        +--------+  +--+  +--+  +--+---------+
@@ -1015,8 +1013,8 @@ GitHub Repo
 | Endpoint | Limit | Reason |
 |----------|-------|--------|
 | /api/sms/inbound | 1 msg/sec per phone | Prevent SMS spam/abuse |
-| /api/ai/generate | Tied to plan limits | 100/500/unlimited per month |
-| /api/social/post | 10 posts/hour per user | Respect social platform rate limits |
+| lib/claude.js (internal) | Tied to plan limits | 100/500/unlimited per month |
+| lib/social-post.js (internal) | 10 posts/hour per user | Respect social platform rate limits |
 | /api/oauth/* | 5 attempts/hour per phone | Prevent OAuth abuse |
 
 Implementation: Upstash Redis for distributed rate limiting (compatible with Vercel serverless).
@@ -1144,7 +1142,7 @@ Phase 2 -- Week 3:
 Phase 3 -- Week 4-5:
   [ ] Meta OAuth flow (Facebook + Instagram)
   [ ] X/Twitter OAuth flow
-  [ ] POST /api/social/post (publish to platforms)
+  [ ] POST lib/social-post.js (internal) (publish to platforms)
   [ ] Draft -> Approve -> Post conversation flow
   [ ] Token refresh jobs
 

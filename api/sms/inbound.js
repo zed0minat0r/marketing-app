@@ -15,7 +15,7 @@
  */
 
 const twilio = require('twilio');
-const { sendSms } = require('./outbound');
+const { sendSms } = require('../../lib/sms-outbound');
 const { checkRateLimit } = require('../../lib/rate-limit');
 const { processOnboarding } = require('../../lib/onboarding');
 const { generateResponse } = require('../../lib/claude');
