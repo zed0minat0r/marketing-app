@@ -19,6 +19,7 @@ const handlers = {
   'photos':       require('../../lib/admin-handlers/photos'),
   'photo-delete': require('../../lib/admin-handlers/photo-delete'),
   'config-check': require('../../lib/admin-handlers/config-check'),
+  'portal':       require('../../lib/admin-handlers/portal'),
 };
 
 module.exports = async function handler(req, res) {
