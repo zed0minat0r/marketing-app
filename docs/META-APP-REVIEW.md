@@ -1,298 +1,112 @@
-# Meta App Review — Sidekick
+# Meta App Review packet - Sidekick by Mo (App ID 26890596557296121)
 
-Copy-paste materials for the App Review submission at
-**developers.facebook.com → My Apps → Sidekick → App Review → Permissions and Features**.
+Prepared 2026-08-25, ahead of Matt's beta-user-#1 walkthrough. The walkthrough IS the demo
+recording. File the review within days of recording it.
 
-Submit all 5 Advanced permissions in a single batch — Meta reviews them together
-when they share a demo recording, which shortens turnaround.
+## Pre-submission checklist
 
----
+- [ ] Business Verification in Meta Business Manager (Settings > Business Info > Start
+      Verification): legal name "Pennsylvania Technology Solutions LLC", business address,
+      EIN letter (CP 575) as the document. Same packet Twilio got. Do this FIRST - review
+      of business apps stalls without it.
+- [ ] App settings complete: privacy policy URL, data deletion callback URL
+      (https://marketing-app-navy.vercel.app/data-deletion-status.html), app icon 1024px,
+      category (Business), contact email mmodica3@gmail.com.
+- [ ] Webhooks subscribed (Page feed + Instagram comments) - needed to demo comment replies.
+- [ ] Record the demo video (shot list below) BEFORE filling the forms.
+- [ ] DECISION NEEDED: drop `business_management` from META_SCOPES before submitting?
+      We list pages via /me/accounts, which `pages_show_list` covers. business_management
+      triggers the strictest review track and we may not use anything it gates. Verify
+      token-refresh + page listing still work for a tester account without it, then remove.
 
-## App-level context (for the "App Details" section)
+## Permissions and paste-ready justifications
 
-**What does your app do?**
-Sidekick is an SMS-based marketing assistant for small business owners (painters,
-electricians, restaurants, salons, small retail). Users text in updates about
-their business — "just finished a kitchen", "new Friday special is $3 slices" — and
-Sidekick drafts on-brand social posts, publishes them to the user's connected
-Facebook Page and Instagram Business account, and tracks how each one performed.
-Everything is conversational over SMS — there is no customer-facing dashboard.
-The Facebook integration is what enables the publishing and analytics steps.
+Text below is written for the "Tell us how you'll use this permission" box. No em dashes
+anywhere (house rule for outward-facing text).
 
-**How does Facebook Login work in your app?**
-A user starts onboarding by texting our number. After a few setup questions
-(business name, type, tone), Sidekick texts them a one-time URL that launches
-the standard Facebook Login dialog. After granting permissions, the user is
-redirected back and receives an SMS confirmation. From then on, Sidekick uses
-the granted tokens to read, publish, and measure on their behalf — initiated by
-their SMS commands ("write a post about our weekend hours", "how did Friday's
-post do?").
+### pages_show_list
+> Sidekick is an SMS assistant that posts to a small business's own Facebook Page at the
+> owner's request. After the owner logs in with Facebook, we call /me/accounts once to show
+> the owner a list of their Pages so they can pick which Page Sidekick should manage. We
+> store only the chosen Page's id and access token.
 
----
+### pages_read_engagement
+> Once a week Sidekick sends the business owner a text message summarizing how their own
+> Page posts performed (reach, reactions, comments). We read engagement metrics for posts
+> our app itself published on the owner's chosen Page. Data is shown only to that owner.
 
-## Per-permission use-case statements
+### pages_manage_posts
+> The core feature: the owner texts Sidekick something like "post about our Friday
+> special", approves the draft by replying YES, and Sidekick publishes the approved post to
+> the owner's own Page via the Pages API. Every publish is explicitly approved by the owner
+> by text message first. Nothing is posted without a YES.
 
-For each scope below, paste the **"How will your app use this permission?"** and
-**"Tell us how a person using your app will see this permission in action"**
-sections into the corresponding Meta form.
+### pages_manage_engagement
+> When someone comments on a post Sidekick published on the owner's Page, Sidekick drafts a
+> reply and texts it to the owner. If the owner replies YES, Sidekick posts that reply as
+> the Page. Every reply is owner-approved before it is posted, and reply volume is capped
+> per day.
 
----
+### instagram_basic
+> After the owner connects their Facebook Page, we read the Instagram Business account
+> linked to that Page (id and username) so the owner can also publish to Instagram. We read
+> only the account linked to their own Page.
 
-### 1. `pages_show_list` (usually approved automatically — Standard tier)
+### instagram_content_publish
+> Same approval flow as Facebook: the owner requests a post by text, approves the draft
+> with YES, and Sidekick publishes the approved image post to the owner's own Instagram
+> Business account using the content publishing API.
 
-**How will your app use this permission?**
-After a user completes Facebook Login, Sidekick calls `GET /me/accounts` once
-to discover which Facebook Pages they administer. We list those Pages back to
-the user via SMS so they can confirm which Page they want Sidekick to manage.
-We persist the chosen Page's ID and display name to scope subsequent
-publishing and analytics calls to that single Page.
+### instagram_manage_comments
+> When someone comments on a post Sidekick published to the owner's Instagram account,
+> Sidekick drafts a reply, texts it to the owner for approval, and posts it only after the
+> owner replies YES. Volume is capped per day.
 
-**User flow**
-1. User texts "Connect Facebook" (or completes onboarding step 4).
-2. User taps the OAuth link and authorizes Sidekick.
-3. Sidekick fetches their Page list with `pages_show_list`.
-4. Sidekick texts back: "Connected to Mike's Pizza Page (and IG: @mikespizza)."
+### instagram_manage_insights
+> Used for the same weekly text summary as the Facebook metrics: we read reach and
+> engagement for posts our app published to the owner's own Instagram account, and report
+> those numbers to that owner only.
 
----
+### business_management (only if kept - see checklist)
+> Used solely to enumerate the Pages and linked Instagram accounts the logged-in owner
+> manages through a Business Manager, so multi-location owners can pick the right Page.
+> We do not read or modify any other Business Manager assets.
 
-### 2. `pages_read_engagement` (Advanced — review required)
+## Demo video shot list (one continuous screen recording, ~4 minutes)
 
-**How will your app use this permission?**
-Sidekick uses this scope to read post-level engagement metrics for posts that
-Sidekick itself published on the user's behalf. The user requests these
-metrics via SMS commands like "how did my last post do?" or as part of the
-auto-sent weekly summary text every Monday morning. We read `insights/edges`
-(reactions, comments, shares, impressions, reach) for each Page post and
-return a short summary in SMS form. We never read metrics for posts the user
-created outside of Sidekick.
+Record the phone screen (Messages app) and a browser side by side, or cut between them.
+Narrate or caption each step with the permission it demonstrates.
 
-**User flow**
-1. User texts "how did last Friday's post do?"
-2. Sidekick calls `GET /{page-post-id}/insights` with `pages_read_engagement`.
-3. Sidekick texts a summary: "Friday's pizza special — 1,247 impressions, 47
-   reactions, 8 comments, 12 shares. Up 34% vs last week."
+1. Text "connect facebook" to Sidekick. Tap the link, complete the Facebook login dialog,
+   show the permissions screen, tap Allow, show the success page. [login + pages_show_list]
+2. Show the Page picker / confirmation text listing the connected Page and IG account.
+   [pages_show_list, instagram_basic]
+3. Text "post about our Friday pizza special with a photo". Show the draft arriving, reply
+   YES, then open facebook.com and instagram.com and show the live posts.
+   [pages_manage_posts, instagram_content_publish]
+4. From a second account, comment on the new post. Show Sidekick texting the drafted
+   reply, reply YES, show the reply live under the comment.
+   [pages_manage_engagement, instagram_manage_comments, webhooks]
+5. Show the weekly summary text with the metrics. If the real Monday job hasn't run, use
+   the admin trigger to fire it during the recording.
+   [pages_read_engagement, instagram_manage_insights]
 
----
+## Known rejection traps
 
-### 3. `pages_manage_posts` (Advanced — review required)
-
-**How will your app use this permission?**
-This is the core publishing scope. After a user drafts a post via SMS and
-approves it by texting "YES", Sidekick publishes the post to their Facebook
-Page using `POST /{page-id}/feed` (or `/photos` when a photo from their
-library is attached). Every publish is initiated by an explicit user
-approval — Sidekick never publishes unattended unless the user has explicitly
-opted into "Autopilot" mode (a separate per-user setting). The user can also
-schedule a post for a future time, and Sidekick uses the same scope to publish
-at the scheduled moment.
-
-**User flow**
-1. User texts "write a post about Friday slices being $3 tonight".
-2. Sidekick texts back a draft.
-3. User replies "YES" to approve.
-4. Sidekick publishes via `POST /{page-id}/feed` and texts a link to the live
-   post: "Published to Facebook: https://facebook.com/..."
-
----
-
-### 4. `instagram_basic` (Standard, but often grouped with Advanced batch)
-
-**How will your app use this permission?**
-After Facebook OAuth, Sidekick uses `pages_show_list` to find Pages, then
-reads each Page's `instagram_business_account` edge with `instagram_basic` to
-identify any connected Instagram Business or Creator account. We persist the
-IG account ID and username so subsequent SMS commands can target Instagram
-alongside Facebook.
-
-**User flow**
-Same OAuth flow as #1. After connect, Sidekick confirms over SMS: "Connected:
-Mike's Pizza FB Page + @mikespizza on Instagram."
-
----
-
-### 5. `instagram_content_publish` (Advanced — review required)
-
-**How will your app use this permission?**
-The Instagram counterpart to `pages_manage_posts`. When the user approves a
-draft via SMS, Sidekick publishes the content natively to their Instagram
-Business account using the standard two-step container flow: `POST
-/{ig-user-id}/media` to create a container with the image (from the user's
-own photo library — they MMS photos to our number to stock the library), then
-`POST /{ig-user-id}/media_publish` to publish it. Captions are tuned to IG
-format (longer-form, hashtag-friendly) vs the Facebook version of the same
-post. Same explicit-approval model as Facebook publishing — no silent
-posting unless the user has opted into Autopilot.
-
-**User flow**
-1. User texts a photo of their finished kitchen + "first post about this
-   one".
-2. Sidekick saves the photo to the user's library, drafts an Instagram
-   caption, texts the draft.
-3. User replies "YES" to approve.
-4. Sidekick publishes to IG via the two-step container API. Texts back the
-   live link.
-
----
-
-### 6. `instagram_manage_insights` (Advanced — review required)
-
-**How will your app use this permission?**
-Parallel to `pages_read_engagement` but for the user's Instagram posts that
-Sidekick published. Same on-demand "how did this do?" SMS and the auto-sent
-Monday weekly summary include IG-specific metrics: impressions, reach, saves,
-profile visits. Sidekick calls `GET /{ig-media-id}/insights` for each post we
-published. We never read metrics for posts the user created outside Sidekick.
-
-**User flow**
-1. User texts "what did my IG posts do this week?" (or it lands automatically
-   in the weekly Monday summary).
-2. Sidekick aggregates per-post insights via `instagram_manage_insights`.
-3. Sidekick texts a summary: "This week on IG — 3 posts, 4,820 impressions,
-   312 saves, +23 followers. Top post: Friday slice special (1,250 reach)."
-
----
-
-### 7. `business_management` (Advanced — review required)
-
-**How will your app use this permission?**
-Required because many of our target users (small business owners) connect via
-Pages owned by a Meta Business Account rather than their personal account. We
-use this scope strictly to enumerate the user's business assets at OAuth time
-so we can correctly find the Page and Instagram Business account that should
-be linked to the Sidekick account. No business-level configuration is changed
-by Sidekick — read-only enumeration on connect, then never used again.
-
-**User flow**
-Invisible to the user — happens during the OAuth callback. Without this
-scope, business-owned Pages return zero results from `me/accounts`. With it,
-Sidekick can find and confirm the user's actual Page.
-
----
-
-## Demo screen recording — shot list
-
-Meta requires a single video that demonstrates every requested permission.
-**Length: 2-3 minutes max.** Quality matters more than length — show each
-permission being used clearly, and narrate what's happening.
-
-**Setup before recording:**
-- Add your personal Facebook account as a Tester (Roles → Testers → invite).
-- Make sure you have at least one Facebook Page you admin, with a connected
-  Instagram Business account.
-- Have a phone ready that can text the Sidekick number.
-- Have a screen recorder running on both your phone (for the SMS view) and
-  your laptop (for the OAuth flow + Facebook posts appearing).
-
-**Shot 1 — onboarding flow (0:00-0:30)**
-- Phone screen: text "hi" to the Sidekick number.
-- Show the back-and-forth: business name → business type → tone.
-- After tone, Sidekick texts a Facebook OAuth link.
-- *Narration*: "A small business owner — let's call her Mike at Mike's Pizza —
-  onboards entirely over SMS. After three quick questions, Sidekick sends a
-  link to connect her Facebook Page and Instagram together."
-
-**Shot 2 — OAuth grant (0:30-1:00)**
-- Tap the OAuth link in iMessage.
-- Show Facebook Login dialog clearly. Pause on the permission grant screen —
-  Meta wants to see the dialog showing the permissions being requested.
-- Approve.
-- See the success page + SMS confirmation arrive on the phone.
-- *Narration*: "Standard Facebook Login. Mike grants Sidekick access to
-  publish, read engagement, and manage her business — all the scopes shown.
-  After approving, she's redirected back and gets a confirmation text."
-
-**Shot 3 — photo library + post drafting (1:00-1:45)**
-- Phone screen: Sidekick texts "Now send 3-5 photos of your work."
-- Mike texts in a photo of a pizza.
-- Sidekick confirms.
-- Mike texts: "first post — let everyone know we have $3 slices tonight."
-- Sidekick texts back a draft caption.
-- *Narration*: "Mike sends photos to the same SMS thread to stock her photo
-  library — they're stored and tagged automatically. Then she asks Sidekick
-  to write a post. Sidekick drafts the caption in Mike's voice."
-
-**Shot 4 — approval + publishing (`pages_manage_posts` + `instagram_content_publish`) (1:45-2:15)**
-- Mike replies "YES" to approve.
-- Sidekick texts "Publishing now."
-- Cut to laptop: show the post appearing on the actual Facebook Page.
-- Cut to phone: show the post appearing on Instagram.
-- Phone: Sidekick texts back the live post links.
-- *Narration*: "Mike approves with a single YES, and Sidekick publishes
-  natively to both Facebook and Instagram using `pages_manage_posts` and
-  `instagram_content_publish`. The published links come right back via SMS."
-
-**Shot 5 — analytics (`pages_read_engagement` + `instagram_manage_insights`) (2:15-2:45)**
-- Mike texts: "how did Friday's post do?"
-- Sidekick texts back the metrics summary (FB + IG numbers).
-- *Narration*: "Anytime Mike wants to know how a post performed, she just
-  asks. Sidekick reads engagement insights from both platforms and texts back
-  a plain-language summary."
-
-**Shot 6 — wrap (2:45-3:00)**
-- Show Mike's actual Facebook Page in the browser with the post visible, and
-  the Instagram post visible side-by-side.
-- *Narration*: "Every permission Sidekick requests serves one of these flows —
-  publishing posts the user explicitly approved over SMS, and reading
-  engagement so the user can know what's working. There are no other surfaces
-  in the product, no dashboard, no batch operations. It's just SMS."
-
----
-
-## Required Meta App Dashboard URLs
-
-In addition to the OAuth redirect URI, Meta App Review requires these two
-URLs in **Settings → Basic**:
-
-| Field | Value |
-|-------|-------|
-| Data Deletion Request URL | `https://sidekik.com/api/oauth/meta/data-deletion` |
-| Privacy Policy URL | `https://sidekik.com/#privacy` |
-| Terms of Service URL | `https://sidekik.com/#terms` |
-| App Domains | `sidekik.com` |
-
-The data-deletion endpoint is wired up in
-`lib/oauth-handlers/meta-data-deletion.js`. It verifies Meta's signed_request
-against `META_APP_SECRET`, marks any Facebook/Instagram social_accounts rows
-for the matched FB user_id as inactive, and returns the
-`{ url, confirmation_code }` JSON that Meta expects. Without this URL in the
-dashboard, App Review will be rejected.
-
----
-
-## Submission tips
-
-1. **Submit all permissions in one batch.** Each one points to a different
-   timestamp in the same demo video. Meta processes batched submissions faster
-   than 7 separate ones.
-
-2. **Business verification first.** None of the Advanced permissions can be
-   approved without business verification (`Settings → Basic → verify
-   business`). Plan ~1 week for that step alone.
-
-3. **Test with your own account first.** Confirm the full OAuth + post +
-   read flow works end-to-end while in Development mode (you'll need to be
-   added as a Tester) before recording the demo video. The video should be a
-   real working flow, not mocked.
-
-4. **Don't mention "AI" or "automated posting" in your justifications.** Meta
-   has historically been skittish about "AI automation" framing. Always frame
-   as "user-initiated, user-approved" — which is true for Sidekick's
-   non-Autopilot default mode. (For Autopilot users, mention that opt-in
-   is explicit and revocable at any time.)
-
-5. **If a permission is rejected**, the rejection email will tell you which
-   part of the use case Meta thinks doesn't fit. Adjust the writeup and
-   resubmit — most apps need 1-2 review rounds.
-
----
+- Video shows the feature but not the PERMISSION: reviewers want to see the API result
+  (the live post, the live reply), not just our UI. Shot list above ends every step on the
+  Facebook/Instagram surface for this reason.
+- Reviewer cannot reproduce: they log in with their own test user. Our flow needs an SMS
+  number, which reviewers cannot text. Provide detailed reviewer instructions + the demo
+  video, and state that SMS is the product surface; this is common for SMS-first apps and
+  accepted when the video is complete.
+- Privacy policy missing the data-deletion path: ours has it, double check the URL resolves
+  on the live site at submission time.
+- business_management requested but not demonstrated: strongest argument for dropping it.
 
 ## After approval
 
-Once all 5 Advanced permissions are approved:
-
-1. Flip the app to **Live mode** in App Settings.
-2. The OAuth flow then works for any user, not just Testers.
-3. Bump the Graph API version in code from `v19.0` to `v21.0` (5 files —
-   each oauth-handler in `lib/oauth-handlers/`). Confirmed with Matt before
-   shipping.
-4. Remove the development-mode banner from `/connected` page if any exists.
+- Switch the app from Development to Live mode.
+- Retire the tester-list requirement from onboarding docs.
+- Migrate the Twilio opt-in evidence URL to sidekick.penntechsolutions.com if not already
+  done (only after Twilio verification is approved).
