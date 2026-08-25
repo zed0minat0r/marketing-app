@@ -106,7 +106,7 @@ beforeEach(() => {
   healthData = { stuck: [], overdue: [], expiring: [], errCount: 0 };
   process.env.NOTIFY_EMAIL = 'mmodica3@gmail.com';
   process.env.ALERT_SMS_TO = '+14847162152';
-  for (const k of ['SUPABASE_URL', 'SUPABASE_SERVICE_KEY', 'TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_PHONE_NUMBER', 'ANTHROPIC_API_KEY']) {
+  for (const k of ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_PHONE_NUMBER', 'ANTHROPIC_API_KEY']) {
     process.env[k] = process.env[k] || 'test-value';
   }
 });
@@ -177,13 +177,13 @@ describe('health check', () => {
   });
 
   test('missing env var is reported', async () => {
-    delete process.env.NOTIFY_EMAIL;
-    process.env.NOTIFY_EMAIL_BACKUP = '1';
+    const saved = process.env.TWILIO_AUTH_TOKEN;
+    delete process.env.TWILIO_AUTH_TOKEN;
     const res = makeRes();
     await healthCheck({ method: 'POST', headers: {} }, res);
     assert.equal(res.body.healthy, false);
-    assert.match(res.body.issues.join(' '), /NOTIFY_EMAIL/);
-    process.env.NOTIFY_EMAIL = 'mmodica3@gmail.com';
+    assert.match(res.body.issues.join(' '), /TWILIO_AUTH_TOKEN/);
+    process.env.TWILIO_AUTH_TOKEN = saved;
   });
 
   test('error volume over threshold is reported', async () => {
