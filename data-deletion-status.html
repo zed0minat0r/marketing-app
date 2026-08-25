@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Data Deletion Status - Sidekick</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e0d0b'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23d4f53c'/%3E%3C/svg%3E">
+<style>
+body{margin:0;background:#0e0d0b;color:#f5f2ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.card{max-width:520px;border:1px solid rgba(245,242,234,0.14);border-radius:8px;padding:36px}
+h1{font-size:1.3rem;margin:0 0 14px}
+p{line-height:1.6;color:#a8a294;margin:0 0 12px}
+code{background:rgba(245,242,234,0.08);padding:2px 8px;border-radius:4px;color:#d4f53c;font-size:0.95em;word-break:break-all}
+.dot{width:10px;height:10px;border-radius:50%;background:#d4f53c;display:inline-block;margin-right:8px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1><span class="dot"></span>Sidekick data deletion</h1>
+  <p>Your Facebook-initiated data deletion request was received and processed. The social account connections tied to your Facebook account have been deactivated and their access tokens invalidated on our side.</p>
+  <p>Your confirmation code: <code id="code"></code></p>
+  <p>To also delete your Sidekick account and all remaining data (messages, posts, photos), text <strong>DELETE MY DATA</strong> to your Sidekick number, or email <a href="mailto:mmodica3@gmail.com" style="color:#d4f53c">us directly</a>.</p>
+</div>
+<script>
+  try {
+    var c = new URLSearchParams(location.search).get('code') || 'not provided';
+    document.getElementById('code').textContent = c.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64) || 'not provided';
+  } catch (e) { document.getElementById('code').textContent = 'not provided'; }
+</script>
+</body>
+</html>

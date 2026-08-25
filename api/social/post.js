@@ -691,78 +691,14 @@ async function publishPost(postId) {
 
       if (err.message === 'INSTAGRAM_NEEDS_IMAGE') {
         errors[platform] = 'Instagram requires an image for feed posts, and your photo library is empty.';
-
-        try {
-          const { data: userData } = await getClient()
-            .from('users')
-            .select('phone')
-            .eq('id', post.user_id)
-            .single();
-          if (userData?.phone) {
-            const otherPlatforms = post.platforms.filter(p => p !== 'instagram');
-            const altText = otherPlatforms.length > 0
-              ? ` I posted it to ${otherPlatforms.join(' & ')} for you.`
-              : '';
-            await sendSms(userData.phone,
-              `Instagram needs an image and your photo library is empty. Text me a few photos and try again.${altText}`
-            ).catch(console.error);
-          }
-        } catch (notifyErr) {
-          console.error('Failed to notify user about Instagram image requirement:', notifyErr.message);
-        }
       } else if (err.message === 'PINTEREST_NEEDS_IMAGE') {
         errors[platform] = 'Pinterest requires an image, and your photo library is empty.';
-
-        try {
-          const { data: userData } = await getClient()
-            .from('users')
-            .select('phone')
-            .eq('id', post.user_id)
-            .single();
-          if (userData?.phone) {
-            await sendSms(userData.phone,
-              'Pinterest needs an image and your photo library is empty. Text me a few photos and try again.'
-            ).catch(console.error);
-          }
-        } catch (notifyErr) {
-          console.error('Failed to notify user about Pinterest image requirement:', notifyErr.message);
-        }
 
       } else if (err.message === 'LINKEDIN_TOKEN_EXPIRED') {
         errors[platform] = 'LinkedIn connection has expired. Please reconnect by texting "Connect LinkedIn".';
 
-        try {
-          const { data: userData } = await getClient()
-            .from('users')
-            .select('phone')
-            .eq('id', post.user_id)
-            .single();
-          if (userData?.phone) {
-            await sendSms(userData.phone,
-              'Your LinkedIn connection has expired. Text "Connect LinkedIn" to reconnect.'
-            ).catch(console.error);
-          }
-        } catch (notifyErr) {
-          console.error('Failed to notify user about LinkedIn token expiry:', notifyErr.message);
-        }
-
       } else if (err.message === 'PINTEREST_TOKEN_EXPIRED') {
         errors[platform] = 'Pinterest connection has expired. Please reconnect by texting "Connect Pinterest".';
-
-        try {
-          const { data: userData } = await getClient()
-            .from('users')
-            .select('phone')
-            .eq('id', post.user_id)
-            .single();
-          if (userData?.phone) {
-            await sendSms(userData.phone,
-              'Your Pinterest connection has expired. Text "Connect Pinterest" to reconnect.'
-            ).catch(console.error);
-          }
-        } catch (notifyErr) {
-          console.error('Failed to notify user about Pinterest token expiry:', notifyErr.message);
-        }
 
       } else {
         errors[platform] = err.message;

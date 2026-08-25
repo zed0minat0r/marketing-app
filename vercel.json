@@ -27,6 +27,10 @@
     {
       "source": "/admin",
       "destination": "/admin.html"
+    },
+    {
+      "source": "/data-deletion-status",
+      "destination": "/data-deletion-status.html"
     }
   ],
   "headers": [

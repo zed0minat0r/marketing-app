@@ -26,6 +26,21 @@ const handlers = {
   'enhance-photo':         require('../../lib/job-handlers/enhance-photo'),
 };
 
+/**
+ * QStash signs the RAW request bytes. Vercel's default body parsing consumes
+ * them, so signature checks on a re-serialized body can fail on any byte
+ * difference. bodyParser is disabled for this route; we read the raw stream
+ * once here and hand every handler both req.rawBody and a parsed req.body.
+ */
+async function readRawBody(req) {
+  if (req.body instanceof Buffer) return req.body;
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
 module.exports = async function handler(req, res) {
   const action = req.query.action;
 
@@ -34,5 +49,18 @@ module.exports = async function handler(req, res) {
     return res.status(404).json({ error: `Unknown job action: ${action}` });
   }
 
+  try {
+    const raw = await readRawBody(req);
+    req.rawBody = raw;
+    if (!req.body || req.body instanceof Buffer) {
+      req.body = raw.length ? JSON.parse(raw.toString('utf8')) : {};
+    }
+  } catch {
+    req.rawBody = req.rawBody || Buffer.alloc(0);
+    req.body = req.body && !(req.body instanceof Buffer) ? req.body : {};
+  }
+
   return routeHandler(req, res);
 };
+
+module.exports.config = { api: { bodyParser: false } };
