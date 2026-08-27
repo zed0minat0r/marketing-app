@@ -92,6 +92,53 @@ Original submission REJECTED 2026-06-04 — reasons **30445** (business could no
 4. ✅ Live site verified 2026-08-24: entity name + opt-in checkbox present at the opt-in URL
 5. ✅ `optin-proof.png` regenerated 2026-08-24 from the live site (in docs/)
 
+---
+
+## REJECTION HISTORY AND THE FIELD SHAPE THAT ACTUALLY WORKS
+
+Three rejections. **Two of them were caused by the fix for the previous one**, so read this before
+editing any field.
+
+| # | date | reason | what it really was |
+|---|---|---|---|
+| 1 | 2026-06-04 | 30445 business not verified, 30513 opt-in | sole proprietor, no EIN; opt-in "proof" was just the homepage URL |
+| 2 | 2026-08-24 | 30527 / 1112 registration number missing or invalid | recorded at the time as a "snapshot race" from splitting the POST. **That diagnosis was wrong** - see #3 |
+| 3 | 2026-08-25 | DBA name must be accurately provided | reviewer saw Sidekick branding against a bare LLC name |
+| 4 | 2026-08-26 | 1112 registration number missing or invalid | **caused by the fix for #3**: "DBA Sidekick" was appended to BusinessName, which broke the character-for-character match against the IRS record for the EIN |
+
+### The correct shape - do not deviate
+
+```
+BusinessName                 = Pennsylvania Technology Solutions LLC     <- EXACT CP-575 name. Never append anything.
+DoingBusinessAs              = Sidekick                                  <- the DBA goes HERE, in its own field
+BusinessRegistrationNumber   = 424671570                                 <- EIN, 9 digits, NO hyphen
+BusinessRegistrationAuthority= EIN
+BusinessRegistrationCountry  = US
+BusinessType                 = PRIVATE_PROFIT
+```
+The registration fields are required as a set for any BusinessType other than SOLE_PROPRIETOR.
+Send the whole record in **ONE POST** - review can begin within two minutes of a save.
+
+### Twilio's own listed causes of 1112 (from the 30527 error doc)
+1. legal name does not exactly match the name on the registration record
+2. registration number invalid for the authority/region
+3. a trade name/DBA submitted as the primary business name instead of using `DoingBusinessAs`
+4. **the EIN was recently issued and is not yet verifiable - a new EIN can take up to two weeks to
+   pass IRS TIN matching**
+
+Causes 1 and 3 were ours and are fixed. **Cause 4 is not fixable by editing** - this EIN was issued
+2026-08-24. If a correctly-formed submission is rejected again for 1112, the answer is to WAIT, not
+to start rewriting fields that are already right.
+
+### Evidence corrected 2026-08-26
+The opt-in proof screenshot led with "A PRODUCT OF PENN TECH SOLUTIONS" - a third name, matching
+neither the IRS record nor the DBA - because the final-CTA block on the live page said so. Both the
+final-CTA line and the nav byline now carry the full legal name, and `optin-proof.png` was recaptured
+from the corrected page (verified live, byte-identical to the repo copy). The old shot also showed a
+"Start free trial" button that the honesty sweep had already replaced.
+
+---
+
 **SUBMITTED 2026-08-24 via API** (verification SID HH782bef18c1f78a90f72916ed6c6cf58a,
 status back to PENDING_REVIEW). What was fixed vs the June submission: business name was
 "Matthew Modica" as SOLE_PROPRIETOR → now Pennsylvania Technology Solutions LLC as
