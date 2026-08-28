@@ -1631,6 +1631,18 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 .sms-reassurance{
   font-size:0.82rem;color:var(--text-muted);margin-top:10px;text-align:center;
 }
+/* The SMS opt-ins sit OUTSIDE the signup form on purpose: they are a standalone, affirmative
+   choice, not part of submitting the form. Twilio's review flagged the old bundled version. */
+.sms-optin{
+  margin-top:16px;padding:14px 16px;text-align:left;
+  border:1px solid var(--border2);border-radius:10px;
+}
+.sms-optin__head{
+  font-size:0.8rem;color:var(--text);margin:0 0 10px;font-weight:600;line-height:1.4;
+}
+.sms-optin .sms-consent{margin-top:0;}
+.sms-optin .sms-consent + .sms-consent{margin-top:12px;}
+.sms-optin .sms-consent strong{color:var(--text);}
 .signup-note a{
   padding:11px 2px;display:inline-flex;align-items:center;
   min-height:44px;
@@ -2727,7 +2739,7 @@ footer p a:hover{color:var(--accent)}
     <p class="final-cta__parent">A product of <a href="https://penntechsolutions.com" target="_blank" rel="noopener">Pennsylvania&nbsp;Technology&nbsp;Solutions&nbsp;LLC</a></p>
     <p class="final-cta__trust">Early&nbsp;access &nbsp;&bull;&nbsp; Cancel&nbsp;by&nbsp;text &nbsp;&bull;&nbsp; No&nbsp;login&nbsp;ever</p>
     <h2 class="final-cta__title">Your marketing shouldn't require a second job.</h2>
-    <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. We text you when your spot opens - no app to check, no login to check.</p>
+    <p class="final-cta__sub" id="formSub">Enter your email to hold your spot. No app to check, no login to forget.</p>
 
     <div class="plan-selected" id="planSelected" style="display:none">
       <span class="plan-selected__label">Selected:</span>
@@ -2746,18 +2758,38 @@ footer p a:hover{color:var(--accent)}
       <button type="submit">Hold my spot &rarr;</button>
     </form>
 
+    <!-- SMS CONSENT REBUILT 2026-08-28 after Twilio's reviewer walked the page. Four findings, all
+         checked against this file before changing anything:
+           1. one checkbox covered three distinct message types -> now one opt-in PER TYPE, labelled
+           2. consent was bundled into "by submitting your number you agree..." beside the Privacy /
+              Terms links -> that sentence is GONE; consent is standalone and affirmative only
+           3. the form REFUSED to submit unless the box was ticked (handleStep2 returned early) ->
+              phone and both opt-ins are now genuinely optional; you can join with email alone
+           4. the header said the LLC while the consent said Sidekick -> every consent line now names
+              the end business the same way, "Sidekick, a product of Pennsylvania Technology
+              Solutions LLC"
+         The POST also used to hardcode consent:true regardless of the checkbox, which recorded a
+         consent the user may never have given. It now sends what was actually ticked. -->
     <form class="signup-form" id="step2Form" onsubmit="handleStep2(event)" style="display:none">
-      <input type="tel" id="phoneInput" placeholder="(555) 867-5309" autocomplete="tel" required>
-      <button type="submit">Text me when it&rsquo;s ready &rarr;</button>
-      <label class="sms-consent" for="smsConsent">
-        <input type="checkbox" id="smsConsent" name="smsConsent">
-        <span>I agree to receive recurring SMS messages from Sidekick about my account, onboarding, and waitlist updates. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span>
-      </label>
+      <input type="tel" id="phoneInput" placeholder="(555) 867-5309 (optional)" autocomplete="tel">
+      <button type="submit">Finish signup &rarr;</button>
     </form>
+
+    <div class="sms-optin" id="smsOptIn" style="display:none">
+      <p class="sms-optin__head">Text messages are optional. You can finish your signup without them, and your place in line is the same either way.</p>
+      <label class="sms-consent" for="smsConsentWaitlist">
+        <input type="checkbox" id="smsConsentWaitlist" name="smsConsentWaitlist">
+        <span><strong>Waitlist updates.</strong> I agree to receive recurring SMS messages from Sidekick, a product of Pennsylvania Technology Solutions LLC, about my place in line and when my early-access spot opens. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span>
+      </label>
+      <label class="sms-consent" for="smsConsentAccount">
+        <input type="checkbox" id="smsConsentAccount" name="smsConsentAccount">
+        <span><strong>Account and onboarding messages.</strong> I agree to receive recurring SMS messages from Sidekick, a product of Pennsylvania Technology Solutions LLC, about setting up and running my account. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span>
+      </label>
+    </div>
 
     <p class="sms-reassurance" id="smsReassurance" style="display:none">We&rsquo;ll only text you when your spot opens - one message. No marketing texts during your wait. No spam, ever.</p>
 
-    <p class="signup-note">By submitting your number you agree to receive SMS messages from Sidekick about your account, onboarding, and waitlist updates. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>.</p>
+    <p class="signup-note">Sidekick is a product of Pennsylvania Technology Solutions LLC. See our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>.</p>
     <p class="signup-msg" id="signupMsg"></p>
 
     <!-- POST-SIGNUP CONFIRMATION STATE -->
@@ -3330,9 +3362,13 @@ function handleStep1(e) {
   document.getElementById('step1Form').style.display = 'none';
   const title = document.querySelector('.final-cta__title');
   if (title) title.textContent = 'One more thing.';
-  document.getElementById('formSub').textContent = 'What number should we text when your spot opens?';
+  // was "What number should we text when your spot opens?" - that promised a text before any
+  // consent existed, which is the automatic-consent framing Twilio flagged.
+  document.getElementById('formSub').textContent = 'Add a mobile number if you want text updates. Optional - you are already on the list.';
   const step2 = document.getElementById('step2Form');
   step2.style.display = 'flex';
+  const optIn = document.getElementById('smsOptIn');
+  if (optIn) optIn.style.display = 'block';
   const reassurance = document.getElementById('smsReassurance');
   if (reassurance) reassurance.style.display = 'block';
   document.getElementById('phoneInput').focus();
@@ -3342,20 +3378,19 @@ function handleStep2(e) {
   e.preventDefault();
   const phoneInput = document.getElementById('phoneInput');
   const phone = phoneInput.value.trim();
-  if (!phone || phone.replace(/\D/g, '').length < 10) {
+  // Phone is OPTIONAL. Only validate it if something was actually typed - a blank field is a
+  // legitimate signup now. Twilio's reviewer: "Allow users to complete the waitlist signup without
+  // consenting to SMS messages."
+  if (phone && phone.replace(/\D/g, '').length < 10) {
     phoneInput.style.borderColor = 'var(--red)';
     phoneInput.focus();
     return;
   }
   phoneInput.style.borderColor = '';
-  const consent = document.getElementById('smsConsent');
-  const consentLabel = document.querySelector('.sms-consent');
-  if (consent && !consent.checked) {
-    if (consentLabel) consentLabel.style.color = 'var(--red)';
-    consent.focus();
-    return;
-  }
-  if (consentLabel) consentLabel.style.color = '';
+  // NO CONSENT GATE. This used to return early unless the box was ticked, which made SMS
+  // enrollment mandatory - the exact thing that failed review.
+  const consentWaitlist = !!(document.getElementById('smsConsentWaitlist') || {}).checked;
+  const consentAccount  = !!(document.getElementById('smsConsentAccount') || {}).checked;
   const btn = e.target.querySelector('button');
   btn.textContent = 'Locking you in...';
   btn.disabled = true;
@@ -3373,7 +3408,12 @@ function handleStep2(e) {
   fetch('https://marketing-app-navy.vercel.app/api/waitlist', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, phone: rawPhone, consent: true, plan, ref: refParam, referralCode: referralSlug })
+    // consent was hardcoded true here, which recorded a consent the user may never have given.
+    // Send what was actually ticked, per type. `consent` stays for the existing server contract and
+    // is now true only if the user opted into at least one message type.
+    body: JSON.stringify({ email, phone: rawPhone, consent: (consentWaitlist || consentAccount),
+                           consentWaitlist, consentAccount,
+                           plan, ref: refParam, referralCode: referralSlug })
   })
     .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
     .then(({ ok, d }) => {
@@ -3396,6 +3436,8 @@ function handleStep2(e) {
 
 function showSignupConfirmation(plan, referralSlug, position) {
   document.getElementById('step2Form').style.display = 'none';
+  const optInBlk = document.getElementById('smsOptIn');
+  if (optInBlk) optInBlk.style.display = 'none';
   document.getElementById('formSub').style.display = 'none';
   const trust = document.querySelector('.final-cta__trust');
   if (trust) trust.style.display = 'none';
