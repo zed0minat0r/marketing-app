@@ -4,9 +4,17 @@
  * POST /api/waitlist — store a landing-page signup and notify the owner.
  *
  * Body (JSON): {
- *   email:        string  (required)
- *   phone:        string  (required — any US format, normalized to E.164)
- *   consent:      boolean (required — must be true; the SMS checkbox)
+ *   email:           string  (required)
+ *   phone:           string  (OPTIONAL — any US format, normalized to E.164)
+ *   consentWaitlist: boolean (OPTIONAL — the "Account notifications" opt-in)
+ *   consentAccount:  boolean (OPTIONAL — the "Customer care replies" opt-in)
+ *   consent:         boolean (OPTIONAL — roll-up; true if either opt-in was given)
+ *
+ * PHONE AND CONSENT ARE OPTIONAL, 2026-08-28. Twilio's toll-free review required
+ * that a person be able to complete this signup WITHOUT agreeing to SMS. The page
+ * was changed to allow it; this handler still returned 400 for a missing phone and
+ * for consent !== true, so the compliant path failed here instead. Migration 013
+ * makes phone nullable and adds the per-type consent columns.
  *   plan:         string  (optional — starter/growth/pro)
  *   ref:          string  (optional — ?ref= code that brought them here)
  *   referralCode: string  (optional — this signup's own shareable code)
@@ -70,19 +78,31 @@ module.exports = async function handler(req, res) {
   if (!validateEmail(email)) {
     return res.status(400).json({ error: 'Enter a valid email address' });
   }
-  if (!phone) {
+  // A phone number is optional. Only reject one that was supplied and is unusable -
+  // an empty field is a legitimate email-only signup.
+  if (body.phone && String(body.phone).trim() && !phone) {
     return res.status(400).json({ error: 'Enter a valid US phone number' });
   }
-  if (body.consent !== true) {
-    return res.status(400).json({ error: 'SMS consent is required' });
+  // NO CONSENT GATE. Consent is recorded, never required.
+  const consentAccountNotifications = body.consentWaitlist === true;
+  const consentCustomerCare = body.consentAccount === true;
+  const anyConsent = consentAccountNotifications || consentCustomerCare;
+  // Consent to be messaged at no number is meaningless; the page blocks it, and this
+  // is the server-side counterpart of that rule.
+  if (anyConsent && !phone) {
+    return res.status(400).json({ error: 'Add a mobile number to receive the updates you selected' });
   }
 
   const row = {
     email,
-    phone,
-    sms_consent: true,
-    consent_language: CONSENT_LANGUAGE,
-    consent_at: new Date().toISOString(),
+    phone: phone || null,
+    sms_consent: anyConsent,
+    consent_account: consentAccountNotifications,
+    consent_care: consentCustomerCare,
+    // consent evidence is only stamped when consent was actually given. It used to be
+    // written unconditionally, which recorded a consent time for people who never consented.
+    consent_language: anyConsent ? CONSENT_LANGUAGE : null,
+    consent_at: anyConsent ? new Date().toISOString() : null,
     plan: typeof body.plan === 'string' && body.plan ? body.plan.slice(0, 32) : null,
     referred_by: typeof body.ref === 'string' && body.ref ? body.ref.slice(0, 32) : null,
     referral_code: typeof body.referralCode === 'string' && body.referralCode ? body.referralCode.slice(0, 32) : null,
@@ -93,8 +113,11 @@ module.exports = async function handler(req, res) {
   let isNewSignup = false;
   try {
     const db = getClient();
-    const { data: existing } = await db
-      .from('waitlist').select('id').eq('phone', phone).maybeSingle();
+    // Dedupe on phone when there is one; an email-only signup has no phone to match on,
+    // so those dedupe on email instead (mirrors the partial unique index in migration 013).
+    const { data: existing } = phone
+      ? await db.from('waitlist').select('id').eq('phone', phone).maybeSingle()
+      : await db.from('waitlist').select('id').eq('email', email).is('phone', null).maybeSingle();
     if (existing) {
       // Repeat signup for a known phone: refresh contact fields only. The
       // original consent evidence (consent_at / consent_language) is
