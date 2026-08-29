@@ -1633,6 +1633,11 @@ nav.scrolled{background:rgba(14,13,11,0.92);backdrop-filter:blur(16px);-webkit-b
 }
 /* The SMS opt-ins sit OUTSIDE the signup form on purpose: they are a standalone, affirmative
    choice, not part of submitting the form. Twilio's review flagged the old bundled version. */
+.sms-disclosure{
+  margin:14px 0 0;padding:0 2px;text-align:left;
+  font-size:0.76rem;line-height:1.5;color:var(--text-muted);
+}
+.sms-disclosure strong{color:var(--text);}
 .sms-optin{
   margin-top:16px;padding:14px 16px;text-align:left;
   border:1px solid var(--border2);border-radius:10px;
@@ -2775,6 +2780,14 @@ footer p a:hover{color:var(--accent)}
       <button type="submit">Finish signup &rarr;</button>
     </form>
 
+    <!-- CTA-AREA DISCLOSURE. Isa Bell, 2026-08-29: the visible call-to-action area near the phone
+         field and checkboxes must itself show the brand collecting consent, the frequency for each
+         program, "Msg & data rates may apply", and STOP/HELP - not only the checkbox text. -->
+    <p class="sms-disclosure" id="smsDisclosure" style="display:none">
+      <strong>Sidekick</strong>, a product of Pennsylvania Technology Solutions LLC.
+      Account notifications and customer care replies are recurring; msg frequency varies.
+      Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.
+    </p>
     <div class="sms-optin" id="smsOptIn" style="display:none">
       <p class="sms-optin__head">Text messages are optional. You can finish your signup without them, and your place in line is the same either way.</p>
       <label class="sms-consent" for="smsConsentWaitlist">
@@ -2787,7 +2800,7 @@ footer p a:hover{color:var(--accent)}
       </label>
     </div>
 
-    <p class="sms-reassurance" id="smsReassurance" style="display:none">If you opt in above, we&rsquo;ll only text you when your spot opens - one message. No marketing texts during your wait. No spam, ever.</p>
+    <p class="sms-reassurance" id="smsReassurance" style="display:none">If you opt in above, we&rsquo;ll only text you about what you selected. Msg frequency varies. We never send marketing texts.</p>
 
     <p class="signup-note">Sidekick is a product of Pennsylvania Technology Solutions LLC. See our <a href="#" onclick="openModal('privacy');return false;">Privacy&nbsp;Policy</a> and <a href="#" onclick="openModal('terms');return false;">Terms&nbsp;of&nbsp;Service</a>.</p>
     <p class="signup-msg" id="signupMsg"></p>
@@ -3369,6 +3382,8 @@ function handleStep1(e) {
   step2.style.display = 'flex';
   const optIn = document.getElementById('smsOptIn');
   if (optIn) optIn.style.display = 'block';
+  const disc = document.getElementById('smsDisclosure');
+  if (disc) disc.style.display = 'block';
   const reassurance = document.getElementById('smsReassurance');
   if (reassurance) reassurance.style.display = 'block';
   document.getElementById('phoneInput').focus();
@@ -3452,6 +3467,8 @@ function showSignupConfirmation(plan, referralSlug, position) {
   document.getElementById('step2Form').style.display = 'none';
   const optInBlk = document.getElementById('smsOptIn');
   if (optInBlk) optInBlk.style.display = 'none';
+  const discBlk = document.getElementById('smsDisclosure');
+  if (discBlk) discBlk.style.display = 'none';
   document.getElementById('formSub').style.display = 'none';
   const trust = document.querySelector('.final-cta__trust');
   if (trust) trust.style.display = 'none';
