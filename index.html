@@ -3485,7 +3485,16 @@ function showSignupConfirmation(plan, referralSlug, position) {
   // What happens next - the product promise
   const confirmNext = document.getElementById('confirmationNext');
   if (confirmNext) {
-    confirmNext.innerHTML = `We open in waves of 50 businesses. When your wave opens, <strong>we\u2019ll personally text ${phoneDisplay}</strong> - that\u2019s the product, starting with you.`;
+    // The confirmation must match what the person actually gave us. It used to promise
+    // "we'll personally text ${phoneDisplay}" to everyone - which for an email-only signup
+    // renders as a text to nobody, and promises messaging to someone who declined it. That is
+    // the same automatic-consent framing Twilio's review asked us to remove from the form.
+    const optedIn =
+      (document.getElementById('smsConsentWaitlist') || {}).checked ||
+      (document.getElementById('smsConsentAccount') || {}).checked;
+    confirmNext.innerHTML = (optedIn && phoneDisplay)
+      ? `We open in waves of 50 businesses. When your wave opens, <strong>we\u2019ll personally text ${phoneDisplay}</strong> - that\u2019s the product, starting with you.`
+      : `We open in waves of 50 businesses. When your wave opens, <strong>we\u2019ll email you</strong> - and you can add a mobile number any time if you\u2019d rather we text.`;
   }
 
   // Real queue position from the server
