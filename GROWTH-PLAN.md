@@ -45,12 +45,24 @@ The weekly report stops reporting and starts steering.
    `content_insights` + the active experiment, so every generated draft leans toward what
    worked and honors the live test.
 
-## Phase 2 — Photo-First Growth (code exists; blocked on keys)
+## Phase 2 — Photo-First Growth (NOT BLOCKED — live since 2026-08-24)
 
-Real photos of a real business beat generic copy for local reach. Photo intake, tagging,
-enhancement, and auto-drafting are BUILT — they need `R2_*` (Cloudflare R2) and
-`REPLICATE_API_TOKEN` in Vercel env. When Matt provides keys: enable, then make the product
-push photos ("text us a photo" nudges in onboarding + weekly texts when the library is thin).
+Real photos of a real business beat generic copy for local reach. Photo intake, tagging and
+auto-drafting are BUILT AND WORKING TODAY.
+
+**This section used to say "blocked on keys" and that is wrong — it misled me into telling Matt
+photos were blocked on 2026-08-29, and he corrected me.** `lib/storage.js` is dual-backend and
+**Supabase Storage is the DEFAULT**, riding the `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` the app
+already requires, into the public `customer-photos` bucket. Cloudflare R2 is an optional upgrade that
+only takes over when ALL five `R2_*` vars are set. `config-check` lists `R2_*` and
+`REPLICATE_API_TOKEN` under OPTIONAL_KEYS, and the live config reports 22/22 required set with zero
+missing.
+
+The only thing absent without `REPLICATE_API_TOKEN` is the photo ENHANCEMENT step, which is written
+to skip gracefully rather than fail.
+
+**The remaining work is product, not plumbing:** make Sidekick push for photos — "text us a photo"
+nudges during onboarding, and in the weekly text when a user's photo library is thin.
 
 ## Phase 3 — Engagement Speed (spike done 2026-08-24; Meta-gated)
 
