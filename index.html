@@ -3391,6 +3391,20 @@ function handleStep2(e) {
   // enrollment mandatory - the exact thing that failed review.
   const consentWaitlist = !!(document.getElementById('smsConsentWaitlist') || {}).checked;
   const consentAccount  = !!(document.getElementById('smsConsentAccount') || {}).checked;
+  // If they asked for texts but gave no number, ask for the number rather than recording a
+  // consent to be messaged at nothing. This is NOT the old mandatory-consent gate in disguise:
+  // it only ever fires when the user has affirmatively ticked a box, and leaving both unticked
+  // still completes the signup with no phone at all.
+  if ((consentWaitlist || consentAccount) && !phone) {
+    const note0 = document.querySelector('.signup-note');
+    if (note0) {
+      note0.textContent = 'Add a mobile number above so we can send the updates you selected, or untick the boxes to finish without texts.';
+      note0.style.color = 'var(--red)';
+    }
+    phoneInput.style.borderColor = 'var(--red)';
+    phoneInput.focus();
+    return;
+  }
   const btn = e.target.querySelector('button');
   btn.textContent = 'Locking you in...';
   btn.disabled = true;
