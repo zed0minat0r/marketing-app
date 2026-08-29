@@ -64,25 +64,36 @@ to skip gracefully rather than fail.
 **The remaining work is product, not plumbing:** make Sidekick push for photos — "text us a photo"
 nudges during onboarding, and in the weekly text when a user's photo library is thin.
 
-## Phase 3 — Engagement Speed (spike done 2026-08-24; Meta-gated)
+## Phase 3 — Engagement Speed (BUILT 2026-08-24; one manual step outstanding)
 
-**Findings:** the OAuth flow currently requests `pages_show_list`, `pages_read_engagement`,
-`pages_manage_posts`, `instagram_basic`, `instagram_content_publish` (meta-callback.js).
-Reading comments rides `pages_read_engagement` (already requested). REPLYING needs
-`pages_manage_engagement` (FB) + `instagram_manage_comments` (IG) — not requested anywhere,
-and both are Advanced-tier App Review permissions. DMs need `pages_messaging` (bigger lift —
-skip for now).
+**This section used to describe Phase 3 as unbuilt and said `pages_manage_engagement` and
+`instagram_manage_comments` were "not requested anywhere". Both are wrong** — it was written as a
+spike plan on 2026-08-24 and the work shipped the same day (commit 2136e52), but the plan was never
+updated. On 2026-08-29 I read it instead of the code and told Matt there was a feature to build.
+Verify against the code, not this file.
 
-**The Development Mode loophole that makes beta possible:** while the Meta app is in Dev
-Mode, ALL permissions work for users with a role on the app (admin/tester). Matt's own
-accounts — beta user #1 — can run the full comment-reply loop with zero approvals.
+**What actually exists:**
+- `lib/oauth-handlers/meta-start.js` requests all nine scopes, including `pages_manage_engagement`
+  and `instagram_manage_comments`.
+- `api/meta/webhook.js` — the subscription handshake plus event intake. Every payload is treated as
+  an untrusted hint and the comment is re-fetched from the Graph API with our stored page token.
+- `lib/comment-replies.js` and `lib/review-replies.js` — draft a reply in the owner's voice.
+- Approval over SMS: `YES` / `SKIP` / `reply: ...`.
+- `META_WEBHOOK_VERIFY_TOKEN` is set in Vercel and the live webhook correctly 403s a bad token.
 
-**Path:** (1) add the two reply scopes to the OAuth URL + token storage; (2) extend
-collect-analytics to pull new comments and text the owner a drafted reply for YES-approval;
-(3) submit Meta App Review — materials for the current 5 permissions are already written in
-docs/META-APP-REVIEW.md (submission status unknown — ASK MATT whether it was ever filed);
-write statements for the 2 new scopes and submit all together. Review turnaround is weeks, so
-file it long before public launch.
+**THE ONLY THING LEFT is a one-time step inside Matt's Meta dashboard** (docs/SETUP.md §8), which
+nobody can do for him: subscribe object **Page** (field `feed`) and object **Instagram** (field
+`comments`) to `https://marketing-app-navy.vercel.app/api/meta/webhook` using the verify token from
+Vercel env. He can reveal that value in the Vercel dashboard; the API returns it encrypted.
+
+Until that subscription exists, Meta never pushes comment events and the loop simply never fires.
+
+**Dev Mode still applies:** while the app is in Development Mode every permission works for accounts
+with a role on it, so the whole loop is testable on Matt's own page with zero approvals.
+
+**Meta App Review** — materials for the permissions are written in `docs/META-APP-REVIEW.md`.
+**Whether it was ever filed is still unknown — ASK MATT.** Turnaround is weeks, so it wants filing
+long before public launch.
 
 ## Phase 4 — Local Mechanics
 
