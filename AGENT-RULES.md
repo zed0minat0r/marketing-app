@@ -11,7 +11,7 @@ Phase 2: SMS backend (Twilio + Claude API + social media APIs) — future.
 1. Your VERY FIRST action must be a tool call. Do NOT generate ANY text before your first tool call.
 2. Always commit and push after making changes.
 3. After pushing, text the user via iMessage (chat_id: `any;-;+14847162152`) with a summary of what you did.
-4. Always include the live link: https://zed0minat0r.github.io/marketing-app/
+4. Always include the live link: https://marketing-app-navy.vercel.app/
 5. SIMPLICITY IS KING — Do NOT pile on animations, effects, or decorative elements.
 6. This must NOT look AI-generated. Break Claude's default patterns. No teal/green, no rounded cards, no Nunito/Inter. Be bold, unique, distinctive. Reference the best SaaS landing pages (Linear, Vercel, Stripe, Arc) for inspiration.
 7. Spark: CAN add impressive features, but if you add something, REPLACE or REMOVE something else. No piling on.
@@ -21,7 +21,7 @@ Phase 2: SMS backend (Twilio + Claude API + social media APIs) — future.
 - Repo: /tmp/marketing-app
 - Branch: main
 - Remote: origin (GitHub)
-- Live: https://zed0minat0r.github.io/marketing-app/
+- Live: https://marketing-app-navy.vercel.app/
 
 ## Agent Team
 - **Builder** — implements features, fixes bugs

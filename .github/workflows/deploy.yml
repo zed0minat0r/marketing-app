@@ -22,7 +22,11 @@ jobs:
       - name: Stage public site files
         run: |
           mkdir -p _site/docs
-          cp index.html connected.html robots.txt sitemap.xml og.png _site/
+          # privacy.html and terms.html are GENERATED (scripts/build_policy_pages.py) and MUST
+          # ship: Meta App Review needs a privacy policy URL that resolves, and this allowlist
+          # is why it did not. data-deletion-status.html is deliberately absent here - Meta's
+          # callback points at the Vercel host, which serves the repo root directly.
+          cp index.html connected.html privacy.html terms.html robots.txt sitemap.xml og.png _site/
           cp docs/optin-proof.png _site/docs/
       - uses: actions/upload-pages-artifact@v3
         with:

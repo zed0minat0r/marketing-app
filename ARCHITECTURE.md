@@ -82,7 +82,14 @@ Buffer adds $6/channel/month at scale and limits API access to analytics. Going 
 **Status: DONE**
 
 - Single HTML file + Tailwind CSS via CDN
-- Hosted on GitHub Pages at https://zed0minat0r.github.io/marketing-app/
+- Published to TWO hosts from this one repo, and they do not serve the same files:
+  - **Vercel, https://marketing-app-navy.vercel.app - the canonical public URL.** Serves the repo
+    root plus the SMS endpoint, the jobs API and a daily cron. This is the URL that goes on Twilio
+    and Meta filings; both have reviewers who follow links, and this is the host that resolves.
+  - GitHub Pages, https://zed0minat0r.github.io/marketing-app - the marketing page only.
+    `deploy.yml` copies a hand-picked file list, which is why data-deletion-status.html 404s there.
+  Chosen 2026-09-04. `scripts/set_site_url.py` moves every declaration in one command when
+  sidekick.penntechsolutions.com is bought.
 - Interactive SMS demo conversation
 - Phone number signup CTA (Formspree collection)
 - Pricing tiers displayed: Starter $49, Growth $99, Pro $199

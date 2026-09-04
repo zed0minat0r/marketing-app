@@ -41,3 +41,10 @@ jobs:
           # Node environment
           NODE_ENV: test
         run: npm test
+
+      - name: Policy pages match index.html
+        # The Privacy Policy and Terms live in index.html's modalContent registry and are GENERATED
+        # into privacy.html / terms.html. Meta App Review requires a privacy policy URL that resolves,
+        # so those files are not decoration - they are the URL. This fails the build if someone edits
+        # the policy and forgets to regenerate, which is the only way the page and the modal can drift.
+        run: python3 scripts/build_policy_pages.py --check

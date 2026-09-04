@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zed0minat0r.github.io/marketing-app/sitemap.xml
+Sitemap: https://marketing-app-navy.vercel.app/sitemap.xml

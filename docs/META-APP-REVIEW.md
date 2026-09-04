@@ -1,7 +1,38 @@
-# Meta App Review packet - Sidekick by Mo (App ID 26890596557296121)
+# Meta App Review packet - Sidekick
 
-Prepared 2026-08-25, ahead of Matt's beta-user-#1 walkthrough. The walkthrough IS the demo
-recording. File the review within days of recording it.
+**App ID `1548667480606918`** - created 2026-09-04, display name "Sidekick".
+
+This file previously carried "App ID 26890596557296121" in its title as though the app already
+existed. It did not: the portfolio's Apps page read "No apps added", and the Graph API returned
+"object does not exist" for that number - conclusive only because a control was run, since a REAL app
+returns "an access token is required" instead. Where the old number came from is unknown. **Verify an
+app ID against the Graph API before repeating it; a number in a doc is not evidence.**
+
+Created with two use cases, and the choice matters for review:
+**"Manage everything on your Page"** (pages_show_list, pages_manage_posts, pages_manage_engagement,
+pages_read_engagement) and **"Manage messaging & content on Instagram"** (instagram_basic,
+instagram_content_publish, instagram_manage_comments, instagram_manage_insights). Together they cover
+all eight permissions this app requests. The "Authenticate with Facebook Login" use case is NOT
+combinable with them and was deliberately not chosen - it is for apps whose purpose is login. Facebook
+Login remains the mechanism customers authorise through; add it as a PRODUCT in the dashboard and set
+the redirect URI to `https://marketing-app-navy.vercel.app/api/oauth/meta/callback`.
+
+**The app secret is NOT recorded here and must never be** - it belongs in the Vercel environment
+only. (It appeared in a screenshot on 2026-09-04; Matt's call was to delete the message rather than
+reset, which is his to make. Noted only so nobody later assumes the secret in circulation that day is
+stale.)
+
+**Verified live on 2026-09-04**, using an app access token, that this app is real and named Sidekick -
+the same Graph API check that exposed the previous ID as fictitious. The same call showed
+`privacy_policy_url`, `category` and `app_domains` all absent, which matches the Settings screen: they
+are still to be filled in.
+
+**STANDARD vs ADVANCED ACCESS, because this decides whether the product can exist.** A new app has
+Standard Access: it works ONLY for people holding a role on it (admin/developer/tester). That is fine
+for the first handful of beta customers and is useless for hundreds - every one would need an invite
+and an acceptance. Advanced Access, granted by App Review, is what lets any business connect. Matt's
+product is "hundreds of customers logging into their Facebook through Sidekick", so **App Review is
+mandatory, not optional**, and Business Verification gates it. Start early: weeks, not days.
 
 ## Pre-submission checklist
 
@@ -14,10 +45,13 @@ recording. File the review within days of recording it.
       category (Business), contact email mmodica3@gmail.com.
 - [ ] Webhooks subscribed (Page feed + Instagram comments) - needed to demo comment replies.
 - [ ] Record the demo video (shot list below) BEFORE filling the forms.
-- [ ] DECISION NEEDED: drop `business_management` from META_SCOPES before submitting?
-      We list pages via /me/accounts, which `pages_show_list` covers. business_management
-      triggers the strictest review track and we may not use anything it gates. Verify
-      token-refresh + page listing still work for a tester account without it, then remove.
+- [x] ~~DECISION NEEDED: drop `business_management`~~ **DONE 2026-09-04, Matt approved.** Removed
+      from META_SCOPES. Verified by enumerating every Graph call in `lib/` and `api/` first: /me,
+      /me/accounts, /{page}/feed, /{page}/subscribed_apps, /{ig}/media, /{ig}/media_publish, two
+      insights endpoints, /oauth/access_token. No `/businesses` call exists anywhere in the codebase,
+      so it gated nothing. Suite green, 398 pass. Eight permissions now, not nine - and the
+      justification section below still carries the ninth, which is now dead text kept only so the
+      reasoning survives if anyone asks why it went.
 
 ## Permissions and paste-ready justifications
 
@@ -100,8 +134,13 @@ Narrate or caption each step with the permission it demonstrates.
   number, which reviewers cannot text. Provide detailed reviewer instructions + the demo
   video, and state that SMS is the product surface; this is common for SMS-first apps and
   accepted when the video is complete.
-- Privacy policy missing the data-deletion path: ours has it, double check the URL resolves
-  on the live site at submission time.
+- Privacy policy missing the data-deletion path: the policy DOES cover deletion rights. What it does
+  not do is link to data-deletion-status.html - still open, and it is legal text so Matt writes it.
+  **The "double check the URL resolves" line was aspirational until 2026-09-04**: there was no privacy
+  policy URL at all, only a JavaScript modal behind `href="#"`. privacy.html and terms.html now exist
+  (generated by `scripts/build_policy_pages.py`, drift-checked in CI). Use the VERCEL host - GitHub
+  Pages publishes an allowlist and 404s on anything not in it, which is why data-deletion-status.html
+  still 404s there.
 - business_management requested but not demonstrated: strongest argument for dropping it.
 
 ## After approval
