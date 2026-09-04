@@ -44,7 +44,11 @@ mandatory, not optional**, and Business Verification gates it. Start early: week
       (https://marketing-app-navy.vercel.app/data-deletion-status.html), app icon 1024px,
       category (Business), contact email mmodica3@gmail.com.
 - [ ] Webhooks subscribed (Page feed + Instagram comments) - needed to demo comment replies.
-- [ ] Record the demo video (shot list below) BEFORE filling the forms.
+- [ ] Record the demo video BEFORE filling the forms. **Full shot-by-shot script with the exact
+      texts to send, the reviewer-instructions paragraph, and a post-recording checklist is in
+      `docs/DEMO-VIDEO-SCRIPT.md`** - the shot list further down this file is the summary.
+- [ ] App icon: `app-icon-1024.png` in the repo root is ready to upload. It is the favicon
+      already in index.html rendered at 1024px, not a new mark.
 - [x] ~~DECISION NEEDED: drop `business_management`~~ **DONE 2026-09-04, Matt approved.** Removed
       from META_SCOPES. Verified by enumerating every Graph call in `lib/` and `api/` first: /me,
       /me/accounts, /{page}/feed, /{page}/subscribed_apps, /{ig}/media, /{ig}/media_publish, two
