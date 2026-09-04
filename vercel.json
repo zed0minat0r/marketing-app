@@ -18,6 +18,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/oauth/:provider/:action",
+      "destination": "/api/oauth/router?provider=:provider&action=:action"
+    },
+    {
       "source": "/connected",
       "destination": "/connected.html"
     },
