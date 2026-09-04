@@ -73,6 +73,9 @@ globalThis.fetch = async (url, opts) => {
       if (fbFails) return { ok: false, json: async () => ({ error: { message: 'FB down' } }) };
       return { ok: true, json: async () => ({ id: 'page1_post9' }) };
     }
+    if (u.includes('fields=status_code')) {
+      return { ok: true, json: async () => ({ status_code: 'FINISHED' }) };
+    }
     if (u.includes('/media_publish')) {
       if (igPublishFails) return { ok: true, json: async () => ({ error: { message: 'IG rejected the container' } }) };
       return { ok: true, json: async () => ({ id: '17900012345' }) };

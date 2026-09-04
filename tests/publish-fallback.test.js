@@ -103,6 +103,9 @@ globalThis.fetch = async (url) => {
         json: async () => ({ id: 'page123_post456' }),
       };
     }
+    if (url.includes('fields=status_code')) {
+      return { ok: true, json: async () => ({ status_code: 'FINISHED' }) };
+    }
     if (url.includes('/media_publish')) {
       return { ok: true, json: async () => ({ id: 'IGmedia123' }) };
     }
