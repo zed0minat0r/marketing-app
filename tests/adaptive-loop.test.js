@@ -67,7 +67,16 @@ function chainFor(table) {
     is() { return chain; },
     gte(_c, v) { state.gte = v; return chain; },
     in(_c, list) { state.inList = list; return chain; },
-    then(resolve) { resolve({ data: rowsFor(), error: null }); },
+    // weekly-summary pages the user list before fanning batches out to the queue, so the stub has
+    // to answer .range(). Slicing (rather than ignoring it) is what makes the pager terminate.
+    range(from, to) { state.range = [from, to]; return chain; },
+    not() { return chain; },
+    lt() { return chain; },
+    then(resolve) {
+      const rows = rowsFor();
+      const sliced = state.range ? rows.slice(state.range[0], state.range[1] + 1) : rows;
+      resolve({ data: sliced, error: null });
+    },
   };
   return chain;
 }
