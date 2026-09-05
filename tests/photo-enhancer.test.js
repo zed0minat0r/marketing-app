@@ -81,3 +81,19 @@ test('enhancePhoto — throws URL_NOT_PUBLIC when originalUrl is the internal R2
   );
   delete process.env.REPLICATE_API_TOKEN;
 });
+
+// --- HEIC guard -------------------------------------------------------------
+// photo-intake accepts image/heic so an iPhone photo is never rejected on arrival, but Claude's
+// vision API cannot read it. Without this guard every native iPhone photo made a doomed API call and
+// landed untagged, with nothing visibly wrong.
+test('tagPhotoFromBuffer refuses HEIC before calling the API', async () => {
+  const { tagPhotoFromBuffer } = require('../lib/photo-tagger');
+  await assert.rejects(
+    () => tagPhotoFromBuffer(Buffer.from('x'), 'image/heic'),
+    /cannot read image\/heic/,
+  );
+  await assert.rejects(
+    () => tagPhotoFromBuffer(Buffer.from('x'), 'IMAGE/HEIF'),
+    /cannot read image\/heif/,
+  );
+});
