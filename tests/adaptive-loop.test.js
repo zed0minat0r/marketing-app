@@ -16,6 +16,7 @@ let snapshots = [];
 let userUpdates = [];
 let smsSent = [];
 let weeklyUpserts = [];
+let alreadySentRows = [];   // weekly_analytics rows that already carry sent_at
 
 // ---- outbound ----
 const outboundPath = require.resolve('../lib/sms-outbound');
@@ -55,6 +56,7 @@ function chainFor(table) {
         state.filters.every(([col, val]) => String(p[col]) === String(val)) &&
         (!state.gte || p.created_at >= state.gte));
     }
+    if (state.table === 'weekly_analytics') return alreadySentRows;
     if (state.table === 'analytics_snapshots') {
       const ids = state.inList || [];
       return snapshots.filter(s => ids.includes(s.post_id));
@@ -138,7 +140,7 @@ function seedPerformingPosts() {
   }
 }
 
-beforeEach(() => { users = []; posts = []; snapshots = []; userUpdates = []; smsSent = []; weeklyUpserts = []; });
+beforeEach(() => { users = []; posts = []; snapshots = []; userUpdates = []; smsSent = []; weeklyUpserts = []; alreadySentRows = []; });
 
 describe('adaptive loop, actually executed', () => {
   test('first run computes insights, stores them, proposes an experiment, and the SMS carries it', async () => {
@@ -203,5 +205,20 @@ describe('adaptive loop, actually executed', () => {
     assert.ok(stored);
     assert.equal(stored.updates.active_experiment.type, 'format', 'insufficient data must NOT rotate the experiment');
     assert.equal(stored.updates.active_experiment.started_at, '2026-08-10T00:00:00Z', 'the live experiment must be preserved, not restarted');
+  });
+
+  test('a customer already texted this week is not texted again', async () => {
+    // QStash retries a failed delivery, so a batch that dies halfway gets redelivered. Without the
+    // already-sent guard everyone it had already reached would get their summary a second time.
+    seedUser();
+    seedPerformingPosts();
+    alreadySentRows = [{ user_id: 'u1' }];
+
+    const res = await run();
+
+    assert.equal(res.statusCode, 200);
+    assert.equal(smsSent.length, 0, 'must not re-send to a customer already summarised this week');
+    assert.equal(res.body.sent, 0);
+    assert.equal(res.body.skipped, 1);
   });
 });
