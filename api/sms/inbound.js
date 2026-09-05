@@ -816,7 +816,9 @@ module.exports = async function handler(req, res) {
             const getPendingCommentReply = isReview ? reviewLib.getPendingReviewReply : commentLib.getPendingCommentReply;
             const postCommentReply = isReview ? reviewLib.postReviewReply : commentLib.postCommentReply;
             const markCommentReply = isReview ? reviewLib.markReviewReply : commentLib.markCommentReply;
-            const pending = await getPendingCommentReply(user.id);
+            // Pin to the draft that existed when we sent the message - see the note on the
+            // lookup. Passing nothing here reintroduces the race it exists to close.
+            const pending = await getPendingCommentReply(user.id, lastOutbound.created_at);
             const commentResponse = getDraftResponse(messageBody.trim());
             const customReply = messageBody.trim().match(/^reply:\s*(.+)/is);
             if (pending && (commentResponse || customReply)) {
